@@ -2,9 +2,10 @@ package br.com.cardappio.domain;
 
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -14,17 +15,14 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode(of = "id")
 @Getter
-public class Ticket implements EntityModel<UUID> {
+public class Payment implements EntityModel<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_person")
-    private Person person;
+    @NotNull
+    private BigDecimal price;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "id_ticket", nullable = false)
-    private List<Order> order;
+
 }
