@@ -1,4 +1,4 @@
-name: Testes Backend # Nome da pipe que aparece no Actions
+name: tests # Nome da pipe que aparece no Actions
 
 on:
   push: # A pipe sempre é executada quando algo é mergeado na main
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  core: # É criado um job chamado build que vai rodar numa máquina virtual Ubuntu
+  cardappio-backend: # É criado um job chamado cardappio-backend que vai rodar numa máquina virtual Ubuntu
     runs-on: ubuntu-latest
 
     steps:
