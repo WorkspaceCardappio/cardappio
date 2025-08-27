@@ -6,8 +6,6 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <property name="uuid" value="UUID" dbms="postgresql,h2"/>
-    <property name="description" value="VARCHAR(255)" dbms="postgresql,h2"/>
     <property name="price" value="NUMERIC(10,2)" dbms="postgresql,h2"/>
-    <property name="uf" value="CHAR(2)" dbms="postgresql,h2"/>
-    
+
 </databaseChangeLog>
