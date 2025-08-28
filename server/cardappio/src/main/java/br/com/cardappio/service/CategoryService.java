@@ -8,11 +8,13 @@ import com.cardappio.core.repository.CrudRepository;
 import com.cardappio.core.service.CrudService;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class CategoryService extends CrudService<Category, CategoryDTO, Long> {
+public class CategoryService extends CrudService<Category, CategoryDTO, UUID> {
 
 
-    public CategoryService(CrudRepository<Category, Long> repository) {
+    public CategoryService(CrudRepository<Category, UUID> repository) {
         super(repository);
     }
 

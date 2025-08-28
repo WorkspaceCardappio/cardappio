@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.UUID;
+
 @Entity
 @Table
 @Getter
@@ -15,11 +17,10 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(of = "id")
-public class Category implements EntityModel<Long> {
+public class Category implements EntityModel<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column
     @NotNull

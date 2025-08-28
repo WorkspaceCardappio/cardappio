@@ -4,9 +4,11 @@ import br.com.cardappio.entity.Category;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.UUID;
+
 public record CategoryDTO(
 
-        Long id,
+        UUID id,
         @NotBlank(message = "Campo nome não pode ficar vazio")
         @Length(max = 255, message = "Tamanho do nome não pode ultrapassar 255 caracteres")
         String name,

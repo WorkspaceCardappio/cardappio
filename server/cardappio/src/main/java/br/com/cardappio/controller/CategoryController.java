@@ -7,11 +7,13 @@ import com.cardappio.core.service.CrudService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/category")
-public class CategoryController extends CrudController<Category, CategoryDTO, Long> {
+public class CategoryController extends CrudController<Category, CategoryDTO, UUID> {
 
-    public CategoryController(CrudService<Category, CategoryDTO, Long> service) {
+    public CategoryController(CrudService<Category, CategoryDTO, UUID> service) {
         super(service);
     }
 

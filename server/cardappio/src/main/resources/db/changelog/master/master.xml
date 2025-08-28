@@ -5,5 +5,6 @@
 
     <property name="uuid" value="UUID" dbms="postgresql,h2"/>
     <property name="price" value="NUMERIC(10,2)" dbms="postgresql,h2"/>
+    <includeAll path="changelog" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
