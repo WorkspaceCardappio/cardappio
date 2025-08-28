@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Category implements EntityModel<UUID> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column
