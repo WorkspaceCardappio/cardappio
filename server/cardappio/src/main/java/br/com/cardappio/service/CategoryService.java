@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CategoryService extends CrudService<Category, CategoryDTO, UUID> {
 
 
-    public CategoryService(CrudRepository<Category, UUID> repository) {
+    public CategoryService(final CrudRepository<Category, UUID> repository) {
         super(repository);
     }
 

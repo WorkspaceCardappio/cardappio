@@ -1,6 +1,7 @@
 package br.com.cardappio.DTO;
 
 import br.com.cardappio.entity.Category;
+import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
@@ -9,13 +10,13 @@ import java.util.UUID;
 public record CategoryDTO(
 
         UUID id,
-        @NotBlank(message = "Campo nome não pode ficar vazio")
-        @Length(max = 255, message = "Tamanho do nome não pode ultrapassar 255 caracteres")
+        @NotBlank(message = Messages.EMPTY_NAME)
+        @Length(max = 255, message = Messages.SIZE_255)
         String name,
 
         boolean active,
 
-        @Length(max = 255)
+        @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
         Category subCategory

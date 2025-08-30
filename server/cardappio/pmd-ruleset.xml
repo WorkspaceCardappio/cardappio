@@ -46,7 +46,6 @@
     <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"/>
     <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
         <properties>
-            <property name="maxDuplicateLiterals" value="1"/>
             <property name="minimumLength" value="15"/>
             <property name="exceptionList" value=""/>
         </properties>

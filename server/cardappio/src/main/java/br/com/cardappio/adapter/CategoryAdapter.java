@@ -7,12 +7,12 @@ import com.cardappio.core.adapter.Adapter;
 public class CategoryAdapter implements Adapter<CategoryDTO, Category> {
 
     @Override
-    public CategoryDTO toDTO(Category entity) {
+    public CategoryDTO toDTO(final Category entity) {
         return new CategoryDTO(entity);
     }
 
     @Override
-    public Category toEntity(CategoryDTO dto) {
+    public Category toEntity(final CategoryDTO dto) {
         return Category.of(dto);
     }
 }

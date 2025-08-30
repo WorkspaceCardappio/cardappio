@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("/category")
 public class CategoryController extends CrudController<Category, CategoryDTO, UUID> {
 
-    public CategoryController(CrudService<Category, CategoryDTO, UUID> service) {
+    public CategoryController(final CrudService<Category, CategoryDTO, UUID> service) {
         super(service);
     }
 

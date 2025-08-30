@@ -1,6 +1,7 @@
 package br.com.cardappio.entity;
 
 import br.com.cardappio.DTO.CategoryDTO;
+import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,16 +25,15 @@ public class Category implements EntityModel<UUID> {
     private UUID id;
 
     @Column
-    @NotNull
-    @Length(max = 255)
+    @NotNull(message = Messages.EMPTY_NAME)
+    @Length(max = 255, message = Messages.SIZE_255)
     private String name;
 
     @Column
-    @NotNull
     private Boolean active = true;
 
     @Column
-    @Length(max = 255)
+    @Length(max = 255, message = Messages.SIZE_255)
     private String image;
 
     @ManyToOne
@@ -41,7 +41,7 @@ public class Category implements EntityModel<UUID> {
     private Category subCategory;
 
     public static Category of(final CategoryDTO dto) {
-        Category category = new Category();
+        final Category category = new Category();
         category.setId(dto.id());
         category.setName(dto.name());
         category.setActive(dto.active());
