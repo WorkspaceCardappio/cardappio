@@ -27,7 +27,7 @@ public record CategoryDTO(
                 category.getName(),
                 category.getActive(),
                 category.getImage(),
-                category.getSubCategory()
+                category.getParent()
         );
     }
 }

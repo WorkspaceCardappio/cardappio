@@ -3,11 +3,14 @@ package br.com.cardappio.entity;
 import br.com.cardappio.DTO.CategoryDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -38,7 +41,11 @@ public class Category implements EntityModel<UUID> {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category subCategory;
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("parent")
+    private Set<Category> subCategories = new HashSet<>();
 
     public static Category of(final CategoryDTO dto) {
         final Category category = new Category();
@@ -46,7 +53,7 @@ public class Category implements EntityModel<UUID> {
         category.setName(dto.name());
         category.setActive(dto.active());
         category.setImage(dto.image());
-        category.setSubCategory(dto.subCategory());
+        category.setParent(dto.subCategory());
 
         return category;
     }
