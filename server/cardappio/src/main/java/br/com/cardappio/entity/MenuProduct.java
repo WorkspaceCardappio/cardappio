@@ -44,9 +44,10 @@ public class MenuProduct implements EntityModel<UUID> {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @OneToMany
-    @JoinColumn(name = "menu_product_id")
-    private Set<Product> products;
+    @ManyToOne
+    @NotNull(message = "O produto é obrigatório")
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column
     @NotNull(message = Messages.EMPTY_PRICE)
