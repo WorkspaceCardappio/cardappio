@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 public class TableService extends CrudService<TableRestaurant, TableRestaurantDTO, UUID> {
-    public TableService(CrudRepository<TableRestaurant, UUID> repository) {
+    public TableService(final CrudRepository<TableRestaurant, UUID> repository) {
         super(repository);
     }
 

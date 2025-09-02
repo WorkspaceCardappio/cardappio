@@ -11,7 +11,7 @@ public class TableAdapter implements Adapter<TableRestaurantDTO, TableRestaurant
     }
 
     @Override
-    public TableRestaurant toEntity(TableRestaurantDTO dto) {
+    public TableRestaurant toEntity(final TableRestaurantDTO dto) {
         return TableRestaurant.of(dto);
     }
 }

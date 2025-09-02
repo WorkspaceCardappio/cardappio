@@ -14,8 +14,8 @@ public enum TableStatus {
     private final int code;
     private final String description;
 
-    public static TableStatus fromCodigo(int code){
-        for (TableStatus status: TableStatus.values()){
+    public static TableStatus fromCodigo(final int code){
+        for (final TableStatus status: TableStatus.values()){
             if(status.getCode() == code){
                 return status;
             }
