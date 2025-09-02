@@ -26,7 +26,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-//@Table
+@Table
 @Getter
 @Setter
 @AllArgsConstructor
@@ -44,8 +44,9 @@ public class MenuProduct implements EntityModel<UUID> {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @OneToMany(mappedBy = "menu")
-    private Set<Product> product;
+    @OneToMany
+    @JoinColumn(name = "menu_product_id")
+    private Set<Product> products;
 
     @Column
     @NotNull(message = Messages.EMPTY_PRICE)
