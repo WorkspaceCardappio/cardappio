@@ -12,3 +12,6 @@ spring:
       path: /h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+#TODO  implementar essa config, para testar tive que usar a url que gerou no log do spring
+# H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:0251f7e5-37a9-49ad-b9ac-a87c82ded5fc'
