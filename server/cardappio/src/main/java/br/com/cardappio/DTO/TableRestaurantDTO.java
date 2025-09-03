@@ -16,7 +16,6 @@ public record TableRestaurantDTO(
 
         @NotBlank(message = Messages.EMPTY_NUMBER)
         @Length(max=10, message = Messages.SIZE_10)
-        @UniqueElements
         String number,
 
         TableStatus status,
