@@ -5,9 +5,12 @@ import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.UUID;
 
@@ -17,24 +20,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class TableRestaurant implements EntityModel<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
-    @NotNull(message = Messages.EMPTY_NUMBER)
+    @Column(unique = true)
+    @NotBlank(message = Messages.EMPTY_NUMBER)
     @Length(max=10, message = Messages.SIZE_10)
     private String number;
 
     @Column
+    @Enumerated(EnumType.ORDINAL)
     private TableStatus status;
 
     @Column
-    @NotNull(message = Messages.EMPTY_NUMBER)
-    @Length(message = Messages.SIZE_10)
+    @NotNull(message = Messages.EMPTY_PLACE)
+    @Max(value = 10, message = Messages.SIZE_10)
     private Long places;
 
     public static TableRestaurant of(final TableRestaurantDTO dto) {

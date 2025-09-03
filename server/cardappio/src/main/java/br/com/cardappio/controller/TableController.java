@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/table")
+@RequestMapping("/tables")
 public class TableController extends CrudController<TableRestaurant, TableRestaurantDTO, UUID> {
     public TableController(final CrudService<TableRestaurant, TableRestaurantDTO, UUID> service) {
         super(service);

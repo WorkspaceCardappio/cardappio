@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create_table_city" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a tabela city já existe">
+            <not>
+                <tableExists tableName="city"/>
+            </not>
+        </preConditions>
+        <createTable tableName="city">
+            <column name="id" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="pk_city"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state_id" type="${uuid}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_constraint_fk_city" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_city_id já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_city_state_id" foreignKeyTableName="state"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="city" baseColumnNames="state_id" constraintName="fk_city_state_id" referencedTableName="state"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
