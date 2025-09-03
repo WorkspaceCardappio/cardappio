@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create_table_address" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a tabela address já existe">
+            <not>
+                <tableExists tableName="address"/>
+            </not>
+        </preConditions>
+        <createTable tableName="address">
+            <column name="id" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="pk_address"/>
+            </column>
+            <column name="street" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zip_code" type="varchar(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="district" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city_id" type="${uuid}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_constraint_fk_address" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_address já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_address_city_id" foreignKeyTableName="city"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="address" baseColumnNames="city_id" constraintName="fk_address_city_id" referencedTableName="city"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

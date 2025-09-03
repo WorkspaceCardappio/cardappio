@@ -13,12 +13,9 @@ import java.util.UUID;
 @Service
 public class CategoryService extends CrudService<Category, CategoryDTO, UUID> {
 
-
     public CategoryService(final CrudRepository<Category, UUID> repository) {
         super(repository);
     }
-
-
 
     @Override
     protected Adapter<CategoryDTO, Category> getAdapter() {

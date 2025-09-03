@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create_table_table_restaurant" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a tabela table_restaurant já existe">
+            <not>
+                <tableExists tableName="table_restaurant"/>
+            </not>
+        </preConditions>
+        <createTable tableName="table_restaurant">
+            <column name="id" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="pk_table_restaurant"/>
+            </column>
+            <column name="number" type="varchar(10)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_table_restaurant_number"/>
+            </column>
+            <column name="places" type="numeric(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="numeric(10)"/>
+            <column name="restaurant_id" type="${uuid}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_constraint_fk_table_restaurant" author="cassia">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_table_restaurant já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_table_restaurant_restaurant_id" foreignKeyTableName="restaurant"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="table_restaurant" baseColumnNames="restaurant_id" constraintName="fk_table_table_restaurant_id" referencedTableName="restaurant"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
