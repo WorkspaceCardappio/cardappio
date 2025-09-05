@@ -1,0 +1,27 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+carddapio-left-menu {
+  width: 250px;
+}
+
+.main-content-area {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+cardappio-header {
+  margin-left: -100px;
+
+  height: 64px;
+}
+
+.page-content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+ }
+
+

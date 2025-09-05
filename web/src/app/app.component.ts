@@ -1,13 +1,66 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+
+import {
+  LeftMenuComponent,
+  HeaderComponent,
+  CheckboxComponent,
+  ActionsListComponent,
+  AutocompleteComponent,
+  CancelButtonComponent,
+  GenericButtonComponent,
+  SaveButtonComponent,
+  DatePickerComponent,
+  DialogComponent,
+  DropdownMenuListComponent,
+  DropdownTypeFilterComponent,
+  InputComponent,
+  FilterHeaderComponent,
+  ListComponent
+} from "@cardappio/cardappio-component-hub";
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+
+    LeftMenuComponent,
+    HeaderComponent,
+    CheckboxComponent,
+    ActionsListComponent,
+    AutocompleteComponent,
+    CancelButtonComponent,
+    GenericButtonComponent,
+    SaveButtonComponent,
+    DatePickerComponent,
+    DialogComponent,
+    DropdownMenuListComponent,
+    DropdownTypeFilterComponent,
+    InputComponent,
+    FilterHeaderComponent,
+    ListComponent
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'web';
+
+  nome: string = 'Cardappio';
+
+  aoAlterarNome(valor: string) {
+    this.nome = valor;
+    console.log('Nome alterado para:', this.nome);
+  }
 }
