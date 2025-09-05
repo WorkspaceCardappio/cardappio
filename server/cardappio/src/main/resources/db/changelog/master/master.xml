@@ -1,10 +1,13 @@
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <property name="uuid" value="UUID" dbms="postgresql,h2"/>
     <property name="price" value="NUMERIC(10,2)" dbms="postgresql,h2"/>
-    <includeAll path="changelog" relativeToChangelogFile="true"/>
+    <property name="quantity" value="NUMERIC(10,2)" dbms="postgresql,h2"/>
+    <property name="boolean" value="BOOLEAN" dbms="postgresql,h2"/>
+    <property name="date" value="DATE" dbms="h2,postgresql"/>
 
+    <includeAll path="changelog" relativeToChangelogFile="true"/>
 </databaseChangeLog>
