@@ -3,8 +3,8 @@ spring:
     name: cardappio
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5434/db
+    url: jdbc:postgresql://localhost:5432/cardappio
     username: postgres
     password: postgres
   liquibase:
-    change-log: classpath:/liquibase/master.xml
+    change-log: classpath:/db/changelog/master/master.xml
