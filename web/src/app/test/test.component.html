@@ -1,23 +1,19 @@
 <div class="test-content">
-
   <div class="components-grid">
-    <!-- Left Column -->
     <div class="left-column">
-      <!-- Date picker -->
       <div class="component-section">
-        <h3>Date Picker</h3>
+        <h3>Date Selection</h3>
         <cardappio-date-picker
-          [selectedDate]="selectedDate"
+          [selectedDate]="formState.selectedDate"
           (dateChange)="onDateSelected($event)"
           topLabel="Select Date"
           size="40">
         </cardappio-date-picker>
         <div class="result">
-          <strong>Selected:</strong> {{ selectedDate | date:'dd/MM/yyyy' }}
+          <strong>Selected:</strong> {{ formState.selectedDate | date:'dd/MM/yyyy' }}
         </div>
       </div>
 
-      <!-- Single Autocomplete -->
       <div class="component-section">
         <h3>Single User Selection</h3>
         <carddapio-autocomplete
@@ -28,49 +24,42 @@
           [isMultiple]="false"
           [size]="40"
           (selectionChange)="onUserSelected($event)"
-          (clear)="onClearUsers()">
+          (clear)="onClearSingleUser()">
         </carddapio-autocomplete>
         <div class="result">
-          <strong>Selected User:</strong> {{ selectedUser?.name || 'None' }}
+          <strong>Selected User:</strong> {{ formState.selectedUser?.name || 'None' }}
         </div>
       </div>
 
-      <!-- Action Buttons -->
       <div class="component-section">
-        <h3>Actions</h3>
+        <h3>Form Actions</h3>
         <div class="buttons-section">
           <cardappio-save-button
-            [disabled]="!acceptTerms"
+            [disabled]="!isFormValid"
             (onClick)="onSave()">
           </cardappio-save-button>
-
           <cardappio-cancel-button
             (onClick)="onCancel()">
           </cardappio-cancel-button>
         </div>
-
-        @if (!acceptTerms) {
+        @if (!isFormValid) {
           <div class="warning">
-            <small>Please accept terms and conditions to enable save</small>
+            <small>Accept terms and conditions to enable save</small>
           </div>
         }
       </div>
 
-      <!-- Actions List -->
       <div class="component-section">
-        <h3>Actions List</h3>
+        <h3>Available Actions</h3>
         <p>Sample actions for record ID: 123</p>
         <cardappio-actions-list
           nameRoute="/users"
-          [id]="123"
-          [actionsInput]="customActions">
+          [id]="123">
         </cardappio-actions-list>
       </div>
     </div>
 
-    <!-- Right Column -->
     <div class="right-column">
-      <!-- Multiple Autocomplete -->
       <div class="component-section">
         <h3>Multiple User Selection</h3>
         <carddapio-autocomplete
@@ -84,14 +73,12 @@
           (selectionChange)="onMultipleUsersSelected($event)"
           (clear)="onClearMultipleUsers()">
         </carddapio-autocomplete>
-
         <div class="result">
-          <strong>Selected Users:</strong> {{ selectedMultipleItems.length }} user(s)
+          <strong>Selected Users:</strong> {{ formState.selectedMultipleUsers.length }} user(s)
         </div>
-
-        @if (selectedMultipleItems.length > 0) {
+        @if (formState.selectedMultipleUsers.length > 0) {
           <div class="selected-users">
-            @for (user of selectedMultipleItems; track user.id) {
+            @for (user of formState.selectedMultipleUsers; track user.id) {
               <div class="user-chip">
                 <span class="user-name">{{ user.name }}</span>
                 <span class="user-email">{{ user.email }}</span>
@@ -100,97 +87,74 @@
           </div>
         }
       </div>
+
       <div class="component-section">
         <h3>Form Controls</h3>
         <div class="form-controls">
-          <!-- Adicione os toggles aqui -->
           <cardappio-toggle
             label="Enable Feature"
-            [(ngModel)]="isEnabled"
-            (onSwitch)="onToggleChange($event)">
+            [(ngModel)]="formState.isFeatureEnabled"
+            (onSwitch)="onFeatureToggleChange($event)">
           </cardappio-toggle>
 
-          <div class="form-controls">
-            <!-- Toggle para Feature -->
-            <cardappio-toggle
-              label="Enable Feature"
-              [(ngModel)]="isEnabled"
-              (onSwitch)="onToggleChange($event)">
-            </cardappio-toggle>
+          <cardappio-toggle
+            label="Receive Notifications"
+            [(ngModel)]="formState.receiveNotifications"
+            (onSwitch)="onNotificationsToggleChange($event)">
+          </cardappio-toggle>
 
-            <!-- Toggle para Notifications -->
-            <cardappio-toggle
-              label="Receive Notifications"
-              [(ngModel)]="receiveNotifications"
-              (onSwitch)="onNotificationsChange($event)">
-            </cardappio-toggle>
-
-          <div class="results">
-
-          <div class="result-item">
-            <strong>Feature Enabled:</strong>
-            <span [class]="isEnabled ? 'status-yes' : 'status-no'">
-        {{ isEnabled ? 'Yes' : 'No' }}
-      </span>
+          <div (click)="toggleTerms()">
+            <cardappio-checkbox
+              spanMessage="I accept the terms and conditions"
+              [defaultChecked]="formState.acceptsTerms"
+              checkedColor="#51CF66">
+            </cardappio-checkbox>
           </div>
-          <div class="result-item">
-            <strong>Receive Notifications:</strong>
-            <span [class]="receiveNotifications ? 'status-yes' : 'status-no'">
-        {{ receiveNotifications ? 'Yes' : 'No' }}
-      </span>
-          </div>
-          <div class="result-item">
-            <strong>Terms Accepted:</strong>
-            <span [class]="acceptTerms ? 'status-yes' : 'status-no'">
-        {{ acceptTerms ? 'Yes' : 'No' }}
-      </span>
-          </div>
-        </div>
-      </div>
-
-
         </div>
 
         <div class="results">
           <div class="result-item">
             <strong>Feature Enabled:</strong>
-            <span [class]="isEnabled ? 'status-yes' : 'status-no'">
-              {{ isEnabled ? 'Yes' : 'No' }}
+            <span [class]="formState.isFeatureEnabled ? 'status-yes' : 'status-no'">
+              {{ formState.isFeatureEnabled ? 'Yes' : 'No' }}
+            </span>
+          </div>
+          <div class="result-item">
+            <strong>Receive Notifications:</strong>
+            <span [class]="formState.receiveNotifications ? 'status-yes' : 'status-no'">
+              {{ formState.receiveNotifications ? 'Yes' : 'No' }}
             </span>
           </div>
           <div class="result-item">
             <strong>Terms Accepted:</strong>
-            <span [class]="acceptTerms ? 'status-yes' : 'status-no'">
-              {{ acceptTerms ? 'Yes' : 'No' }}
+            <span [class]="formState.acceptsTerms ? 'status-yes' : 'status-no'">
+              {{ formState.acceptsTerms ? 'Yes' : 'No' }}
             </span>
           </div>
         </div>
       </div>
 
-      <!-- Dropdown Filter -->
       <div class="component-section">
-        <h3>Dropdown Type Filter</h3>
+        <h3>Filter & Dialog</h3>
         <cardappio-dropdown-type-filter
           [type]="'string'"
           (selectedChange)="onFilterChange($event)">
         </cardappio-dropdown-type-filter>
-
-        <button class="demo-button" (click)="openCustomDialog()">
+        <button class="demo-button" (click)="openDialog()">
           Open Custom Dialog
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Custom Dialog -->
   @if (showCustomDialog) {
     <cardappio-dialog
       [params]="{
         title: 'Custom Dialog Test',
         content: 'This is a custom dialog example with different content.'
       }"
-      (eventCancel)="closeCustomDialog()"
-      (eventConfirm)="confirmCustomDialog()">
+      (eventCancel)="closeDialog()"
+      (eventConfirm)="confirmDialog()">
     </cardappio-dialog>
   }
 </div>

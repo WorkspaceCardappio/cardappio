@@ -2,14 +2,6 @@
   max-width: 1400px;
   padding: 30px;
 
-  h1 {
-    text-align: center;
-    margin-bottom: 40px;
-    color: #333;
-    font-size: 2.2em;
-    font-weight: 300;
-  }
-
   .components-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -26,14 +18,19 @@
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
 
     h3 {
       margin: 0 0 20px 0;
-      color: #555;
+      color: #2d3748;
       font-size: 1.3em;
-      font-weight: 500;
-      border-bottom: 2px solid #f0f0f0;
+      font-weight: 600;
+      border-bottom: 2px solid #f0f2f5;
       padding-bottom: 10px;
     }
 
@@ -47,7 +44,7 @@
     cardappio-actions-list {
       display: flex;
       justify-content: center;
-      padding: 15px;
+      padding: 20px;
       background-color: #f8f9fa;
       border-radius: 8px;
       border: 1px dashed #dee2e6;
@@ -57,7 +54,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
 
       cardappio-toggle,
       cardappio-checkbox {
@@ -67,27 +64,30 @@
 
     .result {
       background-color: #f8f9fa;
-      padding: 12px;
-      border-radius: 6px;
+      padding: 15px;
+      border-radius: 8px;
       border-left: 4px solid #007bff;
       font-size: 0.95em;
+      margin-top: 15px;
 
       strong {
         color: #495057;
+        font-weight: 600;
       }
     }
 
     .results {
       background-color: #f8f9fa;
-      padding: 15px;
-      border-radius: 6px;
+      padding: 20px;
+      border-radius: 8px;
       border-left: 4px solid #28a745;
 
       .result-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
+        padding: 5px 0;
 
         &:last-child {
           margin-bottom: 0;
@@ -95,16 +95,23 @@
 
         strong {
           color: #495057;
+          font-weight: 500;
         }
 
         .status-yes {
           color: #28a745;
           font-weight: 600;
+          text-transform: uppercase;
+          font-size: 0.85em;
+          letter-spacing: 0.5px;
         }
 
         .status-no {
           color: #dc3545;
           font-weight: 600;
+          text-transform: uppercase;
+          font-size: 0.85em;
+          letter-spacing: 0.5px;
         }
       }
     }
@@ -118,20 +125,26 @@
       .user-chip {
         background-color: #e3f2fd;
         border: 1px solid #bbdefb;
-        border-radius: 6px;
-        padding: 8px 12px;
+        border-radius: 8px;
+        padding: 12px 15px;
         display: flex;
         flex-direction: column;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #e1f5fe;
+        }
 
         .user-name {
-          font-weight: 500;
+          font-weight: 600;
           color: #1565c0;
+          font-size: 0.95em;
         }
 
         .user-email {
           font-size: 0.85em;
-          color: #666;
-          margin-top: 2px;
+          color: #757575;
+          margin-top: 3px;
         }
       }
     }
@@ -152,11 +165,13 @@
       background-color: #fff3cd;
       border: 1px solid #ffeaa7;
       border-radius: 6px;
-      padding: 10px;
+      padding: 12px 15px;
+      margin-top: 10px;
 
       small {
         color: #856404;
         font-style: italic;
+        font-weight: 500;
       }
     }
 
@@ -164,13 +179,21 @@
       background-color: #6c757d;
       color: white;
       border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
+      padding: 10px 18px;
+      border-radius: 6px;
       cursor: pointer;
       margin-top: 15px;
+      font-weight: 500;
+      transition: all 0.2s ease;
 
       &:hover {
         background-color: #5a6268;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
@@ -178,6 +201,13 @@
       margin: 10px 0;
       font-size: 0.9em;
       color: #666;
+      line-height: 1.5;
     }
+  }
+
+  .left-column,
+  .right-column {
+    display: flex;
+    flex-direction: column;
   }
 }

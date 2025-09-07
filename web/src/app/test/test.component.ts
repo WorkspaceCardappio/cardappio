@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
-  InputComponent,
-  ToggleComponent,
   DatePickerComponent,
+  ToggleComponent,
   AutocompleteComponent,
   CancelButtonComponent,
   SaveButtonComponent,
@@ -10,14 +13,33 @@ import {
   ActionsListComponent,
   DialogComponent,
   DropdownTypeFilterComponent
-} from "cardappio-component-hub";
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { DatePipe } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+} from 'cardappio-component-hub';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface FormState {
+  selectedDate: Date | null;
+  selectedUser: User | null;
+  selectedMultipleUsers: User[];
+  isFeatureEnabled: boolean;
+  acceptsTerms: boolean;
+  receiveNotifications: boolean;
+}
+
+interface CustomAction {
+  name: string;
+  icon: { name: string; color: string };
+  action: (id?: number) => void;
+  enabled: boolean;
+}
 
 @Component({
   selector: 'app-test',
+  standalone: true,
   imports: [
     DatePickerComponent,
     ToggleComponent,
@@ -31,25 +53,22 @@ import { FormsModule } from "@angular/forms";
     DatePipe,
     FormsModule
   ],
-  standalone: true,
   templateUrl: './test.component.html',
-  styleUrl: './test.component.scss'
+  styleUrls: ['./test.component.scss']
 })
 export class TestComponent {
-  selectedDate: Date | null = new Date();
-  selectedUser: any = null;
-  selectedMultipleItems: any[] = [];
+  formState: FormState = {
+    selectedDate: new Date(),
+    selectedUser: null,
+    selectedMultipleUsers: [],
+    isFeatureEnabled: false,
+    acceptsTerms: false,
+    receiveNotifications: true
+  };
 
-  // Form state
-  isEnabled: boolean = false;
-  acceptTerms: boolean = false;
-  receiveNotifications: boolean = true;
+  showCustomDialog = false;
 
-  // Dialog state
-  showCustomDialog: boolean = false;
-
-  // Mock data for demonstration
-  mockUsers = [
+  readonly mockUsers: readonly User[] = [
     { id: 1, name: 'João Silva', email: 'joao@email.com' },
     { id: 2, name: 'Maria Santos', email: 'maria@email.com' },
     { id: 3, name: 'Pedro Oliveira', email: 'pedro@email.com' },
@@ -57,8 +76,7 @@ export class TestComponent {
     { id: 5, name: 'Carlos Ferreira', email: 'carlos@email.com' }
   ];
 
-  // Custom actions for actions list
-  customActions = [
+  readonly customActions: readonly CustomAction[] = [
     {
       name: 'view',
       icon: { name: 'fa-solid fa-eye', color: '#28a745' },
@@ -73,98 +91,103 @@ export class TestComponent {
     }
   ];
 
-  // Existing methods...
-  onDateSelected(date: Date | null) {
-    console.log('Selected date:', date);
-    this.selectedDate = date;
+  get isFormValid(): boolean {
+    return this.formState.acceptsTerms;
   }
 
-  searchUsers = (query: string): Observable<any[]> => {
-    console.log('Searching for:', query);
+  onDateSelected(date: Date | null): void {
+    this.formState.selectedDate = date;
+    console.log('Date selected:', date);
+  }
 
+  searchUsers = (query: string): Observable<User[]> => {
     const filteredUsers = this.mockUsers.filter(user =>
       user.name.toLowerCase().includes(query.toLowerCase()) ||
       user.email.toLowerCase().includes(query.toLowerCase())
     );
-
     return of(filteredUsers).pipe(delay(300));
+  };
+
+  onUserSelected(user: User): void {
+    this.formState.selectedUser = user;
+    console.log('User selected:', user);
   }
 
-  onUserSelected(user: any) {
-    console.log('Selected user:', user);
-    this.selectedUser = user;
+  onMultipleUsersSelected(users: User[]): void {
+    this.formState.selectedMultipleUsers = users;
+    console.log('Multiple users selected:', users);
   }
 
-  onMultipleUsersSelected(users: any[]) {
-    console.log('Selected users:', users);
-    this.selectedMultipleItems = users;
+  onClearSingleUser(): void {
+    this.formState.selectedUser = null;
   }
 
-  onClearUsers() {
-    console.log('Cleared selection');
-    this.selectedUser = null;
+  onClearMultipleUsers(): void {
+    this.formState.selectedMultipleUsers = [];
   }
 
-  onClearMultipleUsers() {
-    console.log('Cleared multiple selection');
-    this.selectedMultipleItems = [];
+  displayUserName = (user: User): string => user?.name || '';
+  displayUserEmail = (user: User): string => user?.email || '';
+
+  onFeatureToggleChange(enabled: boolean): void {
+    this.formState.isFeatureEnabled = enabled;
+    console.log('Feature enabled:', enabled);
   }
 
-  displayUserName = (user: any) => user?.name || '';
-  displayUserEmail = (user: any) => user?.email || '';
-
-  onSave() {
-    console.log('Save clicked!');
-    console.log('Form data:', {
-      selectedDate: this.selectedDate,
-      selectedUser: this.selectedUser,
-      selectedMultipleItems: this.selectedMultipleItems,
-      isEnabled: this.isEnabled,
-      acceptTerms: this.acceptTerms,
-      receiveNotifications: this.receiveNotifications
-    });
+  onNotificationsToggleChange(enabled: boolean): void {
+    this.formState.receiveNotifications = enabled;
+    console.log('Notifications enabled:', enabled);
   }
 
-  onCancel() {
-    console.log('Cancel clicked!');
-    this.selectedDate = new Date();
-    this.selectedUser = null;
-    this.selectedMultipleItems = [];
-    this.isEnabled = false;
-    this.acceptTerms = false;
-    this.receiveNotifications = true;
+  onTermsChange(accepted: boolean): void {
+    this.formState.acceptsTerms = accepted;
+    console.log('Terms accepted:', accepted);
   }
 
-  onToggleChange(value: boolean) {
-    console.log('Toggle changed:', value);
-    this.isEnabled = value;
-  }
-
-  onTermsChange(value: boolean) {
-    console.log('Terms checkbox changed:', value);
-    this.acceptTerms = value;
-  }
-
-  onNotificationsChange(value: boolean) {
-    console.log('Notifications toggle changed:', value);
-    this.receiveNotifications = value;
-  }
-
-  // New methods for new components
-  onFilterChange(selectedFilter: any) {
+  onFilterChange(selectedFilter: unknown): void {
     console.log('Filter changed:', selectedFilter);
   }
 
-  openCustomDialog() {
+  onSave(): void {
+    if (!this.isFormValid) {
+      console.warn('Cannot save: Form is invalid');
+      return;
+    }
+
+    console.log('Saving form data:', this.formState);
+  }
+
+  onCancel(): void {
+    this.resetForm();
+    console.log('Form cancelled and reset');
+  }
+
+  openDialog(): void {
     this.showCustomDialog = true;
   }
 
-  closeCustomDialog() {
+  closeDialog(): void {
     this.showCustomDialog = false;
   }
 
-  confirmCustomDialog() {
-    console.log('Custom dialog confirmed!');
-    this.showCustomDialog = false;
+  confirmDialog(): void {
+    console.log('Dialog confirmed');
+    this.closeDialog();
+  }
+
+  private resetForm(): void {
+    this.formState = {
+      selectedDate: new Date(),
+      selectedUser: null,
+      selectedMultipleUsers: [],
+      isFeatureEnabled: false,
+      acceptsTerms: false,
+      receiveNotifications: true
+    };
+  }
+
+  toggleTerms(): void {
+    const newValue = !this.formState.acceptsTerms;
+    this.onTermsChange(newValue);
   }
 }
