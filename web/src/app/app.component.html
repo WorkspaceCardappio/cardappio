@@ -1,10 +1,17 @@
 <div class="app-container">
-  <carddapio-left-menu></carddapio-left-menu>
+  <div class="body-content">
+    <!-- Sidebar on the left (full height) -->
+    <carddapio-left-menu class="sidebar"></carddapio-left-menu>
 
-  <div class="main-content-area">
-    <cardappio-header></cardappio-header>
+    <!-- Right side content -->
+    <div class="right-content">
+      <!-- Header at the top of right side -->
+      <cardappio-header class="header"></cardappio-header>
 
-    <main class="page-content">
-    </main>
+      <!-- Main content area below header -->
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </div>
 </div>

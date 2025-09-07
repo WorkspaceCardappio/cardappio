@@ -22,7 +22,8 @@ import {
   InputComponent,
   FilterHeaderComponent,
   ListComponent
-} from "@cardappio/cardappio-component-hub";
+} from "cardappio-component-hub";
+import { RouterOutlet } from "@angular/router";
 
 
 @Component({
@@ -49,7 +50,8 @@ import {
     DropdownTypeFilterComponent,
     InputComponent,
     FilterHeaderComponent,
-    ListComponent
+    ListComponent,
+    RouterOutlet
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

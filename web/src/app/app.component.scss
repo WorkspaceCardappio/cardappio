@@ -1,27 +1,34 @@
 .app-container {
-  display: flex;
   height: 100vh;
+
+  .body-content {
+    display: flex;
+    height: 100%;
+
+    .sidebar {
+      flex-shrink: 0;
+      // Sidebar takes full height
+    }
+
+    .right-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .header {
+        flex-shrink: 0;
+        height: 60px; // Adjust height as needed
+        // Add any header-specific styles if needed
+        margin-left: 43px;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px; // This gives margin to all your route content
+        overflow-y: auto;
+
+        // Optional: add background or additional styling
+      }
+    }
+  }
 }
-
-carddapio-left-menu {
-  width: 250px;
-}
-
-.main-content-area {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-
-cardappio-header {
-  margin-left: -100px;
-
-  height: 64px;
-}
-
-.page-content {
-  flex-grow: 1;
-  overflow-y: auto;
-}
- }
-
-
