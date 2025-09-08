@@ -147,6 +147,17 @@
     </div>
   </div>
 
+  <div class="list-component-section">
+    <h2>Data List Component</h2>
+    <div class="list-wrapper">
+      <app-list
+        [params]="listParams"
+        [showActions]="true"
+        [quantityPages]="[5, 10, 20, 50]">
+      </app-list>
+    </div>
+  </div>
+
   @if (showCustomDialog) {
     <cardappio-dialog
       [params]="{

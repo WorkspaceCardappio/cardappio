@@ -12,8 +12,10 @@ import {
   CheckboxComponent,
   ActionsListComponent,
   DialogComponent,
-  DropdownTypeFilterComponent
+  DropdownTypeFilterComponent, ListComponent
 } from 'cardappio-component-hub';
+import { ListParams } from "cardappio-component-hub/lib/list/params/list-params.model";
+import { DropdownItem } from "cardappio-component-hub/lib/dropdown-menu-list/model/dropdown-item.model";
 
 interface User {
   id: number;
@@ -51,7 +53,8 @@ interface CustomAction {
     DialogComponent,
     DropdownTypeFilterComponent,
     DatePipe,
-    FormsModule
+    FormsModule,
+    ListComponent // Add the ListComponent to imports
   ],
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.scss']
@@ -67,6 +70,71 @@ export class TestComponent {
   };
 
   showCustomDialog = false;
+
+  // Configuration for the ListComponent
+  listParams: Partial<ListParams> = {
+    route: '/users', // Base route for navigation
+    columns: [
+      {
+        field: 'universo',
+        title: 'Universo',
+        order: 'none',
+        size: 2
+      },
+      {
+        field: 'mundo',
+        title: 'Mundo',
+        order: 'none',
+        size: 2
+      },
+      {
+        field: 'ricardo',
+        title: 'Ricardo',
+        order: 'none',
+        size: 2
+      },
+      {
+        field: 'teste',
+        title: 'Teste',
+        order: 'none',
+        size: 2
+      },
+      {
+        field: 'kenji',
+        title: 'Kenji',
+        order: 'none',
+        size: 2
+      }
+    ],
+    filters: [
+      {
+        value: 'universo',
+        typeValue: 'string'
+      },
+      {
+        label: 'Mundo',
+        value: 'mundo',
+        typeValue: 'string'
+      },
+      {
+        label: 'Ricardo',
+        value: 'ricardo',
+        typeValue: 'string'
+      },
+      {
+        label: 'Teste',
+        value: 'teste',
+        typeValue: 'string'
+      },
+      {
+        label: 'Kenji',
+        value: 'kenji',
+        typeValue: 'string'
+      }
+    ] as DropdownItem[]
+    // Note: You'll need to add the service property if you have a real service
+    // service: yourDataService
+  };
 
   readonly mockUsers: readonly User[] = [
     { id: 1, name: 'João Silva', email: 'joao@email.com' },
