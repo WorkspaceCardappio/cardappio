@@ -59,10 +59,10 @@ import { RouterOutlet } from "@angular/router";
 })
 export class AppComponent {
 
-  nome: string = 'Cardappio';
+  title: string = 'title';
 
   aoAlterarNome(valor: string) {
-    this.nome = valor;
-    console.log('Nome alterado para:', this.nome);
+    this.title = valor;
+    console.log('Nome alterado para:', this.title);
   }
 }
