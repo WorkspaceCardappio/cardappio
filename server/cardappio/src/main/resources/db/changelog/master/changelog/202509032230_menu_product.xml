@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_table_menu_product" author="joao.rolo">
+        <preConditions onFail="MARK_RAN" onFailMessage="a tabela menu_product já existe">
+            <not>
+                <tableExists tableName="menu_product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="menu_product">
+            <column name="id" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="pk_menu_product"/>
+            </column>
+            <column name="menu_id" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="${price}" type="decimal(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_fk_menu_product_menu_id" author="joao.rolo">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_menu_id já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_menu_id" foreignKeyTableName="menu_product"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="menu_product"
+                                 baseColumnNames="menu_id"
+                                 constraintName="fk_menu_product_menu_id"
+                                 referencedTableName="menu"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add_fk_menu_product_product_id" author="joao.rolo">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_product_id já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_product_id" foreignKeyTableName="menu_product"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="menu_product"
+                                 baseColumnNames="product_id"
+                                 constraintName="fk_menu_product_product_id"
+                                 referencedTableName="product"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

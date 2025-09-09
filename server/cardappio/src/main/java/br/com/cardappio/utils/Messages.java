@@ -9,4 +9,7 @@ public class Messages {
     public static final String SIZE_10 = "Tamanho não pode ultrapassar 10 caracteres";
     public static final String SIZE_255 = "Tamanho não pode ultrapassar 255 caracteres";
 
+    public static final String EMPTY_MENU = "Campo menu não pode ficar vazio";
+    public static final String EMPTY_PRODUCT = "Campo produto não pode ficar vazio";
+    public static final String EMPTY_PRICE = "Campo preço não pode ficar vazio";
 }
