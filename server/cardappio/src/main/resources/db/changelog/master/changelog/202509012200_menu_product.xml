@@ -27,28 +27,28 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="add_fk_menu_product_to_menu" author="joao.rolo">
-        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_to_menu já existe">
+    <changeSet id="add_fk_menu_product_menu_id" author="joao.rolo">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_menu_id já existe">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_to_menu" foreignKeyTableName="menu_product"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_menu_id" foreignKeyTableName="menu_product"/>
             </not>
         </preConditions>
         <addForeignKeyConstraint baseTableName="menu_product"
                                  baseColumnNames="menu_id"
-                                 constraintName="fk_menu_product_to_menu"
+                                 constraintName="fk_menu_product_menu_id"
                                  referencedTableName="menu"
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="add_fk_menu_product_to_product" author="joao.rolo">
-        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_to_product já existe">
+    <changeSet id="add_fk_menu_product_product_id" author="joao.rolo">
+        <preConditions onFail="MARK_RAN" onFailMessage="a constraint fk_menu_product_product_id já existe">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_to_product" foreignKeyTableName="menu_product"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_product_product_id" foreignKeyTableName="menu_product"/>
             </not>
         </preConditions>
         <addForeignKeyConstraint baseTableName="menu_product"
                                  baseColumnNames="product_id"
-                                 constraintName="fk_menu_product_to_product"
+                                 constraintName="fk_menu_product_product_id"
                                  referencedTableName="product"
                                  referencedColumnNames="id"/>
     </changeSet>

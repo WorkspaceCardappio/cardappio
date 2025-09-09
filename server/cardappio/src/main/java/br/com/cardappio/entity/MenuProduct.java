@@ -43,7 +43,7 @@ public class MenuProduct implements EntityModel<UUID> {
     private Menu menu;
 
     @ManyToOne
-    @NotNull(message = "O produto é obrigatório")
+    @NotNull(message = Messages.EMPTY_PRODUCT)
     @JoinColumn(name = "product_id")
     private Product product;
 
