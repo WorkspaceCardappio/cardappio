@@ -12,9 +12,6 @@ import java.util.UUID;
 
 @Service
 public class TableService extends CrudService<TableRestaurant, TableRestaurantDTO, UUID> {
-    public TableService(final CrudRepository<TableRestaurant, UUID> repository) {
-        super(repository);
-    }
 
     @Override
     protected Adapter<TableRestaurantDTO, TableRestaurant> getAdapter() {
