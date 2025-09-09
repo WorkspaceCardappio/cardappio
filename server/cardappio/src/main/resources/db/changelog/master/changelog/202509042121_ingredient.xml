@@ -21,12 +21,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="QUANTITY" type="${quantity}">
-                <constraints nullable="false"/>
+                <constraints nullable="false" checkConstraint="QUANTITY >= 0"/>
             </column>
             <column name="EXPIRATION_DATE" type="${date}">
                 <constraints nullable="false"/>
             </column>
-            <column name="ALLERGENIC" type="${boolean}" defaultValueBoolean="true">
+            <column name="ALLERGENIC" type="${boolean}" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
