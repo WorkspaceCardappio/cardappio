@@ -12,8 +12,4 @@ import java.util.UUID;
 @RequestMapping("/products")
 public class ProductController extends CrudController<Product, ProductDTO, UUID> {
 
-
-    public ProductController(final CrudService<Product, ProductDTO, UUID> service) {
-        super(service);
-    }
 }

@@ -14,11 +14,6 @@ import java.util.UUID;
 @Service
 public class ProductService extends CrudService<Product, ProductDTO, UUID> {
 
-
-    public ProductService(final CrudRepository<Product, UUID> repository) {
-        super(repository);
-    }
-
     @Override
     protected Adapter<ProductDTO, Product> getAdapter() {
         return new ProductAdapter();
