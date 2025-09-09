@@ -15,7 +15,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class Menu implements EntityModel<UUID> {
 
     @Id

@@ -14,7 +14,7 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @ToString
 public class Product implements EntityModel<UUID> {
 
