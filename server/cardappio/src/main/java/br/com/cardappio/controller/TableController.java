@@ -11,8 +11,4 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/tables")
-public class TableController extends CrudController<TableRestaurant, TableRestaurantDTO, UUID> {
-    public TableController(final CrudService<TableRestaurant, TableRestaurantDTO, UUID> service) {
-        super(service);
-    }
-}
+public class TableController extends CrudController<TableRestaurant, TableRestaurantDTO, UUID> {}
