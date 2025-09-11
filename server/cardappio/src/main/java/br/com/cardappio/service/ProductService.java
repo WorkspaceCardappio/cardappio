@@ -5,9 +5,11 @@ import br.com.cardappio.adapter.ProductAdapter;
 import br.com.cardappio.entity.Product;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class ProductService extends CrudService<Product, ProductDTO, UUID> {
 
 
