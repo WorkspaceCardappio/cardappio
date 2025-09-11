@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="CREATE_TABLE_INGREDIENT" author="ricardo.filho">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela INGREDIENT já foi criada">
+            <not>
+                <tableExists tableName="INGREDIENT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="INGREDIENT">
+            <column name="ID" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="PK_INGREDIENT"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="QUANTITY" type="${quantity}">
+                <constraints nullable="false" checkConstraint="QUANTITY >= 0"/>
+            </column>
+            <column name="EXPIRATION_DATE" type="${date}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ALLERGENIC" type="${boolean}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
