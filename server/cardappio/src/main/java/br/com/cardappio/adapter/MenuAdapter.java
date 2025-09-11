@@ -7,12 +7,12 @@ import com.cardappio.core.adapter.Adapter;
 public class MenuAdapter implements Adapter<MenuDTO, Menu> {
 
     @Override
-    public MenuDTO toDTO(Menu entity) {
+    public MenuDTO toDTO(final Menu entity) {
         return new MenuDTO(entity);
     }
 
     @Override
-    public Menu toEntity(MenuDTO dto) {
+    public Menu toEntity(final MenuDTO dto) {
         return Menu.of(dto);
     }
 }
