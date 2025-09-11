@@ -24,16 +24,16 @@ public record TicketDTO(
         Long code,
 
         @NotNull(message = Messages.PERSON_NON_NULL)
-        Long personId,
+        UUID ownerId,
 
         @NotNull(message = Messages.TABLE_NON_NULL)
-        Long tableId
+        UUID tableId
 ) {
     public TicketDTO(final Ticket ticket){
         this(
                 ticket.getId(),
                 ticket.getNumber(),
-                ticket.getStatus(),
+                ticket.getStatus().getCode(),
                 ticket.getOwner().getId(),
                 ticket.getTable().getId()
         );
