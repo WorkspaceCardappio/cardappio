@@ -4,6 +4,7 @@ import br.com.cardappio.DTO.IngredientDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -34,7 +35,8 @@ public class Ingredient implements EntityModel<UUID> {
 
     @Column(nullable = false)
     @NotNull
-    private BigDecimal quantity;
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal quantity = BigDecimal.ZERO;
 
     @Column(name = "expiration_date", nullable = false)
     @NotNull
@@ -42,7 +44,7 @@ public class Ingredient implements EntityModel<UUID> {
 
     @Column(nullable = false)
     @NotNull
-    private Boolean allergenic;
+    private Boolean allergenic = Boolean.FALSE;
 
     public static Ingredient of(final IngredientDTO dto) {
 
