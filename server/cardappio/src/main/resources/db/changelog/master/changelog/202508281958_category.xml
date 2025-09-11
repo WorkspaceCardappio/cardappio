@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
     <changeSet id="create_table_category" author="cassia">
         <preConditions onFail="MARK_RAN" onFailMessage="a tabela category já existe">
             <not>
@@ -31,10 +32,8 @@
                 <foreignKeyConstraintExists foreignKeyName="fk_category_category_id" foreignKeyTableName="category"/>
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseTableName="category" baseColumnNames="category_id" constraintName="fk_category_category_id" referencedTableName="category"
+        <addForeignKeyConstraint baseTableName="category" baseColumnNames="category_id"
+                                 constraintName="fk_category_category_id" referencedTableName="category"
                                  referencedColumnNames="id"/>
     </changeSet>
-    
-    
-    
 </databaseChangeLog>
