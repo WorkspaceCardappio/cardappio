@@ -1,12 +1,11 @@
 package br.com.cardappio.entity;
 
-import br.com.cardappio.DTO.CategoryDTO;
 import br.com.cardappio.DTO.ProductDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -17,7 +16,8 @@ import java.util.UUID;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,10 +37,11 @@ public class Product implements EntityModel<UUID> {
     private BigDecimal price;
 
     @Column
+    @Min(value = 0, message = Messages.MAIOR_QUE_ZERO)
     private BigDecimal quantity;
 
-    @Column
-    private boolean active;
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean active = true;
 
     @Column
     @ManyToOne
@@ -48,14 +49,14 @@ public class Product implements EntityModel<UUID> {
     private Category category;
 
     @Column
-    private LocalDate dataVencimento;
+    private LocalDate expirationDate;
 
     @Column
     private String image;
 
     @Column
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductIngredient> productIngredient;
+    private List<ProductIngredient> productIngredients;
 
     public static Product of(final ProductDTO dto) {
         final Product product = new Product();
@@ -66,9 +67,9 @@ public class Product implements EntityModel<UUID> {
         product.setQuantity(dto.quantity());
         product.setActive(dto.active());
         product.setCategory(dto.category());
-        product.setDataVencimento(dto.dataVencimento());
+        product.setExpirationDate(dto.expirationDate());
         product.setImage(dto.image());
-        product.setProductIngredient(dto.productIngredient());
+        product.setProductIngredients(dto.productIngredients());
 
         return product;
     }

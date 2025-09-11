@@ -4,10 +4,7 @@ import br.com.cardappio.entity.Category;
 import br.com.cardappio.entity.Product;
 import br.com.cardappio.entity.ProductIngredient;
 import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Builder;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
@@ -15,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
 public record ProductDTO(
 
         UUID id,
@@ -24,25 +20,25 @@ public record ProductDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String name,
 
-        @NotNull
+        @NotNull(message = Messages.EMPTY_PRICE)
         BigDecimal price,
 
         @NotNull
+        @Min(value = 0, message = Messages.MAIOR_QUE_ZERO)
         BigDecimal quantity,
 
-        @NotNull
-        LocalDate dataVencimento,
+        LocalDate expirationDate,
 
         boolean active,
 
-        @NotNull
+        @NotNull(message = Messages.EMPTY_CATEGORY)
         Category category,
 
         @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
         @NotNull
-        List<ProductIngredient> productIngredient
+        List<ProductIngredient> productIngredients
 ) {
 
     public ProductDTO(final Product product){
@@ -51,11 +47,11 @@ public record ProductDTO(
                 product.getName(),
                 product.getPrice(),
                 product.getQuantity(),
-                product.getDataVencimento(),
+                product.getExpirationDate(),
                 product.isActive(),
                 product.getCategory(),
                 product.getImage(),
-                product.getProductIngredient()
+                product.getProductIngredients()
         );
     }
 
