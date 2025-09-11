@@ -6,12 +6,12 @@ import com.cardappio.core.adapter.Adapter;
 
 public class ProductAdapter implements Adapter<ProductDTO, Product> {
     @Override
-    public ProductDTO toDTO(Product entity) {
+    public ProductDTO toDTO(final Product entity) {
         return new ProductDTO(entity);
     }
 
     @Override
-    public Product toEntity(ProductDTO dto) {
+    public Product toEntity(final ProductDTO dto) {
         return Product.of(dto);
     }
 }
