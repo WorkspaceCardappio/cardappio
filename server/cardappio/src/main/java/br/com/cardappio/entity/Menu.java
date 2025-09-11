@@ -4,6 +4,7 @@ import br.com.cardappio.DTO.MenuDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -18,19 +19,19 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(of = "id")
-
 public class Menu implements EntityModel<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column
-    @NotNull(message = Messages.EMPTY_NAME)
+    @NotBlank(message = Messages.EMPTY_NAME)
     @Length(max = 255, message = Messages.SIZE_255)
     private String name;
 
     @Column
+    @NotNull
     private Boolean active = true;
 
     @Column
@@ -38,7 +39,7 @@ public class Menu implements EntityModel<UUID> {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     public static Menu of(final MenuDTO dto) {

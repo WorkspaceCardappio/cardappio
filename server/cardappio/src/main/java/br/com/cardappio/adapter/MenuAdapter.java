@@ -2,17 +2,17 @@ package br.com.cardappio.adapter;
 
 import br.com.cardappio.DTO.MenuDTO;
 import br.com.cardappio.entity.Menu;
+import com.cardappio.core.adapter.Adapter;
 
-
-public class MenuAdapter implements Addpter<MenuDTO, Menu> {
+public class MenuAdapter implements Adapter<MenuDTO, Menu> {
 
     @Override
-    public MenuDTO toDto(final Menu entity) {
+    public MenuDTO toDTO(Menu entity) {
         return new MenuDTO(entity);
     }
 
     @Override
-    public Menu toEntity(final MenuDTO dto) {
+    public Menu toEntity(MenuDTO dto) {
         return Menu.of(dto);
     }
 }
