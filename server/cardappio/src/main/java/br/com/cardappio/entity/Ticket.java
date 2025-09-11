@@ -4,13 +4,11 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
-import br.com.cardappio.DTO.TableRestaurantDTO;
 import br.com.cardappio.DTO.TicketDTO;
 import br.com.cardappio.converter.TicketStatusConverter;
 import br.com.cardappio.enums.TicketStatus;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

@@ -4,11 +4,8 @@ import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.cardappio.entity.TableRestaurant;
 import br.com.cardappio.entity.Ticket;
-import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -2,9 +2,7 @@ package br.com.cardappio.adapter;
 
 import com.cardappio.core.adapter.Adapter;
 
-import br.com.cardappio.DTO.TableRestaurantDTO;
 import br.com.cardappio.DTO.TicketDTO;
-import br.com.cardappio.entity.TableRestaurant;
 import br.com.cardappio.entity.Ticket;
 
 public class TicketAdapter implements Adapter<TicketDTO, Ticket> {
