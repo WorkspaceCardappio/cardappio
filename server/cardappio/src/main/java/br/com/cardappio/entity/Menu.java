@@ -11,16 +11,6 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
-import com.cardappio.core.entity.EntityModel;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
 @Entity
 @Table
 @Getter
