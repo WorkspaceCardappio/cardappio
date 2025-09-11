@@ -1,0 +1,41 @@
+package br.com.cardappio.DTO;
+
+import java.util.UUID;
+
+import org.hibernate.validator.constraints.Length;
+
+import br.com.cardappio.entity.TableRestaurant;
+import br.com.cardappio.entity.Ticket;
+import br.com.cardappio.enums.TableStatus;
+import br.com.cardappio.utils.Messages;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record TicketDTO(
+
+        UUID id,
+
+        @NotBlank(message = Messages.EMPTY_NUMBER)
+        @Length(max=10, message = Messages.SIZE_10)
+        String number,
+
+        @NotNull(message = Messages.CODE_NOT_FOUND)
+        Long code,
+
+        @NotNull(message = Messages.PERSON_NON_NULL)
+        Long personId,
+
+        @NotNull(message = Messages.TABLE_NON_NULL)
+        Long tableId
+) {
+    public TicketDTO(final Ticket ticket){
+        this(
+                ticket.getId(),
+                ticket.getNumber(),
+                ticket.getStatus(),
+                ticket.getOwner().getId(),
+                ticket.getTable().getId()
+        );
+    }
+}
