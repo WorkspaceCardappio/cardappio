@@ -16,4 +16,38 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="add_new_columns_table_menu" author="lorenzo.berg">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela 'menu' não existe">
+            <tableExists tableName="menu"/>
+        </preConditions>
+
+        <addColumn tableName="menu">
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="${boolean}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(255)"/>
+            <column name="restaurant_id" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_constraint_fk_menu_restaurant_id" author="lorenzo.berg">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A constraint fk_menu_restaurant_id já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_restaurant_id" foreignKeyTableName="menu"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="menu"
+                                 baseColumnNames="restaurant_id"
+                                 constraintName="fk_menu_restaurant_id"
+                                 referencedTableName="restaurant"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
