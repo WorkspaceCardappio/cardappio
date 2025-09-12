@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="CREATE_TABLE_PRODUCT_INGREDIENT" author="yves.morello">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela PRODUCT_INGREDIENT ja foi criada">
+            <not>
+                <tableExists tableName="PRODUCT_INGREDIENT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="PRODUCT_INGREDIENT">
+            <column name="ID" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="PK_PRODUCT_INGREDIENT"/>
+            </column>
+            <column name="PRODUCT_ID" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INGREDIENT_ID" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="QUANTITY" type="${quantity}">
+                <constraints nullable="false" checkConstraint="QUANTITY >= 0"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ADD_FK_PRODUCT_INGREDIENT_PRODUCT_ID" author="yves.morello">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A constraint FK_PRODUCT_INGREDIENT_PRODUCT_ID já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PRODUCT_INGREDIENT_PRODUCT_ID"
+                                            foreignKeyTableName="product_ingredient"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="product_ingredient" baseColumnNames="product_id"
+                                 constraintName="FK_PRODUCT_INGREDIENT_PRODUCT_ID"
+                                 referencedTableName="PRODUCT"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="ADD_FK_PRODUCT_INGREDIENT_INGREDIENT_ID" author="yves.morello">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A constraint FK_PRODUCT_INGREDIENT_INGREDIENT_ID já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PRODUCT_INGREDIENT_INGREDIENT_ID"
+                                            foreignKeyTableName="product_ingredient"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="product_ingredient" baseColumnNames="ingredient_id"
+                                 constraintName="FK_PRODUCT_INGREDIENT_INGREDIENT_ID"
+                                 referencedTableName="INGREDIENT"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+</databaseChangeLog>
