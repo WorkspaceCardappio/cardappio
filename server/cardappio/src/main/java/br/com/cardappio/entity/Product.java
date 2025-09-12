@@ -14,16 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import com.cardappio.core.entity.EntityModel;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
 @Entity
 @Table
 @Getter
@@ -43,16 +33,20 @@ public class Product implements EntityModel<UUID> {
     @Length(max = 255, message = Messages.SIZE_255)
     private String name;
 
+    @NotNull(message = Messages.EMPTY_PRICE)
     @Column
     private BigDecimal price;
 
+    @NotNull
     @Column
-    @Min(value = 0, message = Messages.MAIOR_QUE_ZERO)
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal quantity;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @NotNull
+    @Column
     private boolean active = true;
 
+    @NotNull(message = Messages.EMPTY_CATEGORY)
     @Column
     @ManyToOne
     @JoinColumn(name = "category_id")
