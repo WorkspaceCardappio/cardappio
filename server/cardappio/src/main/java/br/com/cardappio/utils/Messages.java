@@ -13,5 +13,6 @@ public class Messages {
     public static final String MIN_VALUE_ZERO = "Informe um valor maior ou igual a zero.";
     public static final String SIZE_10 = "Tamanho não pode ultrapassar 10 caracteres";
     public static final String SIZE_255 = "Tamanho não pode ultrapassar 255 caracteres";
-
+    public static final String PERSON_NON_NULL = "Campo pessoa não pode ficar vazio";
+    public static final String TABLE_NON_NULL = "Campo mesa não pode ficar vazio";
 }
