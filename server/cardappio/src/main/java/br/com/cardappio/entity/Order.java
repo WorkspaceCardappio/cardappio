@@ -1,17 +1,19 @@
 package br.com.cardappio.entity;
 
-import br.com.cardappio.DTO.IngredientDTO;
+import br.com.cardappio.DTO.OrderDTO;
+import br.com.cardappio.converter.OrderStatusConverter;
+import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table
@@ -33,35 +35,24 @@ public class Order implements EntityModel<UUID> {
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal price = BigDecimal.ZERO;
 
-
-    @Column(nullable = false)
-    @NotBlank
-    @Length(max = 255, message = Messages.SIZE_255)
-    private String name;
-
     @Column(nullable = false)
     @NotNull
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal quantity = BigDecimal.ZERO;
+    @Convert(converter = OrderStatusConverter.class)
+    private OrderStatus status = OrderStatus.PENDING;
 
-    @Column(name = "expiration_date", nullable = false)
-    @NotNull
-    private LocalDate expirationDate;
+    @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("order")
+    private List<ProductOrder> products = new ArrayList<>();
 
-    @Column(nullable = false)
-    @NotNull
-    private Boolean allergenic = Boolean.FALSE;
+    public static Order of(final OrderDTO dto) {
 
-    public static Order of(final IngredientDTO dto) {
+        final Order order = new Order();
+        order.setId(dto.id());
+        order.setPrice(dto.price());
+        order.setStatus(dto.orderStatus());
+        order.getProducts().addAll(dto.products());
 
-        final Order ingredient = new Order();
-        ingredient.setId(dto.id());
-        ingredient.setName(dto.name());
-        ingredient.setQuantity(dto.quantity());
-        ingredient.setExpirationDate(dto.expirationDate());
-        ingredient.setAllergenic(dto.allergenic());
-
-        return ingredient;
+        return order;
     }
 
 }
