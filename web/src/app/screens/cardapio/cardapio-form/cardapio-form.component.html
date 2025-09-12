@@ -1,1 +1,10 @@
-<p>cardapio-form works!</p>
+<h1>Cardápio</h1>
+<div class="list-component-section">
+    <div class="list-wrapper">
+      <app-list
+        [params]="listParams"
+        [showActions]="true"
+        [quantityPages]="[5, 10, 20, 50]">
+      </app-list>
+    </div>
+  </div>
