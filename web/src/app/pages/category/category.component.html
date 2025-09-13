@@ -1,6 +1,24 @@
 <cardappio-list
     [params]="{
-        route: 'teste',
-        filters: []
+        service: service,
+        route: 'category',
+        columns: [
+            { title: 'Categorias', field: 'name', size: 6   },
+            { title: 'Status', field: 'active', size: 3   },
+        ],
+        filters: [
+            {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Categoria',
+                value: 'name',
+                typeValue: 'string'
+            },
+            {
+                icon: 'fa-solid fa-circle-check',
+                title: 'Status',
+                value: 'active',
+                typeValue: 'boolean'
+            }
+        ]
     }"
 ></cardappio-list>
