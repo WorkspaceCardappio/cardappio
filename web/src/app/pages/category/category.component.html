@@ -1,18 +1,6 @@
-<app-list [showActions]="true" [params]="{
-    route: 'category',
-    service: service,
-    columns: [
-        {
-            title: 'Nome',
-            field: 'name',
-            size: 6,
-            order: 'name'
-        },
-        {
-            title: 'Status',
-            field: 'active',
-            size: 3
-        },       
-    ],
-}"
-></app-list>
+<cardappio-list
+    [params]="{
+        route: 'teste',
+        filters: []
+    }"
+></cardappio-list>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EntityService } from 'cardappio-component-hub/lib/entity/entity.service';
+import { EntityService } from 'cardappio-component-hub';
 
 
 @Injectable({
@@ -8,8 +8,9 @@ import { EntityService } from 'cardappio-component-hub/lib/entity/entity.service
 })
 export class CategoryService extends EntityService<any, any> {
 
+  override resource: string = 'http://localhost:8080/categories';
+
   constructor(http: HttpClient) {
     super(http);
-    this.resource = 'http://localhost:8080/categories';
   }
 }

@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { ListComponent } from 'cardappio-component-hub';
 import { CategoryService } from './service/category.service';
+import { ListComponent } from 'cardappio-component-hub';
 
 @Component({
   selector: 'app-category',
-  standalone: true,
   imports: [
     ListComponent
+  ],
+  providers: [
+    CategoryService
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
