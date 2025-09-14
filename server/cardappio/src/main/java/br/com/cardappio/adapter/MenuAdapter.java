@@ -4,7 +4,7 @@ import br.com.cardappio.DTO.MenuDTO;
 import br.com.cardappio.entity.Menu;
 import com.cardappio.core.adapter.Adapter;
 
-public class MenuAdapter implements Adapter<MenuDTO, Menu> {
+public class MenuAdapter implements Adapter<Menu, MenuDTO, MenuDTO> {
 
     @Override
     public MenuDTO toDTO(final Menu entity) {
