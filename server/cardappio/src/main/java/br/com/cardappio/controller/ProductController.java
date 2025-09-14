@@ -1,7 +1,7 @@
 package br.com.cardappio.controller;
 
-import br.com.cardappio.DTO.TableRestaurantDTO;
-import br.com.cardappio.entity.TableRestaurant;
+import br.com.cardappio.DTO.ProductDTO;
+import br.com.cardappio.entity.Product;
 import com.cardappio.core.controller.CrudController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tables")
-public class TableController extends CrudController<TableRestaurant, TableRestaurantDTO, UUID> {
+@RequestMapping("/products")
+public class ProductController extends CrudController<Product, ProductDTO, UUID> {
 }
