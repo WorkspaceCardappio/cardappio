@@ -7,6 +7,6 @@ export const routes: Routes = [
     },
     {
          path: 'category/:id',
-        loadComponent: () => import('./pages/category/teste/teste.component').then(m => m.TesteComponent)
+        loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)
     }
 ];
