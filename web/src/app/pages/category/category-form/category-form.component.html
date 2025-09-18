@@ -4,7 +4,8 @@
         width="150"
         [placeholder]="'Nome'"
         [label]="'Nome da Categoria'"
-        formControlName.name
+        [value]="this.form.get('name')?.value"
+        (inputValue)="input($event)"
     >
 </cardappio-input>
 <cardappio-toggle
@@ -18,8 +19,8 @@
     >
 </cardappio-image-upload>
 <div id="button" class="button">
-    <cardappio-cancel-button></cardappio-cancel-button>
-    <cardappio-save-button></cardappio-save-button>
+    <cardappio-cancel-button (onClick)="cancel()"></cardappio-cancel-button>
+    <cardappio-save-button (onClick)="create()"></cardappio-save-button>
 </div>
 </form>
 
