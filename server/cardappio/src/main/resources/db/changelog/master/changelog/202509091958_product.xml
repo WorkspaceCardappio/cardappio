@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet id="CREATE_TABLE_PRODUCT" author="yves.morello">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela PRODUCT ja foi criada">
+            <not>
+                <tableExists tableName="PRODUCT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="PRODUCT">
+            <column name="ID" type="${uuid}">
+                <constraints primaryKey="true" primaryKeyName="PK_PRODUCT"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICE" type="${quantity}">
+                <constraints nullable="false" checkConstraint="PRICE >= 0"/>
+            </column>
+            <column name="QUANTITY" type="${quantity}">
+                <constraints nullable="false" checkConstraint="QUANTITY >= 0"/>
+            </column>
+            <column name="ACTIVE" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATEGORY_ID" type="${uuid}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRATION_DATE" type="${date}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ADD_FK_PRODUCT_CATEGORY_ID" author="yves.morello">
+
+        <preConditions onFail="MARK_RAN" onFailMessage="A constraint FK_PRODUCT_CATEGORY_ID já existe">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PRODUCT_CATEGORY_ID" foreignKeyTableName="product"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="product" baseColumnNames="category_id"
+                                 constraintName="FK_PRODUCT_CATEGORY_ID"
+                                 referencedTableName="CATEGORY"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+</databaseChangeLog>
