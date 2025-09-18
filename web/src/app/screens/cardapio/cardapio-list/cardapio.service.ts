@@ -5,9 +5,10 @@ import { HttpClient } from "@angular/common/http";
 @Injectable({
   providedIn: 'root'
 })
-export class CardapioService extends EntityService<any, any>{
+export class CardapioService extends EntityService<any, any> {
+
   constructor(http: HttpClient) {
     super(http);
-    this.resource = 'cardapio';
+    this.resource = 'menus';
   }
 }

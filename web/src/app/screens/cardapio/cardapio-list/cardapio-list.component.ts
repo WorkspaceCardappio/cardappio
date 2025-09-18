@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ListComponent } from "cardappio-component-hub";
 import { CardapioService } from "./cardapio.service";
+import { Router } from "express";
 
 @Component({
   selector: 'app-cardapio-list',
@@ -10,104 +11,62 @@ import { CardapioService } from "./cardapio.service";
   templateUrl: './cardapio-list.component.html',
   styleUrl: './cardapio-list.component.scss'
 })
-export class CardapioListComponent {
+export class CardapioListComponent implements OnInit {
 
   listParams = {
     service: this.cardapioService,
-    route: '/api/cardapio',
+    route: '/menus/dto',
     columns: [
       {
-        key: 'name',
         title: 'Nome',
-        type: 'text' as const,
-        sortable: true,
-        filterable: true,
-        width: '200px'
+        field: 'name',
+        size: 200,
+        order: 'name'
       },
       {
-        key: 'note',
         title: 'Observação',
-        type: 'text' as const,
-        sortable: true,
-        width: '120px',
-        align: 'right' as const
+        field: 'note',
+        size: 300,
+        order: 'note'
       },
       {
-        key: 'theme',
         title: 'Tema',
-        type: 'text' as const,
-        sortable: true,
-        filterable: true,
-        width: '150px'
+        field: 'theme',
+        size: 150,
+        order: 'theme'
       },
       {
-        key: 'status',
         title: 'Status',
-        type: 'text' as const,
-        sortable: true,
-        width: '100px',
-        align: 'center' as const
-      },
-      {
-        key: 'actions',
-        title: 'Ações',
-        type: 'actions' as const,
-        width: '120px',
-        align: 'center' as const
-      }
-    ],
-    actions: [
-      {
-        name: 'Editar',
-        icon: 'edit',
-        color: 'primary',
-        action: (item: any) => this.editItem(item)
-      },
-      {
-        name: 'Excluir',
-        icon: 'delete',
-        color: 'danger',
-        action: (item: any) => this.deleteItem(item)
+        field: 'status',
+        size: 100,
+        order: 'status'
       }
     ],
     filters: [
       {
-        key: 'category',
-        title: 'Categoria',
-        type: 'select',
-        options: [
-          { label: 'Entradas', value: 'entradas' },
-          { label: 'Pratos Principais', value: 'pratos_principais' },
-          { label: 'Sobremesas', value: 'sobremesas' },
-          { label: 'Bebidas', value: 'bebidas' }
-        ]
+        icon: 'text_fields',
+        title: 'Nome',
+        value: 'name',
+        typeValue: 'string' as const
       },
       {
-        key: 'status',
+        icon: 'text_fields',
+        title: 'Tema',
+        value: 'theme',
+        typeValue: 'string' as const
+      },
+      {
+        icon: 'toggle_on',
         title: 'Status',
-        type: 'select',
-        options: [
-          { label: 'Ativo', value: 'active' },
-          { label: 'Inativo', value: 'inactive' }
-        ]
+        value: 'status',
+        typeValue: 'string' as const
       }
     ]
   };
 
-  constructor(private cardapioService: CardapioService) {}
+  constructor(
+    private cardapioService: CardapioService,
+  ) {}
 
-  ngOnInit() {
-
-  }
-
-  editItem(item: any) {
-    console.log('Editar item:', item);
-  }
-
-  deleteItem(item: any) {
-    if (confirm('Tem certeza que deseja excluir este item?')) {
-      console.log('Excluir item:', item);
-    }
-  }
-
+  ngOnInit() {}
 }

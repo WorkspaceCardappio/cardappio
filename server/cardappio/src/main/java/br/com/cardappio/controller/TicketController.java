@@ -12,5 +12,5 @@ import br.com.cardappio.entity.Ticket;
 
 @RestController
 @RequestMapping("/tickets")
-public class TicketController extends CrudController<Ticket, TicketDTO, UUID> {
+public class TicketController extends CrudController<Ticket, UUID, TicketDTO, TicketDTO> {
 }
