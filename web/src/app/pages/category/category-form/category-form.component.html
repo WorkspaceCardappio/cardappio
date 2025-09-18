@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+    <div id="category" class="category">
+    <cardappio-input
+        width="150"
+        [placeholder]="'Nome'"
+        [label]="'Nome da Categoria'"
+        formControlName.name
+    >
+</cardappio-input>
+<cardappio-toggle
+    [label]="'Ativo'"
+    formControlName.active
+    >
+</cardappio-toggle>
+</div>
+<cardappio-image-upload id="category-image-upload"
+        [label]="'Imagem da Categoria'"
+    >
+</cardappio-image-upload>
+<div id="button" class="button">
+    <cardappio-cancel-button></cardappio-cancel-button>
+    <cardappio-save-button></cardappio-save-button>
+</div>
+</form>
+
