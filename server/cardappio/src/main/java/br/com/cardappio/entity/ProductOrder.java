@@ -1,6 +1,7 @@
 package br.com.cardappio.entity;
 
 import br.com.cardappio.DTO.ProductOrderDTO;
+import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,12 +23,12 @@ public class ProductOrder implements EntityModel<UUID> {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
+    @NotNull(message = Messages.ORDER_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @NotNull
+    @NotNull(message = Messages.PRODUCT_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

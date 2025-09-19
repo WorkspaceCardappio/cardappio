@@ -15,4 +15,7 @@ public class Messages {
     public static final String SIZE_255 = "Tamanho não pode ultrapassar 255 caracteres";
     public static final String PERSON_NON_NULL = "Campo pessoa não pode ficar vazio";
     public static final String TABLE_NON_NULL = "Campo mesa não pode ficar vazio";
+    public static final String STATUS_NOT_NULL = "O status deve ser informado";
+    public static final String ORDER_NOT_NULL = "O pedido deve ser informado";
+    public static final String PRODUCT_NOT_NULL = "O produto deve ser informado";
 }

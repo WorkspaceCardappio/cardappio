@@ -13,10 +13,10 @@ import java.util.UUID;
 
 public record OrderDTO(
         UUID id,
-        @NotNull
+        @NotNull(message = Messages.MIN_VALUE_ZERO)
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal price,
-        @NotNull
+        @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus,
         List<ProductOrder> products
 ) {
