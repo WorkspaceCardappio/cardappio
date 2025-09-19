@@ -1,6 +1,7 @@
 package br.com.cardappio.entity;
 
 import br.com.cardappio.DTO.TableRestaurantDTO;
+import br.com.cardappio.converter.TicketStatusConverter;
 import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -32,7 +33,7 @@ public class TableRestaurant implements EntityModel<UUID> {
     private String number;
 
     @Column
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = TicketStatusConverter.class)
     private TableStatus status;
 
     @Column

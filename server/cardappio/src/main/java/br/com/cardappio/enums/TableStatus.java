@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public enum TableStatus {
-    FREE (0L, "livre"),
-    RESERVED (1L, "reservada"),
-    OCCUPIED (2L, "ocupada"),
-    UNAVAILABLE (3L, "indisponivel");
+    FREE (1L, "Livre"),
+    RESERVED (2L, "Reservada"),
+    OCCUPIED (3L, "Ocupada"),
+    UNAVAILABLE (4L, "Indisponível");
 
     private final Long code;
     private final String description;

@@ -2,19 +2,15 @@ package br.com.cardappio.entity;
 
 import java.util.UUID;
 
-import br.com.cardappio.converter.PersonTypeConverter;
-import br.com.cardappio.enums.PersonType;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,7 +29,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Person {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,33 +40,8 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    @Convert(converter = PersonTypeConverter.class)
-    private PersonType type;
-
-    @Size(max = 14)
-    @Column(unique = true, length = 14)
-    private String document;
-
-    @Size(max = 11)
-    @Column(length = 11)
-    private String phone;
-
-    @NotBlank(message = Messages.EMPTY_PASSWORD)
-    @Size(max = 255)
-    @Column(nullable = false)
-    private String password;
-
-    @Email(message = Messages.INVALID_EMAIL)
-    @Size(max = 255)
-    @Column
-    private String email;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
     @NotNull
-    @OneToOne
-    @JoinColumn(name = "address_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
     private Address address;
 }

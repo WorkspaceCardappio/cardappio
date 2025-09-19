@@ -15,4 +15,9 @@ public class Messages {
     public static final String SIZE_255 = "Tamanho não pode ultrapassar 255 caracteres";
     public static final String PERSON_NON_NULL = "Campo pessoa não pode ficar vazio";
     public static final String TABLE_NON_NULL = "Campo mesa não pode ficar vazio";
+    public static final String EMPTY_PASSWORD = "Campo senha não pode ficar vazio";
+    public static final String EMPTY_STREET = "Campo logradouro não pode ficar vazio";
+    public static final String EMPTY_ZIP_CODE = "Campo CEP não pode ficar vazio";
+    public static final String EMPTY_DISTRICT = "Campo bairro não pode ficar vazio";
+    public static final String INVALID_EMAIL = "Campo email deve ser válido";
 }

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class IngredientService extends CrudService<Ingredient, IngredientDTO, UUID> {
+public class IngredientService extends CrudService<Ingredient, UUID, IngredientDTO, IngredientDTO> {
 
     @Override
-    protected Adapter<IngredientDTO, Ingredient> getAdapter() {
+    protected Adapter<Ingredient, IngredientDTO, IngredientDTO> getAdapter() {
 
         return new IngredientAdapter();
     }

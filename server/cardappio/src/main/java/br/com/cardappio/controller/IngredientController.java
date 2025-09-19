@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/ingredients")
-public class IngredientController extends CrudController<Ingredient, IngredientDTO, UUID> {
+public class IngredientController extends CrudController<Ingredient, UUID, IngredientDTO, IngredientDTO> {
 }

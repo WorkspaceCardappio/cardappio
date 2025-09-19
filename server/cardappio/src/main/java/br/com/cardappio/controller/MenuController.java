@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/menus")
-public class MenuController extends CrudController<Menu, MenuDTO, UUID> {
+public class MenuController extends CrudController<Menu, UUID, MenuDTO, MenuDTO> {
 
 }

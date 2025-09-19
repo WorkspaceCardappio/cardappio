@@ -7,6 +7,7 @@ import com.cardappio.core.entity.EntityModel;
 import br.com.cardappio.DTO.TicketDTO;
 import br.com.cardappio.converter.TicketStatusConverter;
 import br.com.cardappio.enums.TicketStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +41,7 @@ public class Ticket implements EntityModel<UUID> {
     @NotNull
     private String number;
 
+    @Column
     @Convert(converter = TicketStatusConverter.class)
     private TicketStatus status = TicketStatus.OPEN;
 

@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -33,44 +34,37 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Person {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = Messages.EMPTY_NAME)
+    @NotBlank(message = Messages.EMPTY_STREET)
     @Size(max = 255)
     @Column(nullable = false)
-    private String name;
+    private String street;
 
-    @Column
-    @Convert(converter = PersonTypeConverter.class)
-    private PersonType type;
+    @NotBlank(message = Messages.EMPTY_ZIP_CODE)
+    @Size(max = 8)
+    @Column(nullable = false)
+    private String zipCode;
 
-    @Size(max = 14)
-    @Column(unique = true, length = 14)
-    private String document;
-
-    @Size(max = 11)
-    @Column(length = 11)
-    private String phone;
-
-    @NotBlank(message = Messages.EMPTY_PASSWORD)
+    @NotBlank(message = Messages.EMPTY_DISTRICT)
     @Size(max = 255)
     @Column(nullable = false)
-    private String password;
+    private String district;
 
-    @Email(message = Messages.INVALID_EMAIL)
-    @Size(max = 255)
-    @Column
-    private String email;
+    @NotBlank(message = Messages.EMPTY_NUMBER)
+    @Size(max = 10)
+    @Column(nullable = false)
+    private String number;
 
     @Column(nullable = false)
     private Boolean active = true;
 
     @NotNull
-    @OneToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
+    private City city;
 }

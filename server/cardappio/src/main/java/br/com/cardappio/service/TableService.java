@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class TableService extends CrudService<TableRestaurant, TableRestaurantDTO, UUID> {
+public class TableService extends CrudService<TableRestaurant, UUID, TableRestaurantDTO, TableRestaurantDTO> {
 
     @Override
-    protected Adapter<TableRestaurantDTO, TableRestaurant> getAdapter() {
+    protected Adapter<TableRestaurant, TableRestaurantDTO, TableRestaurantDTO> getAdapter() {
         return new TableAdapter();
     }
 }
