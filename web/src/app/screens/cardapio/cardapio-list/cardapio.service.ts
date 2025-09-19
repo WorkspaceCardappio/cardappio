@@ -9,6 +9,6 @@ export class CardapioService extends EntityService<any, any> {
 
   constructor(http: HttpClient) {
     super(http);
-    this.resource = 'menus';
+    this.resource = 'http://localhost:8080/menus';
   }
 }
