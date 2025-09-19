@@ -4,7 +4,7 @@ import br.com.cardappio.DTO.ProductDTO;
 import br.com.cardappio.entity.Product;
 import com.cardappio.core.adapter.Adapter;
 
-public class ProductAdapter implements Adapter<ProductDTO, Product> {
+public class ProductAdapter implements Adapter<Product, ProductDTO, ProductDTO> {
     @Override
     public ProductDTO toDTO(final Product entity) {
         return new ProductDTO(entity);

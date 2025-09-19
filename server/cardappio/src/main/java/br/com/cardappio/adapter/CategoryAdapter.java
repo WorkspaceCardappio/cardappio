@@ -4,7 +4,7 @@ import br.com.cardappio.DTO.CategoryDTO;
 import br.com.cardappio.entity.Category;
 import com.cardappio.core.adapter.Adapter;
 
-public class CategoryAdapter implements Adapter<CategoryDTO, Category> {
+public class CategoryAdapter implements Adapter<Category, CategoryDTO, CategoryDTO> {
 
     @Override
     public CategoryDTO toDTO(final Category entity) {

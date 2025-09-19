@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController extends CrudController<Product, ProductDTO, UUID> {
+public class ProductController extends CrudController<Product, UUID, ProductDTO, ProductDTO> {
 }

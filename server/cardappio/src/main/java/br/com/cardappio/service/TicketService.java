@@ -12,10 +12,10 @@ import br.com.cardappio.adapter.TicketAdapter;
 import br.com.cardappio.entity.Ticket;
 
 @Service
-public class TicketService extends CrudService<Ticket, TicketDTO, UUID> {
+public class TicketService extends CrudService<Ticket, UUID, TicketDTO, TicketDTO> {
 
     @Override
-    protected Adapter<TicketDTO, Ticket> getAdapter() {
+    protected Adapter<Ticket, TicketDTO, TicketDTO> getAdapter() {
         return new TicketAdapter();
     }
 }

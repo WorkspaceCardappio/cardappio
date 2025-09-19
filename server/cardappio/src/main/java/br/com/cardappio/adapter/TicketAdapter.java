@@ -5,7 +5,7 @@ import com.cardappio.core.adapter.Adapter;
 import br.com.cardappio.DTO.TicketDTO;
 import br.com.cardappio.entity.Ticket;
 
-public class TicketAdapter implements Adapter<TicketDTO, Ticket> {
+public class TicketAdapter implements Adapter<Ticket, TicketDTO, TicketDTO> {
 
     @Override
     public TicketDTO toDTO(final Ticket entity) {
