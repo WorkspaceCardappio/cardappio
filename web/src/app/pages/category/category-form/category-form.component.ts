@@ -4,8 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ImageUploadComponent, InputComponent, ToggleComponent, CancelButtonComponent, SaveButtonComponent } from 'cardappio-component-hub';
 import { CategoryService } from '../service/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UUID } from 'node:crypto';
-import { log } from 'node:console';
 
 @Component({
   selector: 'app-category-form',
@@ -55,7 +53,7 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
-  private loadCategory(id: UUID) {
+  private loadCategory(id: string) {
     this.service.findById(id).subscribe(category => {
       this.form.patchValue(category)
     })

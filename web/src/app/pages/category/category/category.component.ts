@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CategoryService } from '../service/category.service';
-import { CardappioComponent } from 'cardappio-component-hub';
+import { CardappioListComponent } from 'cardappio-component-hub';
 
 
 @Component({
   selector: 'app-category',
   imports: [
-    CardappioComponent
+    CardappioListComponent
   ],
   providers: [
     CategoryService
