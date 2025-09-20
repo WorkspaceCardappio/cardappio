@@ -1,0 +1,18 @@
+package br.com.cardappio.domain.ingredient.adapter;
+
+import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
+import br.com.cardappio.domain.ingredient.Ingredient;
+import com.cardappio.core.adapter.Adapter;
+
+public class IngredientAdapter implements Adapter<Ingredient, IngredientDTO, IngredientDTO> {
+
+    @Override
+    public IngredientDTO toDTO(final Ingredient entity) {
+        return new IngredientDTO(entity);
+    }
+
+    @Override
+    public Ingredient toEntity(final IngredientDTO dto) {
+        return Ingredient.of(dto);
+    }
+}
