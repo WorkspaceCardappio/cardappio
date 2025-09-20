@@ -3,9 +3,6 @@ import { Injectable } from '@angular/core';
 import { EntityService } from 'cardappio-component-hub';
 import { UUID } from 'crypto';
 import { Category } from '../model/category';
-import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-
 
 @Injectable({
   providedIn: 'root'

@@ -1,20 +1,22 @@
 <form [formGroup]="form">
     <div id="category" class="category">
+        <div class="category-input">
     <cardappio-input
-        width="150"
+        [width]="95"
         [placeholder]="'Nome'"
         [label]="'Nome da Categoria'"
-        [value]="this.form.get('name')?.value"
-        (inputValue)="input($event)"
+        formControlName="name"
     >
 </cardappio-input>
+</div>
 <cardappio-toggle
     [label]="'Ativo'"
     formControlName.active
     >
 </cardappio-toggle>
 </div>
-<cardappio-image-upload id="category-image-upload"
+<cardappio-image-upload 
+        id="category-image-upload"
         [label]="'Imagem da Categoria'"
     >
 </cardappio-image-upload>
