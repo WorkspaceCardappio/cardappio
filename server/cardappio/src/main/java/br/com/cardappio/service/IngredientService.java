@@ -5,7 +5,6 @@ import br.com.cardappio.adapter.IngredientAdapter;
 import br.com.cardappio.entity.Ingredient;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
