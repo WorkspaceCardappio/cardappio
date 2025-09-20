@@ -10,5 +10,4 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/categories")
-public class CategoryController extends CrudController<Category, CategoryDTO, UUID> {
-}
+public class CategoryController extends CrudController<Category, UUID, CategoryDTO, CategoryDTO> {}

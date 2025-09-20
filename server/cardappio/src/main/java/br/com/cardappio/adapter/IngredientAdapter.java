@@ -4,7 +4,7 @@ import br.com.cardappio.DTO.IngredientDTO;
 import br.com.cardappio.entity.Ingredient;
 import com.cardappio.core.adapter.Adapter;
 
-public class IngredientAdapter implements Adapter<IngredientDTO, Ingredient> {
+public class IngredientAdapter implements Adapter<Ingredient, IngredientDTO, IngredientDTO> {
 
     @Override
     public IngredientDTO toDTO(final Ingredient entity) {

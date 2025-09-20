@@ -4,7 +4,7 @@ import br.com.cardappio.DTO.TableRestaurantDTO;
 import br.com.cardappio.entity.TableRestaurant;
 import com.cardappio.core.adapter.Adapter;
 
-public class TableAdapter implements Adapter<TableRestaurantDTO, TableRestaurant> {
+public class TableAdapter implements Adapter<TableRestaurant, TableRestaurantDTO, TableRestaurantDTO> {
     @Override
     public TableRestaurantDTO toDTO(final TableRestaurant entity) {
         return new TableRestaurantDTO(entity);

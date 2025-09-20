@@ -9,5 +9,5 @@ import com.cardappio.core.repository.CrudRepository;
 import br.com.cardappio.entity.Ticket;
 
 @Repository
-public interface TickerRepository extends CrudRepository<Ticket, UUID> {
+public interface TicketRepository extends CrudRepository<Ticket, UUID> {
 }
