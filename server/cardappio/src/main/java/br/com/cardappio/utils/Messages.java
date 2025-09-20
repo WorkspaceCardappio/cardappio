@@ -20,4 +20,7 @@ public class Messages {
     public static final String EMPTY_ZIP_CODE = "Campo CEP não pode ficar vazio";
     public static final String EMPTY_DISTRICT = "Campo bairro não pode ficar vazio";
     public static final String INVALID_EMAIL = "Campo email deve ser válido";
+    public static final String STATUS_NOT_NULL = "O status deve ser informado";
+    public static final String ORDER_NOT_NULL = "O pedido deve ser informado";
+    public static final String PRODUCT_NOT_NULL = "O produto deve ser informado";
 }
