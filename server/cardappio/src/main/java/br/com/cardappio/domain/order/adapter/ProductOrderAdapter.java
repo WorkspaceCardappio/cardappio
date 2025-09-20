@@ -1,10 +1,11 @@
-package br.com.cardappio.adapter;
+package br.com.cardappio.domain.order.adapter;
 
-import br.com.cardappio.DTO.ProductOrderDTO;
-import br.com.cardappio.domain.order.ProductOrder;
 import com.cardappio.core.adapter.Adapter;
 
-public class ProductOrderAdapter implements Adapter<ProductOrderDTO, ProductOrder> {
+import br.com.cardappio.domain.order.ProductOrder;
+import br.com.cardappio.domain.order.dto.ProductOrderDTO;
+
+public class ProductOrderAdapter implements Adapter<ProductOrder, ProductOrderDTO, ProductOrderDTO> {
 
     @Override
     public ProductOrderDTO toDTO(final ProductOrder entity) {

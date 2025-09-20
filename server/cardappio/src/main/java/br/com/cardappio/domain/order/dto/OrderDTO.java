@@ -1,4 +1,8 @@
-package br.com.cardappio.DTO;
+package br.com.cardappio.domain.order.dto;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.domain.order.ProductOrder;
@@ -6,10 +10,6 @@ import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
 public record OrderDTO(
         UUID id,

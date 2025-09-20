@@ -48,20 +48,20 @@ public class Ticket implements EntityModel<UUID> {
     private TicketStatus status = TicketStatus.OPEN;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
     private Person owner;
 
     @ManyToOne
-    @JoinColumn(name = "table_id", nullable = false)
+    @JoinColumn(name = "table_id", nullable = false, insertable = false, updatable = false)
     private TableRestaurant table;
 
     public static Ticket of(final TicketDTO dto) {
 
-        // TODO: OWNER E TABLE
-
         final Ticket ticket = new Ticket();
         ticket.setId(dto.id());
         ticket.setNumber(dto.number());
+        ticket.setOwner(Person.of(dto.owner().id()));
+        ticket.setTable(TableRestaurant.of(dto.table().id()));
 
         return ticket;
     }

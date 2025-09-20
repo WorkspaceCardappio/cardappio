@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.cardappio.domain.person.dto.PersonIdDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantIdDTO;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.NotBlank;
@@ -21,18 +23,8 @@ public record TicketDTO(
         Long code,
 
         @NotNull(message = Messages.PERSON_NON_NULL)
-        UUID ownerId,
+        PersonIdDTO owner,
 
         @NotNull(message = Messages.TABLE_NON_NULL)
-        UUID tableId
-) {
-    public TicketDTO(final Ticket ticket){
-        this(
-                ticket.getId(),
-                ticket.getNumber(),
-                ticket.getStatus().getCode(),
-                ticket.getOwner().getId(),
-                ticket.getTable().getId()
-        );
-    }
-}
+        TableRestaurantIdDTO table
+) {}

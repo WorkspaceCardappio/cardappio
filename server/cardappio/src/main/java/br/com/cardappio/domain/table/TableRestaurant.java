@@ -29,7 +29,7 @@ public class TableRestaurant implements EntityModel<UUID> {
 
     @Column(unique = true)
     @NotBlank(message = Messages.EMPTY_NUMBER)
-    @Length(max=10, message = Messages.SIZE_10)
+    @Length(max = 10, message = Messages.SIZE_10)
     private String number;
 
     @Column
@@ -50,4 +50,13 @@ public class TableRestaurant implements EntityModel<UUID> {
 
         return table;
     }
+
+    public static TableRestaurant of(final UUID id) {
+
+        final TableRestaurant table = new TableRestaurant();
+        table.setId(id);
+
+        return table;
+    }
+
 }

@@ -1,13 +1,12 @@
-package br.com.cardappio.DTO;
-
-import br.com.cardappio.domain.order.Order;
-import br.com.cardappio.domain.product.Product;
-import br.com.cardappio.entity.Product;
-import br.com.cardappio.domain.order.ProductOrder;
-import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.NotNull;
+package br.com.cardappio.domain.order.dto;
 
 import java.util.UUID;
+
+import br.com.cardappio.domain.order.Order;
+import br.com.cardappio.domain.order.ProductOrder;
+import br.com.cardappio.domain.product.Product;
+import br.com.cardappio.utils.Messages;
+import jakarta.validation.constraints.NotNull;
 
 public record ProductOrderDTO(
         UUID id,

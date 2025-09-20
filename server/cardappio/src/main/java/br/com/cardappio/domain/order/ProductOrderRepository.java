@@ -1,10 +1,10 @@
-package br.com.cardappio.repository;
-
-import br.com.cardappio.domain.order.ProductOrder;
-import com.cardappio.core.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+package br.com.cardappio.domain.order;
 
 import java.util.UUID;
+
+import org.springframework.stereotype.Repository;
+
+import com.cardappio.core.repository.CrudRepository;
 
 @Repository
 public interface ProductOrderRepository extends CrudRepository<ProductOrder, UUID> {

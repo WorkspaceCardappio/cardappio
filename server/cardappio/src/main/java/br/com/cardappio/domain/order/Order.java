@@ -1,6 +1,6 @@
-package br.com.cardappio.entity;
+package br.com.cardappio.domain.order;
 
-import br.com.cardappio.DTO.OrderDTO;
+import br.com.cardappio.domain.order.dto.OrderDTO;
 import br.com.cardappio.converter.OrderStatusConverter;
 import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;

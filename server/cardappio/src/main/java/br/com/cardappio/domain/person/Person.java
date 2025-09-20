@@ -75,4 +75,11 @@ public class Person {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
+
+    public static Person of(final UUID id) {
+        final Person person = new Person();
+        person.setId(id);
+
+        return person;
+    }
 }

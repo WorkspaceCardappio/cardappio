@@ -1,19 +1,20 @@
-package br.com.cardappio.service;
-
-import br.com.cardappio.DTO.ProductOrderDTO;
-import br.com.cardappio.adapter.ProductOrderAdapter;
-import br.com.cardappio.domain.order.ProductOrder;
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-import org.springframework.stereotype.Service;
+package br.com.cardappio.domain.order;
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+
+import br.com.cardappio.domain.order.adapter.ProductOrderAdapter;
+import br.com.cardappio.domain.order.dto.ProductOrderDTO;
+
 @Service
-public class ProductOrderService extends CrudService<ProductOrder, ProductOrderDTO, UUID> {
+public class ProductOrderService extends CrudService<ProductOrder, UUID, ProductOrderDTO, ProductOrderDTO> {
 
     @Override
-    protected Adapter<ProductOrderDTO, ProductOrder> getAdapter() {
+    protected Adapter<ProductOrder, ProductOrderDTO, ProductOrderDTO> getAdapter() {
 
         return new ProductOrderAdapter();
     }
