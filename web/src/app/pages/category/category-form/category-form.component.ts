@@ -47,14 +47,11 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private checkRoute() {
-    const path = this.route.snapshot.routeConfig?.path;
+    const { id } = this.route.snapshot.params;
 
-    if (path == 'new')
-      return;
-
-    const id = this.route.snapshot.paramMap.get('id') as UUID;
-    if (id) 
+    if (id != 'new') {
       this.loadCategory(id);
+    }
   }
 
   private loadCategory(id: UUID) {
