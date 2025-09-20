@@ -5,6 +5,7 @@ import { ImageUploadComponent, InputComponent, ToggleComponent, CancelButtonComp
 import { CategoryService } from '../service/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UUID } from 'node:crypto';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-category-form',
@@ -61,11 +62,16 @@ export class CategoryFormComponent implements OnInit {
   }
 
   create() {
+    const { id } = this.route.snapshot.params;
+    console.log(id)
     if (this.form.invalid)
       return;
-
-    this.service.create(this.form.value)
-        .subscribe(() => this.router.navigate(['category']));    
+    
+    if (id != 'new') {
+      this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
+    } else {
+      this.service.create(this.form.value).subscribe(() => this.router.navigate(['category']));
+    }  
   }
 
   cancel() {
