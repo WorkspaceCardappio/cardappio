@@ -2,12 +2,7 @@ package br.com.cardappio.domain.ticket.dto;
 
 import java.util.UUID;
 
-import org.hibernate.validator.constraints.Length;
-
 import br.com.cardappio.domain.ticket.Ticket;
-import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record TicketListDTO(
 

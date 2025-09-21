@@ -3,10 +3,8 @@ package br.com.cardappio.converter;
 import java.util.Optional;
 
 import br.com.cardappio.enums.TableStatus;
-import br.com.cardappio.enums.TicketStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import jakarta.persistence.Table;
 
 @Converter
 public class TableStatusConverter implements AttributeConverter<TableStatus, Long> {

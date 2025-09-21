@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
-import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.converter.TicketStatusConverter;
-import br.com.cardappio.domain.table.TableRestaurant;
 import br.com.cardappio.domain.person.Person;
+import br.com.cardappio.domain.table.TableRestaurant;
+import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.enums.TicketStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

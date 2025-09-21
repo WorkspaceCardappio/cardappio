@@ -3,7 +3,6 @@ package br.com.cardappio.converter;
 import java.util.Optional;
 
 import br.com.cardappio.enums.PersonType;
-import br.com.cardappio.enums.TableStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

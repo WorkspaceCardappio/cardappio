@@ -21,7 +21,7 @@ public class StateController {
     private final StateRepositoy repositoy;
 
     @GetMapping
-    public ResponseEntity<List<State>> findAll(@RequestParam(value = "search", defaultValue = "") String search) {
+    public ResponseEntity<List<State>> findAll(@RequestParam(value = "search", required = false, defaultValue = "") final String search) {
         return ResponseEntity.ok(repositoy.findAll(RSQLJPASupport.toSpecification(search)));
     }
 
