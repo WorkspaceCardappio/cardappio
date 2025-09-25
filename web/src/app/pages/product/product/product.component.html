@@ -1,1 +1,32 @@
-<p>product works!</p>
+<cardappio-list
+    [params]="{
+        service: service,
+        route: 'product',
+        columns: [
+            {title: 'Nome', field: 'name', size: 5},
+            {title: 'Categoria', field: 'category', size: 3},
+            {title: 'Preço', field: 'price', size: 3},
+            {title: 'Status', field: 'active', size: 3}
+        ],
+        filters: [
+            {
+                icon: 'fa-solid fa-bowl-food',
+                title: 'Produto',
+                value: 'name',
+                typeValue: 'string'
+            },
+                        {
+                icon: 'fa-solid fa-circle-check',
+                title: 'Status',
+                value: 'active',
+                typeValue: 'boolean'
+            },
+                        {
+                icon: 'fa-solid fa-money-bill',
+                title: 'Preço',
+                value: 'price',
+                typeValue: 'number'
+            }
+        ]
+    }"
+></cardappio-list>

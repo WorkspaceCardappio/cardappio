@@ -1,0 +1,64 @@
+<form>
+    <div id="product" class="product">
+        <div id="product-row" class="product-first-row">
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'nome'"
+                [label]="'Nome do Produto'"
+                formControlName="name"/>
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'preço'"
+                [label]="'Preço'"
+                formControlName="price"/>
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'quantidade'"
+                [label]="'Quantidade'"
+                formControlName="quantity"/>
+        </div>
+        <div id="product-second-row" class="product-second-row">
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'descrição'"
+                [label]="'Descrição'"
+                formControlName="description"/>
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'categoria'"
+                [label]="'Categoria'"
+                formControlName="category"/>
+            <cardappio-generic-button class="category-btn"
+                [params]="{ 
+                    title: { name: 'Categoria', color: '#015EAF'},
+                    background: '#F5F4F7',
+                    border: { color: '#015EAF'},
+                    icon: { name: 'fa-solid fa-folder-plus', color: '#015EAF'}
+                    }"/>
+            <cardappio-toggle class="active-btn"
+                    formControlName="active"/>
+            
+        </div>
+        <div class="third-row">
+            <cardappio-image-upload
+                id="product-image-upload"
+                [label]="'Imagem do produto'"/>
+            <div class="text-area">
+                <label>Observações</label>
+                <textarea id="product-obs" name="notes"></textarea>
+            </div>
+        </div>
+        <button type="button" id="additional-btn">
+            <span>Adicionais</span>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <button type="button" id="ingredients-btn">
+            <span>Ingredientes</span>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <div class="actions-btn">
+            <cardappio-cancel-button></cardappio-cancel-button>
+            <cardappio-save-button> </cardappio-save-button>
+        </div>
+    </div>
+</form>
