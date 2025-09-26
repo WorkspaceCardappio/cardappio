@@ -1,0 +1,24 @@
+<form [formGroup]="form">
+  <div>
+    <div>
+      <cardappio-input
+        [label]="'Número'"
+        [placeholder]="'número'"
+        [width]="95"
+        formControlName="number"
+      >
+      </cardappio-input>
+    </div>
+    <cardappio-input
+      [label]="'Lugares'"
+      [placeholder]="'lugares'"
+      [width]="95"
+      formControlName="places"
+    >
+    </cardappio-input>
+  </div>
+  <div>
+    <cardappio-cancel-button (onClick)="onCancel()"></cardappio-cancel-button>
+    <cardappio-save-button (onClick)="onSave()"></cardappio-save-button>
+  </div>
+</form>
