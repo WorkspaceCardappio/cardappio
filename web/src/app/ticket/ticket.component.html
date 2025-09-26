@@ -1,0 +1,108 @@
+<!--<div class="pedidos-container">
+
+    <div 
+        *ngFor="let ticket of ticketsList" 
+        [class]="'cartao status-' + ticket.status.toLowerCase()"
+    >
+        <div class="numero-pedido">{{ ticket.number }}</div>
+        
+        <div class="detalhes">
+            <p>{{ ticket.owner }}</p>
+            <p>Mesa: {{ ticket.table }} | {{ ticket.totalValue | currency: 'BRL' }}</p>
+        </div>
+
+        <button class="botao-visualizar" (click)="visualizarTicket(ticket.id)">
+            Visualizar pedidos
+        </button>
+    </div>
+
+</div>
+
+<div class="legenda">
+    <span class="cor-finalizada"></span> Finalizada
+    <span class="cor-cancelada"></span> Cancelada
+    <span class="cor-aberta"></span> Aberta
+</div>-->
+
+<div class="pedidos-container">
+
+    <div class="cartao status-cancelada">
+        
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 2502,00</p> 
+        </div>
+
+        <button class="botao-visualizar" (click)="visualizarTicket('TESTE-007')">
+            Visualizar pedidos
+        </button>
+    </div>
+    <div class="cartao status-aberta">
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 250,00</p> 
+        </div>
+
+        <button class="botao-visualizar">
+            Visualizar pedidos
+        </button>
+    </div>
+    <div class="cartao status-aberta">
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 250,00</p> 
+        </div>
+
+        <button class="botao-visualizar">
+            Visualizar pedidos
+        </button>
+    </div>
+    <div class="cartao status-aberta">
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 250,00</p> 
+        </div>
+
+        <button class="botao-visualizar">
+            Visualizar pedidos
+        </button>
+    </div>
+    <div class="cartao status-aberta">
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 250,00</p> 
+        </div>
+
+        <button class="botao-visualizar">
+            Visualizar pedidos
+        </button>
+    </div>
+    <div class="cartao status-aberta">
+        <div class="numero-pedido">007</div>
+        
+        <div class="detalhes">
+            <p>Cliente Teste Estático</p>
+            <p>Mesa: 99 | R$ 250,00</p> 
+        </div>
+
+        <button class="botao-visualizar">
+            Visualizar pedidos
+        </button>
+    </div>
+    </div>
+
+<div class="legenda">
+    <span class="cor-finalizada"></span> Finalizada
+    <span class="cor-cancelada"></span> Cancelada
+    <span class="cor-aberta"></span> Aberta
+</div>
