@@ -16,18 +16,26 @@
                 [placeholder]="'quantidade'"
                 [label]="'Quantidade'"
                 formControlName="quantity"/>
+            <cardappio-date-picker class="date-picker"
+                [topLabel]="'Data de validade'"
+                [size]="'20'"
+            />
         </div>
         <div id="product-second-row" class="product-second-row">
-            <cardappio-input
+            <cardappio-input class="input"
                 [width]="100"
                 [placeholder]="'descrição'"
                 [label]="'Descrição'"
                 formControlName="description"/>
-            <cardappio-input
-                [width]="100"
-                [placeholder]="'categoria'"
-                [label]="'Categoria'"
-                formControlName="category"/>
+            <cardappio-autocomplete class="auto-complete"
+                [placeholder]="'Selecione uma categoria'"
+                [isMultiple]="false"
+                [isDisabled]="false"
+                [topLabelInput]="'Categoria'"
+                [size]="50"
+                [search]="categories"
+                formControlName="category"
+            ></cardappio-autocomplete>
             <cardappio-generic-button class="category-btn"
                 [params]="{ 
                     title: { name: 'Categoria', color: '#015EAF'},
@@ -57,8 +65,8 @@
             <i class="fa-solid fa-plus"></i>
         </button>
         <div class="actions-btn">
-            <cardappio-cancel-button></cardappio-cancel-button>
-            <cardappio-save-button> </cardappio-save-button>
+            <cardappio-cancel-button (onClick)="cancel()"></cardappio-cancel-button>
+            <cardappio-save-button (onClick)="create()"> </cardappio-save-button>
         </div>
     </div>
 </form>

@@ -1,12 +1,5 @@
 
-#product-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 4px;
-  width: 100%;
-  margin-top: 10px;
-}
-
+#product-row,
 #product-second-row {
   display: grid;
   grid-template-columns: 1fr auto auto auto;
@@ -15,12 +8,15 @@
   margin-top: 10px;
 }
 
+.input {
+  margin-top: 12px;
+}
 .category-btn {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .active-btn {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 #additional-btn,
@@ -40,6 +36,10 @@
   justify-content: space-between;
   gap: 4px;
   margin-top: 20px;
+}
+
+.auto-complete {
+  margin-top: 0px;
 }
 
 .actions-btn {
@@ -62,9 +62,4 @@
   display: grid;
     grid-template-rows: auto 1fr;
 }
-
-.button {
-    flex-direction: column;
-    align-items: stretch;
-  }
 

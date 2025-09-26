@@ -1,10 +1,12 @@
 export interface Product {
-    id: String,
+    id: string,
     name: String,
     price: Number,
     quantity: Number,
     description: String,
     active: Boolean,
-    expirationDate: Date,
-    image: String
+    category: string,
+    expirationDate: Date,    
+    image: String,
+    note: String
 }
