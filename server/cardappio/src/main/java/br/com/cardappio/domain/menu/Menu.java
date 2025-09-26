@@ -39,17 +39,13 @@ public class Menu implements EntityModel<UUID> {
     @Length(max = 255, message = Messages.SIZE_255)
     private String note;
 
+    @Column
+    @Length(max = 30, message = Messages.SIZE_10)
+    private String theme;
+
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    public static Menu of(final MenuDTO dto) {
-        final Menu menu = new Menu();
-        menu.setId(dto.id());
-        menu.setName(dto.name());
-        menu.setActive(dto.active());
-        menu.setNote(dto.note());
 
-        return menu;
-    }
 }

@@ -1,0 +1,51 @@
+<div class="cardapio-form-fullscreen">
+  <h1>Cardápio › {{ isEditMode ? 'Editar' : 'Novo' }}</h1>
+  <br><br>
+  <div class="form-and-upload-container">
+    <div class="form-container">
+      <div class="field-group">
+        <cardappio-input
+          placeholder="nome"
+          [width]="79"
+          label="Nome"
+          [(ngModel)]="cardapio.name">
+        </cardappio-input>
+      </div>
+      <br>
+      <div class="field-group tema-row">
+        <div class="tema-field">
+          <cardappio-input
+            placeholder="tema"
+            [width]="465"
+            label="Tema"
+            [(ngModel)]="cardapio.theme">
+          </cardappio-input>
+        </div>
+        <div class="toggle-container">
+          <cardappio-toggle
+            [ngModel]="cardapio.active"
+            (ngModelChange)="cardapio.active = $event"
+            [label]="cardapio.active ? 'Ativo' : 'Inativo'">
+          </cardappio-toggle>
+          <!-- Debug: {{ cardapio.active }} -->
+        </div>
+      </div>
+      <br>
+      <div class="field-group note-row">
+        <div class="note-field">
+          <cardappio-input
+            [width]="80"
+            [height]="70"
+            label="Observações"
+            [(ngModel)]="cardapio.note">
+          </cardappio-input>
+        </div>
+      </div>
+    </div>
+    <cardappio-image-upload></cardappio-image-upload>
+  </div>
+</div>
+<div class="form-actions">
+  <cardappio-cancel-button (click)="onCancel()"></cardappio-cancel-button>
+  <cardappio-save-button (click)="onSave()"></cardappio-save-button>
+</div>

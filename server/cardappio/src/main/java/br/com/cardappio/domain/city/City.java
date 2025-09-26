@@ -41,8 +41,4 @@ public class City {
     @Column(nullable = false)
     private String name;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
-    private Address address;
 }
