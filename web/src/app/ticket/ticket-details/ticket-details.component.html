@@ -1,0 +1,48 @@
+<!--<div class="detalhe-container">
+    
+    <header class="header-detalhe">
+        <button class="botao-voltar" (click)="voltarParaLista()">
+            &larr; </button>
+        <h1 class="numero-pedido-header">
+            {{ ticket?.number || '001' }}
+        </h1>
+    </header>
+
+    <div class="itens-lista">
+        
+        <div 
+            *ngFor="let item of itensDoPedido" 
+            [class]="'item-card status-' + item.status.toLowerCase()"
+        >
+            <div class="item-conteudo">
+                
+                <div class="item-imagem">
+                    <img src="caminho/para/imagem.png" alt="Carne Grelhada">
+                </div>
+                
+                <div class="item-info">
+                    <p class="item-quantidade">{{ item.quantidade }}x</p>
+                    <p class="item-nome">{{ item.nome }}</p>
+                    <p class="item-adicionais">Adicionais: {{ item.adicionais }}</p>
+                    
+                    <p *ngIf="item.tempo" class="item-tempo">
+                        Tempo de preparo estimado: {{ item.tempo }} min
+                    </p>
+                </div>
+                
+                <p class="item-preco">{{ item.preco | currency: 'BRL' }}</p>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="legenda-detalhe">
+        <span class="cor-finalizado"></span> Finalizado
+        <span class="cor-cancelada"></span> Cancelada
+        <span class="cor-em-preparo"></span> Em preparo
+    </div>
+</div>
+
+<footer class="footer-total">
+    Total: <span class="valor-total">R$ {{ ticket?.total | currency: 'BRL' }}</span>
+    </footer>-->
