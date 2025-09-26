@@ -1,23 +1,24 @@
 package br.com.cardappio.enums;
 
+import br.com.cardappio.utils.Messages;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import br.com.cardappio.utils.Messages;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 @Getter
 @AllArgsConstructor
 public enum TableStatus {
-    FREE (1L, "Livre"),
-    RESERVED (2L, "Reservada"),
-    OCCUPIED (3L, "Ocupada"),
-    UNAVAILABLE (4L, "Indisponível");
+    
+    FREE(1L, "Livre"),
+    RESERVED(2L, "Reservada"),
+    OCCUPIED(3L, "Ocupada"),
+    UNAVAILABLE(4L, "Indisponível");
 
     private final Long code;
     private final String description;

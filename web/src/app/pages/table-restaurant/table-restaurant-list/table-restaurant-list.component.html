@@ -1,0 +1,25 @@
+<cardappio-list
+  [params]="{
+        service: service,
+        route: 'tables',
+        columns: [
+            { title: 'Mesa', field: 'number', size: 3 },
+            { title: 'Lugares', field: 'places', size: 3 },
+            { title: 'Status', field: 'status', size: 3 },
+        ],
+        filters: [
+            {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Número da Mesa',
+                value: 'number',
+                typeValue: 'number'
+            },
+            {
+                icon: 'fa-solid fa-circle-check',
+                title: 'Qtd. Lugares',
+                value: 'number',
+                typeValue: 'boolean'
+            }
+        ]
+    }"
+></cardappio-list>

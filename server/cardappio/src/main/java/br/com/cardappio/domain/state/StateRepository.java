@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StateRepositoy extends JpaRepository<State, Long>, JpaSpecificationExecutor<State> {
+public interface StateRepository extends JpaRepository<State, Long>, JpaSpecificationExecutor<State> {
 }
