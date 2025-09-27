@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS person (
     active BOOLEAN NOT NULL,
     address_id UUID NOT NULL,
 
-    CONSTRAINT fk_person_type_id FOREIGN KEY (type_id) REFERENCES person_type(id),
+    CONSTRAINT fk_person_type_id FOREIGN KEY (type_id) REFERENCES person_type(code),
     CONSTRAINT fk_person_address_id FOREIGN KEY (address_id) REFERENCES address(id)
 );
