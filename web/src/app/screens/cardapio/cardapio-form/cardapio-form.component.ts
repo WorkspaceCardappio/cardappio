@@ -29,6 +29,7 @@ export class CardapioFormComponent implements OnInit {
   isEditMode = false;
 
   cardapio = {
+    id: '',
     name: '',
     active: true,
     note: '',
@@ -74,6 +75,7 @@ export class CardapioFormComponent implements OnInit {
     this.cardapioService.findById(this.cardapioId).subscribe({
       next: (cardapio) => {
         this.cardapio = {
+          id: cardapio.id || '',
           name: cardapio.name || '',
           active: cardapio.active ?? true,
           note: cardapio.note || '',
@@ -95,6 +97,7 @@ export class CardapioFormComponent implements OnInit {
 
   private updateCardapio(): void {
     if (!this.cardapioId) return;
+
 
     this.cardapioService.update(this.cardapioId, this.cardapio).subscribe({
       next: () => this.navigateToList(),
