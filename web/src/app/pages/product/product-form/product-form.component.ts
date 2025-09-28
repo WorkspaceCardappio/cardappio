@@ -62,7 +62,6 @@ export class ProductFormComponent implements OnInit {
     const { id } = this.route.snapshot.params;
 
     if (this.form.invalid) {
-      console.log('invalido');
       return;
     }
       
