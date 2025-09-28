@@ -1,0 +1,40 @@
+<form [formGroup]="form">
+    <div id="ingredient" class="ingredient">
+        <div id="ingredient-input" class="ingredient-input">
+            <cardappio-input
+                [width]="95",
+                [placeholder]="'nome'"
+                [label]="'Nome do ingrediente'"
+                formControlName="name"
+            />
+            <cardappio-input
+                [width]="95",
+                [placeholder]="'quantidade'"
+                [label]="'Quantidade'"
+                formControlName="quantity"
+            />
+            <cardappio-input
+                [width]="95",
+                [placeholder]="'data de validade'"
+                [label]="'Data de Validade'"
+                formControlName="expirationDate"
+            />
+            <cardappio-dropdown-type-filter
+                [params]="
+                {
+                    width: '150'
+                }
+                "
+            />
+            <cardappio-toggle
+                [label]="'Ativo'",
+                formControlName="active"
+            />
+        </div> 
+        <div id="button" class="button">
+            <cardappio-cancel-button/>
+            <cardappio-save-button/>
+        </div>
+    </div>
+
+</form>
