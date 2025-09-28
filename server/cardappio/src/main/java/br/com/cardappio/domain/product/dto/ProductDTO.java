@@ -38,7 +38,6 @@ public record ProductDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
-        @NotNull
         Category category
 ) {
 

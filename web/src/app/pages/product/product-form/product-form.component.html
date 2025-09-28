@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="form">
     <div id="product" class="product">
         <div id="product-row" class="product-first-row">
             <cardappio-input
@@ -30,11 +30,10 @@
             <cardappio-autocomplete class="auto-complete"
                 [placeholder]="'Selecione uma categoria'"
                 [isMultiple]="false"
-                [isDisabled]="false"
+
                 [topLabelInput]="'Categoria'"
                 [size]="50"
                 [search]="categories"
-                formControlName="category"
             ></cardappio-autocomplete>
             <cardappio-generic-button class="category-btn"
                 [params]="{ 
@@ -50,10 +49,11 @@
         <div class="third-row">
             <cardappio-image-upload
                 id="product-image-upload"
-                [label]="'Imagem do produto'"/>
+                [label]="'Imagem do produto'"
+                />
             <div class="text-area">
                 <label>Observações</label>
-                <textarea id="product-obs" name="notes"></textarea>
+                <textarea id="product-obs" formControlName="note"></textarea>
             </div>
         </div>
         <button type="button" id="additional-btn">

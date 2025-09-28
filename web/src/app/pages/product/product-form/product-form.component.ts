@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, GenericButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
@@ -7,7 +7,8 @@ import { ProductService } from '../service/product.service';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent],
+  imports: [ ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent],
+  providers: [ProductService],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
 })
@@ -36,8 +37,8 @@ export class ProductFormComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(0)]],
       description: [''],
       active: [true],
+      category: [null],
       expirationDate: [''],
-      category: [''],
       image: [''],
       note: ['']
     })
@@ -60,7 +61,11 @@ export class ProductFormComponent implements OnInit {
   create() {
     const { id } = this.route.snapshot.params;
 
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      console.log('invalido');
+      return;
+    }
+      
 
     if (id != 'new') {
       this.service.update(id, this.form.value);

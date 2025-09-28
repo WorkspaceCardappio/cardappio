@@ -48,6 +48,9 @@ public class Product implements EntityModel<UUID> {
     private BigDecimal quantity;
 
     @Column
+    private String description;
+
+    @Column
     private Boolean active = Boolean.TRUE;
 
     @Column
@@ -58,8 +61,10 @@ public class Product implements EntityModel<UUID> {
     @Length(max = 255, message = Messages.SIZE_255)
     private String image;
 
+    @Column
+    private String note;
+
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "category_id")
     private Category category;
 
