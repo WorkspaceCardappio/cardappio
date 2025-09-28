@@ -13,19 +13,19 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TableStatus {
-    FREE (1L, "Livre"),
-    RESERVED (2L, "Reservada"),
-    OCCUPIED (3L, "Ocupada"),
-    UNAVAILABLE (4L, "Indisponível");
+public enum PersonType {
+
+    PF (1L, "PF", "Pessoa Física"),
+    PJ (2L, "PJ", "Pessoa Jurídica");
 
     private final Long code;
+    private final String type;
     private final String description;
 
-    private static final Map<Long, TableStatus> CODE_MAP =
-            Arrays.stream(values()).collect(Collectors.toMap(TableStatus::getCode, Function.identity()));
+    private static final Map<Long, PersonType> CODE_MAP =
+            Arrays.stream(values()).collect(Collectors.toMap(PersonType::getCode, Function.identity()));
 
-    public static TableStatus fromCode(final Long code) {
+    public static PersonType fromCode(final Long code) {
 
         return Optional.ofNullable(CODE_MAP.get(code))
                 .orElseThrow(() -> new EntityNotFoundException(Messages.CODE_NOT_FOUND));
