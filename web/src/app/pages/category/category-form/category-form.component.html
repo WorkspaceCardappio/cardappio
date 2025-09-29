@@ -6,15 +6,21 @@
         [placeholder]="'Nome'"
         [label]="'Nome da Categoria'"
         formControlName="name"
-    >
-</cardappio-input>
-</div>
-<cardappio-toggle
-    [label]="'Ativo'"
-    formControlName="active"
->
-</cardappio-toggle>
-</div>
+    />
+        </div>
+    <cardappio-toggle
+        [label]="'Ativo'"
+        formControlName="active"
+    />
+    <!-- <cardappio-autocomplete
+        [placeholder]="'Vincular uma categoria'",
+        [isMultiple]="false",
+        [size]="10"
+        search=""
+    > -->
+<!-- 
+    </cardappio-autocomplete> -->
+    </div>
 <cardappio-image-upload 
         id="category-image-upload"
         [label]="'Imagem da Categoria'"

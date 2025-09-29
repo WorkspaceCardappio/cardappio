@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CancelButtonComponent, DropdownMenuListComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
+import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { CategoryService } from '../service/category.service';
     ToggleComponent,
     CancelButtonComponent,
     SaveButtonComponent,
-    DropdownMenuListComponent],
+    AutocompleteComponent],
   providers: [CategoryService],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss'
