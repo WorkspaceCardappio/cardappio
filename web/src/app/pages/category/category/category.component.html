@@ -21,4 +21,10 @@
             }
         ]
     }"
-></cardappio-list>
+>
+
+    <ng-template #active let-item>
+        {{ item.active }}
+    </ng-template>
+
+</cardappio-list>

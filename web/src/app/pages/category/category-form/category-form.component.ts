@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
+import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -73,5 +74,9 @@ export class CategoryFormComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['category'])
-  }  
+  }
+
+  categories = (query: string): Observable<any[]> => {
+    return this.service.findAll(20, query);
+  }
 }

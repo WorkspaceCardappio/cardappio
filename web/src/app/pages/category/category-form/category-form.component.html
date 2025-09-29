@@ -12,14 +12,13 @@
         [label]="'Ativo'"
         formControlName="active"
     />
-    <!-- <cardappio-autocomplete
+    <cardappio-autocomplete
         [placeholder]="'Vincular uma categoria'",
         [isMultiple]="false",
         [size]="10"
-        search=""
-    > -->
-<!-- 
-    </cardappio-autocomplete> -->
+        [search]="categories"
+    >
+    </cardappio-autocomplete>
     </div>
 <cardappio-image-upload 
         id="category-image-upload"
