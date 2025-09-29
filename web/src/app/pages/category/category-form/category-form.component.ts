@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ImageUploadComponent, InputComponent, ToggleComponent, CancelButtonComponent, SaveButtonComponent } from 'cardappio-component-hub';
-import { CategoryService } from '../service/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
+import { CategoryService } from '../service/category.service';
 
 @Component({
   selector: 'app-category-form',
@@ -61,7 +61,6 @@ export class CategoryFormComponent implements OnInit {
 
   create() {
     const { id } = this.route.snapshot.params;
-    console.log(id)
     if (this.form.invalid)
       return;
     
@@ -74,11 +73,5 @@ export class CategoryFormComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['category'])
-  }
-
-  input(name: string) {
-    this.form.get('name')?.setValue(name);
-  }
-
-  
+  }  
 }
