@@ -8,18 +8,20 @@
         formControlName="name"
     />
         </div>
-    <cardappio-toggle
+    <cardappio-autocomplete
+        [placeholder]="'Vincular uma categoria'"
+        [isMultiple]="false"
+        [size]="40"
+        [topLabelInput]="'Selecione uma categoria'"
+        [search]="categories"
+    />
+    <div class="toogle">
+        <cardappio-toggle
         [label]="'Ativo'"
         formControlName="active"
     />
-    <!-- <cardappio-autocomplete
-        [placeholder]="'Vincular uma categoria'",
-        [isMultiple]="false",
-        [size]="10"
-        [search]="categories"
-    >
-    </cardappio-autocomplete> -->
     </div>
+   </div>
 <cardappio-image-upload 
         id="category-image-upload"
         [label]="'Imagem da Categoria'"
