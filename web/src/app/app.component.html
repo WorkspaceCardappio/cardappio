@@ -1,0 +1,29 @@
+<!-- Seu botão customizado -->
+<button mat-raised-button (click)="modal.open()">Adicionar Usuário</button>
+
+<!-- Modal -->
+<modal-generic
+  #modal
+  title="Novo Usuário"
+  width="500px">
+
+  <div>
+    <label>Nome:</label>
+    <input type="text" [(ngModel)]="nome">
+  </div>
+
+  <div>
+    <label>Email:</label>
+    <input type="email" [(ngModel)]="email">
+  </div>
+
+  <div>
+    <label>Senha:</label>
+    <input type="password" [(ngModel)]="senha">
+  </div>
+
+  <div modal-actions>
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-button (click)="salvar()">Salvar</button>
+  </div>
+</modal-generic>

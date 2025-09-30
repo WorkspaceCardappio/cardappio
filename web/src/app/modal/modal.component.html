@@ -1,0 +1,9 @@
+<ng-template #dialogTemplate>
+  <h2 mat-dialog-title>{{ title }}</h2>
+  <mat-dialog-content>
+    <ng-content></ng-content>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <ng-content select="[modal-actions]"></ng-content>
+  </mat-dialog-actions>
+</ng-template>
