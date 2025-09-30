@@ -33,7 +33,7 @@ public class Restaurant {
     @Column(name = "cnpj", length = 14)
     private String cnpj;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 }

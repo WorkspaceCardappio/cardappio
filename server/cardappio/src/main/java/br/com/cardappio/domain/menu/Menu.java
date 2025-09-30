@@ -40,7 +40,7 @@ public class Menu implements EntityModel<UUID> {
     private String note;
 
     @Column
-    @Length(max = 30, message = Messages.SIZE_10)
+    @Length(max = 30, message = Messages.SIZE_30)
     private String theme;
 
     @ManyToOne

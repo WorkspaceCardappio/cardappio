@@ -23,9 +23,7 @@ public class MenuAdapter implements Adapter<Menu, MenuDTO, MenuDTO> {
     @Override
     public Menu toEntity(final MenuDTO dto) {
 
-        Restaurant restaurant = restaurantRepository.findById(dto.restaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurante não encontrado."));
-
+        final Restaurant restaurant = restaurantRepository.getReferenceById(dto.restaurantId());
 
         final Menu menu = new Menu();
         menu.setId(dto.id());

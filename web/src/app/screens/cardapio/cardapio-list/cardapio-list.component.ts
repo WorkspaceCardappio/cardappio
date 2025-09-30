@@ -14,7 +14,7 @@ export class CardapioListComponent implements OnInit {
 
   listParams = {
     service: this.cardapioService,
-    route: '/menus/dto',
+    route: '/menus',
     columns: [
       {
         title: 'Nome',
@@ -25,7 +25,7 @@ export class CardapioListComponent implements OnInit {
       {
         title: 'Observação',
         field: 'note',
-        size: 300,
+        size: 200,
         order: 'note'
       },
       {

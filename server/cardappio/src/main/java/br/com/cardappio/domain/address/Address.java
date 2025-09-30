@@ -61,6 +61,6 @@ public class Address {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
     private City city;
 }
