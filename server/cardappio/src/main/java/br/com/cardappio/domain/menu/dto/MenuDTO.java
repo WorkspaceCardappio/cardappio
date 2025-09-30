@@ -17,7 +17,7 @@ public record MenuDTO(
         boolean active,
         @Length(max = 255, message = Messages.SIZE_255)
         String note,
-        @Length(max = 30, message = Messages.SIZE_10)
+        @Length(max = 30, message = Messages.SIZE_30)
         String theme,
         @NotNull
         UUID restaurantId

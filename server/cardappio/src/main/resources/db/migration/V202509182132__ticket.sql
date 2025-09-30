@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS ticket (
     id UUID PRIMARY KEY,
-    number VARCHAR(10),
+    number VARCHAR(10) NOT NULL UNIQUE,
     status NUMERIC(10),
     person_id UUID,
     table_id UUID,

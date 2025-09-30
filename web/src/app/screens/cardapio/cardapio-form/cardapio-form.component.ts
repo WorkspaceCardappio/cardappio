@@ -111,6 +111,6 @@ export class CardapioFormComponent implements OnInit {
   }
 
   protected navigateToList(): void {
-    this.router.navigate(['/cardapio-list']);
+    this.router.navigate(['/cardapio']);
   }
 }

@@ -3,7 +3,7 @@ import { CardapioListComponent } from "./screens/cardapio/cardapio-list/cardapio
 import { CardapioFormComponent } from "./screens/cardapio/cardapio-form/cardapio-form.component";
 
 export const routes: Routes = [
-  { path:'cardapio-list', component:CardapioListComponent },
+  { path:'cardapio', component:CardapioListComponent },
   { path:'menus/new', component: CardapioFormComponent },
   { path: 'menus/:id', component: CardapioFormComponent }
 ];
