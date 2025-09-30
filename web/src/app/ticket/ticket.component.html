@@ -1,0 +1,20 @@
+<cardappio-list
+  [params]="{
+        service: ticketService,
+        route: 'tables',
+        columns: [
+            { title: 'Número', field: 'number', size: 1 },
+            { title: 'Mesa', field: 'places', size: 1 },
+            { title: 'Pessoa', field: 'person', size: 1 },
+            { title: 'Status', field: 'status', size: 1 },
+        ],
+        filters: [
+            {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Número da Mesa',
+                value: 'number',
+                typeValue: 'number'
+            },
+        ]
+    }"
+></cardappio-list>
