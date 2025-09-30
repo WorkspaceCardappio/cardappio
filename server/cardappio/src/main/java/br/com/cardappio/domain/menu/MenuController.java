@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/menus")
-@CrossOrigin(origins = "http://localhost:4200")
 public class MenuController extends CrudController<Menu, UUID, MenuDTO, MenuDTO> {
 
 }
