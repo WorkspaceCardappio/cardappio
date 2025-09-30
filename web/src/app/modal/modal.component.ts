@@ -1,30 +1,103 @@
-import {Component, inject, Input, TemplateRef, ViewChild} from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
+import {
+  Component,
+  inject,
+  input,
+  output,
+  TemplateRef,
+  viewChild,
+  DestroyRef,
+  signal,
+  computed
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
+  MatDialogRef,
   MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogConfig,
 } from '@angular/material/dialog';
 
+export interface ModalConfig {
+  title?: string;
+  width?: string;
+  cancelText?: string;
+  confirmText?: string;
+  disableClose?: boolean;
+}
+
 @Component({
-  selector: 'modal-generic',
-  styleUrl: 'modal.component.scss',
-  templateUrl: 'modal.component.html',
+  selector: 'app-modal-generic',
+  styleUrl: './modal.component.scss',
+  templateUrl: './modal.component.html',
   standalone: true,
-  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose],
+  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions],
 })
 export class ModalComponent {
-  @Input() title: string = 'Dialog Title';
-  @Input() width: string = '400px';
 
-  readonly dialog = inject(MatDialog);
-  @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
+  readonly title = input<string>('Dialog Title');
+  readonly width = input<string>('400px');
+  readonly cancelText = input<string>('Cancelar');
+  readonly confirmText = input<string>('Salvar');
+  readonly disableClose = input<boolean>(false);
+
+  readonly confirmed = output<void>();
+  readonly cancelled = output<void>();
+  readonly closed = output<void>();
+
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly dialogTemplate = viewChild.required<TemplateRef<unknown>>('dialogTemplate');
+
+  private dialogRef = signal<MatDialogRef<unknown> | null>(null);
+  readonly isOpen = computed(() => this.dialogRef() !== null);
+
 
   open(): void {
-    this.dialog.open(this.dialogTemplate, {
-      width: this.width,
-    });
+    if (this.isOpen()) {
+      console.warn('Modal já está aberto');
+      return;
+    }
+
+    const config: MatDialogConfig = {
+      width: this.width(),
+      disableClose: this.disableClose(),
+      autoFocus: 'dialog',
+      restoreFocus: true,
+    };
+
+    const ref = this.dialog.open(this.dialogTemplate(), config);
+    this.dialogRef.set(ref);
+
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.dialogRef.set(null);
+        this.closed.emit();
+      });
+  }
+
+
+  close(): void {
+    const ref = this.dialogRef();
+    if (ref) {
+      ref.close();
+      this.dialogRef.set(null);
+    }
+  }
+
+
+  handleConfirm(): void {
+    this.confirmed.emit();
+    this.close();
+  }
+
+
+  handleCancel(): void {
+    this.cancelled.emit();
+    this.close();
   }
 }
