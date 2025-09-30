@@ -22,10 +22,21 @@ public record IngredientDTO(
         @NotNull
         LocalDate expirationDate,
         @NotNull
+        String unitOfMeasurement,
+        @NotNull
+        Boolean active,
+        @NotNull
         Boolean allergenic
 ) {
     public IngredientDTO(final Ingredient ingredient) {
-        this(ingredient.getId(), ingredient.getName(), ingredient.getQuantity(), ingredient.getExpirationDate(), ingredient.getAllergenic());
+        this(
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getQuantity(),
+                ingredient.getExpirationDate(),
+                ingredient.getUnitOfMeasurement(),
+                ingredient.getActive(),
+                ingredient.getAllergenic());
     }
 }
 

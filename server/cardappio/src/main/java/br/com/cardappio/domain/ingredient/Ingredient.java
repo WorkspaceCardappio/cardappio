@@ -42,6 +42,14 @@ public class Ingredient implements EntityModel<UUID> {
     @NotNull
     private LocalDate expirationDate;
 
+    @Column(name="unit_of_measurement", nullable = false)
+    @NotNull
+    private String unitOfMeasurement;
+
+    @Column(nullable = false)
+    @NotNull
+    private Boolean active = Boolean.TRUE;
+
     @Column(nullable = false)
     @NotNull
     private Boolean allergenic = Boolean.FALSE;
@@ -53,6 +61,8 @@ public class Ingredient implements EntityModel<UUID> {
         ingredient.setName(dto.name());
         ingredient.setQuantity(dto.quantity());
         ingredient.setExpirationDate(dto.expirationDate());
+        ingredient.setUnitOfMeasurement(dto.unitOfMeasurement());
+        ingredient.setActive(dto.active());
         ingredient.setAllergenic(dto.allergenic());
 
         return ingredient;
