@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
+import { CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
 import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 
@@ -14,8 +14,8 @@ import { CategoryService } from '../service/category.service';
     CommonModule,
     ToggleComponent,
     CancelButtonComponent,
-    SaveButtonComponent,
-    AutocompleteComponent],
+    SaveButtonComponent
+  ],
   providers: [CategoryService],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss'
@@ -35,7 +35,7 @@ export class CategoryFormComponent implements OnInit {
     this.initForm();
     this.checkRoute();
     };
-  
+
   private initForm() {
     this.form = this.builder.group({
       id: [''],
@@ -64,12 +64,12 @@ export class CategoryFormComponent implements OnInit {
     const { id } = this.route.snapshot.params;
     if (this.form.invalid)
       return;
-    
+
     if (id != 'new') {
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
     } else {
       this.service.create(this.form.value).subscribe(() => this.router.navigate(['category']));
-    }  
+    }
   }
 
   cancel() {
