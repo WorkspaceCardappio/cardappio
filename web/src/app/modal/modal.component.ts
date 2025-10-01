@@ -19,6 +19,7 @@ import {
   MatDialogActions,
   MatDialogConfig,
 } from '@angular/material/dialog';
+import { NgClass } from "@angular/common";
 
 export interface ModalConfig {
   title?: string;
@@ -28,19 +29,22 @@ export interface ModalConfig {
   disableClose?: boolean;
 }
 
+export type ModalType = 'warning' | 'edit' | 'delete' | 'post';
+
 @Component({
   selector: 'app-modal-generic',
   styleUrl: './modal.component.scss',
   templateUrl: './modal.component.html',
   standalone: true,
-  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions],
+  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, NgClass],
 })
 export class ModalComponent {
 
+  readonly type = input<ModalType>('warning');
   readonly title = input<string>('Dialog Title');
   readonly width = input<string>('400px');
   readonly cancelText = input<string>('Cancelar');
-  readonly confirmText = input<string>('Salvar');
+  readonly confirmText = input<string>();
   readonly disableClose = input<boolean>(false);
 
   readonly confirmed = output<void>();
@@ -57,11 +61,6 @@ export class ModalComponent {
 
 
   open(): void {
-    if (this.isOpen()) {
-      console.warn('Modal já está aberto');
-      return;
-    }
-
     const config: MatDialogConfig = {
       width: this.width(),
       disableClose: this.disableClose(),

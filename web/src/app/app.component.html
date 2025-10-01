@@ -4,9 +4,15 @@
   #modal
   [title]="'Confirmar Ação'"
   [width]="'500px'"
-  [cancelText]="'Não'"
-  [confirmText]="'Sim'"
+  [cancelText]="'Cancelar'"
+  [confirmText]="'Boraaaa'"
   (confirmed)="onConfirm()"
-  (cancelled)="onCancel()">
-  <p>Tem certeza que deseja continuar?</p>
+  (cancelled)="onCancel()"
+  [type]="'warning'"
+>
+
+  <div>
+    <cardappio-cancel-button></cardappio-cancel-button>
+  </div>
+  <p>Campos do formulário...</p>
 </app-modal-generic>

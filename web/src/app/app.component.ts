@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ModalComponent } from "./modal/modal.component";
 import { FormsModule } from "@angular/forms";
+import { CancelButtonComponent } from "cardappio-component-hub";
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,7 @@ import { FormsModule } from "@angular/forms";
   imports: [
     ModalComponent,
     FormsModule,
+    CancelButtonComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
