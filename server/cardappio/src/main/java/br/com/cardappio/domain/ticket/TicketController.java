@@ -11,6 +11,6 @@ import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
 
 @RestController
-@RequestMapping("/tickets")
+@RequestMapping("/api/tickets")
 public class TicketController extends CrudController<Ticket, UUID, TicketListDTO, TicketDTO> {
 }

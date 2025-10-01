@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
-import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Entity;
@@ -46,15 +45,5 @@ public class ProductOrder implements EntityModel<UUID> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
-    public static ProductOrder of(final ProductOrderDTO dto) {
-
-        final ProductOrder productOrder = new ProductOrder();
-        productOrder.setId(dto.id());
-        productOrder.setOrder(dto.order());
-        productOrder.setProduct(dto.product());
-
-        return productOrder;
-    }
 
 }

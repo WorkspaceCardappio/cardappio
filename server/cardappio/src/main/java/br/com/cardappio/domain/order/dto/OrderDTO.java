@@ -17,10 +17,9 @@ public record OrderDTO(
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal price,
         @NotNull(message = Messages.STATUS_NOT_NULL)
-        OrderStatus orderStatus,
-        List<ProductOrder> products
+        OrderStatus orderStatus
 ) {
     public OrderDTO(final Order order) {
-        this(order.getId(), order.getPrice(), order.getStatus(), order.getProducts());
+        this(order.getId(), order.getPrice(), order.getStatus());
     }
 }

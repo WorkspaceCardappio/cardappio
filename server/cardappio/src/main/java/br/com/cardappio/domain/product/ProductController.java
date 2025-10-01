@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController extends CrudController<Product, UUID, ProductDTO, ProductDTO> {
 }

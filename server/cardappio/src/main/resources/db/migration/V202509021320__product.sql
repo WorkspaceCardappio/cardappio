@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS product (
     price DECIMAL(10,2) NOT NULL,
     quantity DECIMAL(10,2) NOT NULL CHECK (quantity >= 0),
     active BOOLEAN NOT NULL DEFAULT TRUE,
-    expiration_date DATE NOT NULL,
+    expiration_date DATE,
     image VARCHAR(255),
-    category_id UUID,
+    category_id UUID NOT NULL,
     CONSTRAINT fk_product_category_id FOREIGN KEY (category_id) REFERENCES category(id)
 );

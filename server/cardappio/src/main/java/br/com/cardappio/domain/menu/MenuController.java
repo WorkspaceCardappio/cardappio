@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("/api/menus")
 public class MenuController extends CrudController<Menu, UUID, MenuDTO, MenuDTO> {
 
 }
