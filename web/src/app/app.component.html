@@ -5,14 +5,10 @@
   [title]="'Confirmar Ação'"
   [width]="'500px'"
   [cancelText]="'Cancelar'"
-  [confirmText]="'Boraaaa'"
   (confirmed)="onConfirm()"
   (cancelled)="onCancel()"
-  [type]="'warning'"
+  [type]="'delete'"
 >
 
-  <div>
-    <cardappio-cancel-button></cardappio-cancel-button>
-  </div>
   <p>Campos do formulário...</p>
 </app-modal-generic>

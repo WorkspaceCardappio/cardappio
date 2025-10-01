@@ -1,24 +1,87 @@
-h2[mat-dialog-title] {
-  padding-right: 1.5rem;
-  padding-left: 1.5rem;
+/* modal.component.scss */
+
+// Contêiner para a tira colorida e o botão de fechar
+.modal-header-strip {
+  // Use a propriedade 'display: flex' para o alinhamento
+  display: flex;
+  // 'justify-content' empurra o conteúdo para a direita
+  justify-content: flex-end;
+  // 'align-items' alinha o conteúdo verticalmente
+  align-items: center;
+  // Altura da faixa
+  height: 15px;
+  // Aumente o padding para dar espaço ao botão e à faixa
+  padding: 0 1rem;
 
   &.warning {
     background-color: #ff9800;
-    color: white;
   }
 
   &.edit {
     background-color: #2196f3;
-    color: white;
   }
 
   &.delete {
     background-color: #f44336;
-    color: white;
   }
 
   &.post {
     background-color: #4caf50;
-    color: white;
+  }
+}
+
+// Garanta que o botão 'X' esteja com a cor correta e o ícone visível
+button[mat-icon-button] {
+  color: white;
+  // Adicione 'z-index' para garantir que ele fique acima de outros elementos, se necessário
+  z-index: 10;
+}
+
+// Remova os estilos do título que podem estar interferindo
+h2[mat-dialog-title] {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+// Estilos adicionais para o contêiner do modal para evitar que a faixa seja cortada
+mat-dialog-container {
+  overflow: visible;
+  border-radius: 4px; // Use a mesma borda do seu modal para a faixa
+}
+
+
+.close-button {
+  position: absolute;
+  top: 25px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  color: black;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  padding: 0;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
   }
 }

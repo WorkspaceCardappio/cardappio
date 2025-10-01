@@ -20,6 +20,8 @@ import {
   MatDialogConfig,
 } from '@angular/material/dialog';
 import { NgClass } from "@angular/common";
+import { CancelButtonComponent, GenericButtonComponent, SaveButtonComponent } from "cardappio-component-hub";
+import { MatIcon } from "@angular/material/icon";
 
 export interface ModalConfig {
   title?: string;
@@ -36,7 +38,7 @@ export type ModalType = 'warning' | 'edit' | 'delete' | 'post';
   styleUrl: './modal.component.scss',
   templateUrl: './modal.component.html',
   standalone: true,
-  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, NgClass],
+  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, NgClass, SaveButtonComponent, GenericButtonComponent, CancelButtonComponent, MatIcon],
 })
 export class ModalComponent {
 

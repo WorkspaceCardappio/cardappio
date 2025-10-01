@@ -1,31 +1,19 @@
 <ng-template #dialogTemplate>
-  <h2
-    mat-dialog-title
-    [ngClass]="type()"> {{ title() }}
-  </h2>
+  <div class="modal-header">
+    <div class="modal-header-strip" [ngClass]="type()">     <button class="close-button" (click)="close()" aria-label="Fechar">&times;</button>
+    </div>
+  </div>
+
+  <h2 mat-dialog-title>{{ title() }}</h2>
 
   <mat-dialog-content>
     <ng-content />
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-
     @if (confirmText()) {
-      <button
-        mat-raised-button
-        color="primary"
-        type="button"
-        (click)="handleConfirm()">
-        {{ confirmText() }}
-      </button>
+      <cardappio-generic-button (click)="handleConfirm()"></cardappio-generic-button>
     }
-
-    <button
-      mat-button
-      type="button"
-      (click)="handleCancel()">
-      {{ cancelText() }}
-    </button>
-
+    <cardappio-cancel-button (click)="handleCancel()"></cardappio-cancel-button>
   </mat-dialog-actions>
 </ng-template>
