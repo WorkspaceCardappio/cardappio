@@ -1,0 +1,6 @@
+{
+  "release-type": "simple",
+  "bumpMinorPreMajor": true,
+  "bumpPatchForMinorPreMajor": true,
+  "versioningStrategy": "increase"
+}

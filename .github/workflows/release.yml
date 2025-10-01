@@ -1,10 +1,10 @@
-name: Create Release
+name: Generate Release
 
 on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Version (patch, minor, major)'
+        description: 'Version type (patch, minor, major)'
         required: true
         default: 'minor'
 
@@ -13,13 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Release
+      - name: Generate Release
         uses: google-github-actions/release-please-action@v4
         with:
-          release-type: simple
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
-          versioning-strategy: increase
-          default-release-type: ${{ github.event.inputs.release_type }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PERSONAL_ACCESS }}
+          config-file: release-please-config.json
+          release-type: ${{ github.event.inputs.release_type }}
