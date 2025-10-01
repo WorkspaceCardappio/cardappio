@@ -19,3 +19,4 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS }}
           config-file: release-please-config.json
           release-type: simple
+          skip-github-release: true
