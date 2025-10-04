@@ -2,19 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
+import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from 'cardappio-component-hub';
 import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 
 @Component({
   selector: 'app-category-form',
-  imports: [InputComponent,
+  imports: [
+    InputComponent,
     ReactiveFormsModule,
     ImageUploadComponent,
     CommonModule,
     ToggleComponent,
     CancelButtonComponent,
-    SaveButtonComponent
+    SaveButtonComponent,
+    AutocompleteComponent
   ],
   providers: [CategoryService],
   templateUrl: './category-form.component.html',
