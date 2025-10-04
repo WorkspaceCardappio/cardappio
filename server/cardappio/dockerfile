@@ -1,10 +1,10 @@
-FROM gradle:8.4-jdk21 AS build
-COPY --chown=gradle:gradle . /app
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-RUN gradle build -x test --no-daemon
+COPY . .
+RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jdk
+WORKDIR /app
 EXPOSE 8080
-COPY --from=build /app/build/libs/*.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "/app.jar", "--spring.profiles.active=prod"]
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
