@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { CategoryService } from '../service/category.service';
 import { CardappioListComponent } from 'cardappio-component-hub';
+import { CategoryService } from '../service/category.service';
 
 
 @Component({
