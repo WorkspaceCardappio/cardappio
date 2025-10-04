@@ -6,8 +6,7 @@ import {
   TemplateRef,
   viewChild,
   DestroyRef,
-  signal,
-  computed
+  signal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +20,6 @@ import {
 } from '@angular/material/dialog';
 import { NgClass } from "@angular/common";
 import { CancelButtonComponent, GenericButtonComponent, SaveButtonComponent } from "cardappio-component-hub";
-import { MatIcon } from "@angular/material/icon";
 
 export interface ModalConfig {
   title?: string;
@@ -38,7 +36,7 @@ export type ModalType = 'warning' | 'edit' | 'delete' | 'post';
   styleUrl: './modal.component.scss',
   templateUrl: './modal.component.html',
   standalone: true,
-  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, NgClass, SaveButtonComponent, GenericButtonComponent, CancelButtonComponent, MatIcon],
+  imports: [MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, NgClass, GenericButtonComponent, CancelButtonComponent],
 })
 export class ModalComponent {
 
@@ -47,7 +45,6 @@ export class ModalComponent {
   readonly width = input<string>('400px');
   readonly cancelText = input<string>('Cancelar');
   readonly confirmText = input<string>();
-  readonly disableClose = input<boolean>(false);
 
   readonly confirmed = output<void>();
   readonly cancelled = output<void>();
@@ -59,13 +56,12 @@ export class ModalComponent {
   readonly dialogTemplate = viewChild.required<TemplateRef<unknown>>('dialogTemplate');
 
   private dialogRef = signal<MatDialogRef<unknown> | null>(null);
-  readonly isOpen = computed(() => this.dialogRef() !== null);
 
 
   open(): void {
     const config: MatDialogConfig = {
       width: this.width(),
-      disableClose: this.disableClose(),
+      disableClose: false,
       autoFocus: 'dialog',
       restoreFocus: true,
     };
