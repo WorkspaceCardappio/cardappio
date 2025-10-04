@@ -8,14 +8,16 @@ import { CategoryService } from '../service/category.service';
 
 @Component({
   selector: 'app-category-form',
-  imports: [InputComponent,
+  imports: [
+    InputComponent,
     ReactiveFormsModule,
     ImageUploadComponent,
     CommonModule,
     ToggleComponent,
     CancelButtonComponent,
     SaveButtonComponent,
-    AutocompleteComponent],
+    AutocompleteComponent
+  ],
   providers: [CategoryService],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss'
@@ -35,7 +37,7 @@ export class CategoryFormComponent implements OnInit {
     this.initForm();
     this.checkRoute();
   };
-  
+
   private initForm() {
     this.form = this.builder.group({
       id: [''],
@@ -46,7 +48,7 @@ export class CategoryFormComponent implements OnInit {
     });
   }
 
-  private checkRoute() {  
+  private checkRoute() {
     const { id } = this.route.snapshot.params;
     if (id != 'new') {
       this.loadCategory(id);
@@ -62,14 +64,14 @@ export class CategoryFormComponent implements OnInit {
   create() {
     if (this.form.invalid)
       return;
-    
+
     const { id } = this.route.snapshot.params;
 
     if (id != 'new') {
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
     } else {
       this.service.create(this.form.value).subscribe(() => this.router.navigate(['category']));
-    }  
+    }
   }
 
   cancel() {
