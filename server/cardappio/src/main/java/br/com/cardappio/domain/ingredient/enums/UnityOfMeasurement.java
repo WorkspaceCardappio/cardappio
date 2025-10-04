@@ -6,18 +6,18 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UnityOfMeasurement {
-    LITER(0, "Litro"),
-    MILLILITER(1, "Mililitro"),
-    GRAM(2, "Grama"),
-    KILOGRAM(3, "Quilograma"),
-    UNIT(4, "Unidade");
+    LITER(1L, "Litro"),
+    MILLILITER(2L, "Mililitro"),
+    GRAM(3L, "Grama"),
+    KILOGRAM(4L, "Quilograma"),
+    UNIT(5L, "Unidade");
 
-    private final int code;
+    private final Long code;
     private final String description;
 
-    public static UnityOfMeasurement fromCode(int code){
+    public static UnityOfMeasurement fromCode(Long code){
         for(UnityOfMeasurement value: UnityOfMeasurement.values()){
-            if(value.code == code){
+            if(value.code.equals(code)){
                 return value;
             }
         } throw new IllegalArgumentException("Código inválido" + code);

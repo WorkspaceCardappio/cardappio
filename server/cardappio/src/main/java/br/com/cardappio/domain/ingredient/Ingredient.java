@@ -1,6 +1,7 @@
 package br.com.cardappio.domain.ingredient;
 
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
+import br.com.cardappio.domain.ingredient.enums.UnityOfMeasurement;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
@@ -42,9 +43,8 @@ public class Ingredient implements EntityModel<UUID> {
     @NotNull
     private LocalDate expirationDate;
 
-    @Column(name="unit_of_measurement", nullable = false)
-    @NotNull
-    private String unitOfMeasurement;
+    @Column(name="unit_of_measurement")
+    private UnityOfMeasurement unityOfMeasurement;
 
     @Column(nullable = false)
     @NotNull
@@ -61,7 +61,7 @@ public class Ingredient implements EntityModel<UUID> {
         ingredient.setName(dto.name());
         ingredient.setQuantity(dto.quantity());
         ingredient.setExpirationDate(dto.expirationDate());
-        ingredient.setUnitOfMeasurement(dto.unitOfMeasurement());
+        ingredient.setUnityOfMeasurement(UnityOfMeasurement.fromCode(dto.unityOfMeasurement().code()));
         ingredient.setActive(dto.active());
         ingredient.setAllergenic(dto.allergenic());
 
