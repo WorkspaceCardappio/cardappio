@@ -44,7 +44,7 @@ public class Restaurant {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    public static Restaurant of(UUID id) {
+    public static Restaurant of(final UUID id) {
 
         Restaurant restaurant = new Restaurant();
         restaurant.setId(id);
