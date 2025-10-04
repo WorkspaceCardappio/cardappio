@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
-import { IngredientService } from '../../service/ingredient.service';
+import { IngredientService } from '../service/ingredient.service';
 
 @Component({
   selector: 'app-ingredients-form',

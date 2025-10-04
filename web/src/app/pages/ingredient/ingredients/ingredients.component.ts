@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CardappioListComponent, GenericButtonComponent } from "cardappio-component-hub";
-import { IngredientService } from '../../service/ingredient.service';
+import { IngredientService } from '../service/ingredient.service';
 
 @Component({
   selector: 'app-ingredients',
