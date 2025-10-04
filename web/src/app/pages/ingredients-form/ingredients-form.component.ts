@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CancelButtonComponent, DropdownTypeFilterComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
+import { AutocompleteComponent, CancelButtonComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
+import { Observable } from 'rxjs';
 import { IngredientService } from '../../service/ingredient.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { IngredientService } from '../../service/ingredient.service';
     ToggleComponent,
     CancelButtonComponent,
     SaveButtonComponent,
-    DropdownTypeFilterComponent
+    AutocompleteComponent
 ],
   templateUrl: './ingredients-form.component.html',
   styleUrl: './ingredients-form.component.scss'
@@ -56,6 +57,10 @@ export class IngredientsFormComponent implements OnInit {
     this.service.findById(id).subscribe(ingredient => {
       this.form.patchValue(ingredient);
     })
+  }
+
+  unitOfMeasurement = (query: string): Observable<any[]> => {
+    return this.service.findAll(20, query);
   }
 
 }

@@ -2,33 +2,38 @@
     <div id="ingredient" class="ingredient">
         <div id="ingredient-input" class="ingredient-input">
             <cardappio-input
-                [width]="95",
+                [width]="95"
                 [placeholder]="'nome'"
                 [label]="'Nome do ingrediente'"
                 formControlName="name"
             />
             <cardappio-input
-                [width]="95",
+                [width]="95"
                 [placeholder]="'quantidade'"
                 [label]="'Quantidade'"
                 formControlName="quantity"
             />
             <cardappio-input
-                [width]="95",
+                [width]="95"
                 [placeholder]="'data de validade'"
                 [label]="'Data de Validade'"
                 formControlName="expirationDate"
             />
-            <cardappio-dropdown-type-filter
-                [params]="
-                {
-                    width: '150'
-                }
-                "
+            <cardappio-autocomplete
+                [placeholder]="'Unidade de medida'"
+                [isMultiple]="false"
+                [topLabelInput]="'Unidade de medida'"
+                [size]="20"
+                [search]="unitOfMeasurement"
+            />
+                
+            <cardappio-toggle
+                [label]="'Ativo'"
+                formControlName="active"
             />
             <cardappio-toggle
-                [label]="'Ativo'",
-                formControlName="active"
+                [label]="'Alergênico'"
+                formControlName="allergenic"
             />
         </div> 
         <div id="button" class="button">
