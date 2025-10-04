@@ -3,10 +3,6 @@ name: Create Tag
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Origin'
-        required: true
-        default: 'main'
       tag_name:
         description: 'Name (ex: v1.2.3)'
         required: true
@@ -54,31 +50,48 @@ jobs:
         run: npm run test:ci
 
   create-tag:
+    needs: [backend-tests, frontend-tests] 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código da branch atual
+      - name: Checkout da branch selecionada
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.inputs.branch }}
 
-      - name: Obter SHA do commit atual
+      - name: Obter SHA do commit atual da branch
         id: get_sha
         run: |
           SHA=$(git rev-parse HEAD)
           echo "sha=$SHA" >> $GITHUB_OUTPUT
 
-      - name: Criar tag
+      - name: Criar tag via API do GitHub
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const tagName = core.getInput('tag_name');
+            const tagName = '${{ github.event.inputs.tag_name }}';
             const sha = '${{ steps.get_sha.outputs.sha }}';
 
-            await github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${tagName}`,
-              sha: sha
-            });
+            // Verifica se tag já existe (opcional, pra evitar erro)
+            try {
+              await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `tags/${tagName}`
+              });
+              console.log(`Tag ${tagName} já existe, abortando criação.`);
+            } catch (error) {
+              if (error.status === 404) {
+                // Tag não existe, criar
+                await github.rest.git.createRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `refs/tags/${tagName}`,
+                  sha: sha
+                });
+                console.log(`Tag ${tagName} criada no commit ${sha}.`);
+              } else {
+                throw error;
+              }
+            }
