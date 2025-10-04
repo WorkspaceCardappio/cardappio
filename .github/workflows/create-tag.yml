@@ -1,12 +1,8 @@
-name: Testar e Criar Tag Manualmente
+name: Create Tag
 
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch de origem para a tag'
-        required: true
-        default: 'main'
       tag_name:
         description: 'Nome da nova tag (ex: v1.2.3)'
         required: true
@@ -55,15 +51,12 @@ jobs:
 
   create-tag:
     runs-on: ubuntu-latest
-    needs:
-      - backend-tests
-      - frontend-tests
 
     steps:
-      - name: Checkout do código
+      - name: Checkout do código da branch atual
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.ref_name }}
 
       - name: Obter SHA do commit atual
         id: get_sha
@@ -71,7 +64,7 @@ jobs:
           SHA=$(git rev-parse HEAD)
           echo "sha=$SHA" >> $GITHUB_OUTPUT
 
-      - name: Criar
+      - name: Criar tag
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PERSONAL_ACCESS }}
