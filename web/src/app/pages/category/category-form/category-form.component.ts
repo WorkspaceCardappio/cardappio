@@ -60,11 +60,10 @@ export class CategoryFormComponent implements OnInit {
   }
 
   create() {
-    const { id } = this.route.snapshot.params;
     if (this.form.invalid)
       return;
     
-    if (id != 'new') {
+    if (this.getActiveId != 'new') {
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
     } else {
       this.service.create(this.form.value).subscribe(() => this.router.navigate(['category']));
