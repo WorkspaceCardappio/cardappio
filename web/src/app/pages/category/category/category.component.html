@@ -24,7 +24,17 @@
 >
 
     <ng-template #active let-item>
-        {{ item.active }}
+
+        @if(item.active) {
+            <span style="color: #51CF66;">
+                <i class="fa-solid fa-circle-check"></i>
+            </span>
+        } @else {
+            <span style="color: #D33B19;">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </span>
+        }
+
     </ng-template>
 
 </cardappio-list>

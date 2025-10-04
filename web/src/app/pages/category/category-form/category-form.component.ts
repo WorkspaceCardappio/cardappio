@@ -34,7 +34,7 @@ export class CategoryFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.checkRoute();
-    };
+  };
   
   private initForm() {
     this.form = this.builder.group({
@@ -63,7 +63,9 @@ export class CategoryFormComponent implements OnInit {
     if (this.form.invalid)
       return;
     
-    if (this.getActiveId != 'new') {
+    const { id } = this.route.snapshot.params;
+
+    if (id != 'new') {
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
     } else {
       this.service.create(this.form.value).subscribe(() => this.router.navigate(['category']));
@@ -75,6 +77,22 @@ export class CategoryFormComponent implements OnInit {
   }
 
   categories = (query: string): Observable<any[]> => {
-    return this.service.findAll(20, query);
+
+    const searchs = [];
+
+    if (query) {
+      searchs.push(`name=ilike=${query}%`);
+    }
+
+    const id = this.form.get('id')?.value;
+    if (id) {
+      searchs.push(`id=out=${id}`)
+    }
+
+    return this.service.findAll(20, searchs.join(';'));
+  }
+
+  display = (item: any) => {
+    return item.name;
   }
 }
