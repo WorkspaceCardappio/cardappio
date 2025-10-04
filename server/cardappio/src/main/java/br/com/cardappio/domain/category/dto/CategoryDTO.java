@@ -19,7 +19,7 @@ public record CategoryDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
-        Category subCategory
+        Category parent
 ) {
     public CategoryDTO(final Category category) {
         this(

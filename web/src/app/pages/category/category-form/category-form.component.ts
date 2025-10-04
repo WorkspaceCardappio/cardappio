@@ -33,14 +33,8 @@ export class CategoryFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.getActiveId();
     this.checkRoute();
-    };
-
-  private getActiveId() {
-    const { id } = this.route.snapshot.params;
-    return id;
-  }
+  };
 
   private initForm() {
     this.form = this.builder.group({
@@ -53,8 +47,9 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private checkRoute() {
-    if (this.getActiveId() != 'new') {
-      this.loadCategory(this.getActiveId());
+    const { id } = this.route.snapshot.params;
+    if (id != 'new') {
+      this.loadCategory(id);
     }
   }
 
@@ -64,14 +59,11 @@ export class CategoryFormComponent implements OnInit {
     })
   }
 
-  private navigate(routeToNavigate: string) {
-    return this.router.navigate([routeToNavigate]);
-  }
-
   create() {
-    const { id } = this.route.snapshot.params;
     if (this.form.invalid)
       return;
+
+    const { id } = this.route.snapshot.params;
 
     if (id != 'new') {
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['category']));
@@ -81,10 +73,26 @@ export class CategoryFormComponent implements OnInit {
   }
 
   cancel() {
-    this.navigate('category');
+    this.router.navigate(['category']);
   }
 
   categories = (query: string): Observable<any[]> => {
-    return this.service.findAll(20, query);
+
+    const searchs = [];
+
+    if (query) {
+      searchs.push(`name=ilike=${query}%`);
+    }
+
+    const id = this.form.get('id')?.value;
+    if (id) {
+      searchs.push(`id=out=${id}`)
+    }
+
+    return this.service.findAll(20, searchs.join(';'));
+  }
+
+  display = (item: any) => {
+    return item.name;
   }
 }

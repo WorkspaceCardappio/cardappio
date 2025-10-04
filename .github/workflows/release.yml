@@ -1,0 +1,22 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Release type (patch, minor, major)'
+        required: true
+        default: 'minor'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create Release
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS }}
+          config-file: release-please-config.json
+          release-type: simple
+          skip-github-release: true
