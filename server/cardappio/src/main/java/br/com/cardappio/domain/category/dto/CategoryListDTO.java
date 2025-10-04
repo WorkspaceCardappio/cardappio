@@ -1,10 +1,8 @@
 package br.com.cardappio.domain.category.dto;
 
 import br.com.cardappio.domain.category.Category;
-import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Length;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public record CategoryListDTO(
@@ -13,14 +11,17 @@ public record CategoryListDTO(
     String name,
     boolean active,
     String image,
-
-    Category parent
+    CategoryParentDTO parent
 )
     {   public CategoryListDTO(final Category category){
         this(
                 category.getId(),
                 category.getName(),
-                category.getParent()
+                category.getActive(),
+                category.getImage(),
+                Optional.ofNullable(category.getParent())
+                        .map(CategoryParentDTO::new)
+                        .orElse(null)
         );
     }
 }
