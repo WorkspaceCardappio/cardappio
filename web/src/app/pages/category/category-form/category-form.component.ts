@@ -33,15 +33,9 @@ export class CategoryFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.getActiveId();
     this.checkRoute();
     };
   
-  private getActiveId() {
-    const { id } = this.route.snapshot.params;
-    return id;
-  }
-
   private initForm() {
     this.form = this.builder.group({
       id: [''],
@@ -53,8 +47,9 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private checkRoute() {  
-    if (this.getActiveId() != 'new') {
-      this.loadCategory(this.getActiveId());
+    const { id } = this.route.snapshot.params;
+    if (id != 'new') {
+      this.loadCategory(id);
     }
   }
 
@@ -62,10 +57,6 @@ export class CategoryFormComponent implements OnInit {
     this.service.findById(id).subscribe(category => {
       this.form.patchValue(category)
     })
-  }
-
-  private navigate(routeToNavigate: string) {
-    return this.router.navigate([routeToNavigate]);
   }
 
   create() {
@@ -81,7 +72,7 @@ export class CategoryFormComponent implements OnInit {
   }
 
   cancel() {
-    this.navigate('category');
+    this.router.navigate(['category']);
   }
 
   categories = (query: string): Observable<any[]> => {
