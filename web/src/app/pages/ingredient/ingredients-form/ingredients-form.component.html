@@ -13,24 +13,22 @@
                 [label]="'Quantidade'"
                 formControlName="quantity"
             />
-            <cardappio-date-picker
-                [size]="'20'"
-                [topLabel]="'Data de validade'"
-                formControlName="expirationDate"
-                (dateChange)="teste($event)"
-            />
-        </div>
-        <div class="second-row">
-            <span>
-                <cardappio-autocomplete class="auto-complete"
+            <cardappio-autocomplete class="auto-complete"
                 [placeholder]="'Unidade de medida'"
                 [topLabelInput]="'Unidade de medida'"
-                [size]="50"
+                [size]="40"
                 [search]="unitOfMeasurement"
-                [displayMultipleField]="getUnitDescription"
+                [displayField]="getUnitDescription"
                 formControlName="unityOfMeasurement"
+                
             />  
-            </span>              
+        </div>
+        <div class="second-row">
+            <cardappio-date-picker class="date-picker"
+                [size]="'30'"
+                [topLabel]="'Data de validade'"
+                (dateChange)="selectedDate($event)"
+            />             
             <cardappio-toggle
                 [label]="'Ativo'"
                 formControlName="active"

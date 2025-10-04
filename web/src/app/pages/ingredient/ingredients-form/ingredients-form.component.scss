@@ -1,12 +1,17 @@
 .first-row {
     display: grid;
     grid-template-columns: 1fr auto auto;
+    align-items: center;
 }
 
 .second-row {
     display: flex;
     gap: 20px;
     align-items: center;
+}
+
+.date-picker {
+    margin-top: 20px;
 }
 
 .button {

@@ -92,12 +92,12 @@ export class IngredientsFormComponent implements OnInit {
   );
   }
 
+
   getUnitDescription = (item: any): string => {
-    return item?.description || '';
+    return `${item.code} - ${item.description}`;
   }
 
-  teste(data: any) {
+  selectedDate(data: any) {
     this.form.get('expirationDate')?.setValue(data);
-    
   }
 }
