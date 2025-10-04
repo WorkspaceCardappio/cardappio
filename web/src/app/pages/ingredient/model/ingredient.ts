@@ -1,11 +1,10 @@
-import { UnityOfMeasurement } from "../enum/UnityOfMeasurement";
 
 export interface Ingredient {
     id: string,
     name: String,
     quantity: Number,
     active: Boolean,
-    unityOfMeasurement: UnityOfMeasurement,
+    unityOfMeasurement: String,
     expirationDate: Date,
     allergenic: Boolean
 }
