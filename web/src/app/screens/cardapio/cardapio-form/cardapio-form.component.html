@@ -11,9 +11,7 @@
           placeholder="nome"
           [width]="79"
           label="Nome"
-          [ngModel]="cardapioForm.get('name')?.value"
-          (ngModelChange)="cardapioForm.get('name')?.setValue($event)"
-          [ngModelOptions]="{standalone: true}">
+          formControlName="name">
         </cardappio-input>
       </div>
       <br>
@@ -23,16 +21,12 @@
             placeholder="tema"
             [width]="465"
             label="Tema"
-            [ngModel]="cardapioForm.get('theme')?.value"
-            (ngModelChange)="cardapioForm.get('theme')?.setValue($event)"
-            [ngModelOptions]="{standalone: true}">
+            formControlName="theme">
           </cardappio-input>
         </div>
         <div class="toggle-container">
           <cardappio-toggle
-            [ngModel]="cardapioForm.get('active')?.value"
-            (ngModelChange)="cardapioForm.get('active')?.setValue($event)"
-            [ngModelOptions]="{standalone: true}"
+            formControlName="active"
             [label]="cardapioForm.get('active')?.value ? 'Ativo' : 'Inativo'">
           </cardappio-toggle>
         </div>
@@ -44,9 +38,7 @@
             [width]="80"
             [height]="70"
             label="Observações"
-            [ngModel]="cardapioForm.get('note')?.value"
-            (ngModelChange)="cardapioForm.get('note')?.setValue($event)"
-            [ngModelOptions]="{standalone: true}">
+            formControlName="note">
           </cardappio-input>
         </div>
       </div>

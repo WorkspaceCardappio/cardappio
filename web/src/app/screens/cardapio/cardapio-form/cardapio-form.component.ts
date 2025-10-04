@@ -78,11 +78,11 @@ export class CardapioFormComponent implements OnInit {
     this.cardapioService.findById(this.cardapioId).subscribe({
       next: (cardapio) => {
         this.cardapioForm.patchValue({
-          id: cardapio.id || '',
-          name: cardapio.name || '',
+          id: cardapio.id,
+          name: cardapio.name,
           active: cardapio.active ?? true,
-          note: cardapio.note || '',
-          theme: cardapio.theme || '',
+          note: cardapio.note,
+          theme: cardapio.theme,
           restaurantId: 'a12cfd73-fe31-4103-aa47-cf22b8912b19'
         });
         this.cdr.detectChanges();
@@ -93,7 +93,6 @@ export class CardapioFormComponent implements OnInit {
 
   private createCardapio(): void {
     const { id, ...cardapioData } = this.cardapioForm.value;
-    console.log(cardapioData);
 
     this.cardapioService.create(cardapioData).subscribe({
       next: () => this.navigateToList(),
@@ -102,7 +101,6 @@ export class CardapioFormComponent implements OnInit {
   }
 
   private updateCardapio(): void {
-    if (!this.cardapioId) return;
 
     this.cardapioService.update(this.cardapioId, this.cardapioForm.value).subscribe({
       next: () => this.navigateToList(),
@@ -111,6 +109,6 @@ export class CardapioFormComponent implements OnInit {
   }
 
   protected navigateToList(): void {
-    this.router.navigate(['/cardapio']);
+    this.router.navigate(['/menu']);
   }
 }

@@ -1,9 +1,47 @@
 import { Routes } from '@angular/router';
-import { CardapioListComponent } from "./screens/cardapio/cardapio-list/cardapio-list.component";
-import { CardapioFormComponent } from "./screens/cardapio/cardapio-form/cardapio-form.component";
 
 export const routes: Routes = [
-  { path:'cardapio', component:CardapioListComponent },
-  { path:'menus/new', component: CardapioFormComponent },
-  { path: 'menus/:id', component: CardapioFormComponent }
+  {
+    path: 'category',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/category/category/category.component').then(m => m.CategoryComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)
+      },
+    ]
+  },
+  {
+    path: 'menu',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./screens/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+      },
+    ]
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
+  },
 ];
