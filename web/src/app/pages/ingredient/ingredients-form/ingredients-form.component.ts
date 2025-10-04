@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutocompleteComponent, CancelButtonComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
-import { Observable } from 'rxjs';
+import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
+import { map, Observable } from 'rxjs';
 import { IngredientService } from '../service/ingredient.service';
 
 @Component({
@@ -13,19 +13,21 @@ import { IngredientService } from '../service/ingredient.service';
     ToggleComponent,
     CancelButtonComponent,
     SaveButtonComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    DatePickerComponent
 ],
   templateUrl: './ingredients-form.component.html',
   styleUrl: './ingredients-form.component.scss'
 })
 export class IngredientsFormComponent implements OnInit {
   form: FormGroup<any> = new FormGroup({});
+  unitItems: any[] = [];
 
   constructor(
     private readonly builder: FormBuilder,
     private service: IngredientService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ){}
   
   ngOnInit(): void {
@@ -33,18 +35,20 @@ export class IngredientsFormComponent implements OnInit {
     this.checkRoute();
   }
 
+
   private initForm() {
     this.form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
       quantity: ['', [Validators.required, Validators.min(0)]],
       active: [true],
-      unityOfMeasurement: ['', Validators.required],
+      unityOfMeasurement: ['Litro'],
       expirationDate: [''],
       allergenic: [false]
     });
   }
 
+  
   private checkRoute() {
     const { id } = this.route.snapshot.params;
 
@@ -59,8 +63,41 @@ export class IngredientsFormComponent implements OnInit {
     })
   }
 
-  unitOfMeasurement = (query: string): Observable<any[]> => {
-    return this.service.findAll(20, query);
+  create() {
+    if (this.form.invalid)
+      return;
+
+    const { id } = this.route.snapshot.params;
+    console.log(this.form.value)
+    if (id != 'new') {
+      this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['ingredient']))
+    } else {
+      this.service.create(this.form.value).subscribe(() => this.router.navigate(['ingredient']))
+    }
   }
 
+  cancel() {
+    this.router.navigate(['ingredient']);
+  }
+
+  unitOfMeasurement = (query: string): Observable<any[]> => {
+  return this.service.getUnitOfMeasurement().pipe(
+    map(units => {
+      const filtered = query
+        ? units.filter(u => u.description.toLowerCase().includes(query.toLowerCase()))
+        : units;
+
+      return filtered;
+    })
+  );
+  }
+
+  getUnitDescription = (item: any): string => {
+    return item?.description || '';
+  }
+
+  teste(data: any) {
+    this.form.get('expirationDate')?.setValue(data);
+    
+  }
 }

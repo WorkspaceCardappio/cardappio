@@ -13,11 +13,11 @@
                 [label]="'Quantidade'"
                 formControlName="quantity"
             />
-            <cardappio-input
-                [width]="95"
-                [placeholder]="'data de validade'"
-                [label]="'Data de Validade'"
+            <cardappio-date-picker
+                [size]="'20'"
+                [topLabel]="'Data de validade'"
                 formControlName="expirationDate"
+                (dateChange)="teste($event)"
             />
         </div>
         <div class="second-row">
@@ -27,6 +27,8 @@
                 [topLabelInput]="'Unidade de medida'"
                 [size]="50"
                 [search]="unitOfMeasurement"
+                [displayMultipleField]="getUnitDescription"
+                formControlName="unityOfMeasurement"
             />  
             </span>              
             <cardappio-toggle
@@ -39,8 +41,8 @@
             />
         </div>
         <div id="button" class="button">
-            <cardappio-cancel-button/>
-            <cardappio-save-button/>
+            <cardappio-cancel-button (onClick)="cancel()"/>
+            <cardappio-save-button (onClick)="create()"/>
         </div>
     </div>
 
