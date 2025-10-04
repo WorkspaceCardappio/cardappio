@@ -3,8 +3,12 @@ name: Create Tag
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: 'Origin'
+        required: true
+        default: 'main'
       tag_name:
-        description: 'Nome da nova tag (ex: v1.2.3)'
+        description: 'Name (ex: v1.2.3)'
         required: true
 
 jobs:
@@ -67,7 +71,7 @@ jobs:
       - name: Criar tag
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.PERSONAL_ACCESS }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const tagName = core.getInput('tag_name');
             const sha = '${{ steps.get_sha.outputs.sha }}';
