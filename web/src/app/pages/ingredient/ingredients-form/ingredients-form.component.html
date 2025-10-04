@@ -1,6 +1,6 @@
 <form [formGroup]="form">
     <div id="ingredient" class="ingredient">
-        <div id="ingredient-input" class="ingredient-input">
+        <div class="first-row">
             <cardappio-input
                 [width]="95"
                 [placeholder]="'nome'"
@@ -19,14 +19,16 @@
                 [label]="'Data de Validade'"
                 formControlName="expirationDate"
             />
-            <cardappio-autocomplete
+        </div>
+        <div class="second-row">
+            <span>
+                <cardappio-autocomplete class="auto-complete"
                 [placeholder]="'Unidade de medida'"
-                [isMultiple]="false"
                 [topLabelInput]="'Unidade de medida'"
-                [size]="20"
+                [size]="50"
                 [search]="unitOfMeasurement"
-            />
-                
+            />  
+            </span>              
             <cardappio-toggle
                 [label]="'Ativo'"
                 formControlName="active"
@@ -35,7 +37,7 @@
                 [label]="'Alergênico'"
                 formControlName="allergenic"
             />
-        </div> 
+        </div>
         <div id="button" class="button">
             <cardappio-cancel-button/>
             <cardappio-save-button/>
