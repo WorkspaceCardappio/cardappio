@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS unity_of_measurement (
 INSERT INTO unity_of_measurement (code, description) VALUES
 (1, 'Litro'),
 (2, 'Mililitro'),
-(3, 'Grama')
+(3, 'Grama'),
 (4, 'Quilograma'),
 (5, 'Unidade');

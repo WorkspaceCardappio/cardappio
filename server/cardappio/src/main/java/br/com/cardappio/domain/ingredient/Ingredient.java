@@ -1,5 +1,7 @@
 package br.com.cardappio.domain.ingredient;
 
+import br.com.cardappio.converter.PersonTypeConverter;
+import br.com.cardappio.converter.UnityOfMeasurementConverter;
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
 import br.com.cardappio.enums.UnityOfMeasurement;
 import br.com.cardappio.utils.Messages;
@@ -43,7 +45,8 @@ public class Ingredient implements EntityModel<UUID> {
     @NotNull
     private LocalDate expirationDate;
 
-    @Column(name="unit_of_measurement")
+    @Column(name="unity_of_measurement", nullable = false)
+    @Convert(converter = UnityOfMeasurementConverter.class)
     private UnityOfMeasurement unityOfMeasurement;
 
     @Column(nullable = false)

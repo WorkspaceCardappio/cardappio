@@ -1,7 +1,15 @@
 package br.com.cardappio.enums;
 
+import br.com.cardappio.utils.Messages;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -15,12 +23,13 @@ public enum UnityOfMeasurement {
     private final Long code;
     private final String description;
 
-    public static UnityOfMeasurement fromCode(Long code){
-        for(UnityOfMeasurement value: UnityOfMeasurement.values()){
-            if(value.code.equals(code)){
-                return value;
-            }
-        } throw new IllegalArgumentException("Código inválido" + code);
+    private static final Map<Long, UnityOfMeasurement> CODE_MAP =
+            Arrays.stream(values()).collect(Collectors.toMap(UnityOfMeasurement::getCode, Function.identity()));
+
+    public static UnityOfMeasurement fromCode(final Long code) {
+
+        return Optional.ofNullable(CODE_MAP.get(code))
+                .orElseThrow(() -> new EntityNotFoundException(Messages.CODE_NOT_FOUND));
     }
 }
 
