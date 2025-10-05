@@ -4,7 +4,7 @@ import br.com.cardappio.domain.ingredient.adapter.IngredientAdapter;
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
 import br.com.cardappio.domain.ingredient.dto.IngredientListDTO;
 import br.com.cardappio.domain.ingredient.dto.UnityOfMeasurementDTO;
-import br.com.cardappio.domain.ingredient.enums.UnityOfMeasurement;
+import br.com.cardappio.enums.UnityOfMeasurement;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 import org.springframework.stereotype.Service;

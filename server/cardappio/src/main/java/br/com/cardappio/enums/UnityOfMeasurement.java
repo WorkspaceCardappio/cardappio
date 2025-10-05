@@ -1,4 +1,4 @@
-package br.com.cardappio.domain.ingredient.enums;
+package br.com.cardappio.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package br.com.cardappio.domain.ingredient;
 
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
-import br.com.cardappio.domain.ingredient.enums.UnityOfMeasurement;
+import br.com.cardappio.enums.UnityOfMeasurement;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
