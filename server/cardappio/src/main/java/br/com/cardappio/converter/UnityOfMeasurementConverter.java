@@ -1,6 +1,5 @@
 package br.com.cardappio.converter;
 
-import br.com.cardappio.enums.PersonType;
 import br.com.cardappio.enums.UnityOfMeasurement;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

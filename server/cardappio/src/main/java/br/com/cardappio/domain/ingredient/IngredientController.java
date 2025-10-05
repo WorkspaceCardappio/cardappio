@@ -18,7 +18,7 @@ public class IngredientController extends CrudController<Ingredient, UUID, Ingre
 
     private final IngredientService ingredientService;
 
-    public IngredientController(IngredientService ingredientService){
+    public IngredientController(final IngredientService ingredientService){
         this.ingredientService = ingredientService;
     }
     @GetMapping("/unity-of-measurement")

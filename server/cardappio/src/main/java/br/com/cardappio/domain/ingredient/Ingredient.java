@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.ingredient;
 
-import br.com.cardappio.converter.PersonTypeConverter;
 import br.com.cardappio.converter.UnityOfMeasurementConverter;
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
 import br.com.cardappio.enums.UnityOfMeasurement;
