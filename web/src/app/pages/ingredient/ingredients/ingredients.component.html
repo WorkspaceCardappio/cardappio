@@ -47,6 +47,9 @@
         </span>
     }
 </ng-template>
+<ng-template #unityOfMeasurement let-item>
+    {{ item.unityOfMeasurement.description }}
+</ng-template>
 <ng-template #expirationDate let-item>
     {{ item.expirationDate | date:'dd/MM/yyyy' }}
 </ng-template>

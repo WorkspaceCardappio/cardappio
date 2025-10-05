@@ -59,7 +59,11 @@ export class IngredientsFormComponent implements OnInit {
 
   private loadIngredient(id: string) {
     this.service.findById(id).subscribe(ingredient => {
+      console.log(ingredient);
+      
       this.form.patchValue(ingredient);
+      console.log(this.form);
+      
     })
   }
 
