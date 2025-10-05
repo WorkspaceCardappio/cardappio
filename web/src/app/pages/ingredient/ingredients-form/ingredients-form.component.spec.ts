@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { IngredientsFormComponent } from './ingredients-form.component';
 
 describe('IngredientsFormComponent', () => {
@@ -8,7 +10,11 @@ describe('IngredientsFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IngredientsFormComponent]
+      imports: [IngredientsFormComponent],
+      providers: [HttpClient, HttpHandler, {
+        provide: ActivatedRoute,
+        useValue: {snapshot: {params: {id: 'new'}}}
+      }]
     })
     .compileComponents();
 
