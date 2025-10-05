@@ -2,16 +2,13 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
-        path: 'product',
-        loadComponent: () => import('./pages/product/product/product.component')
-            .then(m => m.ProductComponent)
+    path: 'product',
+    children: [
+        { path: '', loadComponent: () => import('./pages/product/product/product.component').then(m => m.ProductComponent)},
+        { path: ':id', loadComponent: () => import('./pages/product/product-form/product-form.component').then(m => m.ProductFormComponent)}
+      ]        
     },
-  {
-    path: 'product/:id',
-    loadComponent: () => import('./pages/product/product-form/product-form.component')
-      .then(m => m.ProductFormComponent)
-  },
-      {path: 'category',
+    {path: 'category',
       children: [
         { path: '', loadComponent: () => import('./pages/category/category/category.component').then(m => m.CategoryComponent)},
         { path: ':id', loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)},

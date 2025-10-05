@@ -19,6 +19,7 @@
             <cardappio-date-picker class="date-picker"
                 [topLabel]="'Data de validade'"
                 [size]="'20'"
+                (dateChange)="selectedDate($event)"
             />
         </div>
         <div id="product-second-row" class="product-second-row">
@@ -30,12 +31,13 @@
             <cardappio-autocomplete class="auto-complete"
                 [placeholder]="'Selecione uma categoria'"
                 [isMultiple]="false"
-
                 [topLabelInput]="'Categoria'"
                 [size]="40"
                 [search]="categories"
+                [displayField]="getCategory"
+                formControlName="category"
             ></cardappio-autocomplete>
-            <cardappio-generic-button class="category-btn"
+            <cardappio-generic-button class="category-btn" (onClick)="redirectToCategory()"
                 [params]="{ 
                     title: { name: 'Categoria', color: '#015EAF'},
                     background: '#F5F4F7',

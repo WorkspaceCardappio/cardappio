@@ -29,4 +29,25 @@
             }
         ]
     }"
-></cardappio-list>
+>
+<ng-template #active let-item>
+    @if(item.active){
+        <span style="color: #51CF66;">
+            <i class="fa-solid fa-circle-check"></i>
+        </span>
+    } @else {
+        <span style="color: #D33B19;">
+            <i class="fa-solid fa-circle-xmark"></i>
+        </span>
+    }
+</ng-template>
+<ng-template #category let-item>
+    {{ item.category.name }}
+</ng-template>
+<ng-template #expirationDate let-item>
+    {{ item.expirationDate | date:'dd/MM/yyyy' }}
+</ng-template>
+<ng-template #price let-item>
+    {{ item.price | currency:'BRL' }}
+</ng-template>
+</cardappio-list>

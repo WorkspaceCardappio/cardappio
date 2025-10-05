@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, GenericButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
+import { CategoryService } from '../../category/service/category.service';
 import { ProductService } from '../service/product.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class ProductFormComponent implements OnInit {
   constructor(
     private readonly builder: FormBuilder,
     private service: ProductService,
-    // private categoryService: CategoryService,
+    private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -73,11 +74,30 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
+  selectedDate(data: any) {
+    this.form.get('expirationDate')?.setValue(data);
+  }
+
   cancel() {
     this.router.navigate(['product']);
   }
 
+  redirectToCategory() {
+    this.router.navigate(['category'])
+  }
+
   categories = (query: string): Observable<any[]> => {
-    return this.service.findAll(20, query);
+
+    const searchs = [];
+
+    if (query) {
+      searchs.push(`name=ilike=${query}%`);
+    }
+
+    return this.categoryService.findAll(20, searchs.join(';'));
+  }
+
+  getCategory = (item: any): string => {
+    return `${item.name}`
   }
 }
