@@ -6,9 +6,28 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/product/product/product.component')
             .then(m => m.ProductComponent)
     },
+  {
+    path: 'product/:id',
+    loadComponent: () => import('./pages/product/product-form/product-form.component')
+      .then(m => m.ProductFormComponent)
+  },
+      {path: 'category',
+      children: [
+        { path: '', loadComponent: () => import('./pages/category/category/category.component').then(m => m.CategoryComponent)},
+        { path: ':id', loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)},
+      ]
+    },
     {
-        path: 'product/:id',
-        loadComponent: () => import('./pages/product/product-form/product-form.component')
-            .then(m => m.ProductFormComponent)
+      path: 'home',
+      loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    },
+    {
+      path: '',
+      redirectTo: '/home',
+      pathMatch: 'full'
+    },
+    {
+      path: '**',
+      loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
     }
 ];
