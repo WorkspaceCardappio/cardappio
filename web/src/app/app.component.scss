@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: auto 1fr;
+
+  .area {
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+
+    .content {
+      padding: 10px;
+    }
+  }
+}
+
+
