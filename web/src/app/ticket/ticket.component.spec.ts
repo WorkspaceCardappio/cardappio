@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TicketsComponent } from './ticket.component';
-import { TicketService } from "./service/ticket.service";
 import { provideHttpClient } from "@angular/common/http";
 
 describe('TicketsComponent', () => {
