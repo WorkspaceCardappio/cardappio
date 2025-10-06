@@ -14,6 +14,7 @@ public record PaymentRequest(
         @NotBlank
         String currency,
 
+        @NotBlank
         String paymentMethodId,
 
         @Size(max = 255, message = Messages.SIZE_255)

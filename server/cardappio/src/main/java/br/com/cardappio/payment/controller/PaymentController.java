@@ -26,7 +26,7 @@ public class PaymentController {
     private ServletRequest httpRequest;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPaymentIntent(@Valid @RequestBody PaymentRequest request, HttpServletRequest httpRequest){
+    public ResponseEntity<?> createPaymentIntent(@Valid @RequestBody PaymentRequest request){
         boolean captchaOk = service.verifyHcaptcha(request.hcaptchaToken(), httpRequest.getRemoteAddr());
         if (!captchaOk) {
             return ResponseEntity.badRequest().body("Captcha inválido");
