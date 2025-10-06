@@ -7,6 +7,10 @@ export const routes: Routes = [
         { path: '', loadComponent: () => import('./pages/category/category/category.component').then(m => m.CategoryComponent)},
         { path: ':id', loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)},
       ]
+  },
+     {
+    path: 'payment',
+      loadComponent: () => import('./pages/payment/payment/payment.component').then(m => m.PaymentComponent)
     },
     {
       path: 'home',
@@ -20,5 +24,6 @@ export const routes: Routes = [
     {
       path: '**',
       loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
-    }
+  }
+ 
 ];

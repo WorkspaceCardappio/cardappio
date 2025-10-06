@@ -1,0 +1,37 @@
+<form [formGroup]="form">
+    <div id="payment" class="payment">
+        <div class="payment-input">
+    <cardappio-input
+        [width]="95"
+        [placeholder]="'Valor em centavos'"
+        [label]="'Valor do Pagamento'"
+        formControlName="amount"
+    />
+    <input type="hidden" formControlName="currency"/>
+    <cardappio-input
+        [width]="95"
+        [placeholder]="'Descrição opcional'"
+        [label]="'Descrição'"
+        formControlName="description"
+    />
+        </div>
+    </div>
+    <div
+    class="h-captcha"
+    data-sitekey="10000000-ffff-ffff-ffff-000000000001"
+    data-callback="onHcaptchaSuccess"
+    data-theme="light"
+    data-size="normal">
+  </div>
+     <div id="card-element" class="payment-input">
+     </div>
+    
+<div id="button" class="button">
+    <cardappio-cancel-button (onClick)="cancel()"></cardappio-cancel-button>
+    <cardappio-save-button [disabled]="form.invalid" (onClick)="createPayment()">Pagar</cardappio-save-button>
+</div>
+</form>
+
+<div *ngIf="paymentMessage" class="payment-message">
+  {{ paymentMessage }}
+</div>
