@@ -1,20 +1,44 @@
 <cardappio-list
-  [params]="{
-        service: ticketService,
-        route: 'tables',
+    [params]="{
+        service: service,
+        route: 'ticket',
         columns: [
-            { title: 'Número', field: 'number', size: 1 },
-            { title: 'Mesa', field: 'places', size: 1 },
-            { title: 'Pessoa', field: 'person', size: 1 },
-            { title: 'Status', field: 'status', size: 1 },
+            { title: 'Número', field: 'string', size: 1 },
+            { title: 'Mesa', field: 'table', size: 1 },
+            { title: 'Pessoa', field: 'owner', size: 1 },
+            { title: 'Status', field: 'active', size: 1 },
         ],
         filters: [
             {
                 icon: 'fa-solid fa-plate-wheat',
-                title: 'Número da Mesa',
+                title: 'Número',
                 value: 'number',
-                typeValue: 'number'
+                typeValue: 'string'
             },
+            {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Mesa',
+                value: 'table',
+                typeValue: 'string'
+            },
+             {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Pessoa',
+                value: 'owner',
+                typeValue: 'string'
+            },
+             {
+                icon: 'fa-solid fa-plate-wheat',
+                title: 'Status',
+                value: 'active',
+                typeValue: 'boolean'
+            }
         ]
     }"
-></cardappio-list>
+>
+
+    <ng-template #active let-item>
+        {{ item.active }}
+    </ng-template>
+
+</cardappio-list>

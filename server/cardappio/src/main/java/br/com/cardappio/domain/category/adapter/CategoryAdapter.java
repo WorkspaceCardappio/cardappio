@@ -2,13 +2,14 @@ package br.com.cardappio.domain.category.adapter;
 
 import br.com.cardappio.domain.category.dto.CategoryDTO;
 import br.com.cardappio.domain.category.Category;
+import br.com.cardappio.domain.category.dto.CategoryListDTO;
 import com.cardappio.core.adapter.Adapter;
 
-public class CategoryAdapter implements Adapter<Category, CategoryDTO, CategoryDTO> {
+public class CategoryAdapter implements Adapter<Category, CategoryListDTO, CategoryDTO> {
 
     @Override
-    public CategoryDTO toDTO(final Category entity) {
-        return new CategoryDTO(entity);
+    public CategoryListDTO toDTO(final Category entity) {
+        return new CategoryListDTO(entity);
     }
 
     @Override

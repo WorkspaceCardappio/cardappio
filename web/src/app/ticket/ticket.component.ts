@@ -1,7 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { TicketService } from './service/ticket.service';
-import { Ticket } from '../modal/ticket';
+import { Component } from '@angular/core';
+import { TicketService } from '../service/ticket.service';
 import { CardappioListComponent } from 'cardappio-component-hub';
 
 @Component({
@@ -16,6 +14,5 @@ import { CardappioListComponent } from 'cardappio-component-hub';
   styleUrl: './ticket.component.scss'
 })
 export class TicketsComponent{
-
-  constructor(public ticketService: TicketService){}
+  constructor(public service: TicketService){}
 }
