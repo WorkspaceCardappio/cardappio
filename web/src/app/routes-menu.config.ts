@@ -15,5 +15,10 @@ export const routesMenu = [
     path: 'product',
     name: 'Produtos',
     icon: 'fa-solid fa-shrimp'
-    }
+    },
+  {
+    path: 'menu',
+    name: 'Cardápios',
+    icon: 'fa-solid fa-cutlery'
+  }
 ];

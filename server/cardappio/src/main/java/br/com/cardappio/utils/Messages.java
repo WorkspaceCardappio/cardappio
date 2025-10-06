@@ -23,4 +23,5 @@ public class Messages {
     public static final String STATUS_NOT_NULL = "O status deve ser informado";
     public static final String ORDER_NOT_NULL = "O pedido deve ser informado";
     public static final String PRODUCT_NOT_NULL = "O produto deve ser informado";
+    public static final String SIZE_30 = "Tamanho não pode ultrapassar 30 caracteres";
 }
