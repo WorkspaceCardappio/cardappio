@@ -1,12 +1,10 @@
 package br.com.cardappio.domain.city.dto;
 
-import java.util.UUID;
-
 import org.hibernate.validator.constraints.Length;
-
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 
 public record CityDTO(
 
@@ -17,6 +15,5 @@ public record CityDTO(
         String name,
 
         @NotNull(message = Messages.ADDRESS_NON_NULL)
-        AddressIdDTO address
+        EntityIdDTO address
 ) {}
-

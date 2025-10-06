@@ -1,7 +1,6 @@
 package br.com.cardappio.domain.menu;
 
 import br.com.cardappio.domain.menu.dto.MenuDTO;
-import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.domain.restaurant.Restaurant;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -11,8 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
