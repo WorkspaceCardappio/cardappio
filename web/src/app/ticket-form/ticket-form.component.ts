@@ -13,8 +13,6 @@ import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, Inp
     CommonModule,
     AutocompleteComponent,
     InputComponent,
-    ToggleComponent,
-    ImageUploadComponent,
     CancelButtonComponent,
     SaveButtonComponent
 ],
