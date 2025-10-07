@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface TableRepository extends CrudRepository<TableRestaurant, UUID> {
+public interface TableRestaurantRepository extends CrudRepository<TableRestaurant, UUID> {
 }

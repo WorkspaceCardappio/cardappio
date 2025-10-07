@@ -1,7 +1,7 @@
 package br.com.cardappio.domain.table;
 
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
 import br.com.cardappio.converter.TicketStatusConverter;
+import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
 import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -45,7 +45,7 @@ public class TableRestaurant implements EntityModel<UUID> {
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());
-        table.setStatus(dto.status());
+        table.setStatus(TableStatus.fromCode(dto.status()));
         table.setPlaces(dto.places());
 
         return table;

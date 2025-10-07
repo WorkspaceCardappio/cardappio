@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EntityService } from 'cardappio-component-hub';
-import { TableRestaurant } from '../model/table-restaurant.type';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
-export class TableRestaurantService extends EntityService<TableRestaurant, string> {
+export class TableRestaurantService extends EntityService<any, string> {
 
-  override resource: string = 'http://localhost:8080/tables';
+  override resource: string = `${ environment.apiUrl }/tables-restaurant`;
 
   constructor(public http: HttpClient) {
     super(http);

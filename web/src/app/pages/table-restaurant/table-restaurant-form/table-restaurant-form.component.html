@@ -1,6 +1,6 @@
 <form [formGroup]="form">
-  <div>
-    <div>
+  <div class="tables-first-row">
+    <div class="tables-first-row-input-number">
       <cardappio-input
         [label]="'Número'"
         [placeholder]="'número'"
@@ -9,24 +9,26 @@
       >
       </cardappio-input>
     </div>
-    <cardappio-input
-      [label]="'Lugares'"
-      [placeholder]="'lugares'"
-      [width]="95"
-      formControlName="places"
-    >
-    </cardappio-input>
+    <div class="tables-first-row-input-places">
+      <cardappio-input
+        [label]="'Lugares'"
+        [placeholder]="'lugares'"
+        [width]="95"
+        formControlName="places"
+      >
+      </cardappio-input>
+    </div>
     <cardappio-autocomplete
       [placeholder]="'Selecione um Status'"
       [isMultiple]="false"
-      [size]="40"
+      [size]="25"
       [topLabelInput]="'Selecione um status'"
       [search]="tables"
       formControlName="status"
       [displayField]="display"
     />
   </div>
-  <div>
+  <div class="button">
     <cardappio-cancel-button (onClick)="onCancel()"></cardappio-cancel-button>
     <cardappio-save-button (onClick)="onSave()"></cardappio-save-button>
   </div>

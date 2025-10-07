@@ -12,8 +12,8 @@ import java.util.List;
 public class TableStatusController {
 
     @GetMapping
-    public ResponseEntity<List<TableStatus>> findAll() {
-        return ResponseEntity.ok(List.of(TableStatus.values()));
+    public ResponseEntity<List<EnumCodigoDescricaoDTO>> findAll() {
+        return ResponseEntity.ok(TableStatus.valuesToDTO());
     }
 
 }

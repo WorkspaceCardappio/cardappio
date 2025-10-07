@@ -1,10 +1,11 @@
 package br.com.cardappio.domain.table.adapter;
 
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
 import br.com.cardappio.domain.table.TableRestaurant;
+import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
 import com.cardappio.core.adapter.Adapter;
 
-public class TableAdapter implements Adapter<TableRestaurant, TableRestaurantDTO, TableRestaurantDTO> {
+public class TableRestaurantAdapter implements Adapter<TableRestaurant, TableRestaurantDTO, TableRestaurantDTO> {
+
     @Override
     public TableRestaurantDTO toDTO(final TableRestaurant entity) {
         return new TableRestaurantDTO(entity);

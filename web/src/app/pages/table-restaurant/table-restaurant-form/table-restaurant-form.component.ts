@@ -6,12 +6,12 @@ import {
   AutocompleteComponent,
   CancelButtonComponent,
   InputComponent,
-  SaveButtonComponent
+  SaveButtonComponent,
 } from 'cardappio-component-hub';
+import { Observable } from 'rxjs';
 import { TableRestaurant } from '../model/table-restaurant.type';
 import { TableRestaurantService } from '../service/table-restaurant.service';
-import { Observable } from "rxjs";
-import { TableStatusService } from "../service/table-status.service";
+import { TableStatusService } from '../service/table-status.service';
 
 @Component({
   selector: 'table-restaurant-form-component',
@@ -69,7 +69,7 @@ export class TableRestaurantFormComponent implements OnInit {
     this.router.navigate(['table']);
   }
 
-  onCancel() {
+  onCancel(): void {
 
     this.back();
   }
@@ -79,8 +79,8 @@ export class TableRestaurantFormComponent implements OnInit {
     this.form = this.fb.group({
       id: [''],
       number: ['', Validators.required],
-      status: ['', Validators.required],
       places: ['', Validators.required],
+      status: ['', Validators.required],
     });
   }
 
@@ -102,6 +102,11 @@ export class TableRestaurantFormComponent implements OnInit {
   }
 
   private createTable(): void {
+
+    const formValue = {
+      ...this.form.value,
+      status: this.form.value.status.code,
+    };
 
     this.service.create(this.form.value).subscribe(() =>
       this.back()
@@ -126,7 +131,7 @@ export class TableRestaurantFormComponent implements OnInit {
   }
 
   display = (item: any) => {
-    return item.name;
+    return item.description;
   }
 
 }
