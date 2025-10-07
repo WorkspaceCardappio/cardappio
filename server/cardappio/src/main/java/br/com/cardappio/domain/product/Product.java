@@ -2,10 +2,14 @@ package br.com.cardappio.domain.product;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import br.com.cardappio.domain.order.ProductOrder;
 import br.com.cardappio.domain.product.dto.ProductDTO;
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.utils.Messages;
@@ -62,6 +66,10 @@ public class Product implements EntityModel<UUID> {
     @NotNull
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @JsonIgnoreProperties("product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductIngredient> productIngredients = new ArrayList<>();
 
     public static Product of(final ProductDTO dto){
 
