@@ -18,9 +18,18 @@ public record OrderDTO(
         BigDecimal price,
         @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus,
-        List<ProductOrder> products
+        List<ProductOrder> products,
+        @NotNull
+        UUID ticketId
 ) {
     public OrderDTO(final Order order) {
-        this(order.getId(), order.getPrice(), order.getStatus(), order.getProducts());
+        this(
+                order.getId(),
+                order.getPrice(),
+                order.getStatus(),
+                order.getProducts(),
+                order.getTicket().getId()
+        );
     }
+
 }

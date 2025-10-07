@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { CardapioService } from "./cardapio.service";
+import { Component } from '@angular/core';
 import { CardappioListComponent } from "cardappio-component-hub";
+import { CardapioService } from "../../cardapio/cardapio-list/cardapio.service";
+import { OrderService } from "../order.service";
+
 
 @Component({
-  selector: 'app-cardapio-list',
+  selector: 'app-order-list',
   imports: [
     CardappioListComponent
   ],
-  templateUrl: './cardapio-list.component.html',
-  styleUrl: './cardapio-list.component.scss'
+  templateUrl: './order-list.component.html',
+  styleUrl: './order-list.component.scss'
 })
-export class CardapioListComponent implements OnInit {
+export class OrderListComponent {
 
   listParams = {
-    service: this.cardapioService,
-    route: '/menu',
+    service: this.orderService,
+    route: '/order',
     columns: [
       {
         title: 'Nome',
@@ -64,8 +66,7 @@ export class CardapioListComponent implements OnInit {
   };
 
   constructor(
-    private cardapioService: CardapioService,
+    private orderService: OrderService,
   ) {}
 
-  ngOnInit() {}
 }

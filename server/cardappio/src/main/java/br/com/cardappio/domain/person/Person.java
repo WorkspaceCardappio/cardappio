@@ -46,7 +46,7 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "type_id")
     @Convert(converter = PersonTypeConverter.class)
     private PersonType type;
 

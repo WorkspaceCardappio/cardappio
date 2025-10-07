@@ -1,22 +1,40 @@
 package br.com.cardappio.domain.order;
 
-import br.com.cardappio.domain.order.dto.OrderDTO;
-import br.com.cardappio.converter.OrderStatusConverter;
-import br.com.cardappio.enums.OrderStatus;
-import br.com.cardappio.utils.Messages;
-import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Table
+import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import br.com.cardappio.converter.OrderStatusConverter;
+import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.ticket.Ticket;
+import br.com.cardappio.enums.OrderStatus;
+import br.com.cardappio.utils.Messages;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Table(name = "client_order")
 @Entity
 @Getter
 @Setter
@@ -40,6 +58,11 @@ public class Order implements EntityModel<UUID> {
     @Convert(converter = OrderStatusConverter.class)
     private OrderStatus status = OrderStatus.PENDING;
 
+    @NotNull(message = Messages.TICKET_NOT_NULL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("order")
     private List<ProductOrder> products = new ArrayList<>();
@@ -50,6 +73,7 @@ public class Order implements EntityModel<UUID> {
         order.setId(dto.id());
         order.setPrice(dto.price());
         order.setStatus(dto.orderStatus());
+        order.setTicket(Ticket.of(dto.ticketId()));
         order.getProducts().addAll(dto.products());
 
         return order;
