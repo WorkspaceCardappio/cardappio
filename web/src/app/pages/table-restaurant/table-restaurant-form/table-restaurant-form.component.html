@@ -16,6 +16,15 @@
       formControlName="places"
     >
     </cardappio-input>
+    <cardappio-autocomplete
+      [placeholder]="'Selecione um Status'"
+      [isMultiple]="false"
+      [size]="40"
+      [topLabelInput]="'Selecione um status'"
+      [search]="tables"
+      formControlName="status"
+      [displayField]="display"
+    />
   </div>
   <div>
     <cardappio-cancel-button (onClick)="onCancel()"></cardappio-cancel-button>

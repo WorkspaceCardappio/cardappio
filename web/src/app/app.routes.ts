@@ -19,15 +19,32 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./screens/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
       },
       {
         path: 'new',
-        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
       },
       {
         path: ':id',
-        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+      },
+    ]
+  },
+  {
+    path: 'table',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/table-restaurant/table-restaurant-list/table-restaurant-list.component').then(m => m.TableRestaurantListComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/table-restaurant/table-restaurant-form/table-restaurant-form.component').then(m => m.TableRestaurantFormComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./pages/table-restaurant/table-restaurant-form/table-restaurant-form.component').then(m => m.TableRestaurantFormComponent)
       },
     ]
   },
