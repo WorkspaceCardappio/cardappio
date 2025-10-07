@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionDTO> handleException(Exception exception) {
+    public ResponseEntity<ExceptionDTO> handleException(final Exception exception) {
 
         log.error("unexpected error:", exception);
 
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ExceptionDTO> handleIllegalArgument(IllegalArgumentException exception) {
+    public ResponseEntity<ExceptionDTO> handleIllegalArgument(final IllegalArgumentException exception) {
 
         final ExceptionDTO badRequest = ExceptionDTO.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ExceptionDTO> handleNotFoundException(EntityNotFoundException exception) {
+    public ResponseEntity<ExceptionDTO> handleNotFoundException(final EntityNotFoundException exception) {
 
         final ExceptionDTO badRequest = ExceptionDTO.builder()
                 .status(HttpStatus.NOT_FOUND.value())
