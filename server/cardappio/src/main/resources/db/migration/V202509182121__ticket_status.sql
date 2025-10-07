@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS ticket_status (
-    code NUMERIC(10) NOT NULL,
+    code NUMERIC(10) PRIMARY KEY,
     description VARCHAR(255) NOT NULL
 );
 
