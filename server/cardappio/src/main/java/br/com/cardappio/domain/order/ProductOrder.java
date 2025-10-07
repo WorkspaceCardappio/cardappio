@@ -47,6 +47,8 @@ public class ProductOrder implements EntityModel<UUID> {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+     // TODO: REVER QUANTIDADE VALOR TOTAL, OBSERVAÇÃO?
+
     public static ProductOrder of(final ProductOrderDTO dto) {
 
         final ProductOrder productOrder = new ProductOrder();
