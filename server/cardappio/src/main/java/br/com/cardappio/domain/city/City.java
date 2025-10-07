@@ -3,7 +3,6 @@ package br.com.cardappio.domain.city;
 import java.util.UUID;
 
 import br.com.cardappio.domain.address.Address;
-import br.com.cardappio.domain.state.State;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +43,6 @@ public class City {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "state_id", nullable = false)
-    private State state;
+    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
+    private Address address;
 }

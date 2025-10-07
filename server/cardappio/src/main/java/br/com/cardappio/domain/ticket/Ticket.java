@@ -48,11 +48,11 @@ public class Ticket implements EntityModel<UUID> {
     private TicketStatus status = TicketStatus.OPEN;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
     private Person owner;
 
     @ManyToOne
-    @JoinColumn(name = "table_id", nullable = false)
+    @JoinColumn(name = "table_id", nullable = false, insertable = false, updatable = false)
     private TableRestaurant table;
 
     public static Ticket of(final TicketDTO dto) {

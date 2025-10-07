@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Restaurant {
 
     @Id

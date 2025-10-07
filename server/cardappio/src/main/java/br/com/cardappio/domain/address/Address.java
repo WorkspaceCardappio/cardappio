@@ -43,7 +43,7 @@ public class Address {
 
     @NotBlank(message = Messages.EMPTY_ZIP_CODE)
     @Size(max = 8)
-    @Column(name = "zip_code", nullable = false)
+    @Column(nullable = false)
     private String zipCode;
 
     @NotBlank(message = Messages.EMPTY_DISTRICT)

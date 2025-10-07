@@ -1,1 +1,0 @@
-insert into person(id, name, type, document, password, email, active, address_id) values ('0ad8e87d-a9db-4746-823d-eeb7cd0efb10', 'Darth Vader', 'PF', '51919807004', '1234', 'dart@gmail.com', true, '0ad8e87d-a9db-4746-823d-eeb7cd0efb10');
