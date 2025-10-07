@@ -102,13 +102,14 @@ export class TableRestaurantFormComponent implements OnInit {
   }
 
   private createTable(): void {
+    const { id, ...restForm } = this.form.value;
 
     const formValue = {
-      ...this.form.value,
+      ...restForm,
       status: this.form.value.status.code,
     };
 
-    this.service.create(this.form.value).subscribe(() =>
+    this.service.create(formValue).subscribe(() =>
       this.back()
     );
   }
