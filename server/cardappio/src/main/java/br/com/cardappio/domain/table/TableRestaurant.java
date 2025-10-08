@@ -1,30 +1,18 @@
 package br.com.cardappio.domain.table;
 
-import java.util.UUID;
-
-import org.hibernate.validator.constraints.Length;
-
-import com.cardappio.core.entity.EntityModel;
-
 import br.com.cardappio.converter.TableStatusConverter;
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
 import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.cardappio.core.entity.EntityModel;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -53,11 +41,11 @@ public class TableRestaurant implements EntityModel<UUID> {
     @Max(value = 10, message = Messages.SIZE_10)
     private Long places;
 
-    public static TableRestaurant of(final TableRestaurantDTO dto) {
+    public static TableRestaurant of(final TableRestaurantInsertDTO dto) {
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());
-        table.setStatus(TableStatus.fromCode(dto.status()));
+        table.setStatus(TableStatus.fromCode(dto.status().code()));
         table.setPlaces(dto.places());
 
         return table;

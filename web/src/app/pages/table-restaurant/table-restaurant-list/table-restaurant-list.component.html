@@ -29,4 +29,10 @@
             }
         ]
     }"
-></cardappio-list>
+>
+
+  <ng-template #status let-item>
+    {{ item.status.description }}
+  </ng-template>
+
+</cardappio-list>

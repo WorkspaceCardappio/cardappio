@@ -102,21 +102,17 @@ export class TableRestaurantFormComponent implements OnInit {
   }
 
   private createTable(): void {
+
     const { id, ...restForm } = this.form.value;
 
-    const formValue = {
-      ...restForm,
-      status: this.form.value.status.code,
-    };
-
-    this.service.create(formValue).subscribe(() =>
+    this.service.create(restForm).subscribe(() =>
       this.back()
     );
   }
 
-  private updateTable(id: string): void {
+  private updateTable(idTable: string): void {
 
-    this.service.update(id, this.form.value).subscribe(() =>
+    this.service.update(idTable, this.form.value).subscribe(() =>
       this.back()
     );
   }
@@ -132,7 +128,7 @@ export class TableRestaurantFormComponent implements OnInit {
   }
 
   display = (item: any) => {
-    return item.description;
+    return `${item.code} - ${item.description}`
   }
 
 }

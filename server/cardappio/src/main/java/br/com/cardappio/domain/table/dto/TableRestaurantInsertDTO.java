@@ -1,6 +1,6 @@
 package br.com.cardappio.domain.table.dto;
 
-import br.com.cardappio.domain.table.TableRestaurant;
+import br.com.cardappio.enums.EnumCodigoDescricaoDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
-public record TableRestaurantDTO(
+public record TableRestaurantInsertDTO(
         UUID id,
 
         @NotBlank(message = Messages.EMPTY_NUMBER)
@@ -20,14 +20,7 @@ public record TableRestaurantDTO(
         @Max(value = 10, message = Messages.SIZE_10)
         Long places,
 
-        Long status
+        @NotNull
+        EnumCodigoDescricaoDTO status
 ) {
-    public TableRestaurantDTO(final TableRestaurant table) {
-        this(
-                table.getId(),
-                table.getNumber(),
-                table.getPlaces(),
-                table.getStatus().getCode()
-        );
-    }
 }
