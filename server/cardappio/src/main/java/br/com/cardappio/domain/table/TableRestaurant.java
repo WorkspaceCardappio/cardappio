@@ -1,5 +1,7 @@
 package br.com.cardappio.domain.table;
 
+import br.com.cardappio.converter.TableStatusConverter;
+import br.com.cardappio.domain.restaurant.Restaurant;
 import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
 import br.com.cardappio.converter.TicketStatusConverter;
 import br.com.cardappio.enums.TableStatus;
@@ -33,13 +35,17 @@ public class TableRestaurant implements EntityModel<UUID> {
     private String number;
 
     @Column
-    @Convert(converter = TicketStatusConverter.class)
+    @Convert(converter = TableStatusConverter.class)
     private TableStatus status;
 
     @Column
     @NotNull(message = Messages.EMPTY_PLACE)
     @Max(value = 10, message = Messages.SIZE_10)
     private Long places;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
     public static TableRestaurant of(final TableRestaurantDTO dto) {
         final TableRestaurant table = new TableRestaurant();

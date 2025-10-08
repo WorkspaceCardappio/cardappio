@@ -2,6 +2,7 @@ package br.com.cardappio.domain.order;
 
 import br.com.cardappio.domain.order.dto.OrderDTO;
 import br.com.cardappio.converter.OrderStatusConverter;
+import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Table
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Table(name = "client_order")
 @EqualsAndHashCode(of = {"id"})
 public class Order implements EntityModel<UUID> {
 
@@ -33,24 +34,29 @@ public class Order implements EntityModel<UUID> {
     @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal total = BigDecimal.ZERO;
 
     @Column(nullable = false)
     @NotNull(message = Messages.STATUS_NOT_NULL)
     @Convert(converter = OrderStatusConverter.class)
     private OrderStatus status = OrderStatus.PENDING;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("order")
-    private List<ProductOrder> products = new ArrayList<>();
+    private List<ProductOrder> productOrders = new ArrayList<>();
 
     public static Order of(final OrderDTO dto) {
 
         final Order order = new Order();
         order.setId(dto.id());
-        order.setPrice(dto.price());
+        order.setTotal(dto.total());
         order.setStatus(dto.orderStatus());
-        order.getProducts().addAll(dto.products());
+        order.getProductOrders().addAll(dto.products());
 
         return order;
     }

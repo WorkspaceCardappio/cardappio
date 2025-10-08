@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS restaurant (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     address_id UUID,
     cnpj VARCHAR(14) NOT NULL,
+
     CONSTRAINT fk_restaurant_address_id FOREIGN KEY (address_id) REFERENCES address(id)
 );
