@@ -1,5 +1,7 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { provideRouter, ActivatedRoute } from '@angular/router';
 import { TableRestaurantFormComponent } from '../table-restaurant-form.component';
 
 describe('table-restaurant-form.component.spec.ts', () => {
@@ -10,10 +12,22 @@ describe('table-restaurant-form.component.spec.ts', () => {
   beforeEach(() => {
 
     TestBed.configureTestingModule({
-      imports: [TableRestaurantFormComponent],
-      providers: [HttpClient, HttpHandler],
-    })
-      .compileComponents();
+      imports: [
+        TableRestaurantFormComponent,
+        ReactiveFormsModule,
+      ],
+      providers: [
+        HttpClient,
+        HttpHandler,
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: { id: 'new' } },
+          },
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TableRestaurantFormComponent);
     component = fixture.componentInstance;
@@ -21,7 +35,6 @@ describe('table-restaurant-form.component.spec.ts', () => {
   });
 
   it('should create', () => {
-
     expect(component).toBeTruthy();
   });
 });

@@ -1,7 +1,7 @@
 package br.com.cardappio.domain.table.dto;
 
 import br.com.cardappio.domain.table.TableRestaurant;
-import br.com.cardappio.enums.EnumCodigoDescricaoDTO;
+import br.com.cardappio.enums.dto.EnumCodigoDescricaoDTO;
 
 import java.util.UUID;
 

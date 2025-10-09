@@ -1,6 +1,6 @@
 package br.com.cardappio.domain.table.dto;
 
-import br.com.cardappio.enums.EnumCodigoDescricaoDTO;
+import br.com.cardappio.enums.dto.EnumCodigoDescricaoDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;

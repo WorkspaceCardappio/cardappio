@@ -19,6 +19,6 @@ export const routesMenu = [
   {
     path: 'table',
     name: 'Mesas',
-    icon: 'fa fa-folder'
+    icon: 'fa fa fa-th',
   }
 ];

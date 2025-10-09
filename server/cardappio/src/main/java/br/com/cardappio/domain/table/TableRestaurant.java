@@ -2,7 +2,7 @@ package br.com.cardappio.domain.table;
 
 import br.com.cardappio.converter.TableStatusConverter;
 import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
-import br.com.cardappio.enums.TableStatus;
+import br.com.cardappio.enums.table.status.TableStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;

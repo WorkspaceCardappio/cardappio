@@ -1,4 +1,6 @@
-package br.com.cardappio.enums;
+package br.com.cardappio.enums.dto;
+
+import br.com.cardappio.interfaces.CardappioEnum;
 
 public record EnumCodigoDescricaoDTO(
         Long code,

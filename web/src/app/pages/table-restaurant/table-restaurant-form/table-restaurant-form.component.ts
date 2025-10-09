@@ -47,8 +47,6 @@ export class TableRestaurantFormComponent implements OnInit {
 
   onSave(): void {
 
-    const { id } = this.route.snapshot.params;
-
     if (this.form.invalid) {
 
       return;
@@ -61,18 +59,32 @@ export class TableRestaurantFormComponent implements OnInit {
       return;
     }
 
-    this.updateTable(id);
-  }
-
-  private back(): void {
-
-    this.router.navigate(['table']);
+    this.updateTable(this.getId);
   }
 
   onCancel(): void {
 
     this.back();
   }
+
+  get isNew(): boolean {
+
+    return this.getId === 'new';
+  }
+
+  get getId() {
+
+    return this.route.snapshot.params['id'];
+  }
+
+  searchStatusAutoComplete = (query: string): Observable<any[]> => {
+
+    return this.tableStatusService.findAll();
+  };
+
+  display = (item: any) => {
+    return `${ item.code } - ${ item.description }`;
+  };
 
   private createForm(): void {
 
@@ -94,7 +106,7 @@ export class TableRestaurantFormComponent implements OnInit {
 
   private loadTable(): void {
 
-    const id = this.route.snapshot.params['id'];
+    const id = this.getId;
 
     this.service.findById(id).subscribe((table: TableRestaurant) => {
       this.form.patchValue(table);
@@ -117,18 +129,9 @@ export class TableRestaurantFormComponent implements OnInit {
     );
   }
 
-  get isNew(): boolean {
+  private back(): void {
 
-    return this.route.snapshot.params['id'] === 'new';
-  }
-
-  tables = (query: string): Observable<any[]> => {
-
-    return this.tableStatusService.findAll();
-  }
-
-  display = (item: any) => {
-    return `${item.code} - ${item.description}`
+    this.router.navigate(['table']);
   }
 
 }
