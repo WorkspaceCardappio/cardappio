@@ -39,68 +39,14 @@ export class OrderFormComponent implements OnInit {
   ) {
     this.orderForm = this.fb.group({
       id: [''],
+      price: [0, [Validators.required, Validators.min(0)]],
+      orderStatus: ['PENDING', Validators.required],
       products: [[], Validators.required],
       ticket: [null, Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.initializeComponent();
-  }
-
-  ticketsSrc = (query: string): Observable<any[]> => {
-    const searchs = [];
-
-    if (query) {
-      searchs.push(`number=ilike=${query}%`);
-    }
-
-    const id = this.orderForm.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
-    }
-
-    return this.ticketService.findAll(20, searchs.join(';'));
-  }
-
-  productsSrc = (query: string): Observable<any[]> => {
-    const searchs = [];
-
-    if (query) {
-      searchs.push(`name=ilike=${query}%`);
-    }
-
-    const id = this.orderForm.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
-    }
-
-    return this.productService.findAll(20, searchs.join(';'));
-  }
-
-  displayProduct = (item: any) => {
-    return item.name;
-  }
-
-  displayTicket = (item: any) => {
-    return item.number;
-  }
-
-  onCancel(): void {
-    this.navigateToList();
-  }
-
-  onSave(): void {
-    if (this.orderForm.invalid) return;
-
-    if (this.isEditMode) {
-      this.updateOrder();
-    } else {
-      this.createOrder();
-    }
-  }
-
-  private initializeComponent(): void {
     this.orderId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.orderId;
 
@@ -109,37 +55,100 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
+  ticketsSrc = (query: string): Observable<any[]> => {
+    const searches = query ? [`number=ilike=${query}%`] : [];
+    return this.ticketService.findAll(20, searches.join(';'));
+  }
+
+  productsSrc = (query: string): Observable<any[]> => {
+    const searches = query ? [`name=ilike=${query}%`] : [];
+    return this.productService.findAll(20, searches.join(';'));
+  }
+
+  displayProduct = (item: any): string => item?.name || '';
+
+  displayTicket = (item: any): string => item?.number || '';
+
+  onCancel(): void {
+    this.navigateToList();
+  }
+
+  onSave(): void {
+    if (this.orderForm.invalid) {
+      console.error('Formulário inválido. Verifique os campos obrigatórios.');
+      return;
+    }
+
+    const { price, orderStatus, products, ticket } = this.orderForm.value;
+
+    const orderPayload = {
+      price: price || 0,
+      orderStatus: orderStatus || 'PENDING',
+      ticketId: ticket.id,
+      products: this.formatProducts(products)
+    };
+
+    if (this.isEditMode) {
+      this.updateOrder(orderPayload);
+    } else {
+      this.createOrder(orderPayload);
+    }
+  }
+
+  private formatProducts(products: any[]): any[] {
+    if (!products || !Array.isArray(products)) {
+      return [];
+    }
+
+    return products.map(product => ({
+      product: { id: product.id }
+    }));
+  }
+
   private loadOrder(): void {
+    if (!this.orderId) return;
+
     this.orderService.findById(this.orderId).subscribe({
       next: (order) => {
         this.orderForm.patchValue({
           id: order.id,
+          price: order.price || 0,
+          orderStatus: order.orderStatus || 'PENDING',
           products: order.products || [],
           ticket: order.ticket || null
         });
         this.cdr.detectChanges();
       },
-      error: () => this.navigateToList()
+      error: (error) => {
+        console.error('Erro ao carregar pedido:', error);
+        this.navigateToList();
+      }
     });
   }
 
-  private createOrder(): void {
-    const { id, ...orderData } = this.orderForm.value;
-
-    this.orderService.create(orderData).subscribe({
-      next: () => this.navigateToList(),
+  private createOrder(payload: any): void {
+    this.orderService.create(payload).subscribe({
+      next: () => {
+        console.log('Pedido criado com sucesso!');
+        this.navigateToList();
+      },
       error: (error) => console.error('Erro ao criar pedido:', error)
     });
   }
 
-  private updateOrder(): void {
-    this.orderService.update(this.orderId, this.orderForm.value).subscribe({
-      next: () => this.navigateToList(),
+  private updateOrder(payload: any): void {
+    if (!this.orderId) return;
+
+    this.orderService.update(this.orderId, payload).subscribe({
+      next: () => {
+        console.log('Pedido atualizado com sucesso!');
+        this.navigateToList();
+      },
       error: (error) => console.error('Erro ao atualizar pedido:', error)
     });
   }
 
-  protected navigateToList(): void {
+   navigateToList(): void {
     this.router.navigate(['/order']);
   }
 }

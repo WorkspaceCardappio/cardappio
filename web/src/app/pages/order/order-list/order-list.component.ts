@@ -19,49 +19,37 @@ export class OrderListComponent {
     route: '/order',
     columns: [
       {
-        title: 'Nome',
-        field: 'name',
+        title: 'Número',
+        field: 'number',
         size: 200,
-        order: 'name'
-      },
-      {
-        title: 'Observação',
-        field: 'note',
-        size: 200,
-        order: 'note'
-      },
-      {
-        title: 'Tema',
-        field: 'theme',
-        size: 150,
-        order: 'theme'
+        order: 'number'
       },
       {
         title: 'Status',
-        field: 'active',
-        size: 100,
+        field: 'status',
+        size: 200,
         order: 'status'
+      },
+      {
+        title: 'Preço',
+        field: 'price',
+        size: 150,
+        order: 'price'
+      },
+      {
+        title: 'Data de criação',
+        field: 'createdAt',
+        size: 100,
+        order: 'createdAt'
       }
     ],
     filters: [
       {
-        icon: 'text_fields',
-        title: 'Nome',
-        value: 'name',
+        icon: 'Comanda',
+        title: 'ticket',
+        value: 'ticket',
         typeValue: 'string' as const
       },
-      {
-        icon: 'text_fields',
-        title: 'Tema',
-        value: 'theme',
-        typeValue: 'string' as const
-      },
-      {
-        icon: 'toggle_on',
-        title: 'Status',
-        value: 'status',
-        typeValue: 'string' as const
-      }
     ]
   };
 
