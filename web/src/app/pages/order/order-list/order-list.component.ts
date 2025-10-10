@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CardappioListComponent } from "cardappio-component-hub";
-import { CardapioService } from "../../cardapio/cardapio-list/cardapio.service";
 import { OrderService } from "../order.service";
 
 
@@ -26,9 +25,9 @@ export class OrderListComponent {
       },
       {
         title: 'Status',
-        field: 'status',
+        field: 'orderStatus',
         size: 200,
-        order: 'status'
+        order: 'orderStatus'
       },
       {
         title: 'Preço',

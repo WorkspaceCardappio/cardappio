@@ -91,4 +91,10 @@ public class Product implements EntityModel<UUID> {
 
         return product;
     }
+
+    public static Product of(final UUID id) {
+        final Product product = new Product();
+        product.setId(id);
+        return product;
+    }
 }

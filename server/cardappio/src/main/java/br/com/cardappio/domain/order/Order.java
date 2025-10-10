@@ -1,6 +1,7 @@
 package br.com.cardappio.domain.order;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -48,6 +50,9 @@ public class Order implements EntityModel<UUID> {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull
+    private Long Number;
+
     @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
@@ -67,6 +72,14 @@ public class Order implements EntityModel<UUID> {
     @JsonIgnoreProperties("order")
     private List<ProductOrder> products = new ArrayList<>();
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
     public static Order of(final OrderDTO dto) {
 
         final Order order = new Order();
@@ -74,9 +87,18 @@ public class Order implements EntityModel<UUID> {
         order.setPrice(dto.price());
         order.setStatus(dto.orderStatus());
         order.setTicket(Ticket.of(dto.ticketId()));
-        order.getProducts().addAll(dto.products());
 
+        List<ProductOrder> productOrders = dto.products().stream()
+                .map(ProductOrder::of)
+                .toList();
+
+        order.getProducts().addAll(productOrders);
         return order;
     }
 
+    public static Order of(final UUID id) {
+        final Order order = new Order();
+        order.setId(id);
+        return order;
+    }
 }

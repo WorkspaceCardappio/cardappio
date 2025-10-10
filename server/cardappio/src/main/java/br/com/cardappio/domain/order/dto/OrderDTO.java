@@ -1,11 +1,12 @@
 package br.com.cardappio.domain.order.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import br.com.cardappio.domain.order.Order;
-import br.com.cardappio.domain.order.ProductOrder;
 import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
@@ -18,18 +19,25 @@ public record OrderDTO(
         BigDecimal price,
         @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus,
-        List<ProductOrder> products,
+        List<ProductOrderDTO> products,
         @NotNull
-        UUID ticketId
+        UUID ticketId,
+        @NotNull
+        Long number,
+        @NotNull
+        LocalDateTime createdAt
 ) {
     public OrderDTO(final Order order) {
         this(
                 order.getId(),
                 order.getPrice(),
                 order.getStatus(),
-                order.getProducts(),
-                order.getTicket().getId()
+                order.getProducts().stream()
+                        .map(ProductOrderDTO::new)
+                        .collect(Collectors.toList()),
+                order.getTicket().getId(),
+                order.getNumber(),
+                order.getCreatedAt()
         );
     }
-
 }
