@@ -1,20 +1,17 @@
 package br.com.cardappio.domain.order;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import br.com.cardappio.domain.additional.ProductOrderAdditional;
 import com.cardappio.core.entity.EntityModel;
 
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -46,6 +43,10 @@ public class ProductOrder implements EntityModel<UUID> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @JsonIgnoreProperties("productOrder")
+    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductOrderAdditional> additionals = new ArrayList<>();
 
     public static ProductOrder of(final ProductOrderDTO dto) {
 

@@ -2,6 +2,8 @@ package br.com.cardappio.domain.additional;
 
 import br.com.cardappio.domain.additional.dto.ProductOrderAdditionalDTO;
 import br.com.cardappio.domain.order.ProductOrder;
+import br.com.cardappio.domain.product.Product;
+import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -33,9 +35,10 @@ public class ProductOrderAdditional implements EntityModel<UUID> {
     @JoinColumn(name = "product_order_id")
     private ProductOrder productOrder;
 
-    @OneToMany(mappedBy = "additional_id", orphanRemoval = true, cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("additional")
-    private List<Additional> additional = new ArrayList<>();
+    @NotNull(message = Messages.PRODUCT_NOT_NULL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "additional_id", nullable = false)
+    private Additional additional;
 
     @Column
     private BigDecimal quantity;

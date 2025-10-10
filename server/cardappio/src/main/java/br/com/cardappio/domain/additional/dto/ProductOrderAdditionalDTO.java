@@ -16,7 +16,7 @@ public record ProductOrderAdditionalDTO(
         @NotNull
         ProductOrder productOrder,
 
-        List<Additional> additional,
+        Additional additional,
 
         BigDecimal quantity,
 

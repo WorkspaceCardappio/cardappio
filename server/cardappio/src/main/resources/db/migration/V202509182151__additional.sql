@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS additional(
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    note VARCHAR(255)
+);

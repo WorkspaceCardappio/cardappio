@@ -40,8 +40,8 @@ public class Order implements EntityModel<UUID> {
     @Convert(converter = OrderStatusConverter.class)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("order")
+    @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductOrder> products = new ArrayList<>();
 
     public static Order of(final OrderDTO dto) {
