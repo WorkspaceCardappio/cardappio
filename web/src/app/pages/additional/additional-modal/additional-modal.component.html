@@ -1,0 +1,33 @@
+<dialog #dialog id="dialog">
+     <div class="header">
+        <button class="close-btn" (click)="closeDialog()">X</button>
+    </div>
+        <h2>Adicionais</h2>
+   
+    <cardappio-autocomplete class="autocomplete"
+        [placeholder]="'Busque um produto'"
+        [size]="125"
+        [search]="product"
+    ></cardappio-autocomplete>
+    <form [formGroup]="form">
+            <cardappio-input class="input"
+                [width]="100"
+                [placeholder]="'nome'"
+                [label]="'Nome'"
+                formControlName="name"/>
+            <cardappio-input class="input"
+                [width]="100"
+                [placeholder]="'preço'"
+                [label]="'Preço'"
+                formControlName="price"/>
+            <cardappio-input class="input"
+                [width]="100"
+                [placeholder]="'observações'"
+                [label]="'Observações'"
+                formControlName="note"/>
+        <div class="actions-btn">
+            <cardappio-cancel-button/>
+            <cardappio-save-button/>
+        </div>
+    </form>
+</dialog>

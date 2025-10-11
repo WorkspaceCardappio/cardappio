@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent, LeftMenuComponent } from 'cardappio-component-hub/projects/cardappio-component-hub/src/public-api';
+import { HeaderComponent, LeftMenuComponent } from 'cardappio-component-hub';
 import { routesMenu } from './routes-menu.config';
 
 @Component({

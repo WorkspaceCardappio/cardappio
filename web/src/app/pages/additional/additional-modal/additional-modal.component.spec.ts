@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdditionalComponent } from './additional.component';
+import { AdditionalComponent } from './additional-modal.component';
 
 describe('AdditionalComponent', () => {
   let component: AdditionalComponent;

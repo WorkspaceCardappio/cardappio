@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, GenericButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
+import { AdditionalComponent } from '../../additional/additional-modal/additional-modal.component';
 import { CategoryService } from '../../category/service/category.service';
 import { ProductService } from '../service/product.service';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent],
+  imports: [ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent, AdditionalComponent],
   providers: [ProductService],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
@@ -17,6 +18,13 @@ export class ProductFormComponent implements OnInit {
   
   form: FormGroup<any> = new FormGroup({});
 
+  @ViewChild(AdditionalComponent)
+  additionalModal!: AdditionalComponent;
+
+  openAdditionalModal(): void {
+    this.additionalModal.openDialog();
+  }
+  
   constructor(
     private readonly builder: FormBuilder,
     private service: ProductService,

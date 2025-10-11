@@ -58,7 +58,7 @@
                 <textarea id="product-obs" formControlName="note"></textarea>
             </div>
         </div>
-        <button type="button" id="additional-btn">
+        <button type="button" id="additional-btn" (click)="openAdditionalModal()">
             <span>Adicionais</span>
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -72,3 +72,4 @@
         </div>
     </div>
 </form>
+<app-additional></app-additional>
