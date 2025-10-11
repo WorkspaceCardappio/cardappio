@@ -20,11 +20,11 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "client_order")
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = { "id", "total", "status" })
 public class Order implements EntityModel<UUID> {
 
     @Id

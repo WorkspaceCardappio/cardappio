@@ -14,10 +14,6 @@ public record TicketDTO(
 
         UUID id,
 
-        @NotBlank(message = Messages.EMPTY_NUMBER)
-        @Length(max=10, message = Messages.SIZE_10)
-        String number,
-
         @NotNull(message = Messages.CODE_NOT_FOUND)
         Long code,
 

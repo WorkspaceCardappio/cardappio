@@ -45,7 +45,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(of = { "id", "number", "total", "status" })
 public class Ticket implements EntityModel<UUID> {
 
     @Id
@@ -53,7 +53,7 @@ public class Ticket implements EntityModel<UUID> {
     private UUID id;
 
     @NotNull
-    private String number;
+    private Long number;
 
     @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)
@@ -80,9 +80,17 @@ public class Ticket implements EntityModel<UUID> {
 
         final Ticket ticket = new Ticket();
         ticket.setId(dto.id());
-        ticket.setNumber(dto.number());
         ticket.setOwner(Person.of(dto.owner().id()));
         ticket.setTable(TableRestaurant.of(dto.table().id()));
+
+        return ticket;
+    }
+
+    public final Ticket cloneAndIncrementNumber() {
+
+        final Ticket ticket = new Ticket();
+        ticket.setNumber(number + 1);
+        ticket.setTable(table);
 
         return ticket;
     }
