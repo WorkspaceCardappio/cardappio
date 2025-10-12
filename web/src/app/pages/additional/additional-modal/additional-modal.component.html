@@ -1,12 +1,16 @@
 <div id="expansion-panel"
     [@expandCollapse]="expanded ? 'expanded' : 'collapsed'">
-    
-     <h2>Adicionais</h2>
+
+     <h3>Adicionais</h3>
      <cardappio-autocomplete class="autocomplete"
+        [topLabelInput]="'Selecione um produto'"
         [placeholder]="'Busque um produto'"
         [size]="125"
         [search]="product"
     ></cardappio-autocomplete>
+    <div class="divider">
+        <span>Ou insira um adicional</span>
+    </div>
     <form [formGroup]="form">
             <cardappio-input class="input"
                 [width]="100"
