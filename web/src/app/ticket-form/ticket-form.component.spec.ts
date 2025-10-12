@@ -4,7 +4,7 @@ import { TicketFormComponent } from './ticket-form.component';
 import { ActivatedRoute, provideRouter } from "@angular/router";
 import { provideHttpClient } from "@angular/common/http";
 
-fdescribe('TicketFormComponent', () => {
+describe('TicketFormComponent', () => {
   let component: TicketFormComponent;
   let fixture: ComponentFixture<TicketFormComponent>;
 
