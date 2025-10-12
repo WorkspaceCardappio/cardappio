@@ -1,21 +1,38 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutocompleteComponent, CancelButtonComponent, InputComponent, SaveButtonComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
 import { ProductService } from '../../product/service/product.service';
+
 @Component({
   selector: 'app-additional',
   imports: [SaveButtonComponent, AutocompleteComponent, InputComponent, ReactiveFormsModule, CancelButtonComponent],
   templateUrl: './additional-modal.component.html',
-  styleUrl: './additional-modal.component.scss'
+  styleUrl: './additional-modal.component.scss',
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        overflow: 'hidden'
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        overflow: 'hidden'
+      })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease-in-out')
+      ])
+    ])
+  ]
 })
   
 export class AdditionalComponent implements OnInit {
-  
+  @Input() expanded = false;
   form: FormGroup<any> = new FormGroup({});
-
-  @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>;
 
   constructor(
     private readonly builder: FormBuilder,
@@ -35,15 +52,7 @@ export class AdditionalComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       note: ['']
     })
-  }
-
-  openDialog(): void {
-    this.dialog.nativeElement.showModal();
-  }
-
-  closeDialog(): void {
-    this.dialog.nativeElement.close();
-  }
+  }  
 
   product = (query: string): Observable<any[]> => {
   

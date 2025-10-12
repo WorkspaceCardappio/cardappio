@@ -1,14 +1,5 @@
-#dialog {
-  border: none;
-  border-radius: 16px;
-  padding: 2rem;
-  width: 800px;
-  max-width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-  animation: fadeIn 0.25s ease-out;
+#expanded-panel {
+  padding: 20px;
 }
 
 h2 {
@@ -16,33 +7,8 @@ h2 {
     text-align: center;
   }
 
-
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-}
-
-.header {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  height: 40px;
-}
-
 .autocomplete{
     margin: 0;
-}
-
-.close-btn {
-    border: none;
-    border-radius: 5px;
-    background-color: red;
-    width: 30px;
-    height: 20 px;
-    font-size: 25px;
-    color: white;
 }
 
 form {

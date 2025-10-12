@@ -1,10 +1,8 @@
-<dialog #dialog id="dialog">
-     <div class="header">
-        <button class="close-btn" (click)="closeDialog()">X</button>
-    </div>
-        <h2>Adicionais</h2>
-   
-    <cardappio-autocomplete class="autocomplete"
+<div id="expansion-panel"
+    [@expandCollapse]="expanded ? 'expanded' : 'collapsed'">
+    
+     <h2>Adicionais</h2>
+     <cardappio-autocomplete class="autocomplete"
         [placeholder]="'Busque um produto'"
         [size]="125"
         [search]="product"
@@ -30,4 +28,4 @@
             <cardappio-save-button/>
         </div>
     </form>
-</dialog>
+</div>

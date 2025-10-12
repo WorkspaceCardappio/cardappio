@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,9 +8,21 @@ import { AdditionalComponent } from '../../additional/additional-modal/additiona
 import { CategoryService } from '../../category/service/category.service';
 import { ProductService } from '../service/product.service';
 
+
 @Component({
   selector: 'app-product-form',
-  imports: [ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent, AdditionalComponent],
+  imports: [
+    ReactiveFormsModule,
+    DatePickerComponent,
+    InputComponent,
+    ToggleComponent,
+    CancelButtonComponent,
+    GenericButtonComponent,
+    ImageUploadComponent,
+    SaveButtonComponent,
+    AutocompleteComponent,
+    AdditionalComponent,
+    CommonModule],
   providers: [ProductService],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
@@ -19,11 +32,12 @@ export class ProductFormComponent implements OnInit {
   form: FormGroup<any> = new FormGroup({});
 
   @ViewChild(AdditionalComponent)
-  additionalModal!: AdditionalComponent;
+  additionalToggle!: AdditionalComponent;
+  isExpanded: boolean = false;
 
-  openAdditionalModal(): void {
-    this.additionalModal.openDialog();
-  }
+  togglePanel(): void {
+    this.isExpanded = !this.isExpanded;
+ }
   
   constructor(
     private readonly builder: FormBuilder,

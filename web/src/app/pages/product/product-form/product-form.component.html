@@ -58,10 +58,11 @@
                 <textarea id="product-obs" formControlName="note"></textarea>
             </div>
         </div>
-        <button type="button" id="additional-btn" (click)="openAdditionalModal()">
+        <button type="button" id="additional-btn" (click)="togglePanel()">
             <span>Adicionais</span>
             <i class="fa-solid fa-plus"></i>
         </button>
+        <app-additional [expanded]="isExpanded"></app-additional>
         <button type="button" id="ingredients-btn">
             <span>Ingredientes</span>
             <i class="fa-solid fa-plus"></i>
