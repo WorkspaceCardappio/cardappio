@@ -19,10 +19,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/tickets")
 @RequiredArgsConstructor
-public class TicketController extends CrudController<Ticket, UUID, TicketListDTO, TicketDTO> {
+@RequestMapping("/api/tickets")
 
+public class TicketController extends CrudController<Ticket, UUID, TicketListDTO, TicketDTO> {
     // TODO: REMOVER - VIRAR USUARIO LOGADO
     private final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
 
