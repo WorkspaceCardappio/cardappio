@@ -31,7 +31,7 @@ public class DividerService {
     private final OrderRepository orderRepository;
     private final PersonRepository personRepository;
 
-    public void ticket(UUID id, UUID idPerson, final DividerOrdersDTO valueToDivider) {
+    public void ticket(final UUID id, final UUID idPerson, final DividerOrdersDTO valueToDivider) {
 
         final Ticket ticket = find(id);
         final Person person = findPerson(idPerson);

@@ -10,9 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.converter.TicketStatusConverter;
 import br.com.cardappio.domain.order.Order;
-import br.com.cardappio.domain.order.ProductOrder;
 import br.com.cardappio.domain.person.Person;
-import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.domain.table.TableRestaurant;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.enums.TicketStatus;
@@ -27,7 +25,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

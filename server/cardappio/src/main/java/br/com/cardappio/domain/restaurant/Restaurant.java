@@ -7,7 +7,6 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.address.Address;
-import br.com.cardappio.domain.product.ProductIngredient;
 import br.com.cardappio.domain.table.TableRestaurant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
