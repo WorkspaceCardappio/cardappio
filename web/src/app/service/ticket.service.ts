@@ -10,10 +10,10 @@ import { environment } from '../../environments/environment';
 })
 export class TicketService extends EntityService<Ticket, string>{
 
-  override resource: string = `${environment.apiUrl }/tickets`;
+  override resource: string = `${environment.apiUrl}/tickets`;
 
   constructor(public http: HttpClient){
     super(http);
   }
-  
+
 }

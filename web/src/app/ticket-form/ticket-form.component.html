@@ -1,41 +1,43 @@
 <form [formGroup]="form">
-    <div id="ticket" class="ticket">
-        <div class="ticket-input">
-    <cardappio-input
+  <div id="ticket" class="ticket">
+    <div class="ticket-input">
+      <cardappio-input
         [width]="100"
         [placeholder]="'número'"
         [label]="'Número'"
         formControlName="number"
-    />
-        </div>
-       
-        <div class="auto-mesa">
-    <cardappio-autocomplete
+      />
+    </div>
+
+    <div class="auto-mesa">
+      <cardappio-autocomplete
         [placeholder]="'Selecione'"
         [isMultiple]="true"
         [size]="61.5"
         [topLabelInput]="'Mesa'"
         [search]="tickets"
-    /></div>
+      />
+    </div>
 
     <div class="auto-pessoa">
-     <cardappio-input
+      <cardappio-input
         [width]="98"
         [placeholder]="'pessoa'"
         [label]="'Pessoa'"
         formControlName="owner"
-    /></div>
+      />
+    </div>
 
-     <cardappio-autocomplete
-        [placeholder]="'selecione'"
-        [isMultiple]="true"
-        [size]="63"
-        [topLabelInput]="'Status'"
-        [search]="tickets"
+    <cardappio-autocomplete
+      [placeholder]="'selecione'"
+      [isMultiple]="true"
+      [size]="63"
+      [topLabelInput]="'Status'"
+      [search]="tickets"
     />
-   </div>
-<div id="button" class="button">
+  </div>
+  <div id="button" class="button">
     <cardappio-cancel-button (onClick)="cancel()"></cardappio-cancel-button>
     <cardappio-save-button (onClick)="create()"></cardappio-save-button>
-</div>
+  </div>
 </form>
