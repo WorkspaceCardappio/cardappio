@@ -50,8 +50,8 @@ public class Order implements EntityModel<UUID> {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
-    private Long Number;
+    @Column(insertable = false, updatable = false)
+    private Long number;
 
     @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)

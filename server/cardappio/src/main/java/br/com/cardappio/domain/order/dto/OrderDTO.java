@@ -22,9 +22,7 @@ public record OrderDTO(
         List<ProductOrderDTO> products,
         @NotNull
         UUID ticketId,
-        @NotNull
         Long number,
-        @NotNull
         LocalDateTime createdAt
 ) {
     public OrderDTO(final Order order) {

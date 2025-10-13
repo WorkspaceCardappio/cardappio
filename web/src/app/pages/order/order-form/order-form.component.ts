@@ -6,7 +6,7 @@ import {
 } from "cardappio-component-hub";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { OrderService } from "../order.service";
 import { TicketService } from "../../ticket.service";
 import { ProductService } from "../../product.service";
@@ -27,6 +27,7 @@ export class OrderFormComponent implements OnInit {
   orderId: string | null = null;
   isEditMode = false;
   orderForm: FormGroup;
+  initialTicket: any = null;
 
   constructor(
     private readonly orderService: OrderService,
@@ -67,7 +68,9 @@ export class OrderFormComponent implements OnInit {
 
   displayProduct = (item: any): string => item?.name || '';
 
-  displayTicket = (item: any): string => item?.number || '';
+  displayTicket = (item: any): string => {
+    return item?.number?.toString() || '';
+  }
 
   onCancel(): void {
     this.navigateToList();
@@ -110,14 +113,43 @@ export class OrderFormComponent implements OnInit {
 
     this.orderService.findById(this.orderId).subscribe({
       next: (order) => {
-        this.orderForm.patchValue({
-          id: order.id,
-          price: order.price || 0,
-          orderStatus: order.orderStatus || 'PENDING',
-          products: order.products || [],
-          ticket: order.ticket || null
-        });
-        this.cdr.detectChanges();
+        if (order.ticketId) {
+          forkJoin({
+            order: of(order),
+            ticket: this.ticketService.findById(order.ticketId)
+          }).subscribe({
+            next: ({ order, ticket }) => {
+              console.log('Ticket carregado:', ticket);
+
+              this.initialTicket = ticket;
+
+              this.orderForm.patchValue({
+                id: order.id,
+                price: order.price || 0,
+                orderStatus: order.orderStatus || 'PENDING',
+                products: order.products || [],
+                ticket: ticket
+              });
+
+              this.cdr.detectChanges();
+
+              console.log('Initial ticket setado:', this.initialTicket);
+              console.log('Display deve mostrar:', this.displayTicket(ticket));
+            },
+            error: (error) => {
+              console.error('Erro ao carregar dados:', error);
+              this.navigateToList();
+            }
+          });
+        } else {
+          this.orderForm.patchValue({
+            id: order.id,
+            price: order.price || 0,
+            orderStatus: order.orderStatus || 'PENDING',
+            products: order.products || []
+          });
+          this.cdr.detectChanges();
+        }
       },
       error: (error) => {
         console.error('Erro ao carregar pedido:', error);
@@ -129,7 +161,6 @@ export class OrderFormComponent implements OnInit {
   private createOrder(payload: any): void {
     this.orderService.create(payload).subscribe({
       next: () => {
-        console.log('Pedido criado com sucesso!');
         this.navigateToList();
       },
       error: (error) => console.error('Erro ao criar pedido:', error)
@@ -141,14 +172,13 @@ export class OrderFormComponent implements OnInit {
 
     this.orderService.update(this.orderId, payload).subscribe({
       next: () => {
-        console.log('Pedido atualizado com sucesso!');
         this.navigateToList();
       },
       error: (error) => console.error('Erro ao atualizar pedido:', error)
     });
   }
 
-   navigateToList(): void {
+  navigateToList(): void {
     this.router.navigate(['/order']);
   }
 }

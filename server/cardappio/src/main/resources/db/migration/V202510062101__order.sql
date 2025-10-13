@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS client_order (
     id UUID PRIMARY KEY,
-    number BIGINT NOT NULL,
+    number BIGINT GENERATED ALWAYS AS IDENTITY,
     price DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) NOT NULL,
     ticket_id UUID NOT NULL,
