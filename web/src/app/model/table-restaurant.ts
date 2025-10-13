@@ -1,6 +1,6 @@
 import { TableStatus } from "./table-status";
 
-export interface TableRestaurant{
+export interface TableRestaurant {
     id:string,
     number:string,
     status:TableStatus,

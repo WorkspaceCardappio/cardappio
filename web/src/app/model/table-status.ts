@@ -1,4 +1,4 @@
-export enum TableStatus{
+export enum TableStatus {
     FREE = "LIVRE",
     RESERVED = "RESERVADA",
     OCCUPIED = "OCUPADA",
