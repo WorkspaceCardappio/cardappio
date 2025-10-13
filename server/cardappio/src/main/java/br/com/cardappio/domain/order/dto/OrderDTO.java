@@ -20,7 +20,7 @@ public record OrderDTO(
         @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus,
         List<ProductOrderDTO> products,
-        @NotNull
+        @NotNull(message = Messages.TICKET_NOT_NULL)
         UUID ticketId,
         Long number,
         LocalDateTime createdAt

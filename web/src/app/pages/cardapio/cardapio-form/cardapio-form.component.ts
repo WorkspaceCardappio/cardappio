@@ -95,16 +95,14 @@ export class CardapioFormComponent implements OnInit {
     const { id, ...cardapioData } = this.cardapioForm.value;
 
     this.cardapioService.create(cardapioData).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao criar cardápio:', error)
+      next: () => this.navigateToList()
     });
   }
 
   private updateCardapio(): void {
 
     this.cardapioService.update(this.cardapioId, this.cardapioForm.value).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao atualizar cardápio:', error)
+      next: () => this.navigateToList()
     });
   }
 

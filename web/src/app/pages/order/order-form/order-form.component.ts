@@ -78,7 +78,6 @@ export class OrderFormComponent implements OnInit {
 
   onSave(): void {
     if (this.orderForm.invalid) {
-      console.error('Formulário inválido. Verifique os campos obrigatórios.');
       return;
     }
 
@@ -119,7 +118,6 @@ export class OrderFormComponent implements OnInit {
             ticket: this.ticketService.findById(order.ticketId)
           }).subscribe({
             next: ({ order, ticket }) => {
-              console.log('Ticket carregado:', ticket);
 
               this.initialTicket = ticket;
 
@@ -133,11 +131,8 @@ export class OrderFormComponent implements OnInit {
 
               this.cdr.detectChanges();
 
-              console.log('Initial ticket setado:', this.initialTicket);
-              console.log('Display deve mostrar:', this.displayTicket(ticket));
             },
             error: (error) => {
-              console.error('Erro ao carregar dados:', error);
               this.navigateToList();
             }
           });
@@ -152,7 +147,6 @@ export class OrderFormComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Erro ao carregar pedido:', error);
         this.navigateToList();
       }
     });
@@ -162,8 +156,7 @@ export class OrderFormComponent implements OnInit {
     this.orderService.create(payload).subscribe({
       next: () => {
         this.navigateToList();
-      },
-      error: (error) => console.error('Erro ao criar pedido:', error)
+      }
     });
   }
 
@@ -173,8 +166,7 @@ export class OrderFormComponent implements OnInit {
     this.orderService.update(this.orderId, payload).subscribe({
       next: () => {
         this.navigateToList();
-      },
-      error: (error) => console.error('Erro ao atualizar pedido:', error)
+      }
     });
   }
 
