@@ -1,13 +1,14 @@
 package br.com.cardappio.domain.menu;
 
-import br.com.cardappio.domain.menu.dto.MenuDTO;
-import br.com.cardappio.domain.menu.adapter.MenuAdapter;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
 
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
-import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import br.com.cardappio.domain.menu.adapter.MenuAdapter;
+import br.com.cardappio.domain.menu.dto.MenuDTO;
 
 @Service
 public class MenuService extends CrudService<Menu, UUID, MenuDTO, MenuDTO> {

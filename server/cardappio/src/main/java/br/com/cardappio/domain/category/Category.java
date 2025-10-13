@@ -53,7 +53,7 @@ public class Category implements EntityModel<UUID> {
         category.setName(dto.name());
         category.setActive(dto.active());
         category.setImage(dto.image());
-        category.setParent(dto.subCategory());
+        category.setParent(dto.parent());
 
         return category;
     }

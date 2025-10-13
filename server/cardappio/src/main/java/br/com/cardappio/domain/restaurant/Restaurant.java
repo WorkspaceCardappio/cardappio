@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -27,20 +26,21 @@ public class Restaurant {
 
     @NotBlank(message = Messages.EMPTY_NAME)
     @Size(max = 255, message = Messages.SIZE_255)
-    @Column(nullable = false, length = 255)
+    @Column(name = "name", nullable = false, length = 255, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(name = "active", nullable = false)
     private Boolean active = true;
 
     @NotBlank(message = Messages.EMPTY_DOCUMENT)
     @Size(max = 14, message = Messages.SIZE_14)
-    @Column(unique = true, nullable = false, length = 14)
+    @Column(name = "cnpj", unique = true, nullable = false, length = 14)
     private String cnpj;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 
     public static Restaurant of(final RestaurantDTO dto) {
@@ -49,6 +49,12 @@ public class Restaurant {
         restaurant.setName(dto.getName());
         restaurant.setActive(dto.getActive());
         restaurant.setCnpj(dto.getCnpj());
+        return restaurant;
+    }
+
+    public static Restaurant of(final UUID id) {
+        final Restaurant restaurant = new Restaurant();
+        restaurant.setId(id);
         return restaurant;
     }
 }

@@ -1,0 +1,44 @@
+.container {
+  padding: 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+
+  .btn-novo {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+
+  th {
+    background: #666;
+    color: white;
+  }
+}
+
+.status {
+  font-weight: bold;
+  &.disponivel {
+    color: green;
+  }
+  &.ocupado {
+    color: red;
+  }
+}
