@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -15,6 +15,8 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Product } from '../../../model/product';
+import { ProductVariable } from '../../../model/product_variable';
 import { CategoryService } from '../../category/service/category.service';
 import { ProductService } from '../service/product.service';
 
@@ -51,7 +53,7 @@ export class ProductFormComponent implements OnInit {
   form: FormGroup<any> = new FormGroup({});
   date1: Date | undefined;
   items: MenuItem[] = [];
-  productVariables: any[] = [];
+  productVariables: ProductVariable[] = [];
   home: MenuItem = {};
   filteredCategories: any[] = [];
   filteredProducts: any[] = [];
@@ -61,8 +63,10 @@ export class ProductFormComponent implements OnInit {
   constructor(
     private readonly builder: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private categoryService: CategoryService,
     private productService: ProductService
+
     // private ingredientService: IngredientService
 
   ) { }
@@ -70,21 +74,24 @@ export class ProductFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initBreadcrumb();
+    this.checkRoute();
   };
 
   private initForm(): void {
     this.form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
-      quantity: ['', [Validators.required, Validators.min(0)]],
+      quantity: [null, Validators.required],
+      price: [null, Validators.required],
+      expirationDate: [null, Validators.required],
       description: [''],
       active: [true],
-      category: [null],
-      expirationDate: [''],
       image: [''],
+      category: [null, Validators.required],
+      parent: [null],
       note: [''],
-      product_variable: ['']
+      product_variable: [''],
+      ingredient: [null]
     })
   }
   
@@ -96,12 +103,49 @@ export class ProductFormComponent implements OnInit {
     this.home = { icon: 'pi pi-home', routerLink: '/' };
   }
 
-  create() {
+  private checkRoute() {
+    const { id } = this.route.snapshot.params;
+    if (id != 'new') {
+      this.loadProduct(id);
+    }
+  }
+
+  private loadProduct(id: string) {
+    this.productService.findById(id).subscribe((product) => {
+      this.form.patchValue(product);
+    });
+  }
+
+  create(): void {
     if (this.form.invalid) {
       return;
     }
-    console.log('Form value:', this.form.value);
-    this.router.navigate(['product']);
+    const { id } = this.route.snapshot.params;
+    const formValue = this.form.value;
+    const product: Product = {
+      id: formValue.id,
+      name: formValue.name,
+      quantity: formValue.quantity,
+      price: formValue.price,
+      expirationDate: formValue.expirationDate,
+      description: formValue.description,
+      active: formValue.active,
+      image: formValue.image,
+      category: formValue.category,
+      parent: formValue.parent,
+      note: formValue.note,
+      productVariables: this.productVariables,
+  };
+    if (id != 'new') {
+      this.productService
+        .update(id, product)
+        .subscribe(() => this.router.navigate(['category']));
+    } else {
+      this.productService
+        .create(product)
+        .subscribe(() => this.router.navigate(['category']));
+    }
+    console.log(product);
   }
 
   cancel() {
@@ -189,7 +233,7 @@ export class ProductFormComponent implements OnInit {
   addProductVariable() {
   const name = this.form.get('product_variable')?.value?.trim();
   if (name) {
-    this.productVariables.push({ name });
+    this.productVariables.push({ name } as ProductVariable);
     this.form.get('product_variable')?.reset();
   }
   }
