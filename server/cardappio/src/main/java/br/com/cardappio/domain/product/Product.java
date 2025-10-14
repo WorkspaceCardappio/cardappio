@@ -62,4 +62,17 @@ public class Product implements EntityModel<UUID> {
     @NotNull
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public static Product of(final ProductDTO dto) {
+        Product product = new Product();
+        product.setId(dto.id());
+        product.setName(dto.name());
+        product.setPrice(dto.price());
+        product.setQuantity(dto.quantity());
+        product.setActive(dto.active());
+        product.setExpirationDate(dto.expirationDate());
+        product.setImage(dto.image());
+        product.setCategory(dto.category());
+        return product;
+    }
 }

@@ -9,6 +9,7 @@ import br.com.cardappio.domain.order.ProductOrder;
 import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record OrderDTO(
@@ -17,9 +18,13 @@ public record OrderDTO(
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal price,
         @NotNull(message = Messages.STATUS_NOT_NULL)
-        OrderStatus orderStatus
+        OrderStatus orderStatus,
+        List<ProductOrder> products
+
+
 ) {
     public OrderDTO(final Order order) {
-        this(order.getId(), order.getPrice(), order.getStatus());
+        this(order.getId(), order.getPrice(), order.getStatus(),
+                order.getProducts());
     }
 }

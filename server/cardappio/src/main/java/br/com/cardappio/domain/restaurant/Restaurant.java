@@ -45,10 +45,10 @@ public class Restaurant {
 
     public static Restaurant of(final RestaurantDTO dto) {
         final Restaurant restaurant = new Restaurant();
-        restaurant.setId(dto.getId());
-        restaurant.setName(dto.getName());
-        restaurant.setActive(dto.getActive());
-        restaurant.setCnpj(dto.getCnpj());
+        restaurant.setId(dto.id());
+        restaurant.setName(dto.name());
+        restaurant.setActive(dto.active());
+        restaurant.setCnpj(dto.cnpj());
         return restaurant;
     }
 }

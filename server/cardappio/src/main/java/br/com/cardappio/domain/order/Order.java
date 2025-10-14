@@ -51,7 +51,6 @@ public class Order implements EntityModel<UUID> {
         order.setPrice(dto.price());
         order.setStatus(dto.orderStatus());
         order.getProducts().addAll(dto.products());
-
         return order;
     }
 
