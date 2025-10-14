@@ -1,12 +1,19 @@
+import { Category } from "./category";
+import { Ingredient } from "./ingredient";
+import { ProductVariable } from "./product_variable";
+
 export interface Product {
     id: string,
-    name: String,
-    price: Number,
-    quantity: Number,
-    description: String,
-    active: Boolean,
-    category: string,
+    name: string,
+    price: number,
+    quantity: number,
+    description?: string,
+    active: boolean,
+    category: Category,
     expirationDate: Date,    
-    image: String,
-    note: String
+    image?: String,
+    note?: String
+    parent?: Product,
+    productVariables?: ProductVariable,
+    ingredients: Ingredient
 }

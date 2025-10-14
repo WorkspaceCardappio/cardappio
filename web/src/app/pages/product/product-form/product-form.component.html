@@ -42,7 +42,7 @@
                     <div class="col-3 flex flex-column mb-4 gap-1">
                       <label for="expirationDate" class="required-label">Data de validade</label>
                       <p-datepicker
-                        [(ngModel)]="date1"
+                        formControlName="expirationDate"
                         [showIcon]="true"
                         inputId="expirationDate"
                         [showOnFocus]="true"
@@ -250,7 +250,7 @@
     <div class="p-fluid">
       <div class="grid mt-2">
         <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
-          <label for="ingredient">Escolher um ingrediente</label>
+          <label for="ingredient" class="required-label">Escolher um ingrediente</label>
           <p-autocomplete
             formControlName="ingredient"
             optionLabel="name"
