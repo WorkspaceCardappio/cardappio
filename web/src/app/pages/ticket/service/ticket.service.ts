@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EntityService } from "cardappio-component-hub";
 import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../../environments/environment";
 
 
 @Injectable({

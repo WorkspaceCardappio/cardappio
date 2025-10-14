@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { TicketService } from '../service/ticket.service';
 import { CardappioListComponent } from 'cardappio-component-hub';
+import { TicketService } from "./service/ticket.service";
 
 @Component({
   selector: 'app-tickets',

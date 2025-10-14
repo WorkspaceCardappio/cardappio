@@ -7,9 +7,9 @@ import {
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
-import { OrderService } from "../order.service";
-import { TicketService } from "../../ticket.service";
-import { ProductService } from "../../product.service";
+import { OrderService } from "../service/order.service";
+import { TicketService } from "../../ticket/service/ticket.service";
+import { ProductService } from "../../product/product.service";
 
 @Component({
   selector: 'app-order-form',

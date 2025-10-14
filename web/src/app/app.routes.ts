@@ -39,8 +39,8 @@ export const routes: Routes = [
   {
     path: 'ticket',
     children: [
-      { path: '', loadComponent: () => import('./ticket/ticket.component').then(m => m.TicketsComponent)},
-      { path: ':id', loadComponent: () => import('./ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
+      { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
+      { path: ':id', loadComponent: () => import('./pages/ticket/ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
     ]
   },
   {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CardapioService } from "./cardapio.service";
+import { CardapioService } from "../service/cardapio.service";
 import { CardappioListComponent } from "cardappio-component-hub";
 
 @Component({

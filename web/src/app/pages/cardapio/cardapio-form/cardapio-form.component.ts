@@ -6,7 +6,7 @@ import {
   SaveButtonComponent,
   ToggleComponent
 } from "cardappio-component-hub";
-import { CardapioService } from "../cardapio-list/cardapio.service";
+import { CardapioService } from "../service/cardapio.service";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
