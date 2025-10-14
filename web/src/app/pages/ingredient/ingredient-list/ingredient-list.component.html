@@ -59,7 +59,7 @@
   <ng-template #body let-ingredient>
     <tr>
       <td>{{ ingredient.name }}</td>
-      <td>{{ ingredient.unityOfMeasurement }}</td>
+      <td>{{ ingredient.unityOfMeasurement?.description }}</td>
       <td>
         @if (ingredient.active) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>

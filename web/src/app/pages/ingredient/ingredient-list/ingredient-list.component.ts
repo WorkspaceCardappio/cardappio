@@ -39,8 +39,7 @@ export class IngredientsComponent implements OnInit {
   ingredients: any[] = [];
   totalRecords: number = 0;
   loading = false;
-  unityOfMeasurement: any[] = [];
-  selectedUnity: any | undefined;
+  
 
   constructor(public service: IngredientService, private cdr: ChangeDetectorRef, private router: Router) { }
 
@@ -52,14 +51,6 @@ export class IngredientsComponent implements OnInit {
       sortOrder: 1,
       filters: {},
     });
-
-    this.unityOfMeasurement = [
-      { code: 1, description: 'Litro' },
-      { code: 2, description: 'Mililitro' },
-      { code: 3, description: 'Grama' },
-      { code: 4, description: 'Quilograma' },
-      { code: 5, description: 'Unidade' },
-    ]
   }
 
   clear(table: any) {
