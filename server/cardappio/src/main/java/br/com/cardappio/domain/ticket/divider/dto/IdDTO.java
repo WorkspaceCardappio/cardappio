@@ -1,0 +1,13 @@
+package br.com.cardappio.domain.ticket.divider.dto;
+
+import java.util.UUID;
+
+import br.com.cardappio.utils.Messages;
+import jakarta.validation.constraints.NotNull;
+
+public record IdDTO(
+
+        @NotNull(message = Messages.CODE_NOT_FOUND)
+        UUID id
+
+) { }
