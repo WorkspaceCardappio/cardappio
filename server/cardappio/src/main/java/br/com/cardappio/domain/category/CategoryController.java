@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-<<<<<<< HEAD
-@RequestMapping("/api/categories")
-public class CategoryController extends CrudController<Category, UUID, CategoryDTO, CategoryDTO> {
+@RequestMapping("/api/categorias")
+public class CategoryController extends CrudController<Category, UUID, CategoryListDTO, CategoryDTO> {
 }
