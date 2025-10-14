@@ -1,17 +1,17 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from "@angular/common/http";
-// import { EntityService } from "cardappio-component-hub";
-// import { environment } from "../../../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../../environments/environment";
+import { EntityService } from "../../../entity-service/entity.service";
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class OrderService extends EntityService<any, any> {
+@Injectable({
+  providedIn: 'root'
+})
+export class OrderService extends EntityService<any, any> {
 
-//   override resource: string = `${environment.apiUrl}/orders`;
+  override resource: string = `${environment.apiUrl}/orders`;
 
-//   constructor(public http: HttpClient) {
-//     super(http);
-//   }
+  constructor(public http: HttpClient) {
+    super(http);
+  }
 
-// }
+}

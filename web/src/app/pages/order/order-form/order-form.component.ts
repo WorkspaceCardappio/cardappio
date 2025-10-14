@@ -1,176 +1,189 @@
-// import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-// import {
-//   AutocompleteComponent,
-//   CancelButtonComponent,
-//   SaveButtonComponent
-// } from "cardappio-component-hub";
-// import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-// import { ActivatedRoute, Router } from "@angular/router";
-// import { forkJoin, Observable, of } from "rxjs";
-// import { OrderService } from "../service/order.service";
-// import { TicketService } from "../../ticket/service/ticket.service";
-// import { ProductService } from "../../product/product.service";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { forkJoin, of } from "rxjs";
+import { OrderService } from "../service/order.service";
+import { ProductService } from "../../product/product.service";
+import { TicketService } from "../../ticket/service/ticket.service";
 
-// @Component({
-//   selector: 'app-order-form',
-//   imports: [
-//     CancelButtonComponent,
-//     ReactiveFormsModule,
-//     SaveButtonComponent,
-//     AutocompleteComponent
-//   ],
-//   templateUrl: './order-form.component.html',
-//   styleUrl: './order-form.component.scss'
-// })
-// export class OrderFormComponent implements OnInit {
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ButtonModule } from 'primeng/button';
 
-//   orderId: string | null = null;
-//   isEditMode = false;
-//   orderForm: FormGroup;
-//   initialTicket: any = null;
+@Component({
+  selector: 'app-order-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    AutoCompleteModule,
+    InputNumberModule,
+    ButtonModule
+  ],
+  templateUrl: './order-form.component.html',
+  styleUrl: './order-form.component.scss'
+})
+export class OrderFormComponent implements OnInit {
 
-//   constructor(
-//     private readonly orderService: OrderService,
-//     private readonly ticketService: TicketService,
-//     private readonly productService: ProductService,
-//     private readonly router: Router,
-//     private readonly route: ActivatedRoute,
-//     private readonly cdr: ChangeDetectorRef,
-//     private readonly fb: FormBuilder
-//   ) {
-//     this.orderForm = this.fb.group({
-//       id: [''],
-//       price: [0, [Validators.required, Validators.min(0)]],
-//       orderStatus: ['PENDING', Validators.required],
-//       products: [[], Validators.required],
-//       ticket: [null, Validators.required]
-//     });
-//   }
+  orderId: string | null = null;
+  isEditMode = false;
+  orderForm: FormGroup;
 
-//   ngOnInit(): void {
-//     this.orderId = this.route.snapshot.paramMap.get('id');
-//     this.isEditMode = !!this.orderId;
+  filteredProducts: any[] = [];
+  filteredTickets: any[] = [];
 
-//     if (this.isEditMode) {
-//       this.loadOrder();
-//     }
-//   }
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly ticketService: TicketService,
+    private readonly productService: ProductService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly fb: FormBuilder
+  ) {
+    this.orderForm = this.fb.group({
+      id: [''],
+      price: [0, [Validators.required, Validators.min(0)]],
+      orderStatus: ['PENDING', Validators.required],
+      products: [[], Validators.required],
+      ticket: [null, Validators.required]
+    });
+  }
 
-//   ticketsSrc = (query: string): Observable<any[]> => {
-//     const searches = query ? [`number=ilike=${query}%`] : [];
-//     return this.ticketService.findAll(20, searches.join(';'));
-//   }
+  ngOnInit(): void {
+    this.orderId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.orderId;
 
-//   productsSrc = (query: string): Observable<any[]> => {
-//     const searches = query ? [`name=ilike=${query}%`] : [];
-//     return this.productService.findAll(20, searches.join(';'));
-//   }
+    if (this.isEditMode) {
+      this.loadOrder();
+    }
+  }
 
-//   displayProduct = (item: any): string => item?.name || '';
+  searchProducts(event: any): void {
+    const query = event.query || '';
+    const searches = query ? [`name=ilike=${query}%`] : [];
 
-//   displayTicket = (item: any): string => {
-//     return item?.number?.toString() || '';
-//   }
+    this.productService.findAll(20, searches.join(';')).subscribe({
+      next: (products) => {
+        this.filteredProducts = products;
+      },
+      error: () => {
+        this.filteredProducts = [];
+      }
+    });
+  }
 
-//   onCancel(): void {
-//     this.navigateToList();
-//   }
+  searchTickets(event: any): void {
+    const query = event.query || '';
+    const searches = query ? [`number=ilike=${query}%`] : [];
 
-//   onSave(): void {
-//     if (this.orderForm.invalid) {
-//       return;
-//     }
+    this.ticketService.findAll(20, searches.join(';')).subscribe({
+      next: (tickets) => {
+        this.filteredTickets = tickets;
+      },
+      error: () => {
+        this.filteredTickets = [];
+      }
+    });
+  }
 
-//     const { price, orderStatus, products, ticket } = this.orderForm.value;
+  onCancel(): void {
+    this.navigateToList();
+  }
 
-//     const orderPayload = {
-//       price: price || 0,
-//       orderStatus: orderStatus || 'PENDING',
-//       ticketId: ticket.id,
-//       products: this.formatProducts(products)
-//     };
+  onSave(): void {
+    if (this.orderForm.invalid) {
+      console.log('Formulário inválido');
+      return;
+    }
 
-//     if (this.isEditMode) {
-//       this.updateOrder(orderPayload);
-//     } else {
-//       this.createOrder(orderPayload);
-//     }
-//   }
+    const { price, orderStatus, products, ticket } = this.orderForm.value;
 
-//   private formatProducts(products: any[]): any[] {
-//     if (!products || !Array.isArray(products)) {
-//       return [];
-//     }
+    const orderPayload = {
+      price: price || 0,
+      orderStatus: orderStatus || 'PENDING',
+      ticketId: ticket?.id,
+      products: this.formatProducts(products)
+    };
 
-//     return products.map(product => ({
-//       product: { id: product.id }
-//     }));
-//   }
+    if (this.isEditMode && this.orderId) {
+      this.updateOrder(orderPayload);
+    } else {
+      this.createOrder(orderPayload);
+    }
+  }
 
-//   private loadOrder(): void {
-//     if (!this.orderId) return;
+  private formatProducts(products: any[]): any[] {
+    if (!products || !Array.isArray(products)) {
+      return [];
+    }
 
-//     this.orderService.findById(this.orderId).subscribe({
-//       next: (order) => {
-//         if (order.ticketId) {
-//           forkJoin({
-//             order: of(order),
-//             ticket: this.ticketService.findById(order.ticketId)
-//           }).subscribe({
-//             next: ({ order, ticket }) => {
+    return products.map(product => ({
+      product: { id: product.id }
+    }));
+  }
 
-//               this.initialTicket = ticket;
+  private loadOrder(): void {
+    if (!this.orderId) return;
 
-//               this.orderForm.patchValue({
-//                 id: order.id,
-//                 price: order.price || 0,
-//                 orderStatus: order.orderStatus || 'PENDING',
-//                 products: order.products || [],
-//                 ticket: ticket
-//               });
+    this.orderService.findById(this.orderId).subscribe({
+      next: (order) => {
+        if (order.ticketId) {
+          forkJoin({
+            order: of(order),
+            ticket: this.ticketService.findById(order.ticketId)
+          }).subscribe({
+            next: ({ order, ticket }) => {
+              this.orderForm.patchValue({
+                id: order.id,
+                price: order.price || 0,
+                orderStatus: order.orderStatus || 'PENDING',
+                products: order.products || [],
+                ticket: ticket
+              });
+            },
+            error: () => {
+              this.navigateToList();
+            }
+          });
+        } else {
+          this.orderForm.patchValue({
+            id: order.id,
+            price: order.price || 0,
+            orderStatus: order.orderStatus || 'PENDING',
+            products: order.products || []
+          });
+        }
+      },
+      error: () => {
+        this.navigateToList();
+      }
+    });
+  }
 
-//               this.cdr.detectChanges();
+  private createOrder(payload: any): void {
+    this.orderService.create(payload).subscribe({
+      next: () => {
+        this.navigateToList();
+      },
+      error: (error) => {
+        console.error('Erro ao criar pedido:', error);
+      }
+    });
+  }
 
-//             },
-//             error: (error) => {
-//               this.navigateToList();
-//             }
-//           });
-//         } else {
-//           this.orderForm.patchValue({
-//             id: order.id,
-//             price: order.price || 0,
-//             orderStatus: order.orderStatus || 'PENDING',
-//             products: order.products || []
-//           });
-//           this.cdr.detectChanges();
-//         }
-//       },
-//       error: (error) => {
-//         this.navigateToList();
-//       }
-//     });
-//   }
+  private updateOrder(payload: any): void {
+    if (!this.orderId) return;
 
-//   private createOrder(payload: any): void {
-//     this.orderService.create(payload).subscribe({
-//       next: () => {
-//         this.navigateToList();
-//       }
-//     });
-//   }
+    this.orderService.update(this.orderId, payload).subscribe({
+      next: () => {
+        this.navigateToList();
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar pedido:', error);
+      }
+    });
+  }
 
-//   private updateOrder(payload: any): void {
-//     if (!this.orderId) return;
-
-//     this.orderService.update(this.orderId, payload).subscribe({
-//       next: () => {
-//         this.navigateToList();
-//       }
-//     });
-//   }
-
-//   navigateToList(): void {
-//     this.router.navigate(['/order']);
-//   }
-// }
+  navigateToList(): void {
+    this.router.navigate(['/order']);
+  }
+}

@@ -1,39 +1,71 @@
-<!-- <div class="cardapio-form-fullscreen">
-  <h1>
-    <span class="breadcrumb-link" (click)="navigateToList()">Pedido</span>
-    <span> › {{ isEditMode ? 'Editar' : 'Novo' }}</span>
-  </h1>
-  <br><br><br><br>
+<div class="order-form-container">
+  <div class="header-section">
+    <h2 class="breadcrumb">
+      <span class="link" (click)="navigateToList()">Pedidos</span>
+      <span> › {{ isEditMode ? 'Editar' : 'Novo' }}</span>
+    </h2>
+  </div>
 
-  <div class="form-container" [formGroup]="orderForm">
-    <div class="field-group">
-      <cardappio-autocomplete
-        [placeholder]="'Vincular Produtos'"
-        [isMultiple]="true"
-        [size]="40"
-        [topLabelInput]="'Selecione os Produtos'"
-        [search]="productsSrc"
-        formControlName="products"
-        [displayField]="displayProduct">
-      </cardappio-autocomplete>
-    </div>
-    <br>
+  <form [formGroup]="orderForm" class="form-content">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="products" class="field-label">Produtos</label>
+        <p-autoComplete
+          id="products"
+          formControlName="products"
+          [suggestions]="filteredProducts"
+          (completeMethod)="searchProducts($event)"
+          [multiple]="true"
+          [dropdown]="true"
+          placeholder="Selecione"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-autoComplete>
+      </div>
 
-    <div class="field-group">
-      <cardappio-autocomplete
-        [placeholder]="'Vincular uma comanda'"
-        [isMultiple]="false"
-        [size]="40"
-        [topLabelInput]="'Selecione uma comanda'"
-        [search]="ticketsSrc"
-        formControlName="ticket"
-        [displayField]="displayTicket">
-      </cardappio-autocomplete>
+      <div class="form-field">
+        <label for="ticket" class="field-label">Comanda</label>
+        <p-autoComplete
+          id="ticket"
+          formControlName="ticket"
+          [suggestions]="filteredTickets"
+          (completeMethod)="searchTickets($event)"
+          [dropdown]="true"
+          placeholder="Selecione"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-autoComplete>
+      </div>
     </div>
+
+    <div class="form-field price-form">
+      <label for="price" class="field-label">Preço Final</label>
+      <p-inputNumber
+        id="price"
+        formControlName="price"
+        mode="currency"
+        currency="BRL"
+        locale="pt-BR"
+        placeholder="R$ 0,00"
+        styleClass="w-full">
+      </p-inputNumber>
+    </div>
+
+  </form>
+
+  <div class="form-actions">
+    <p-button
+      label="Cancelar"
+      [outlined]="true"
+      severity="secondary"
+      (onClick)="onCancel()">
+    </p-button>
+
+    <p-button
+      label="Salvar"
+      severity="success"
+      (onClick)="onSave()"
+      [disabled]="orderForm.invalid">
+    </p-button>
   </div>
 </div>
-
-<div class="form-actions">
-  <cardappio-cancel-button (click)="onCancel()"></cardappio-cancel-button>
-  <cardappio-save-button (click)="onSave()"></cardappio-save-button>
-</div> -->

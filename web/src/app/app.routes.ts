@@ -47,23 +47,23 @@ export const routes: Routes = [
   //   redirectTo: '/home',
   //   pathMatch: 'full'
   // },
-  // {
-  //   path: 'order',
-  //   children: [
-  //     {
-  //       path: '',
-  //       loadComponent: () => import('./pages/order/order-list/order-list.component').then(m => m.OrderListComponent)
-  //     },
-  //     {
-  //       path: 'new',
-  //       loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
-  //     },
-  //     {
-  //       path: ':id',
-  //       loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
-  //     },
-  //   ]
-  // },
+  {
+    path: 'order',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/order/order-list/order-list.component').then(m => m.OrderListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
+      },
+    ]
+  },
   {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
