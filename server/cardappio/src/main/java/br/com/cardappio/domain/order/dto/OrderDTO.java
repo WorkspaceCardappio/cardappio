@@ -15,11 +15,11 @@ public record OrderDTO(
         UUID id,
         @NotNull(message = Messages.MIN_VALUE_ZERO)
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-        BigDecimal price,
+        BigDecimal total,
         @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus
 ) {
     public OrderDTO(final Order order) {
-        this(order.getId(), order.getPrice(), order.getStatus());
+        this(order.getId(), order.getTotal(), order.getStatus(), order.getProductOrders());
     }
 }

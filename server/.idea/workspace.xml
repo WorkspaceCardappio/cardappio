@@ -5,32 +5,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d4ff2f3-0708-4492-ba05-b24d8069ea16" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/../docker-compose-keycloak/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/ProductOrderRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/person/PersonRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/product/ProductIngredient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/divider/DividerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/divider/dto/DividerOrdersDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/divider/dto/IdDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509052230__product_ingredient.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182133__order_status.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182135__order.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182136__product_order.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/java/br/com/cardappio/integration/ticket/divider/DividerServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/address/insert_address.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/category/insert_category.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/divider_ticket/insert_divider.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/person/insert_person.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/restaurant/insert_restaurant.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cardappio/src/test/resources/inserts/table_restaurant/insert_table_restaurant.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cardappio/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/converter/PersonTypeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/converter/PersonTypeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/address/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/address/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/city/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/city/City.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/ProductOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/ProductOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/dto/OrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/order/dto/OrderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/product/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/product/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/product/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/product/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/restaurant/Restaurant.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/restaurant/Restaurant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/table/TableRestaurant.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/table/TableRestaurant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/TicketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/TicketController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/TicketRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/TicketRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/dto/TicketDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/dto/TicketDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/dto/TicketListDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/domain/ticket/dto/TicketListDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/enums/PersonType.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/enums/PersonType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/utils/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/utils/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202502092017__restaurant.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202502092017__restaurant.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202502092105__table_restaurant.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202502092105__table_restaurant.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509032230__menu_product.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509032230__menu_product.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182119__person_type.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182119__person_type.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182120__person.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182120__person.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182132__ticket.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/resources/db/migration/V202509182132__ticket.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/screens/cardapio/cardapio-list/cardapio-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/screens/cardapio/cardapio-list/cardapio-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/service/ticket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/service/ticket.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/ticket-form/ticket-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/ticket-form/ticket-form.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/ticket-form/ticket-form.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/ticket-form/ticket-form.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/ticket/ticket.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/ticket/ticket.component.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +90,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -74,7 +100,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CardappioApplication.executor": "Debug",
-    "git-widget-placeholder": "#23 on CP-230-tela-de-cardapio-2",
+    "git-widget-placeholder": "Merging CP-269-cardappio-dtos",
+    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/joaorolo/escola-ti/cardappio/web",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -104,14 +131,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
