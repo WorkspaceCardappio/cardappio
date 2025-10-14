@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS client_order (
+CREATE TABLE IF NOT EXISTS client_order(
     id UUID PRIMARY KEY,
     total DECIMAL(10,2) NOT NULL,
     status NUMERIC(10),

@@ -6,35 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.validator.constraints.Length;
-
+import br.com.cardappio.domain.product.dto.ProductDTO;
 import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.category.Category;
-import br.com.cardappio.domain.product.dto.ProductDTO;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table
@@ -66,6 +52,9 @@ public class Product implements EntityModel<UUID> {
     private BigDecimal quantity;
 
     @Column
+    private String description;
+
+    @Column
     private Boolean active = Boolean.TRUE;
 
     @Column
@@ -75,6 +64,9 @@ public class Product implements EntityModel<UUID> {
     @Column
     @Length(max = 255, message = Messages.SIZE_255)
     private String image;
+
+    @Column
+    private String note;
 
     @ManyToOne
     @NotNull
@@ -86,7 +78,15 @@ public class Product implements EntityModel<UUID> {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductIngredient> productIngredients = new ArrayList<>();
 
-    public static Product of(final ProductDTO dto) {
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("parent")
+    private List<Product> additional = new ArrayList<>();
+
+    public static Product of(final ProductDTO dto){
 
         final Product product = new Product();
         product.setId(dto.id());

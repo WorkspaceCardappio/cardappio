@@ -101,4 +101,5 @@ public class Order implements EntityModel<UUID> {
         order.setId(id);
         return order;
     }
+
 }

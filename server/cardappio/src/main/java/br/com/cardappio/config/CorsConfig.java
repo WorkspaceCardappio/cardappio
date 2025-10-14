@@ -21,4 +21,5 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods(String.valueOf(corsProperties.getAllowedMethods()))
                 .allowedHeaders(String.valueOf(corsProperties.getAllowedHeaders()));
     }
+
 }
