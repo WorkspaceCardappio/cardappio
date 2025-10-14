@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS order_status (
 
 INSERT INTO order_status (code, description) VALUES
 (1, 'Pendente'),
-(2, 'Em andamento'),
+(2, 'Em Andamento'),
 (3, 'Finalizado'),
 (4, 'Entregue');

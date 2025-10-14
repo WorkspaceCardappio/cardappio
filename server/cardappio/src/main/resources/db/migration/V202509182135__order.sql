@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS client_order(
     id UUID PRIMARY KEY,
-    price DECIMAL(10,2) NOT NULL,
+    total DECIMAL(10,2) NOT NULL,
     status NUMERIC(10),
     ticket_id UUID NOT NULL,
 

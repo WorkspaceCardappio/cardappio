@@ -43,7 +43,7 @@ public class Address {
 
     @NotBlank(message = Messages.EMPTY_ZIP_CODE)
     @Size(max = 8)
-    @Column(nullable = false)
+    @Column(name = "zip_code", nullable = false)
     private String zipCode;
 
     @NotBlank(message = Messages.EMPTY_DISTRICT)
@@ -61,6 +61,6 @@ public class Address {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
 }

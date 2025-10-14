@@ -2,6 +2,7 @@ package br.com.cardappio.domain.order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
@@ -9,8 +10,8 @@ import com.cardappio.core.entity.EntityModel;
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -43,16 +44,30 @@ public class ProductOrder implements EntityModel<UUID> {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @JsonIgnoreProperties("productOrder")
-    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ProductOrderAdditional> additionals = new ArrayList<>();
+    @Column
+    @NotNull(message = Messages.INGREDIENT_NOT_NULL)
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal quantity;
+
+    @Column
+    @NotNull
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal price;
+
+    @Column
+    @NotNull
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal total = BigDecimal.ZERO;
+
+    @Column
+    private String note;
 
     public static ProductOrder of(final ProductOrderDTO dto) {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(dto.id());
-        productOrder.setOrder(dto.order());
-        productOrder.setProduct(dto.product());
+        productOrder.setOrder(Order.of(dto.orderId()));
+        productOrder.setProduct(Product.of(dto.productId()));
 
         return productOrder;
     }
