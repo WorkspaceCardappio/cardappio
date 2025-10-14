@@ -32,7 +32,7 @@ import { CategoryService } from '../service/category.service';
     BreadcrumbModule,
     IconFieldModule,
     CardModule,
-    FieldsetModule
+    FieldsetModule,
   ],
   providers: [CategoryService],
   templateUrl: './category-form.component.html',
@@ -93,11 +93,11 @@ export class CategoryFormComponent implements OnInit {
 
     if (id != 'new') {
       this.service
-        .update(id, this.form.value)
+        .update(id, this.prepareForm())
         .subscribe(() => this.router.navigate(['category']));
     } else {
       this.service
-        .create(this.form.value)
+        .create(this.prepareForm())
         .subscribe(() => this.router.navigate(['category']));
     }
   }
@@ -149,5 +149,13 @@ export class CategoryFormComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  prepareForm() {
+    const raw = this.form.getRawValue();
+    return {
+      ...raw,
+      parent: raw.parent === '' ? null : raw.parent,
+    };
   }
 }
