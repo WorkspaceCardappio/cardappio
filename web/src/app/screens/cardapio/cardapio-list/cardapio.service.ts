@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { EntityService } from "cardappio-component-hub";
 import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { EntityService } from "../../../entity-service/entity.service";
 
 @Injectable({
   providedIn: 'root'

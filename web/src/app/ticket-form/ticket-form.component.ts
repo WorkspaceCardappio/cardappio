@@ -1,20 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { TicketService } from '../service/ticket.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AutocompleteComponent, CancelButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
+import { TicketService } from '../service/ticket.service';
 
 @Component({
   selector: 'app-ticket-form',
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    AutocompleteComponent,
-    InputComponent,
-    CancelButtonComponent,
-    SaveButtonComponent
 ],
   providers: [TicketService],
   templateUrl: './ticket-form.component.html',
@@ -39,7 +34,7 @@ export class TicketFormComponent implements OnInit{
 
   private getActiveId(){
     const { id } = this.route.snapshot.params;
-    return id;   
+    return id;
   }
 
   private initForm(){
@@ -79,7 +74,7 @@ export class TicketFormComponent implements OnInit{
       this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['ticket']));
     } else {
       this.service.create(this.form.value).subscribe(() => this.router.navigate(['ticket']));
-    }  
+    }
   }
 
   cancel(){

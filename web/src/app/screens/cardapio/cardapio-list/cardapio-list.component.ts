@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CardapioService } from "./cardapio.service";
-import { CardappioListComponent } from "cardappio-component-hub";
 
 @Component({
   selector: 'app-cardapio-list',
   imports: [
-    CardappioListComponent
   ],
   templateUrl: './cardapio-list.component.html',
   styleUrl: './cardapio-list.component.scss'

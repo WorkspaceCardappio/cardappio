@@ -1,23 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import {
-  CancelButtonComponent,
-  ImageUploadComponent,
-  InputComponent,
-  SaveButtonComponent,
-  ToggleComponent
-} from "cardappio-component-hub";
-import { CardapioService } from "../cardapio-list/cardapio.service";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { CardapioService } from "../cardapio-list/cardapio.service";
 
 @Component({
   selector: 'app-cardapio-form',
   imports: [
-    InputComponent,
-    ImageUploadComponent,
-    ToggleComponent,
-    CancelButtonComponent,
-    SaveButtonComponent,
     ReactiveFormsModule,
     FormsModule
   ],
