@@ -2,6 +2,7 @@ package br.com.cardappio.domain.additional.adapter;
 
 import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.additional.dto.AdditionalDTO;
+import br.com.cardappio.domain.product.ProductRepository;
 import com.cardappio.core.adapter.Adapter;
 
 public class AdditionalAdapter implements Adapter<Additional, AdditionalDTO, AdditionalDTO> {

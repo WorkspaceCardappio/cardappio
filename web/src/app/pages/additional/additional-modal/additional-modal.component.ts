@@ -48,7 +48,6 @@ export class AdditionalComponent implements OnInit {
   private initForm(): void {
     this.form = this.builder.group({
       id: [''],
-      name: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
       note: ['']
     })

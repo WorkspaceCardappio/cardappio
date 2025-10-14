@@ -35,10 +35,7 @@ public class ProductOrderAdditional implements EntityModel<UUID> {
     @JoinColumn(name = "product_order_id")
     private ProductOrder productOrder;
 
-    @NotNull(message = Messages.PRODUCT_NOT_NULL)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "additional_id", nullable = false)
-    private Additional additional;
+    private BigDecimal price;
 
     @Column
     private BigDecimal quantity;
