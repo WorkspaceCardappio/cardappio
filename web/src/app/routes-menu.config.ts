@@ -15,6 +15,11 @@ export const routesMenu = [
     path: 'product',
     name: 'Produtos',
     icon: 'fa-solid fa-shrimp'
+  },
+  {
+    path: 'ingredient',
+    name: 'Ingredientes',
+    icon: 'fa-solid fa-seedling'
     },
   {
     path: 'menu',
