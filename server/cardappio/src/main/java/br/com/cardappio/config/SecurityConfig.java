@@ -16,12 +16,13 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/public/**")
+                        auth.requestMatchers("/**", "public/categories")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(Customizer.withDefaults()));
+                        oauth2.jwt(Customizer.withDefaults()))
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
