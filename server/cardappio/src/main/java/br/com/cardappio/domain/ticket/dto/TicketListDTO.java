@@ -8,7 +8,7 @@ public record TicketListDTO(
 
         UUID id,
 
-        String number,
+        Long number,
 
         Long code,
 

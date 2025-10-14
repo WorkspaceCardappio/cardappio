@@ -16,7 +16,7 @@ public record OrderDTO(
         UUID id,
         @NotNull(message = Messages.MIN_VALUE_ZERO)
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-        BigDecimal price,
+        BigDecimal total,
         @NotNull(message = Messages.STATUS_NOT_NULL)
         OrderStatus orderStatus,
         List<ProductOrderDTO> products,
@@ -28,9 +28,9 @@ public record OrderDTO(
     public OrderDTO(final Order order) {
         this(
                 order.getId(),
-                order.getPrice(),
+                order.getTotal(),
                 order.getStatus(),
-                order.getProducts().stream()
+                order.getProductOrders().stream()
                         .map(ProductOrderDTO::new)
                         .collect(Collectors.toList()),
                 order.getTicket().getId(),

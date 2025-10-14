@@ -37,6 +37,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
+    path: 'ticket',
+    children: [
+      { path: '', loadComponent: () => import('./ticket/ticket.component').then(m => m.TicketsComponent)},
+      { path: ':id', loadComponent: () => import('./ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
+    ]
+  },
+  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full'

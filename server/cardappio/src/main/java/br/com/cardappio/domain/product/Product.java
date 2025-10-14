@@ -2,16 +2,20 @@ package br.com.cardappio.domain.product;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.domain.product.dto.ProductDTO;
 import br.com.cardappio.utils.Messages;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +23,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
@@ -76,6 +81,10 @@ public class Product implements EntityModel<UUID> {
     @JsonIgnore
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @JsonIgnoreProperties("product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductIngredient> productIngredients = new ArrayList<>();
 
     public static Product of(final ProductDTO dto) {
 

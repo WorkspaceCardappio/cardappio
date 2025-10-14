@@ -20,5 +20,10 @@ export const routesMenu = [
     path: 'order',
     name: 'Pedidos',
     icon: 'fa-solid fa-cutlery'
-  }
+  },
+   {
+    path: 'ticket',
+    name: 'Comandas',
+    icon: 'fa-solid fa-ticket-simple'
+  },
 ];

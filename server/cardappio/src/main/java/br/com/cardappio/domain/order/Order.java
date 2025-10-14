@@ -36,14 +36,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Table(name = "client_order")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Table(name = "client_order")
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "total", "status"})
 public class Order implements EntityModel<UUID> {
 
     @Id
@@ -56,7 +56,7 @@ public class Order implements EntityModel<UUID> {
     @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal total = BigDecimal.ZERO;
 
     @Column(nullable = false)
     @NotNull(message = Messages.STATUS_NOT_NULL)
@@ -70,7 +70,7 @@ public class Order implements EntityModel<UUID> {
 
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("order")
-    private List<ProductOrder> products = new ArrayList<>();
+    private List<ProductOrder> productOrders = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -84,7 +84,7 @@ public class Order implements EntityModel<UUID> {
 
         final Order order = new Order();
         order.setId(dto.id());
-        order.setPrice(dto.price());
+        order.setTotal(dto.total());
         order.setStatus(dto.orderStatus());
         order.setTicket(Ticket.of(dto.ticketId()));
 
@@ -92,7 +92,7 @@ public class Order implements EntityModel<UUID> {
                 .map(ProductOrder::of)
                 .toList();
 
-        order.getProducts().addAll(productOrders);
+        order.productOrders.addAll(productOrders);
         return order;
     }
 
