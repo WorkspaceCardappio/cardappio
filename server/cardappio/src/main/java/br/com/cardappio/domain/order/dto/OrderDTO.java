@@ -1,8 +1,10 @@
 package br.com.cardappio.domain.order.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.enums.OrderStatus;

@@ -1,5 +1,6 @@
 package br.com.cardappio.domain.order;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
@@ -8,6 +9,7 @@ import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
