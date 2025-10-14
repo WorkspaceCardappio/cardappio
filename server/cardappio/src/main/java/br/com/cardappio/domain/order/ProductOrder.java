@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.cardappio.domain.additional.ProductOrderAdditional;
 import com.cardappio.core.entity.EntityModel;
 
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;

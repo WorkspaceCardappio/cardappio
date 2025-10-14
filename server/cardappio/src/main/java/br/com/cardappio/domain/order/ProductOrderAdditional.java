@@ -1,18 +1,12 @@
-package br.com.cardappio.domain.additional;
+package br.com.cardappio.domain.order;
 
-import br.com.cardappio.domain.additional.dto.ProductOrderAdditionalDTO;
-import br.com.cardappio.domain.order.ProductOrder;
-import br.com.cardappio.domain.product.Product;
-import br.com.cardappio.utils.Messages;
+import br.com.cardappio.domain.order.dto.ProductOrderAdditionalDTO;
 import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 
