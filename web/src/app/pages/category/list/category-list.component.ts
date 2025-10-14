@@ -1,62 +1,53 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { InputNumber } from "primeng/inputnumber";
 import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { SelectModule } from 'primeng/select';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
 import { finalize } from 'rxjs';
-import { Product } from '../../../model/product';
-import { ProductService } from '../service/product.service';
+import { CategoryService } from '../service/category.service';
 
 @Component({
-  selector: 'app-product',
+  selector: 'app-category',
   imports: [
     TableModule,
-    TagModule,
-    IconFieldModule,
-    InputTextModule,
-    InputIconModule,
-    MultiSelectModule,
-    SelectModule,
-    HttpClientModule,
-    CommonModule,
-    InputNumber,
-    FormsModule,
     ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    CommonModule,
+    FormsModule,
+    InputTextModule,
     RouterLink,
-
-],
-  providers: [ ProductService ],
-  templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.scss'
+    BreadcrumbModule,
+  ],
+  providers: [CategoryService],
+  templateUrl: './category-list.component.html',
+  styleUrl: './category-list.component.scss',
 })
-export class ProductComponent implements OnInit {
+export class CategoryComponent implements OnInit {
+
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Produtos', routerLink: '/product' }]
-  products: Product[] = [];
+  items = [{ label: 'Categorias', routerLink: '/category' }];
+
+  categories: any[] = [];
   totalRecords: number = 0;
-  loading: boolean = true;
+  loading = false;
 
-  constructor(public service: ProductService,  private cdr: ChangeDetectorRef, private router: Router) { }
+  constructor(public service: CategoryService, private cdr: ChangeDetectorRef, private router: Router) {}
 
-  ngOnInit() {
-    this.loadProducts({
+  ngOnInit(): void {
+    this.loadCategories({
       first: 0,
       rows: 20,
       sortField: '',
       sortOrder: 1,
-      filters: {}
+      filters: {},
     });
-    this.loading = false;
   }
 
   clear(table: any) {
@@ -64,10 +55,11 @@ export class ProductComponent implements OnInit {
   }
 
   onEdit(id: any) {
-    this.router.navigate([`product`, id]);
+    this.router.navigate([`category`, id]);
   }
+
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadProducts({
+    this.service.delete(id).subscribe(() => this.loadCategories({
       first: 0,
       rows: 20,
       sortField: '',
@@ -76,7 +68,7 @@ export class ProductComponent implements OnInit {
     }));
   }
 
-  loadProducts(event: TableLazyLoadEvent) {
+  loadCategories(event: TableLazyLoadEvent) {
     this.loading = true;
 
     const page = (event.first ?? 0) / (event?.rows ?? 20);
@@ -100,7 +92,7 @@ export class ProductComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.products = response.content;
+          this.categories = response.content;
           this.totalRecords = response.totalElements;
         },
         error: () => {},

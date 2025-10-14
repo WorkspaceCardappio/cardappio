@@ -15,7 +15,6 @@ import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.domain.ticket.divider.DividerService;
 import br.com.cardappio.domain.ticket.divider.dto.DividerOrdersDTO;
-import br.com.cardappio.domain.ticket.divider.dto.IdDTO;
 import br.com.cardappio.enums.TicketStatus;
 import br.com.cardappio.integration.IntegrationTestBase;
 import jakarta.persistence.EntityNotFoundException;
