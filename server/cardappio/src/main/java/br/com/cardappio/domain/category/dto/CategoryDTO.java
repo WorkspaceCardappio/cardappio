@@ -1,11 +1,12 @@
 package br.com.cardappio.domain.category.dto;
 
-import br.com.cardappio.domain.category.Category;
-import br.com.cardappio.utils.Messages;
-import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
+
 import org.hibernate.validator.constraints.Length;
 
-import java.util.UUID;
+import br.com.cardappio.utils.IdDTO;
+import br.com.cardappio.utils.Messages;
+import jakarta.validation.constraints.NotBlank;
 
 public record CategoryDTO(
 
@@ -19,16 +20,6 @@ public record CategoryDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
-        Category subCategory
-) {
-    public CategoryDTO(final Category category) {
-        this(
-                category.getId(),
-                category.getName(),
-                category.getActive(),
-                category.getImage(),
-                category.getParent()
-        );
-    }
-}
+        IdDTO parent
+) {}
 

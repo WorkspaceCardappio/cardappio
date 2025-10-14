@@ -15,7 +15,7 @@ public record CityListDTO(
         this(
                 city.getId(),
                 city.getName(),
-                city.getAddress() != null ? city.getAddress().getStreet() : null
+                city.getState() != null ? city.getState().getName() : null
         );
     }
 }

@@ -4,16 +4,10 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
+import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -45,5 +39,33 @@ public class ProductOrder implements EntityModel<UUID> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column
+    @NotNull(message = Messages.INGREDIENT_NOT_NULL)
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal quantity;
+
+    @Column
+    @NotNull
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal price;
+
+    @Column
+    @NotNull
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal total = BigDecimal.ZERO;
+
+    @Column
+    private String note;
+
+    public static ProductOrder of(final ProductOrderDTO dto) {
+
+        final ProductOrder productOrder = new ProductOrder();
+        productOrder.setId(dto.id());
+        productOrder.setOrder(Order.of(dto.orderId()));
+        productOrder.setProduct(Product.of(dto.productId()));
+
+        return productOrder;
+    }
 
 }

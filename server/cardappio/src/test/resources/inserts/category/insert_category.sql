@@ -1,0 +1,1 @@
+insert into category(id, name) values ('0ad8e87d-a9db-4746-823d-eeb7cd0efb10', 'TESTE');

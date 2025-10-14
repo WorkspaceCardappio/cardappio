@@ -1,10 +1,7 @@
 spring:
   application:
-    name: cardappio
+    name: cardappio-prod
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/cardappio
-    username: postgres
-    password: postgres
-  liquibase:
-    change-log: classpath:/db/changelog/master/master.xml
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
