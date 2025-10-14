@@ -1,6 +1,6 @@
-package br.com.cardappio.domain.additional;
+package br.com.cardappio.domain.order;
 
-import br.com.cardappio.domain.additional.dto.ProductOrderAdditionalDTO;
+import br.com.cardappio.domain.order.dto.ProductOrderAdditionalDTO;
 import com.cardappio.core.controller.CrudController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

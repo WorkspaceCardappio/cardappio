@@ -1,7 +1,7 @@
-package br.com.cardappio.domain.additional;
+package br.com.cardappio.domain.order;
 
-import br.com.cardappio.domain.additional.adapter.ProductOrderAdditionalAdapter;
-import br.com.cardappio.domain.additional.dto.ProductOrderAdditionalDTO;
+import br.com.cardappio.domain.order.adapter.ProductOrderAdditionalAdapter;
+import br.com.cardappio.domain.order.dto.ProductOrderAdditionalDTO;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 import org.springframework.stereotype.Service;

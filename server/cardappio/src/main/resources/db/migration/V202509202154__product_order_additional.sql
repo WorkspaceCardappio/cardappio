@@ -1,10 +1,10 @@
-CREATE TABLE IF NOT EXISTS product_order_additional (
-    id UUID PRIMARY KEY,
-    quantity DECIMAL(10,2),
-    total DECIMAL(10,2),
-    product_order_id UUID NOT NULL,
-    additional_id UUID NOT NULL,
-
-    CONSTRAINT fk_product_order_additional_product_order_id FOREIGN KEY (product_order_id) REFERENCES product_order(id),
-    CONSTRAINT fk_product_order_additional_additional_id FOREIGN KEY (additional_id) REFERENCES additional(id)
-);
+--CREATE TABLE IF NOT EXISTS product_order_additional (
+--    id UUID PRIMARY KEY,
+--    quantity DECIMAL(10,2),
+--    total DECIMAL(10,2),
+--    product_order_id UUID NOT NULL,
+--    product_id UUID NOT NULL,
+--
+--    CONSTRAINT fk_product_order_additional_product_order_id FOREIGN KEY (product_order_id) REFERENCES product_order(id),
+--    CONSTRAINT fk_product_order_additional_product_id FOREIGN KEY (product_id) REFERENCES product(id)
+--);

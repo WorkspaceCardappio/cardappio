@@ -1,5 +1,6 @@
 package br.com.cardappio.domain.order;
 
+
 import br.com.cardappio.domain.order.dto.ProductOrderAdditionalDTO;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
@@ -42,7 +43,6 @@ public class ProductOrderAdditional implements EntityModel<UUID> {
         final ProductOrderAdditional productOrderAdditional = new ProductOrderAdditional();
         productOrderAdditional.setId(dto.id());
         productOrderAdditional.setProductOrder(dto.productOrder());
-        productOrderAdditional.setAdditional(dto.additional());
         productOrderAdditional.setQuantity(dto.quantity());
         productOrderAdditional.setTotal(dto.total());
 

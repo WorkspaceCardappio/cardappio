@@ -1,19 +1,20 @@
 package br.com.cardappio.domain.order.adapter;
 
+import br.com.cardappio.domain.order.ProductOrder;
+import br.com.cardappio.domain.order.ProductOrderAdditional;
+import br.com.cardappio.domain.order.dto.ProductOrderAdditionalDTO;
+import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import com.cardappio.core.adapter.Adapter;
 
-import br.com.cardappio.domain.order.ProductOrder;
-import br.com.cardappio.domain.order.dto.ProductOrderDTO;
-
-public class ProductOrderAdapter implements Adapter<ProductOrder, ProductOrderDTO, ProductOrderDTO> {
+public class ProductOrderAdditionalAdapter implements Adapter<ProductOrderAdditional, ProductOrderAdditionalDTO, ProductOrderAdditionalDTO> {
 
     @Override
-    public ProductOrderDTO toDTO(final ProductOrder entity) {
-        return new ProductOrderDTO(entity);
+    public ProductOrderAdditionalDTO toDTO(final ProductOrderAdditional entity) {
+        return new ProductOrderAdditionalDTO(entity);
     }
 
     @Override
-    public ProductOrder toEntity(final ProductOrderDTO dto) {
-        return ProductOrder.of(dto);
+    public ProductOrderAdditional toEntity(final ProductOrderAdditionalDTO dto) {
+        return ProductOrderAdditional.of(dto);
     }
 }
