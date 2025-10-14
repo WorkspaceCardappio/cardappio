@@ -1,43 +1,47 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, GenericButtonComponent, ImageUploadComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { Observable } from 'rxjs';
-import { AdditionalComponent } from '../../additional/additional-modal/additional-modal.component';
+// import { AdditionalComponent } from '../../additional/additional-modal/additional-modal.component';
+import { MessageService } from 'primeng/api';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { CategoryService } from '../../category/service/category.service';
 import { ProductService } from '../service/product.service';
 
 
 @Component({
   selector: 'app-product-form',
-  imports: [
-    ReactiveFormsModule,
-    DatePickerComponent,
-    InputComponent,
-    ToggleComponent,
-    CancelButtonComponent,
-    GenericButtonComponent,
-    ImageUploadComponent,
-    SaveButtonComponent,
-    AutocompleteComponent,
-    AdditionalComponent,
-    CommonModule],
-  providers: [ProductService],
+    imports: [
+        InputTextModule,
+        InputNumberModule,
+        MessageModule,
+        ReactiveFormsModule,
+        IconFieldModule,
+        InputIconModule,
+        CommonModule],
+    providers: [
+        ProductService,
+        MessageService
+    ],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
-  
-  form: FormGroup<any> = new FormGroup({});
+    messageService = inject(MessageService);
+    form: FormGroup<any> = new FormGroup({});
+    formSubmitted = false;
+//   @ViewChild(AdditionalComponent)
+//   additionalToggle!: AdditionalComponent;
+//   isExpanded: boolean = false;
 
-  @ViewChild(AdditionalComponent)
-  additionalToggle!: AdditionalComponent;
-  isExpanded: boolean = false;
-
-  togglePanel(): void {
-    this.isExpanded = !this.isExpanded;
- }
+//   togglePanel(): void {
+//     this.isExpanded = !this.isExpanded;
+//  }
   
   constructor(
     private readonly builder: FormBuilder,
@@ -56,8 +60,8 @@ export class ProductFormComponent implements OnInit {
     this.form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
-      quantity: ['', [Validators.required, Validators.min(0)]],
+      price: [null, [Validators.required, Validators.min(0)]],
+      quantity: [null, [Validators.required, Validators.min(0)]],
       description: [''],
       active: [true],
       category: [null],
@@ -81,20 +85,34 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  create() {
-    const { id } = this.route.snapshot.params;
+//   create() {
+//     const { id } = this.route.snapshot.params;
 
-    if (this.form.invalid) {
-      return;
-    }
+//     if (this.form.invalid) {
+//       return;
+//     }
       
 
-    if (id != 'new') {
-      this.service.update(id, this.form.value);
-    } else {
-      this.service.create(this.form.value).subscribe(() => this.router.navigate(['product']));
+//     if (id != 'new') {
+//       this.service.update(id, this.form.value);
+//     } else {
+//       this.service.create(this.form.value).subscribe(() => this.router.navigate(['product']));
+//     }
+    //   }
+
+    onSubmit() {
+        this.formSubmitted = true;
+        if (this.form.valid) {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });
+            this.form.reset();
+            this.formSubmitted = false;
+        }
     }
-  }
+
+    isInvalid(controlName: string) {
+        const control = this.form.get(controlName);
+        return control?.invalid && (control.touched || this.formSubmitted);
+    }
 
   selectedDate(data: any) {
     this.form.get('expirationDate')?.setValue(data);

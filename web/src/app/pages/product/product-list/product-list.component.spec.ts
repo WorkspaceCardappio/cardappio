@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { ProductComponent } from './product.component';
+import { ProductComponent } from './product-list.component';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
