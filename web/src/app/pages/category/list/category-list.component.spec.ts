@@ -1,6 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CategoryComponent } from './category.component';
+import { CategoryComponent } from './category-list.component';
 
 
 
@@ -15,7 +15,7 @@ describe('CategoryComponent', () => {
       providers: [HttpClient, HttpHandler]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

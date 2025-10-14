@@ -10,8 +10,8 @@ export const routes: Routes = [
     },
     {path: 'category',
       children: [
-        { path: '', loadComponent: () => import('./pages/category/category/category.component').then(m => m.CategoryComponent)},
-        { path: ':id', loadComponent: () => import('./pages/category/category-form/category-form.component').then(m => m.CategoryFormComponent)},
+        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryComponent)},
+        { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.CategoryFormComponent)},
       ]
     },
   // {
