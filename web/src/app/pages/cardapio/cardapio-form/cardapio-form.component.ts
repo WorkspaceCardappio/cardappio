@@ -1,11 +1,23 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  CancelButtonComponent,
+  ImageUploadComponent,
+  InputComponent,
+  SaveButtonComponent,
+  ToggleComponent
+} from "cardappio-component-hub";
+import { CardapioService } from "../service/cardapio.service";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { CardapioService } from "../cardapio-list/cardapio.service";
 
 @Component({
   selector: 'app-cardapio-form',
   imports: [
+    InputComponent,
+    ImageUploadComponent,
+    ToggleComponent,
+    CancelButtonComponent,
+    SaveButtonComponent,
     ReactiveFormsModule,
     FormsModule
   ],
@@ -83,16 +95,14 @@ export class CardapioFormComponent implements OnInit {
     const { id, ...cardapioData } = this.cardapioForm.value;
 
     this.cardapioService.create(cardapioData).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao criar cardápio:', error)
+      next: () => this.navigateToList()
     });
   }
 
   private updateCardapio(): void {
 
     this.cardapioService.update(this.cardapioId, this.cardapioForm.value).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao atualizar cardápio:', error)
+      next: () => this.navigateToList()
     });
   }
 

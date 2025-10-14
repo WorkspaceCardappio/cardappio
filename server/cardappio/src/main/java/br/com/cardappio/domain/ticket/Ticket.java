@@ -92,4 +92,11 @@ public class Ticket implements EntityModel<UUID> {
         return ticket;
     }
 
+    public static Ticket of(final UUID id) {
+
+        Ticket ticket = new Ticket();
+        ticket.setId(id);
+        return ticket;
+
+    }
 }

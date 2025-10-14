@@ -1,5 +1,5 @@
-import { Person } from "./person"
-import { TableRestaurant } from "./table-restaurant"
+import { Person } from "../../../model/person"
+import { TableRestaurant } from "../../../model/table-restaurant"
 import { TicketStatus } from "./ticket-status"
 
 export interface Ticket {

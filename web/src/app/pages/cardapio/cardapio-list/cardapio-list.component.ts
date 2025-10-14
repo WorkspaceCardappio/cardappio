@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CardapioService } from "./cardapio.service";
+import { CardapioService } from "../service/cardapio.service";
+import { CardappioListComponent } from "cardappio-component-hub";
 
 @Component({
   selector: 'app-cardapio-list',
   imports: [
+    CardappioListComponent
   ],
   templateUrl: './cardapio-list.component.html',
   styleUrl: './cardapio-list.component.scss'
 })
-export class CardapioListComponent implements OnInit {
+export class CardapioListComponent {
 
   listParams = {
     service: this.cardapioService,
@@ -65,5 +67,4 @@ export class CardapioListComponent implements OnInit {
     private cardapioService: CardapioService,
   ) {}
 
-  ngOnInit() {}
 }

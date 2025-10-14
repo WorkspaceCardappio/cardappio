@@ -72,8 +72,8 @@ public class ProductOrder implements EntityModel<UUID> {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(dto.id());
-        productOrder.setOrder(dto.order());
-        productOrder.setProduct(dto.product());
+        productOrder.setOrder(Order.of(dto.orderId()));
+        productOrder.setProduct(Product.of(dto.productId()));
 
         return productOrder;
     }

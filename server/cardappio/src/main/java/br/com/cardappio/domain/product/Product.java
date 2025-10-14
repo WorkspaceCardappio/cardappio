@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.hibernate.validator.constraints.Length;
 
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.category.Category;
@@ -77,6 +78,7 @@ public class Product implements EntityModel<UUID> {
 
     @ManyToOne
     @NotNull
+    @JsonIgnore
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -84,7 +86,7 @@ public class Product implements EntityModel<UUID> {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductIngredient> productIngredients = new ArrayList<>();
 
-    public static Product of(final ProductDTO dto){
+    public static Product of(final ProductDTO dto) {
 
         final Product product = new Product();
         product.setId(dto.id());
@@ -96,6 +98,12 @@ public class Product implements EntityModel<UUID> {
         product.setImage(dto.image());
         product.setCategory(dto.category());
 
+        return product;
+    }
+
+    public static Product of(final UUID id) {
+        final Product product = new Product();
+        product.setId(id);
         return product;
     }
 }

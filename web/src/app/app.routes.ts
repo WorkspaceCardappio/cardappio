@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { OrderListComponent } from "./pages/order/order-list/order-list.component";
 
 export const routes: Routes = [
   {
@@ -19,15 +20,15 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./screens/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
       },
       {
         path: 'new',
-        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
       },
       {
         path: ':id',
-        loadComponent: () => import('./screens/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
+        loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
       },
     ]
   },
@@ -38,14 +39,31 @@ export const routes: Routes = [
   {
     path: 'ticket',
     children: [
-      { path: '', loadComponent: () => import('./ticket/ticket.component').then(m => m.TicketsComponent)},
-      { path: ':id', loadComponent: () => import('./ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
+      { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
+      { path: ':id', loadComponent: () => import('./pages/ticket/ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
     ]
   },
   {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full'
+  },
+  {
+    path: 'order',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/order/order-list/order-list.component').then(m => m.OrderListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
+      },
+    ]
   },
   {
     path: '**',
