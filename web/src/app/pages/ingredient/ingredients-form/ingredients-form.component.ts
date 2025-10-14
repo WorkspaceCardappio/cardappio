@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutocompleteComponent, CancelButtonComponent, DatePickerComponent, InputComponent, SaveButtonComponent, ToggleComponent } from "cardappio-component-hub";
 import { map, Observable } from 'rxjs';
 import { IngredientService } from '../service/ingredient.service';
 
 @Component({
   selector: 'app-ingredients-form',
   imports: [
-    InputComponent,
-    ReactiveFormsModule,
-    ToggleComponent,
-    CancelButtonComponent,
-    SaveButtonComponent,
-    AutocompleteComponent,
-    DatePickerComponent
+   
 ],
   templateUrl: './ingredients-form.component.html',
   styleUrl: './ingredients-form.component.scss'

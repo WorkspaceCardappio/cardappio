@@ -8,10 +8,16 @@ export const routes: Routes = [
         { path: ':id', loadComponent: () => import('./pages/product/product-form/product-form.component').then(m => m.ProductFormComponent)}
       ]
     },
-    {path: 'category',
+    { path: 'category',
       children: [
         { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryComponent)},
         { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.CategoryFormComponent)},
+      ]
+    },
+    { path: 'ingredient',
+      children: [
+        { path: '', loadComponent: () => import('./pages/ingredient/ingredient-list/ingredient-list.component').then(m => m.IngredientsComponent)},
+        { path: ':id', loadComponent: () => import('./pages/ingredient/ingredients-form/ingredients-form.component').then(m => m.IngredientsFormComponent)},
       ]
     },
   // {

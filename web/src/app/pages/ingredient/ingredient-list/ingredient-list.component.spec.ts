@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { IngredientsComponent } from './ingredients.component';
+import { IngredientsComponent } from './ingredient-list.component';
 
 describe('IngredientsComponent', () => {
   let component: IngredientsComponent;

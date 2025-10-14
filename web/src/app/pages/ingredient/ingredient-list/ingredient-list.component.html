@@ -1,0 +1,156 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-table
+  #dt1
+  [value]="ingredients"
+  [lazy]="true"
+  (onLazyLoad)="loadIngredients($event)"
+  [paginator]="true"
+  [rows]="20"
+  [totalRecords]="totalRecords"
+  [loading]="false"
+  [globalFilterFields]="['name', 'status']"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  dataKey="id"
+  showGridlines
+  stripedRows
+>
+  <ng-template #caption>
+    <div class="flex">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/ingredient/new']">
+      </p-button>
+
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar"
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th pSortableColumn="name" style="width: 50%">
+        <div class="flex items-center gap-2">
+          Nome
+          <p-sortIcon field="name" />
+        </div>
+      </th>
+      <th pSortableColumn="unityOfMeasurement" style="width: 20%">
+         <div class="flex items-center gap-2">
+          Unidade de medida
+          <p-sortIcon field="unityOfMeasurement"/>
+        </div>
+     <!-- <div class="card flex justify-center">
+        <p-select [options]="unityOfMeasurement" formControlName="unityOfMeasurement" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
+    </div> -->
+      </th>
+      <th style="width: 20%">Status</th>
+      <th style="width: 10%">Ações</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-ingredient>
+    <tr>
+      <td>{{ ingredient.name }}</td>
+      <td>{{ ingredient.unityOfMeasurement }}</td>
+      <td>
+        @if (ingredient.active) {
+        <i class="pi pi-check-circle" style="color: #51cf66"></i>
+        } @else {
+        <i class="pi pi-times-circle" style="color: #d33b19"></i>
+        }
+      </td>
+      <td>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-text p-button-sm"
+          (click)="onEdit(ingredient.id)"
+          style="margin-right: 0.5rem"
+          aria-label="Editar"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-danger"
+          (click)="onDelete(ingredient.id)"
+          aria-label="Excluir"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="12">Nenhum ingrediente encontrado.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+
+<!-- <cardappio-list
+    [params]="{
+        service: service,
+        route: 'ingredient',
+        columns: [
+            {title: 'Ingredientes', field: 'name', size: 6},
+            {title: 'Unidade de medida', field: 'unityOfMeasurement', size: 3},
+            {title: 'Data de validade', field: 'expirationDate', size: 3},
+            {title: 'Status', field: 'active', size: 3}
+        ],
+        filters: [
+            {
+                icon: 'fa-solid fa-pepper-hot',
+                title: 'Ingrediente',
+                value: 'name',
+                typeValue: 'string'
+            },
+            {
+                icon: 'fa-solid fa-calendar-days',
+                title: 'Validade',
+                value: 'expirationDate',
+                typeValue: 'string'
+            },
+            {
+                icon: 'fa-solid fa-scale-balanced',
+                title: 'Medida',
+                value: 'unityOfMeasurement',
+                typeValue: 'string'
+            },
+            {
+                icon: 'fa-solid fa-circle-check',
+                title: 'Status',
+                value: 'active',
+                typeValue: 'boolean'
+            }
+        ]
+    }"
+>
+<ng-template #active let-item>
+    @if(item.active){
+        <span style="color: #51CF66;">
+            <i class="fa-solid fa-circle-check"></i>
+        </span>
+    } @else {
+        <span style="color: #D33B19;">
+            <i class="fa-solid fa-circle-xmark"></i>
+        </span>
+    }
+</ng-template>
+<ng-template #unityOfMeasurement let-item>
+    {{ item.unityOfMeasurement.description }}
+</ng-template>
+<ng-template #expirationDate let-item>
+    {{ item.expirationDate | date:'dd/MM/yyyy' }}
+</ng-template>
+</cardappio-list> -->
