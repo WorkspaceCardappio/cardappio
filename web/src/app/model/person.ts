@@ -1,7 +1,7 @@
 import { Address } from "./address";
 import { PersonType } from "./person-type";
 
-export interface Person{
+export interface Person {
     name: string,
     type: PersonType,
     document: string,
