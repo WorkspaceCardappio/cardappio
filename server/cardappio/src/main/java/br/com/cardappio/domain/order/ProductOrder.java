@@ -1,5 +1,7 @@
 package br.com.cardappio.domain.order;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -8,15 +10,7 @@ import com.cardappio.core.entity.EntityModel;
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -42,7 +36,7 @@ public class ProductOrder implements EntityModel<UUID> {
 
     @NotNull(message = Messages.ORDER_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
@@ -72,8 +66,8 @@ public class ProductOrder implements EntityModel<UUID> {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(dto.id());
-        productOrder.setOrder(dto.order());
-        productOrder.setProduct(dto.product());
+        productOrder.setOrder(Order.of(dto.orderId()));
+        productOrder.setProduct(Product.of(dto.productId()));
 
         return productOrder;
     }

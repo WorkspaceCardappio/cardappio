@@ -1,0 +1,61 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Nova Categoria">
+  <form [formGroup]="form" class="p-fluid">
+    <div class="grid mt-4">
+      <div class="col-9 flex flex-column mb-4 gap-1">
+        <label for="name" class="required-label">Nome</label>
+        <input id="name" pInputText formControlName="name" placeholder="Nome" />
+      </div>
+
+      <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
+        <label for="active">Ativo</label>
+        <p-toggle-switch
+          inputId="active"
+          formControlName="active"
+        ></p-toggle-switch>
+      </div>
+    </div>
+
+    <div class="flex flex-column mb-4 gap-1">
+      <label for="parent">Vincular uma categoria</label>
+      <p-autocomplete
+        formControlName="parent"
+        optionLabel="name"
+        [suggestions]="filteredCategories"
+        (completeMethod)="searchCategories($event)"
+        [dropdown]="true"
+        fluid
+      />
+    </div>
+
+    <div class="flex flex-column mb-4 gap-1">
+      <label for="image">Imagem</label>
+      <p-fileUpload
+        name="image"
+        mode="basic"
+        [auto]="true"
+        customUpload="true"
+        chooseLabel="Escolher Imagem"
+      ></p-fileUpload>
+    </div>
+
+    <div class="mt-4 flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="cancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        class="p-button-primary"
+        (click)="create()"
+        [disabled]="this.form.invalid"
+      ></button>
+    </div>
+  </form>
+</p-fieldset>

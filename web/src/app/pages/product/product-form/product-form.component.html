@@ -1,0 +1,122 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full sm:w-56">
+    <div class="flex flex-col gap-1">
+        
+        <input pInputText type="text" id="name" placeholder="Nome do Produto" formControlName="name" [invalid]="isInvalid('name')" />
+        @if (isInvalid('name')) {
+            <p-message severity="error" size="small" variant="simple">Nome do Produto é obrigatório</p-message>
+        }
+    </div>
+    <div class="flex flex-col gap-1">
+        <p-inputNumber
+            inputId="price"
+            formControlName="price"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            [invalid]="isInvalid('price')"
+            placeholder="Preço"
+        >
+        @if (isInvalid('price')) {
+            @if (form.get('price')?.errors?.['required']) {
+                <p-message severity="error" size="small" variant="simple">Preço é obrigatório</p-message>
+            }
+        }
+        </p-inputNumber>
+    </div>
+        <div class="flex flex-col gap-1">
+        <p-inputNumber
+            inputId="quantity"
+            formControlName="quantity"
+            [invalid]="isInvalid('quantity')"
+            placeholder="Quantidade"
+        >
+        @if (isInvalid('price')) {
+            @if (form.get('price')?.errors?.['required']) {
+                <p-message severity="error" size="small" variant="simple">Preço é obrigatório</p-message>
+            }
+        }
+        </p-inputNumber>
+        <label>Quantidade</label>
+    </div>
+    <p-iconfield>
+    <p-inputicon class="pi pi-search" />
+    <input type="text" pInputText placeholder="Search" />
+</p-iconfield>
+    <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
+</form>
+<!-- <form [formGroup]="form">
+    <div id="product" class="product">
+        <div id="product-row" class="product-first-row">
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'nome'"
+                [label]="'Nome do Produto'"
+                formControlName="name"/>
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'preço'"
+                [label]="'Preço'"
+                formControlName="price"/>
+            <cardappio-input
+                [width]="100"
+                [placeholder]="'quantidade'"
+                [label]="'Quantidade'"
+                formControlName="quantity"/>
+            <cardappio-date-picker class="date-picker"
+                [topLabel]="'Data de validade'"
+                [size]="'20'"
+                (dateChange)="selectedDate($event)"
+            />
+        </div>
+        <div id="product-second-row" class="product-second-row">
+            <cardappio-input class="input"
+                [width]="100"
+                [placeholder]="'descrição'"
+                [label]="'Descrição'"
+                formControlName="description"/>
+            <cardappio-autocomplete class="auto-complete"
+                [placeholder]="'Selecione uma categoria'"
+                [isMultiple]="false"
+                [topLabelInput]="'Categoria'"
+                [size]="40"
+                [search]="categories"
+                [displayField]="getCategory"
+                formControlName="category"
+            ></cardappio-autocomplete>
+            <cardappio-generic-button class="category-btn" (onClick)="redirectToCategory()"
+                [params]="{ 
+                    title: { name: 'Categoria', color: '#015EAF'},
+                    background: '#F5F4F7',
+                    border: { color: '#015EAF'},
+                    icon: { name: 'fa-solid fa-folder-plus', color: '#015EAF'}
+                    }"/>
+            <cardappio-toggle class="active-btn"
+                    formControlName="active"/>
+            
+        </div>
+        <div class="third-row">
+            <cardappio-image-upload
+                id="product-image-upload"
+                [label]="'Imagem do produto'"
+                />
+            <div class="text-area">
+                <label>Observações</label>
+                <textarea id="product-obs" formControlName="note"></textarea>
+            </div>
+        </div>
+        <button type="button" id="additional-btn" (click)="togglePanel()">
+            <span>Adicionais</span>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <app-additional [expanded]="isExpanded"></app-additional>
+        <button type="button" id="ingredients-btn">
+            <span>Ingredientes</span>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <div class="actions-btn">
+            <cardappio-cancel-button (onClick)="cancel()"></cardappio-cancel-button>
+            <cardappio-save-button (onClick)="create()"> </cardappio-save-button>
+        </div>
+    </div>
+</form>
+<app-additional></app-additional> -->
