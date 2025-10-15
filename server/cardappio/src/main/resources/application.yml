@@ -12,6 +12,10 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties: # <-- ADICIONADO ESTE BLOCO
+      hibernate:
+        format_sql: true # Formata o SQL para ficar legível
 
   security:
     oauth2:
@@ -19,6 +23,15 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
 
+
+# ===================================================================
+# ADICIONADO: LOG DETALHADO DO HIBERNATE
+# Esta é a parte mais importante para o nosso debug.
+# ===================================================================
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: TRACE
+# ===================================================================
 
 cors:
   allowed-origins:

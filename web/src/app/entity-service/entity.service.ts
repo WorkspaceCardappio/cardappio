@@ -38,6 +38,9 @@ export class EntityService<V, K> {
 
   public create(newDTO: V): Observable<HttpResponse<void>> {
 
+    console.log(newDTO)
+    console.log(this.resource)
+
     return this.httpClient.post<void>(this.resource, newDTO, {
       observe: 'response'
     });

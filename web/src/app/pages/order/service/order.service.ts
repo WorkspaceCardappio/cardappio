@@ -8,7 +8,7 @@ import { EntityService } from "../../../entity-service/entity.service";
 })
 export class OrderService extends EntityService<any, any> {
 
-  override resource: string = `${environment.apiUrl}/orders`;
+  override resource: string = `http://localhost:8080/orders`;
 
   constructor(public http: HttpClient) {
     super(http);
