@@ -51,11 +51,7 @@
   <ng-template #body let-menu>
     <tr>
       <td>{{ menu.name }}</td>
-      <td>
-        @if (menu.parent?.id) {
-          {{ menu.parent.name }}
-        }
-      </td>
+      <td>{{ menu.theme }}</td>
       <td>
         @if (menu.active) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>

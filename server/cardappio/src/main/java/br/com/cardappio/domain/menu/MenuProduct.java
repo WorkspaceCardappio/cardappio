@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
+import br.com.cardappio.domain.menu.dto.MenuProductDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
@@ -30,7 +31,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(of = { "id", "price", "active" })
 @EqualsAndHashCode(of = "id")
 public class MenuProduct implements EntityModel<UUID> {
 
@@ -55,4 +56,15 @@ public class MenuProduct implements EntityModel<UUID> {
     @Column
     @NotNull(message = Messages.STATUS_NOT_NULL)
     private Boolean active = true;
+
+    public static MenuProduct of(final MenuProductDTO dto) {
+
+        final MenuProduct menu = new MenuProduct();
+        menu.setId(dto.id());
+        menu.setProduct(Product.of(dto.product().id()));
+        menu.setPrice(dto.price());
+        menu.setActive(dto.active());
+
+        return menu;
+    }
 }
