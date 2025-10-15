@@ -30,7 +30,12 @@ public record ProductDTO(
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal quantity,
 
+        @Length(max = 255, message = Messages.SIZE_255)
+        String description,
+
         Boolean active,
+
+        Category category,
 
         @Future
         LocalDate expirationDate,
@@ -38,7 +43,8 @@ public record ProductDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String image,
 
-        Category category
+        @Length(max = 255, message = Messages.SIZE_255)
+        String note
 ) {
 
     public ProductDTO(final Product product){
@@ -47,10 +53,12 @@ public record ProductDTO(
                 product.getName(),
                 product.getPrice(),
                 product.getQuantity(),
+                product.getDescription(),
                 product.getActive(),
+                product.getCategory(),
                 product.getExpirationDate(),
                 product.getImage(),
-                product.getCategory()
+                product.getNote()
         );
     }
 }

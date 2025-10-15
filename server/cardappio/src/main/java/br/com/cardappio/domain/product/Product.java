@@ -93,11 +93,12 @@ public class Product implements EntityModel<UUID> {
         product.setName(dto.name());
         product.setPrice(dto.price());
         product.setQuantity(dto.quantity());
+        product.setDescription(dto.description());
         product.setActive(dto.active());
+        product.setCategory(dto.category());
         product.setExpirationDate(dto.expirationDate());
         product.setImage(dto.image());
-        product.setCategory(dto.category());
-
+        product.setNote(dto.note());
         return product;
     }
 

@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS product (
     image VARCHAR(255),
     category_id UUID,
     note VARCHAR(255),
+    product_id UUID,
     CONSTRAINT fk_product_category_id FOREIGN KEY (category_id) REFERENCES category(id)
 );
