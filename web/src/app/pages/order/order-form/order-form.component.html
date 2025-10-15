@@ -19,7 +19,7 @@
           [dropdown]="true"
           placeholder="Selecione"
           [showClear]="true"
-          styleClass="w-full">
+          optionLabel="name" styleClass="w-full">
         </p-autoComplete>
       </div>
 
@@ -33,16 +33,17 @@
           [dropdown]="true"
           placeholder="Selecione"
           [showClear]="true"
+          optionLabel="number"
           styleClass="w-full">
         </p-autoComplete>
       </div>
     </div>
 
     <div class="form-field price-form">
-      <label for="price" class="field-label">Preço Final</label>
+      <label for="total" class="field-label">Preço Final</label>
       <p-inputNumber
-        id="price"
-        formControlName="price"
+        id="total"
+        formControlName="total"
         mode="currency"
         currency="BRL"
         locale="pt-BR"

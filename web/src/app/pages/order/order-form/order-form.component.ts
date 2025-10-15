@@ -20,7 +20,7 @@ import { ButtonModule } from 'primeng/button';
     ButtonModule
   ],
   templateUrl: './order-form.component.html',
-  styleUrl: './order-form.component.scss'
+  styleUrls: ['./order-form.component.scss']
 })
 export class OrderFormComponent implements OnInit {
 
@@ -41,7 +41,7 @@ export class OrderFormComponent implements OnInit {
   ) {
     this.orderForm = this.fb.group({
       id: [''],
-      price: [0, [Validators.required, Validators.min(0)]],
+      total: [0, [Validators.required, Validators.min(0)]],
       orderStatus: ['PENDING', Validators.required],
       products: [[], Validators.required],
       ticket: [null, Validators.required]
@@ -60,10 +60,11 @@ export class OrderFormComponent implements OnInit {
   searchProducts(event: any): void {
     const query = event.query || '';
     const searches = query ? [`name=ilike=${query}%`] : [];
+    const completeParams = `pageSize=20&search=${searches.join(';')}`;
 
-    this.productService.findAll(20, searches.join(';')).subscribe({
-      next: (products) => {
-        this.filteredProducts = products;
+    this.productService.findAllDTO(completeParams).subscribe({
+      next: (page) => {
+        this.filteredProducts = page.content;
       },
       error: () => {
         this.filteredProducts = [];
@@ -74,10 +75,11 @@ export class OrderFormComponent implements OnInit {
   searchTickets(event: any): void {
     const query = event.query || '';
     const searches = query ? [`number=ilike=${query}%`] : [];
+    const completeParams = `pageSize=20&search=${searches.join(';')}`;
 
-    this.ticketService.findAll(20, searches.join(';')).subscribe({
-      next: (tickets) => {
-        this.filteredTickets = tickets;
+    this.ticketService.findAllDTO(completeParams).subscribe({
+      next: (page) => {
+        this.filteredTickets = page.content;
       },
       error: () => {
         this.filteredTickets = [];
@@ -95,10 +97,10 @@ export class OrderFormComponent implements OnInit {
       return;
     }
 
-    const { price, orderStatus, products, ticket } = this.orderForm.value;
+    const { total, orderStatus, products, ticket } = this.orderForm.value;
 
     const orderPayload = {
-      price: price || 0,
+      total: total || 0,
       orderStatus: orderStatus || 'PENDING',
       ticketId: ticket?.id,
       products: this.formatProducts(products)
@@ -111,15 +113,22 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
+  // ===================================================================
+  // AQUI ESTÁ A CORREÇÃO PRINCIPAL
+  // ===================================================================
   private formatProducts(products: any[]): any[] {
     if (!products || !Array.isArray(products)) {
       return [];
     }
 
+    // Agora o map retorna o objeto no formato plano que o backend espera,
+    // com 'productId' e 'quantity' fixo em 1.
     return products.map(product => ({
-      product: { id: product.id }
+      productId: product.id,
+      quantity: 1
     }));
   }
+  // ===================================================================
 
   private loadOrder(): void {
     if (!this.orderId) return;
@@ -134,7 +143,7 @@ export class OrderFormComponent implements OnInit {
             next: ({ order, ticket }) => {
               this.orderForm.patchValue({
                 id: order.id,
-                price: order.price || 0,
+                total: order.total || 0,
                 orderStatus: order.orderStatus || 'PENDING',
                 products: order.products || [],
                 ticket: ticket
@@ -147,7 +156,7 @@ export class OrderFormComponent implements OnInit {
         } else {
           this.orderForm.patchValue({
             id: order.id,
-            price: order.price || 0,
+            total: order.total || 0,
             orderStatus: order.orderStatus || 'PENDING',
             products: order.products || []
           });
@@ -160,6 +169,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   private createOrder(payload: any): void {
+    console.log("Enviando para o backend:", payload); // Log para verificar o payload final
     this.orderService.create(payload).subscribe({
       next: () => {
         this.navigateToList();

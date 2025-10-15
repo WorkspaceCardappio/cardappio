@@ -30,3 +30,4 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
                 .map(OrderToTicketDTO::new);
     }
 }
+

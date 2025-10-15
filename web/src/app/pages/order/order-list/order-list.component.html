@@ -1,7 +1,116 @@
-<p>oioioioi</p>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
+<p-table
+  #dt1
+  [value]="orders"
+  [lazy]="true"
+  (onLazyLoad)="loadOrders($event)"
+  [paginator]="true"
+  [rows]="20"
+  [totalRecords]="totalRecords"
+  [loading]="false"
+  [globalFilterFields]="['number', 'status', 'ticket.number']"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  dataKey="id"
+  showGridlines
+  stripedRows
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/order/new']">
+      </p-button>
 
-<div class="card flex justify-center">
-  <p>teste</p>
-  <p-autocomplete [(ngModel)]="value" [dropdown]="true" [suggestions]="items" (completeMethod)="search($event)" />
-</div>
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar"
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="number" style="width: 15%">
+        <div class="flex items-center gap-2">
+          Número
+          <p-sortIcon field="number" />
+        </div>
+      </th>
+      <th pSortableColumn="status" style="width: 15%">
+        <div class="flex items-center gap-2">
+          Status
+          <p-sortIcon field="status" />
+        </div>
+      </th>
+      <th pSortableColumn="total" style="width: 15%">
+        <div class="flex items-center gap-2">
+          Preço
+          <p-sortIcon field="total" />
+        </div>
+      </th>
+      <th pSortableColumn="createdAt" style="width: 20%">
+        <div class="flex items-center gap-2">
+          Data de Criação
+          <p-sortIcon field="createdAt" />
+        </div>
+      </th>
+      <th pSortableColumn="ticket.number" style="width: 15%">
+        <div class="flex items-center gap-2">
+          Comanda
+          <p-sortIcon field="ticket.number" />
+        </div>
+      </th>
+      <th style="width: 10%">Ações</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-order>
+    <tr>
+      <td>{{ order.number }}</td>
+      <td>
+        <p-tag [value]="order.status"></p-tag>
+      </td>
+      <td>
+        {{ order.total | currency:'BRL' }}
+      </td>
+      <td>
+        {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
+      </td>
+      <td>
+        {{ order.ticket?.number }}
+      </td>
+      <td>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-text p-button-sm"
+          (click)="onEdit(order.id)"
+          style="margin-right: 0.5rem"
+          aria-label="Editar"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-danger"
+          (click)="onDelete(order.id)"
+          aria-label="Excluir"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">Nenhum pedido encontrado.</td>
+    </tr>
+  </ng-template>
+</p-table>
