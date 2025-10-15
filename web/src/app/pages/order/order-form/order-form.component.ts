@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { forkJoin, of } from "rxjs";
+import { forkJoin, of, switchMap } from "rxjs";
 import { OrderService } from "../service/order.service";
 import { ProductService } from "../../product/product.service";
 import { TicketService } from "../../ticket/service/ticket.service";
@@ -9,6 +9,8 @@ import { TicketService } from "../../ticket/service/ticket.service";
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
+import { Fieldset } from "primeng/fieldset";
+import { Breadcrumb } from "primeng/breadcrumb";
 
 @Component({
   selector: 'app-order-form',
@@ -17,7 +19,9 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule,
     AutoCompleteModule,
     InputNumberModule,
-    ButtonModule
+    ButtonModule,
+    Fieldset,
+    Breadcrumb
   ],
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.scss']
@@ -31,6 +35,15 @@ export class OrderFormComponent implements OnInit {
   filteredProducts: any[] = [];
   filteredTickets: any[] = [];
 
+
+  home = { icon: 'pi pi-home', routerLink: '/home' };
+
+  items = [
+    { label: 'Pedidos', routerLink: '/order' },
+    { label: 'Novo', routerLink: '/order/new' },
+  ];
+
+
   constructor(
     private readonly orderService: OrderService,
     private readonly ticketService: TicketService,
@@ -39,6 +52,7 @@ export class OrderFormComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder
   ) {
+
     this.orderForm = this.fb.group({
       id: [''],
       total: [0, [Validators.required, Validators.min(0)]],
@@ -49,6 +63,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.orderId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.orderId;
 
@@ -113,63 +128,46 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
-  // ===================================================================
-  // AQUI ESTÁ A CORREÇÃO PRINCIPAL
-  // ===================================================================
   private formatProducts(products: any[]): any[] {
     if (!products || !Array.isArray(products)) {
       return [];
     }
 
-    // Agora o map retorna o objeto no formato plano que o backend espera,
-    // com 'productId' e 'quantity' fixo em 1.
     return products.map(product => ({
       productId: product.id,
       quantity: 1
     }));
   }
-  // ===================================================================
 
   private loadOrder(): void {
     if (!this.orderId) return;
 
-    this.orderService.findById(this.orderId).subscribe({
-      next: (order) => {
-        if (order.ticketId) {
-          forkJoin({
-            order: of(order),
-            ticket: this.ticketService.findById(order.ticketId)
-          }).subscribe({
-            next: ({ order, ticket }) => {
-              this.orderForm.patchValue({
-                id: order.id,
-                total: order.total || 0,
-                orderStatus: order.orderStatus || 'PENDING',
-                products: order.products || [],
-                ticket: ticket
-              });
-            },
-            error: () => {
-              this.navigateToList();
-            }
-          });
-        } else {
-          this.orderForm.patchValue({
-            id: order.id,
-            total: order.total || 0,
-            orderStatus: order.orderStatus || 'PENDING',
-            products: order.products || []
-          });
-        }
-      },
-      error: () => {
-        this.navigateToList();
-      }
+    this.orderService.findById(this.orderId).pipe(
+      switchMap(order => {
+
+        const ticket$ = order.ticketId ? this.ticketService.findById(order.ticketId) : of(null);
+
+        const productIds = order.products.map((p: any) => p.productId);
+        const products$ = this.productService.findAllDTO(productIds);
+
+        return forkJoin({
+          order: of(order), // Mantemos a 'order' original
+          ticket: ticket$,
+          products: products$
+        });
+      })
+    ).subscribe(({ order, ticket, products }) => {
+
+      this.orderForm.patchValue({
+        total: order.total,
+        ticket: ticket,
+        products: products.content
+      });
     });
   }
 
   private createOrder(payload: any): void {
-    console.log("Enviando para o backend:", payload); // Log para verificar o payload final
+    console.log("Enviando para o backend:", payload);
     this.orderService.create(payload).subscribe({
       next: () => {
         this.navigateToList();

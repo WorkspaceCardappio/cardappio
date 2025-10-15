@@ -1,94 +1,87 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { OrderService } from "../service/order.service";
-import { AutoComplete, AutoCompleteCompleteEvent } from "primeng/autocomplete";
-import { FormsModule } from "@angular/forms";
-import { Breadcrumb } from "primeng/breadcrumb";
-import { Button, ButtonDirective } from "primeng/button";
-import { IconField } from "primeng/iconfield";
-import { InputIcon } from "primeng/inputicon";
-import { InputText } from "primeng/inputtext";
-import { TableLazyLoadEvent, TableModule } from "primeng/table";
-import { finalize } from "rxjs";
 import { Router, RouterLink } from "@angular/router";
-import { CurrencyPipe, DatePipe } from "@angular/common";
-import { Tag } from "primeng/tag";
-
+import { CurrencyPipe, DatePipe, NgIf } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { finalize, switchMap, tap } from "rxjs";
+import { TableLazyLoadEvent, TableModule } from "primeng/table";
+import { OrderService } from "../service/order.service";
+import { TicketService } from "../../ticket/service/ticket.service";
+import { BreadcrumbModule } from "primeng/breadcrumb";
+import { ButtonModule } from "primeng/button";
+import { IconFieldModule } from "primeng/iconfield";
+import { InputIconModule } from "primeng/inputicon";
+import { InputTextModule } from "primeng/inputtext";
+import { TagModule } from "primeng/tag";
 
 @Component({
   selector: 'app-order-list',
+  standalone: true,
   imports: [
-    FormsModule,
-    Breadcrumb,
-    Button,
-    ButtonDirective,
-    IconField,
-    InputIcon,
-    InputText,
-    TableModule,
-    RouterLink,
-    CurrencyPipe,
-    DatePipe,
-    Tag
+    TableModule, RouterLink, CurrencyPipe, DatePipe, TagModule,
+    BreadcrumbModule, ButtonModule, IconFieldModule, InputIconModule,
+    InputTextModule, FormsModule, NgIf
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })
 export class OrderListComponent {
 
-  constructor(public service: OrderService, private cdr: ChangeDetectorRef, private router: Router) {}
-
+  orders: any[] = [];
+  totalRecords = 0;
+  loading = false;
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
+  items = [{ label: 'Pedidos', routerLink: '/order' }];
 
-  items = [{ label: 'Orders', routerLink: '/order' }];
-
-  orders: any[] = [];
-  totalRecords: number = 0;
-  loading = false;
+  constructor(
+    private orderService: OrderService,
+    private ticketService: TicketService,
+    private cdr: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   loadOrders(event: TableLazyLoadEvent) {
     this.loading = true;
-
-    const page = (event.first ?? 0) / (event?.rows ?? 20);
+    const page = (event.first ?? 0) / (event.rows ?? 20);
     const size = event.rows ?? 20;
-    const sortField = event.sortField ?? '';
-    const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
+    const sort = event.sortField ? `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}` : '';
+    const request = `page=${page}&size=${size}&sort=${sort}`;
 
-    let request = `page=${page}&size=${size}`;
-
-    if (sortField) {
-      request += `&sort=${sortField},${sortOrder}`;
-    }
-
-    this.service
-      .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          this.orders = response.content;
-          this.totalRecords = response.totalElements;
-        },
-        error: () => {},
-      });
+    this.orderService.findAllDTO(request).pipe(
+      tap(response => {
+        this.orders = response.content;
+        this.totalRecords = response.totalElements;
+      }),
+      switchMap(response => {
+        const ticketIds = [...new Set(response.content.map((order: any) => order.ticketId))];
+        if (ticketIds.length === 0) {
+          return [];
+        }
+        const paramsRequest = `ids=${ticketIds.join(',')}`;
+        return this.ticketService.findAllDTO(paramsRequest);
+      }),
+      finalize(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
+      next: (ticketResponse) => {
+        if (!ticketResponse?.content) return;
+        const ticketMap = new Map<string, any>();
+        ticketResponse.content.forEach((ticket: any) => ticketMap.set(ticket.id, ticket));
+        this.orders.forEach(order => {
+          order.ticketDetails = ticketMap.get(order.ticketId);
+        });
+      },
+      error: (err) => console.error('Erro ao carregar pedidos ou comandas', err)
+    });
   }
 
   onEdit(id: any) {
-    this.router.navigate([`category`, id]);
+    this.router.navigate(['order', id]);
   }
 
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadOrders({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {},
-    }));
+    this.orderService.delete(id).subscribe(() => this.loadOrders({ first: 0, rows: 20 }));
   }
-
 }
