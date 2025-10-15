@@ -40,7 +40,7 @@ import { ProductService } from '../service/product.service';
     StepperModule,
     ButtonModule,
     TableModule
-],
+  ],
   providers: [
     CategoryService,
     ProductService
@@ -59,6 +59,7 @@ export class ProductFormComponent implements OnInit {
   filteredProducts: any[] = [];
   filteredIngredients: any[] = [];
   loading: boolean = false;
+  imagePreview: string | ArrayBuffer | null = null;
   
   constructor(
     private readonly builder: FormBuilder,
@@ -86,9 +87,10 @@ export class ProductFormComponent implements OnInit {
       expirationDate: [null, Validators.required],
       description: [''],
       active: [true],
-      image: [''],
+      image: [null],
       category: [null, Validators.required],
       parent: [null],
+      additionalPrice: [null, Validators.required],
       note: [''],
       product_variable: [''],
       ingredient: [null]
@@ -133,9 +135,11 @@ export class ProductFormComponent implements OnInit {
       image: formValue.image,
       category: formValue.category,
       parent: formValue.parent,
+      additionalPrice: formValue.additionalPrice,
       note: formValue.note,
       productVariables: this.productVariables,
-  };
+    };
+
     if (id != 'new') {
       this.productService
         .update(id, product)
@@ -145,7 +149,6 @@ export class ProductFormComponent implements OnInit {
         .create(product)
         .subscribe(() => this.router.navigate(['category']));
     }
-    console.log(product);
   }
 
   cancel() {
@@ -178,7 +181,7 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-    searchProducts(event: any) {
+  searchProducts(event: any) {
     const query = event.query;
     const searchs = [];
 
@@ -202,9 +205,9 @@ export class ProductFormComponent implements OnInit {
         this.loading = false;
       },
     });
-    }
+  }
   
-   searchIngredients(event: any) {
+  searchIngredients(event: any) {
     const query = event.query;
     const searchs = [];
 
@@ -228,19 +231,34 @@ export class ProductFormComponent implements OnInit {
     //     this.loading = false;
     //   },
     // });
-    }
+  }
   
   addProductVariable() {
-  const name = this.form.get('product_variable')?.value?.trim();
-  if (name) {
-    this.productVariables.push({ name } as ProductVariable);
-    this.form.get('product_variable')?.reset();
+    const name = this.form.get('product_variable')?.value?.trim();
+    if (name) {
+      this.productVariables.push({ name } as ProductVariable);
+      this.form.get('product_variable')?.reset();
+    }
   }
-  }
+
   editProductVariable(variable: any) {
-  this.form.get('product_variable')?.setValue(variable.name);
-}
+    this.form.get('product_variable')?.setValue(variable.name);
+  }
+  
   deleteProductVariable(variable: any) {
-  this.productVariables = this.productVariables.filter(v => v !== variable);
-}
+    this.productVariables = this.productVariables.filter(v => v !== variable);
+  }
+
+
+  onFileSelected(event: any) {
+    const file = event.files?.[0];
+    if (file) {
+      this.form.get('image')?.setValue(file);
+    }
+  const reader = new FileReader();
+    reader.onload = () => {
+    this.imagePreview = reader.result;
+    };
+  reader.readAsDataURL(file);
+  }
 }

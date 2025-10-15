@@ -14,6 +14,7 @@ export interface Product {
     image?: String,
     note?: String
     parent?: Product,
+    additionalPrice: number,
     productVariables?: ProductVariable[],
     ingredients?: Ingredient
 }
