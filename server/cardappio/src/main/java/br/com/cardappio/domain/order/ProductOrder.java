@@ -8,7 +8,6 @@ import com.cardappio.core.entity.EntityModel;
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,7 +41,7 @@ public class ProductOrder implements EntityModel<UUID> {
     private UUID id;
 
     @NotNull(message = Messages.ORDER_NOT_NULL)
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_order_id", nullable = false)
     private Order order;
 

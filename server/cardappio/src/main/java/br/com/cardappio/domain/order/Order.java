@@ -94,7 +94,7 @@ public class Order implements EntityModel<UUID> {
 
         order.productOrders.addAll(productOrders);
         return order;
-    } //preencher o produto aqui
+    }
 
     public static Order of(final UUID id) {
         final Order order = new Order();

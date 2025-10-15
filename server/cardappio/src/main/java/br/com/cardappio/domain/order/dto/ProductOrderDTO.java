@@ -18,24 +18,16 @@ public record ProductOrderDTO(
         BigDecimal quantity,
         String note
 ) {
-    /**
-     * Este é o construtor que o Jackson usará para criar o DTO a partir do JSON. As anotações @JsonProperty garantem que o mapeamento seja
-     * feito corretamente. A anotação @JsonCreator marca este construtor como o ponto de entrada para o JSON.
-     */
+
     @JsonCreator
     public ProductOrderDTO(
             @JsonProperty("productId") @NotNull(message = Messages.PRODUCT_NOT_NULL) UUID productId,
             @JsonProperty("quantity") @NotNull(message = "A quantidade não pode ser nula.") @Positive(message = "A quantidade deve ser um número positivo.") BigDecimal quantity,
             @JsonProperty("note") String note
     ) {
-        // Chamamos o construtor principal do record, preenchendo os campos que não vêm do JSON com null.
         this(null, null, productId, quantity, note);
     }
 
-    /**
-     * Este é o construtor auxiliar para converter uma Entidade para DTO. O Jackson vai ignorar este construtor para o JSON por causa do
-     * @JsonCreator acima.
-     */
     public ProductOrderDTO(final ProductOrder productOrder) {
         this(
                 productOrder.getId(),
