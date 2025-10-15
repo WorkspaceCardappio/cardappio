@@ -15,6 +15,7 @@ import br.com.cardappio.domain.product.ProductRepository;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.enums.OrderStatus;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -28,7 +29,6 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
         this.repository = repository;
         this.productRepository = productRepository;
         this.ticketRepository = ticketRepository;
-
         super.setRepository(repository);
     }
 
@@ -40,34 +40,60 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
     @Override
     @Transactional
     public UUID create(OrderDTO orderDTO) {
-
         Order newOrder = new Order();
         newOrder.setStatus(OrderStatus.PENDING);
 
-        Ticket ticketReference = ticketRepository.getReferenceById(orderDTO.ticketId());
-        newOrder.setTicket(ticketReference);
-
-        for (ProductOrderDTO productDTO : orderDTO.products()) {
-            ProductOrder productOrder = new ProductOrder();
-
-            Product productReference = productRepository.getReferenceById(productDTO.productId());
-            productOrder.setProduct(productReference);
-            productOrder.setQuantity(productDTO.quantity());
-
-            if (productReference.getPrice() != null) {
-                productOrder.setPrice(productReference.getPrice());
-                productOrder.setTotal(productReference.getPrice().multiply(productDTO.quantity()));
-            }
-
-            productOrder.setOrder(newOrder);
-            newOrder.getProductOrders().add(productOrder);
-        }
-
+        setTicket(newOrder, orderDTO.ticketId());
+        addProductOrders(newOrder, orderDTO.products());
         newOrder.setTotal(orderDTO.total());
 
-        Order savedOrder = repository.save(newOrder);
+        return repository.save(newOrder).getId();
+    }
 
-        return savedOrder.getId();
+    @Override
+    @Transactional
+    public void update(UUID id, OrderDTO orderDTO) {
+        Order existingOrder = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
+
+        if (orderDTO.ticketId() == null) {
+            throw new IllegalArgumentException("O ID da comanda (ticket) é obrigatório para a atualização.");
+        }
+
+        existingOrder.setTotal(orderDTO.total());
+        setTicket(existingOrder, orderDTO.ticketId());
+
+        existingOrder.getProductOrders().clear();
+        addProductOrders(existingOrder, orderDTO.products());
+
+        repository.save(existingOrder);
+    }
+
+    private void setTicket(Order order, UUID ticketId) {
+        Ticket ticket = ticketRepository.getReferenceById(ticketId);
+        order.setTicket(ticket);
+    }
+
+    private void addProductOrders(Order order, Iterable<ProductOrderDTO> productDTOs) {
+        for (ProductOrderDTO productDTO : productDTOs) {
+            ProductOrder productOrder = createProductOrder(productDTO, order);
+            order.getProductOrders().add(productOrder);
+        }
+    }
+
+    private ProductOrder createProductOrder(ProductOrderDTO productDTO, Order order) {
+        ProductOrder productOrder = new ProductOrder();
+        Product product = productRepository.getReferenceById(productDTO.productId());
+
+        productOrder.setProduct(product);
+        productOrder.setQuantity(productDTO.quantity());
+        productOrder.setOrder(order);
+
+        if (product.getPrice() != null) {
+            productOrder.setPrice(product.getPrice());
+            productOrder.setTotal(product.getPrice().multiply(productDTO.quantity()));
+        }
+
+        return productOrder;
     }
 }
-

@@ -1,15 +1,11 @@
-<div class="order-form-container">
-  <div class="header-section">
-    <h2 class="breadcrumb">
-      <span class="link" (click)="navigateToList()">Pedidos</span>
-      <span> › {{ isEditMode ? 'Editar' : 'Novo' }}</span>
-    </h2>
-  </div>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
-  <form [formGroup]="orderForm" class="form-content">
-    <div class="form-row">
-      <div class="form-field">
-        <label for="products" class="field-label">Produtos</label>
+<p-fieldset legend="{{ isEditMode ? 'Editar Pedido' : 'Novo Pedido' }}">
+  <form [formGroup]="orderForm" class="p-fluid">
+    <div class="grid mt-4">
+
+      <div class="col-6 flex flex-column mb-4 gap-1">
+        <label for="products">Produtos</label>
         <p-autoComplete
           id="products"
           formControlName="products"
@@ -17,56 +13,56 @@
           (completeMethod)="searchProducts($event)"
           [multiple]="true"
           [dropdown]="true"
-          placeholder="Selecione"
-          [showClear]="true"
-          optionLabel="name" styleClass="w-full">
+          placeholder="Selecione os produtos"
+          optionLabel="name"
+          fluid>
         </p-autoComplete>
       </div>
 
-      <div class="form-field">
-        <label for="ticket" class="field-label">Comanda</label>
+      <div class="col-6 flex flex-column mb-4 gap-1">
+        <label for="ticket">Comanda</label>
         <p-autoComplete
           id="ticket"
           formControlName="ticket"
           [suggestions]="filteredTickets"
           (completeMethod)="searchTickets($event)"
           [dropdown]="true"
-          placeholder="Selecione"
-          [showClear]="true"
+          placeholder="Selecione a comanda"
           optionLabel="number"
-          styleClass="w-full">
+          fluid>
         </p-autoComplete>
       </div>
+
+      <div class="col-6 flex flex-column mb-4 gap-1">
+        <label for="total">Preço Final</label>
+        <p-inputNumber
+          id="total"
+          formControlName="total"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          placeholder="R$ 0,00">
+        </p-inputNumber>
+      </div>
+
     </div>
 
-    <div class="form-field price-form">
-      <label for="total" class="field-label">Preço Final</label>
-      <p-inputNumber
-        id="total"
-        formControlName="total"
-        mode="currency"
-        currency="BRL"
-        locale="pt-BR"
-        placeholder="R$ 0,00"
-        styleClass="w-full">
-      </p-inputNumber>
+    <div class="mt-4 flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="onCancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        class="p-button-primary"
+        (click)="onSave()"
+        [disabled]="orderForm.invalid"
+      ></button>
     </div>
-
   </form>
-
-  <div class="form-actions">
-    <p-button
-      label="Cancelar"
-      [outlined]="true"
-      severity="secondary"
-      (onClick)="onCancel()">
-    </p-button>
-
-    <p-button
-      label="Salvar"
-      severity="success"
-      (onClick)="onSave()"
-      [disabled]="orderForm.invalid">
-    </p-button>
-  </div>
-</div>
+</p-fieldset>
