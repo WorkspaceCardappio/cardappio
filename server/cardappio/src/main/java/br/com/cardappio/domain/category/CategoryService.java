@@ -22,9 +22,9 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
         return new CategoryAdapter();
     }
 
-    @Override
-    protected void beforeSave(Category category) {
-
-        s3StorageService.saveFile(category.getImage());
-    }
+//    @Override
+//    protected void beforeSave(Category category) {
+//
+//        s3StorageService.saveFile(category.getArchive());
+//    }
 }

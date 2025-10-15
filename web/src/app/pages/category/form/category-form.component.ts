@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -68,7 +63,7 @@ export class CategoryFormComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       active: [true],
-      image: [''],
+      archive: [''],
       parent: [null],
     });
   }
@@ -96,6 +91,9 @@ export class CategoryFormComponent implements OnInit {
         .update(id, this.prepareForm())
         .subscribe(() => this.router.navigate(['category']));
     } else {
+
+      console.log(this.prepareForm());
+
       this.service
         .create(this.prepareForm())
         .subscribe(() => this.router.navigate(['category']));
@@ -158,4 +156,31 @@ export class CategoryFormComponent implements OnInit {
       parent: raw.parent === '' ? null : raw.parent,
     };
   }
+
+  // prepareForm() {
+  //   const raw = this.form.getRawValue();
+  //   const formData = new FormData();
+  //
+  //   formData.append('id', raw.id);
+  //
+  //   formData.append('name', raw.name);
+  //
+  //   formData.append('active', raw.active);
+  //
+  //   formData.append('archive', raw.archive);
+  //
+  //   if (raw.parent) {
+  //     formData.append('parent', raw.parent);
+  //   }
+  //
+  //   return {
+  //     ...formData,
+  //   };
+  // }
+
+  onUpload(file: any) {
+
+    // this.form.get('archive')?.setValue(file.files[0]);
+  }
+
 }

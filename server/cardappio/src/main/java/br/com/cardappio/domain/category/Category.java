@@ -1,5 +1,6 @@
 package br.com.cardappio.domain.category;
 
+import br.com.cardappio.domain.Archive;
 import br.com.cardappio.domain.category.dto.CategoryDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(of = { "id", "name" })
+@ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = "id")
 public class Category implements EntityModel<UUID> {
 
@@ -36,9 +37,9 @@ public class Category implements EntityModel<UUID> {
     @Column
     private Boolean active = true;
 
-    @Column
-    @Length(max = 255, message = Messages.SIZE_255)
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "archive_id")
+    private Archive archive;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -54,10 +55,9 @@ public class Category implements EntityModel<UUID> {
         category.setId(dto.id());
         category.setName(dto.name());
         category.setActive(dto.active());
-        category.setImage(dto.image());
 
         Optional.ofNullable(dto.parent())
-                        .ifPresent(parent -> category.setParent(of(parent.id())));
+                .ifPresent(parent -> category.setParent(of(parent.id())));
 
         return category;
     }

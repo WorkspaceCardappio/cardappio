@@ -2,6 +2,7 @@ package br.com.cardappio.components;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -18,7 +19,7 @@ public class S3StorageService {
 
     private static final String BUCKET_NAME = "cardappio-bucket";
 
-    public void saveFile(String file) {
+    public void saveFile(MultipartFile file) {
 
         S3Client client = S3Client
                 .builder()
