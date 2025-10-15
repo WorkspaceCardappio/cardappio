@@ -1,9 +1,9 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <p-table
   #dt1
-  [value]="categories"
+  [value]="menus"
   [lazy]="true"
-  (onLazyLoad)="loadCategories($event)"
+  (onLazyLoad)="load($event)"
   [paginator]="true"
   [rows]="20"
   [totalRecords]="totalRecords"
@@ -17,7 +17,7 @@
 >
   <ng-template #caption>
     <div class="flex">
-      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/category/new']">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/menu/new']">
       </p-button>
 
       <p-iconfield iconPosition="left" class="ml-auto">
@@ -42,22 +42,22 @@
           <p-sortIcon field="name" />
         </div>
       </th>
-      <th style="width: 30%">Categoria Principal</th>
+      <th style="width: 30%">Tema</th>
       <th style="width: 10%">Status</th>
       <th style="width: 10%">Ações</th>
     </tr>
   </ng-template>
 
-  <ng-template #body let-category>
+  <ng-template #body let-menu>
     <tr>
-      <td>{{ category.name }}</td>
+      <td>{{ menu.name }}</td>
       <td>
-        @if (category.parent?.id) {
-          {{ category.parent.name }}
+        @if (menu.parent?.id) {
+          {{ menu.parent.name }}
         }
       </td>
       <td>
-        @if (category.active) {
+        @if (menu.active) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>
         } @else {
         <i class="pi pi-times-circle" style="color: #d33b19"></i>
@@ -69,7 +69,7 @@
           type="button"
           icon="pi pi-pencil"
           class="p-button-text p-button-sm"
-          (click)="onEdit(category.id)"
+          (click)="onEdit(menu.id)"
           style="margin-right: 0.5rem"
           aria-label="Editar"
         ></button>
@@ -78,7 +78,7 @@
           type="button"
           icon="pi pi-trash"
           class="p-button-text p-button-sm p-button-danger"
-          (click)="onDelete(category.id)"
+          (click)="onDelete(menu.id)"
           aria-label="Excluir"
         ></button>
       </td>
@@ -87,7 +87,7 @@
 
   <ng-template #emptymessage>
     <tr>
-      <td colspan="12">Nenhuma categoria encontrada.</td>
+      <td colspan="12">Nenhum cardápio encontrado.</td>
     </tr>
   </ng-template>
 </p-table>

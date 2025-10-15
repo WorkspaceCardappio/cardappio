@@ -10,32 +10,24 @@ export const routes: Routes = [
     },
     {path: 'category',
       children: [
-        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryComponent)},
-        { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.CategoryFormComponent)},
+        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.MenuComponent)},
+        { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.MenuFormComponent)},
       ]
     },
-  // {
-  //   path: 'menu',
-  //   children: [
-  //     {
-  //       path: '',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
-  //     },
-  //     {
-  //       path: 'new',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
-  //     },
-  //     {
-  //       path: ':id',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
-  //     },
-  //   ]
-  // },
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    path: 'menu',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/cardapio/list/menu-list.component').then(m => m.CardapioListComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.CardapioFormComponent)
+      },
+    ]
   },
-  // {
+    // {
   //   path: 'ticket',
   //   children: [
   //     { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
@@ -65,7 +57,11 @@ export const routes: Routes = [
   //   ]
   // },
   {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
-  },
+  }
 ];

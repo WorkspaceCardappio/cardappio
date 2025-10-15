@@ -1,24 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CardapioListComponent } from './cardapio-list.component';
 import { provideHttpClient } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideRouter } from "@angular/router";
+import { MenuFormComponent } from '../../category/form/category-form.component';
 
-describe('CardapioListComponent', () => {
-  let component: CardapioListComponent;
-  let fixture: ComponentFixture<CardapioListComponent>;
+describe('MenuFormComponent', () => {
+  let component: MenuFormComponent;
+  let fixture: ComponentFixture<MenuFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardapioListComponent],
+      imports: [MenuFormComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideRouter([]),
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CardapioListComponent);
+    fixture = TestBed.createComponent(MenuFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

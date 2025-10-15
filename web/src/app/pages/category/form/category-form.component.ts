@@ -34,15 +34,17 @@ import { CategoryService } from '../service/category.service';
     CardModule,
     FieldsetModule,
   ],
-  providers: [CategoryService],
+  providers: [
+    CategoryService
+  ],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
-export class CategoryFormComponent implements OnInit {
+export class MenuFormComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [
-    { label: 'Categorias', routerLink: '/category' },
+    { label: 'Categoria', routerLink: '/category' },
     { label: 'Novo', routerLink: '/category/new' },
   ];
 
@@ -81,9 +83,8 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private loadCategory(id: string) {
-    this.service.findById(id).subscribe((category) => {
-      this.form.patchValue(category);
-    });
+    this.service.findById(id)
+      .subscribe((category) => this.form.patchValue(category));
   }
 
   create() {

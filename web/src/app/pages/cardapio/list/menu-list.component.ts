@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -11,10 +11,10 @@ import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { finalize } from 'rxjs';
 import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
-import { CategoryService } from '../service/category.service';
+import { MenuService } from "../service/menu.service";
 
 @Component({
-  selector: 'app-category',
+  selector: 'app-cardapio-list',
   imports: [
     TableModule,
     ButtonModule,
@@ -26,24 +26,30 @@ import { CategoryService } from '../service/category.service';
     RouterLink,
     BreadcrumbModule,
   ],
-  providers: [CategoryService],
-  templateUrl: './category-list.component.html',
-  styleUrl: './category-list.component.scss',
+  providers: [
+    MenuService
+  ],
+  templateUrl: './menu-list.component.html',
+  styleUrl: './menu-list.component.scss'
 })
-export class MenuComponent implements OnInit {
+export class CardapioListComponent {
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Categoria', routerLink: '/category' }];
+  items = [{ label: 'Cardápio', routerLink: '/menu' }];
 
-  categories: any[] = [];
+  menus: any[] = [];
   totalRecords: number = 0;
   loading = false;
 
-  constructor(public service: CategoryService, private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(
+    private service: MenuService,
+    private cdr: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.loadCategories(LoadUtils.getDefault());
+    this.load(LoadUtils.getDefault());
   }
 
   clear(table: any) {
@@ -51,15 +57,14 @@ export class MenuComponent implements OnInit {
   }
 
   onEdit(id: any) {
-    this.router.navigate([`category`, id]);
+    this.router.navigate([`menu`, id]);
   }
 
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadCategories(LoadUtils.getDefault()));
+    this.service.delete(id).subscribe(() => this.load(LoadUtils.getDefault()));
   }
 
-  loadCategories(event: TableLazyLoadEvent) {
-
+  load(event: TableLazyLoadEvent) {
     this.loading = true;
 
     const request = RequestUtils.build(event);
@@ -74,10 +79,11 @@ export class MenuComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.categories = response.content;
+          this.menus = response.content;
           this.totalRecords = response.totalElements;
         },
         error: () => {},
       });
   }
+
 }

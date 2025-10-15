@@ -10,7 +10,6 @@ import com.cardappio.core.controller.CrudController;
 import br.com.cardappio.domain.menu.dto.MenuDTO;
 
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("api/menus")
 public class MenuController extends CrudController<Menu, UUID, MenuDTO, MenuDTO> {
-
 }

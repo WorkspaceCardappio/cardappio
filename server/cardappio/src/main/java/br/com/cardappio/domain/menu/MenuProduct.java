@@ -51,4 +51,8 @@ public class MenuProduct implements EntityModel<UUID> {
     @Column
     @NotNull(message = Messages.EMPTY_PRICE)
     private BigDecimal price;
+
+    @Column
+    @NotNull(message = Messages.STATUS_NOT_NULL)
+    private Boolean active = true;
 }
