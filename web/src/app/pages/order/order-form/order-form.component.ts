@@ -151,7 +151,7 @@ export class OrderFormComponent implements OnInit {
         const products$ = this.productService.findAllDTO(productIds);
 
         return forkJoin({
-          order: of(order), // Mantemos a 'order' original
+          order: of(order),
           ticket: ticket$,
           products: products$
         });

@@ -2,9 +2,9 @@
   max-width: 350px;
 }
 .form-row {
-  display: flex; /* Habilita o Flexbox */
-  gap: 20px; /* Adiciona um espaço de 20px entre os elementos */
-  align-items: flex-start; /* Alinha os itens no início do eixo cruzado */
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 
@@ -13,22 +13,19 @@
 }
 
 
-/* Posicionamento e tamanho dos botões */
 .form-actions {
-  position: fixed; /* Fixa o elemento na tela em relação ao viewport */
-  bottom: 20px;    /* 20px da borda inferior da tela */
-  right: 20px;     /* 20px da borda direita da tela */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   display: flex;
   gap: 15px;
 }
 
-/* Opcional: Estilo para aumentar os botões, se ainda não estiver fazendo isso */
 .form-actions p-button {
   font-size: 1.1rem;
 }
 
 
-/* Estilos para fixar os botões no canto inferior direito da página */
 .form-actions {
   position: fixed;
   bottom: 20px;
@@ -38,13 +35,11 @@
   z-index: 1000;
 }
 
-/* Aumenta o tamanho dos botões */
 .form-actions .p-button {
   font-size: 1.2rem;
   padding: 1.25rem 2.5rem;
 }
 
-/* Alinhamento dos campos de produtos e comanda */
 .form-row {
   display: flex;
   gap: 20px;
