@@ -2,13 +2,14 @@ package br.com.cardappio.domain.ingredient.adapter;
 
 import br.com.cardappio.domain.ingredient.dto.IngredientDTO;
 import br.com.cardappio.domain.ingredient.Ingredient;
+import br.com.cardappio.domain.ingredient.dto.IngredientListDTO;
 import com.cardappio.core.adapter.Adapter;
 
-public class IngredientAdapter implements Adapter<Ingredient, IngredientDTO, IngredientDTO> {
+public class IngredientAdapter implements Adapter<Ingredient, IngredientListDTO, IngredientDTO> {
 
     @Override
-    public IngredientDTO toDTO(final Ingredient entity) {
-        return new IngredientDTO(entity);
+    public IngredientListDTO toDTO(final Ingredient entity) {
+        return new IngredientListDTO(entity);
     }
 
     @Override
