@@ -51,6 +51,10 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
 
     private void setTicket(Order order, UUID ticketId) {
         Ticket ticket = ticketRepository.getReferenceById(ticketId);
+
+        if (!TicketStatus.OPEN.equals(ticket.getStatus())) {
+            throw new IllegalArgumentException("A comanda não está aberta.");
+        }
         order.setTicket(ticket);
     }
 
@@ -69,10 +73,8 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
         productOrder.setQuantity(productDTO.quantity());
         productOrder.setOrder(order);
 
-        if (product.getPrice() != null) {
             productOrder.setPrice(product.getPrice());
             productOrder.setTotal(product.getPrice().multiply(productDTO.quantity()));
-        }
 
         return productOrder;
     }

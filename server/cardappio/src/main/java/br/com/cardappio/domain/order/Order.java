@@ -52,7 +52,7 @@ public class Order implements EntityModel<UUID> {
     @Column(insertable = false, updatable = false)
     private Long number;
 
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     @NotNull(message = Messages.MIN_VALUE_ZERO)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal total = BigDecimal.ZERO;
