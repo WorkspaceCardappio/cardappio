@@ -10,21 +10,15 @@ export const routes: Routes = [
     },
     {path: 'category',
       children: [
-        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.MenuComponent)},
-        { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.MenuFormComponent)},
+        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryListComponent)},
+        { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.CategoryFormComponent)},
       ]
     },
   {
     path: 'menu',
     children: [
-      {
-        path: '',
-        loadComponent: () => import('./pages/cardapio/list/menu-list.component').then(m => m.CardapioListComponent)
-      },
-      {
-        path: ':id',
-        loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.CardapioFormComponent)
-      },
+      { path: '', loadComponent: () => import('./pages/cardapio/list/menu-list.component').then(m => m.MenuListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.MenuFormComponent)},
     ]
   },
     // {

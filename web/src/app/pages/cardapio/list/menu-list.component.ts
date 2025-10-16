@@ -13,7 +13,7 @@ import { RequestUtils } from '../../../utils/request-utils';
 import { MenuService } from '../service/menu.service';
 
 @Component({
-  selector: 'app-cardapio-list',
+  selector: 'menu-list',
   imports: [
     TableModule,
     ButtonModule,
@@ -29,7 +29,7 @@ import { MenuService } from '../service/menu.service';
   templateUrl: './menu-list.component.html',
   styleUrl: './menu-list.component.scss',
 })
-export class CardapioListComponent {
+export class MenuListComponent {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [{ label: 'Cardápio', routerLink: '/menu' }];

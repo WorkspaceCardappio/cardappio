@@ -30,7 +30,7 @@ import { CategoryService } from '../service/category.service';
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
 })
-export class MenuComponent implements OnInit {
+export class CategoryListComponent implements OnInit {
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 

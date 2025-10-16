@@ -26,7 +26,7 @@ import { ProductService } from '../../product/product.service';
 import { MenuService } from '../service/menu.service';
 
 @Component({
-  selector: 'app-cardapio-form',
+  selector: 'menu-form',
   imports: [
   ReactiveFormsModule,
     CommonModule,
@@ -49,7 +49,7 @@ import { MenuService } from '../service/menu.service';
   templateUrl: './menu-form.component.html',
   styleUrl: './menu-form.component.scss',
 })
-export class CardapioFormComponent implements OnInit {
+export class MenuFormComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [

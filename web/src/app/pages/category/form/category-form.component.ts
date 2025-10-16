@@ -40,7 +40,7 @@ import { CategoryService } from '../service/category.service';
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
-export class MenuFormComponent implements OnInit {
+export class CategoryFormComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [
