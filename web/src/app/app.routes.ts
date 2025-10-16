@@ -18,8 +18,8 @@ export const routes: Routes = [
     {
       path: 'ingredient',
       children: [
-        { path: '', loadComponent: () => import('./pages/ingredient/ingredient-list/ingredient-list.component').then(m => m.IngredientsComponent)},
-        { path: ':id', loadComponent: () => import('./pages/ingredient/ingredients-form/ingredients-form.component').then(m => m.IngredientsFormComponent)},
+        { path: '', loadComponent: () => import('./pages/ingredient/list/ingredient-list.component').then(m => m.IngredientsComponent)},
+        { path: ':id', loadComponent: () => import('./pages/ingredient/form/ingredients-form.component').then(m => m.IngredientsFormComponent)},
       ]
     },
     {
@@ -29,13 +29,13 @@ export const routes: Routes = [
         { path: ':id', loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.MenuFormComponent)},
       ]
     },
-    // {
-  //   path: 'ticket',
-  //   children: [
-  //     { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
-  //     { path: ':id', loadComponent: () => import('./pages/ticket/ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
-  //   ]
-  // },
+    {
+    path: 'ticket',
+    children: [
+      { path: '', loadComponent: () => import('./pages/ticket/list/ticket-list.component').then(m => m.TicketListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/ticket/form/ticket-form.component').then(m => m.TicketFormComponent)},
+    ]
+  },
   // {
   //   path: 'order',
   //   children: [

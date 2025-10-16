@@ -1,9 +1,10 @@
 package br.com.cardappio.domain.ingredient.dto;
-import br.com.cardappio.domain.ingredient.Ingredient;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import br.com.cardappio.domain.ingredient.Ingredient;
 
 public record IngredientListDTO(
         UUID id,
@@ -11,7 +12,8 @@ public record IngredientListDTO(
         UnityOfMeasurementDTO unityOfMeasurement,
         LocalDate expirationDate,
         BigDecimal quantity,
-        boolean active
+        Boolean active,
+        Boolean allergenic
 ) {
     public IngredientListDTO(final Ingredient ingredient){
         this(
@@ -20,7 +22,8 @@ public record IngredientListDTO(
                 new UnityOfMeasurementDTO(ingredient.getUnityOfMeasurement()),
                 ingredient.getExpirationDate(),
                 ingredient.getQuantity(),
-                ingredient.getActive()
-                );
+                ingredient.getActive(),
+                ingredient.getAllergenic()
+        );
     }
 }

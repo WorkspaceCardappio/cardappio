@@ -10,10 +10,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
-import { MenuService } from '../service/menu.service';
+import { TicketService } from '../service/ticket.service';
 
 @Component({
-  selector: 'menu-list',
+  selector: 'app-ticket-list',
   imports: [
     TableModule,
     ButtonModule,
@@ -25,23 +25,26 @@ import { MenuService } from '../service/menu.service';
     RouterLink,
     BreadcrumbModule,
   ],
-  providers: [MenuService],
-  templateUrl: './menu-list.component.html',
-  styleUrl: './menu-list.component.scss',
+  providers: [
+    TicketService
+  ],
+  templateUrl: './ticket-list.component.html',
+  styleUrl: './ticket-list.component.scss'
 })
-export class MenuListComponent {
+export class TicketListComponent{
+
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Cardápio', routerLink: '/menu' }];
+  items = [{ label: 'Comanda', routerLink: '/ticket' }];
 
-  menus: any[] = [];
+  tickets: any[] = [];
   totalRecords: number = 0;
   loading = false;
 
   expandedRows: { [key: string]: boolean } = {};
 
   constructor(
-    private service: MenuService,
+    private service: TicketService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
@@ -55,7 +58,7 @@ export class MenuListComponent {
   }
 
   onEdit(id: any) {
-    this.router.navigate([`menu`, id]);
+    this.router.navigate([`ticket`, id]);
   }
 
   onDelete(id: any) {
@@ -71,7 +74,7 @@ export class MenuListComponent {
       .findAllDTO(request)
       .subscribe({
         next: (response) => {
-          this.menus = response.content;
+          this.tickets = response.content;
           this.totalRecords = response.totalElements;
         },
         error: () => {},
@@ -82,34 +85,37 @@ export class MenuListComponent {
       });
   }
 
-  toggleRow(menu: any) {
+  toggleRow(ticket: any) {
 
-    if (this.expandedRows[menu.id]) {
-      delete this.expandedRows[menu.id];
+    if (this.expandedRows[ticket.id]) {
+      delete this.expandedRows[ticket.id];
       return;
     }
 
-    this.expandedRows[menu.id] = true;
+    this.expandedRows[ticket.id] = true;
 
-    if (!menu.products && !menu.loadingProducts) {
-      this.loadProducts(menu);
+    if (!ticket.orders && !ticket.loadingOrders) {
+      this.loadOrders(ticket);
     }
   }
 
-  loadProducts(menu: any) {
-    menu.loadingProducts = true;
+  loadOrders(ticket: any) {
+    ticket.loadingOrders = false;
+    ticket.orders = [];
+    return;
 
-    this.service.findProductsInMenu(menu.id).subscribe({
-      next: (products) => {
-        menu.products = products;
-      },
-      error: () => {
-        menu.products = [];
-      },
-      complete: () => {
-        menu.loadingProducts = false;
-        this.cdr.markForCheck();
-      },
-    });
+    // this.service.findProductsInMenu(menu.id).subscribe({
+    //   next: (products) => {
+    //     menu.products = products;
+    //   },
+    //   error: () => {
+    //     menu.products = [];
+    //   },
+    //   complete: () => {
+    //     menu.loadingOrders = false;
+    //     this.cdr.markForCheck();
+    //   },
+    // });
   }
+
 }

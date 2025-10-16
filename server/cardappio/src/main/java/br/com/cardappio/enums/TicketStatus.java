@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import br.com.cardappio.utils.EnumDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,9 @@ public enum TicketStatus {
     public static TicketStatus fromCode(final Long code) {
         return Optional.ofNullable(CODE_MAP.get(code))
                 .orElseThrow(() -> new EntityNotFoundException(Messages.CODE_NOT_FOUND));
+    }
+
+    public EnumDTO toDTO() {
+        return new EnumDTO(code, description);
     }
 }

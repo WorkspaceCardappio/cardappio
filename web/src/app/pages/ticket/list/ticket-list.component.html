@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <p-table
   #dt1
-  [value]="menus"
+  [value]="tickets"
   [lazy]="true"
   (onLazyLoad)="load($event)"
   [paginator]="true"
@@ -18,7 +18,7 @@
 >
   <ng-template #caption>
     <div class="flex">
-      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/menu/new']">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/ticket/new']">
       </p-button>
 
       <p-iconfield iconPosition="left" class="ml-auto">
@@ -38,19 +38,20 @@
   <ng-template #header>
     <tr>
       <th style="width: 3rem"></th>
-      <th pSortableColumn="name" style="width: 50%">
+      <th pSortableColumn="number" style="width: 20%">
         <div class="flex items-center gap-2">
-          Nome
-          <p-sortIcon field="name" />
+          Número
+          <p-sortIcon field="number" />
         </div>
       </th>
-      <th style="width: 30%">Tema</th>
-      <th style="width: 10%">Status</th>
-      <th style="width: 10%">Ações</th>
+      <th style="width: 15%">Total</th>
+      <th style="width: 20%">Status</th>
+      <th style="width: 30%">Criado por</th>
+      <th style="width: 15%">Mesa</th>
     </tr>
   </ng-template>
 
-  <ng-template #body let-menu let-expanded="expanded">
+  <ng-template #body let-ticket let-expanded="expanded">
     <tr>
       <td>
         <p-button
@@ -60,13 +61,27 @@
           severity="secondary"
           [rounded]="true"
           [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-          (click)="toggleRow(menu)"
+          (click)="toggleRow(ticket)"
         />
       </td>
-      <td>{{ menu.name }}</td>
-      <td>{{ menu.theme }}</td>
+      <td>{{ ticket.number }}</td>
+      <td>{{ ticket.total | currency : "BRL" : "symbol" : "1.2-2" }}</td>
       <td>
-        @if (menu.active) {
+        @if (ticket.status.code === 1) {
+        <i class="pi pi-info-circle" style="color: #228be6"></i>
+        {{ ticket.status.description }}
+        } @else if (ticket.status.code === 2) {
+        <i class="pi pi-check-circle" style="color: #51cf66"></i>
+        {{ ticket.status.description }}
+        } @else {
+        <i class="pi pi-times-circle" style="color: #d33b19"></i>
+        {{ ticket.status.description }}
+        }
+      </td>
+      <td>{{ ticket.person }}</td>
+      <td>{{ ticket.table }}</td>
+      <td>
+        @if (ticket.active) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>
         } @else {
         <i class="pi pi-times-circle" style="color: #d33b19"></i>
@@ -78,7 +93,7 @@
           type="button"
           icon="pi pi-pencil"
           class="p-button-text p-button-sm"
-          (click)="onEdit(menu.id)"
+          (click)="onEdit(ticket.id)"
           style="margin-right: 0.5rem"
           aria-label="Editar"
         ></button>
@@ -87,7 +102,7 @@
           type="button"
           icon="pi pi-trash"
           class="p-button-text p-button-sm p-button-danger"
-          (click)="onDelete(menu.id)"
+          (click)="onDelete(ticket.id)"
           aria-label="Excluir"
         ></button>
       </td>
@@ -96,19 +111,19 @@
 
   <ng-template #emptymessage>
     <tr>
-      <td colspan="12">Nenhum cardápio encontrado.</td>
+      <td colspan="12">Nenhuma comanda encontrada.</td>
     </tr>
   </ng-template>
 
-  <ng-template #expandedrow let-menu>
+  <ng-template #expandedrow let-ticket>
     <tr>
       <td colspan="5">
         <div class="p-4">
-          @if (menu.loadingProducts) {
+          @if (ticket.loadingOrders) {
           <p>Carregando...</p>
           } @else {
           <p-table
-            [value]="menu.products"
+            [value]="ticket.orders"
             dataKey="id"
             [tableStyle]="{ 'min-width': '50rem' }"
             showGridlines
@@ -140,7 +155,7 @@
 
             <ng-template #emptymessage>
               <tr>
-                <td colspan="3">Nenhum produto encontrado.</td>
+                <td colspan="3">Nenhum pedido encontrado.</td>
               </tr>
             </ng-template>
           </p-table>

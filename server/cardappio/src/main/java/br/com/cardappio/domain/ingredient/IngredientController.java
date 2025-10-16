@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/ingredients")
+@RequestMapping("api/ingredients")
 public class IngredientController extends CrudController<Ingredient, UUID, IngredientListDTO, IngredientDTO> {
 
     private final IngredientService ingredientService;

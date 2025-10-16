@@ -1,8 +1,10 @@
 package br.com.cardappio.domain.ticket.dto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import br.com.cardappio.domain.ticket.Ticket;
+import br.com.cardappio.utils.EnumDTO;
 
 public record TicketListDTO(
 
@@ -10,7 +12,9 @@ public record TicketListDTO(
 
         Long number,
 
-        Long code,
+        BigDecimal total,
+
+        EnumDTO status,
 
         String person,
 
@@ -20,7 +24,8 @@ public record TicketListDTO(
         this(
                 ticket.getId(),
                 ticket.getNumber(),
-                ticket.getStatus().getCode(),
+                ticket.getTotal(),
+                ticket.getStatus().toDTO(),
                 ticket.getOwner().getName(),
                 ticket.getTable().getNumber()
         );
