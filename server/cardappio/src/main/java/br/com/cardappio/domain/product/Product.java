@@ -1,17 +1,10 @@
 package br.com.cardappio.domain.product;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import br.com.cardappio.domain.product.dto.ProductDTO;
-import com.cardappio.core.entity.EntityModel;
-
+import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.category.Category;
+import br.com.cardappio.domain.product.dto.ProductDTO;
 import br.com.cardappio.utils.Messages;
-
+import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -21,6 +14,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -76,17 +75,17 @@ public class Product implements EntityModel<UUID> {
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Additional> additional = new ArrayList<>();
+
+    @JsonIgnoreProperties("product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductVariable> variables = new ArrayList<>();
+
+    @JsonIgnoreProperties("product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductIngredient> productIngredients = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("parent")
-    private List<Product> additional = new ArrayList<>();
-
-    public static Product of(final ProductDTO dto){
+    public static Product of(final ProductDTO dto) {
 
         final Product product = new Product();
         product.setId(dto.id());
@@ -97,6 +96,15 @@ public class Product implements EntityModel<UUID> {
         product.setExpirationDate(dto.expirationDate());
         product.setImage(dto.image());
         product.setCategory(dto.category());
+
+        final List<Additional> additional = dto.additional()
+                .stream()
+                .map(additionalDTO -> Additional.of(additionalDTO, product))
+                .toList();
+
+        product.setAdditional(additional);
+
+        final List<ProductVariable> variable = dto.
 
         return product;
     }

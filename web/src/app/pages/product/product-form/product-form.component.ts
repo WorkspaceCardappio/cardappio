@@ -15,9 +15,11 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Ingredient } from '../../../model/ingredient';
 import { Product } from '../../../model/product';
 import { ProductVariable } from '../../../model/product_variable';
 import { CategoryService } from '../../category/service/category.service';
+import { IngredientService } from '../../ingredient/service/ingredient.service';
 import { ProductService } from '../service/product.service';
 
 
@@ -51,9 +53,9 @@ import { ProductService } from '../service/product.service';
 export class ProductFormComponent implements OnInit {
   
   form: FormGroup<any> = new FormGroup({});
-  date1: Date | undefined;
   items: MenuItem[] = [];
   productVariables: ProductVariable[] = [];
+  ingredients: Ingredient[] = [];
   home: MenuItem = {};
   filteredCategories: any[] = [];
   filteredProducts: any[] = [];
@@ -66,9 +68,8 @@ export class ProductFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private categoryService: CategoryService,
-    private productService: ProductService
-
-    // private ingredientService: IngredientService
+    private productService: ProductService,
+    private ingredientService: IngredientService
 
   ) { }
   
@@ -138,6 +139,7 @@ export class ProductFormComponent implements OnInit {
       additionalPrice: formValue.additionalPrice,
       note: formValue.note,
       productVariables: this.productVariables,
+      ingredients: this.ingredientService,
     };
 
     if (id != 'new') {
@@ -220,23 +222,23 @@ export class ProductFormComponent implements OnInit {
       searchs.push(`id=out=${id}`);
     }
 
-    // this.service.findAll(20, searchs.join(';')).subscribe({
-    //   next: (data) => {
-    //     this.filteredCategories = data;
-    //   },
-    //   error: (err) => {
-    //     console.error('Erro ao buscar produtos', err);
-    //   },
-    //   complete: () => {
-    //     this.loading = false;
-    //   },
-    // });
+    this.ingredientService.findAll(20, searchs.join(';')).subscribe({
+      next: (data: any) => {
+        this.filteredIngredients = data;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar ingredientes', err);
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
   
   addProductVariable() {
-    const name = this.form.get('product_variable')?.value?.trim();
+    const name: ProductVariable = this.form.get('product_variable')?.value?.trim();
     if (name) {
-      this.productVariables.push({ name } as ProductVariable);
+      this.productVariables.push(name);
       this.form.get('product_variable')?.reset();
     }
   }
@@ -249,6 +251,13 @@ export class ProductFormComponent implements OnInit {
     this.productVariables = this.productVariables.filter(v => v !== variable);
   }
 
+  addIngredient() {
+    const ingredient: Ingredient = this.form.get('ingredient')?.value.trim();
+
+    if (ingredient) {
+      this.ingredients.push(ingredient);
+    }
+  }
 
   onFileSelected(event: any) {
     const file = event.files?.[0];
