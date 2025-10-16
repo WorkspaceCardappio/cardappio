@@ -2,46 +2,34 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
-    path: 'product',
-    children: [
+      path: 'product',
+      children: [
         { path: '', loadComponent: () => import('./pages/product/product-list/product-list.component').then(m => m.ProductComponent)},
         { path: ':id', loadComponent: () => import('./pages/product/product-form/product-form.component').then(m => m.ProductFormComponent)}
       ]
     },
-    { path: 'category',
+    {
+      path: 'category',
       children: [
-        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryComponent)},
+        { path: '', loadComponent: () => import('./pages/category/list/category-list.component').then(m => m.CategoryListComponent)},
         { path: ':id', loadComponent: () => import('./pages/category/form/category-form.component').then(m => m.CategoryFormComponent)},
       ]
     },
-    { path: 'ingredient',
+    {
+      path: 'ingredient',
       children: [
         { path: '', loadComponent: () => import('./pages/ingredient/ingredient-list/ingredient-list.component').then(m => m.IngredientsComponent)},
         { path: ':id', loadComponent: () => import('./pages/ingredient/ingredients-form/ingredients-form.component').then(m => m.IngredientsFormComponent)},
       ]
     },
-  // {
-  //   path: 'menu',
-  //   children: [
-  //     {
-  //       path: '',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-list/cardapio-list.component').then(m => m.CardapioListComponent)
-  //     },
-  //     {
-  //       path: 'new',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
-  //     },
-  //     {
-  //       path: ':id',
-  //       loadComponent: () => import('./pages/cardapio/cardapio-form/cardapio-form.component').then(m => m.CardapioFormComponent)
-  //     },
-  //   ]
-  // },
-  {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
-  },
-  // {
+    {
+      path: 'menu',
+      children: [
+        { path: '', loadComponent: () => import('./pages/cardapio/list/menu-list.component').then(m => m.MenuListComponent)},
+        { path: ':id', loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.MenuFormComponent)},
+      ]
+    },
+    // {
   //   path: 'ticket',
   //   children: [
   //     { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
@@ -71,7 +59,16 @@ export const routes: Routes = [
     ]
   },
   {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
-  },
+  }
 ];

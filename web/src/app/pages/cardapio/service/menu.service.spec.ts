@@ -3,10 +3,10 @@ import { provideHttpClientTesting } from "@angular/common/http/testing";
 
 import { TestBed } from '@angular/core/testing';
 
-import { CardapioService } from './cardapio.service';
+import { MenuService } from './menu.service';
 
-describe('CardapioService', () => {
-  let service: CardapioService;
+describe('MenuService', () => {
+  let service: MenuService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -15,7 +15,7 @@ describe('CardapioService', () => {
         provideHttpClientTesting(),
       ]
     });
-    service = TestBed.inject(CardapioService);
+    service = TestBed.inject(MenuService);
   });
 
   it('should be created', () => {

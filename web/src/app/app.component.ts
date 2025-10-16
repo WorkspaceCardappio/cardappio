@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './menu/header/header.component';
 import { routesMenu } from './routes-menu.config';
-import { LeftMenuComponent } from "./menu/left-menu/left-menu.component";
 import { NgClass } from "@angular/common";
+import { LeftMenuComponent } from "./menu-component/left-menu/left-menu.component";
+import { HeaderComponent } from "./menu-component/header/header.component";
 
 @Component({
   selector: 'app-root',

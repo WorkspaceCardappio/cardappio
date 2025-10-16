@@ -78,14 +78,6 @@ public class Product implements EntityModel<UUID> {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductIngredient> productIngredients = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("parent")
-    private List<Product> additional = new ArrayList<>();
-
     public static Product of(final ProductDTO dto){
 
         final Product product = new Product();
