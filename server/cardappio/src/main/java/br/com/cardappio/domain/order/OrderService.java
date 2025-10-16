@@ -15,22 +15,19 @@ import br.com.cardappio.domain.product.ProductRepository;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.enums.OrderStatus;
+import br.com.cardappio.enums.TicketStatus;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
 
     private final OrderRepository repository;
     private final ProductRepository productRepository;
     private final TicketRepository ticketRepository;
 
-    public OrderService(OrderRepository repository, ProductRepository productRepository, TicketRepository ticketRepository) {
-        this.repository = repository;
-        this.productRepository = productRepository;
-        this.ticketRepository = ticketRepository;
-        super.setRepository(repository);
-    }
 
     @Override
     protected Adapter<Order, OrderDTO, OrderDTO> getAdapter() {
@@ -71,6 +68,10 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
 
     private void setTicket(Order order, UUID ticketId) {
         Ticket ticket = ticketRepository.getReferenceById(ticketId);
+
+        if (!TicketStatus.OPEN.equals(ticket.getStatus())) {
+            throw new IllegalArgumentException("A comanda não está aberta.");
+        }
         order.setTicket(ticket);
     }
 
@@ -89,10 +90,8 @@ public class OrderService extends CrudService<Order, UUID, OrderDTO, OrderDTO> {
         productOrder.setQuantity(productDTO.quantity());
         productOrder.setOrder(order);
 
-        if (product.getPrice() != null) {
             productOrder.setPrice(product.getPrice());
             productOrder.setTotal(product.getPrice().multiply(productDTO.quantity()));
-        }
 
         return productOrder;
     }

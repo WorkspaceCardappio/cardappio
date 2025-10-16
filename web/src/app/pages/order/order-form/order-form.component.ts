@@ -108,7 +108,6 @@ export class OrderFormComponent implements OnInit {
 
   onSave(): void {
     if (this.orderForm.invalid) {
-      console.log('Formulário inválido');
       return;
     }
 
@@ -167,7 +166,6 @@ export class OrderFormComponent implements OnInit {
   }
 
   private createOrder(payload: any): void {
-    console.log("Enviando para o backend:", payload);
     this.orderService.create(payload).subscribe({
       next: () => {
         this.navigateToList();

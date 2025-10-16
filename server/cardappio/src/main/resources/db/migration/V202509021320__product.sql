@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS product (
     id UUID PRIMARY KEY,
-    product_id UUID,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     quantity DECIMAL(10,2) NOT NULL CHECK (quantity >= 0),
