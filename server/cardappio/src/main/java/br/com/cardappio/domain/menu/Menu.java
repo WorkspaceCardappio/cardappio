@@ -80,7 +80,8 @@ public class Menu implements EntityModel<UUID> {
         menu.setTheme(dto.theme());
 
         final List<MenuProduct> products = dto.products()
-                .stream().map(MenuProduct::of)
+                .stream()
+                .map(menuProduct -> MenuProduct.of(menuProduct, menu))
                 .toList();
 
         menu.setProducts(products);

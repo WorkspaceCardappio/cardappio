@@ -24,7 +24,7 @@ public class ProductService extends CrudService<Product, UUID, ProductDTO, Produ
 
     public List<ProductToMenuDTO> findToMenu(final String search) {
 
-        return this.findAllRSQL(search, Pageable.ofSize(20))
+        return this.findAllRSQL(search, Pageable.ofSize(100))
                 .map(ProductToMenuDTO::new)
                 .stream()
                 .toList();

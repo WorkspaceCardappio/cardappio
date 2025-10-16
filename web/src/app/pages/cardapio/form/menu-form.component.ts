@@ -28,7 +28,7 @@ import { MenuService } from '../service/menu.service';
 @Component({
   selector: 'app-cardapio-form',
   imports: [
-    ReactiveFormsModule,
+  ReactiveFormsModule,
     CommonModule,
     InputTextModule,
     AutoCompleteModule,
@@ -77,7 +77,7 @@ export class CardapioFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.checkRoute();
-    this.buildProductForm();
+    this.productForm = this.buildProductForm();
   }
 
   private initForm() {
@@ -107,6 +107,7 @@ export class CardapioFormComponent implements OnInit {
   }
 
   searchProducts(event: any) {
+
     const query = event.query;
     const searchs = [];
 
@@ -114,32 +115,45 @@ export class CardapioFormComponent implements OnInit {
       searchs.push(`name=ilike=${query}%`);
     }
 
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
+    const idsProduct = (this.form.get('products') as FormArray)
+      .value
+      .map((value: any) => value.product.id)
+      .filter((value: any) => value !== '');
+
+    if (idsProduct.length) {
+      const ids = idsProduct.join(',');
+      searchs.push(`id=out=(${ids})`);
     }
 
-    return [];
-
-    this.productService.findAll(20, searchs.join(';')).subscribe({
-      next: (data) => {
-        this.filteredProducts = data;
-      },
-      error: (err) => {
-        console.error('Erro ao buscar produtos', err);
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+    this.productService.findToMenu(searchs.join(';'))
+      .subscribe({
+        next: (data) => {
+          this.filteredProducts = data;
+        },
+        error: (err) => {
+          console.error('Erro ao buscar produtos', err);
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
   }
 
   private checkRoute() {
+
     const { id } = this.route.snapshot.params;
     this.isEdit = id !== 'new';
 
     if (this.isEdit) {
       this.loadCardapio(id);
+      this.service.findProductsInMenu(id)
+        .subscribe(data => {
+          data.forEach((menuProduct: any) => {
+            const productForm = this.buildProductForm();
+            productForm.patchValue(menuProduct);
+            (this.form.get('products') as FormArray).push(productForm);
+          });
+        });
     }
   }
 
@@ -183,7 +197,7 @@ export class CardapioFormComponent implements OnInit {
     }
 
     this.productForm.reset();
-    this.buildProductForm();
+    this.productForm = this.buildProductForm();
   }
 
   protected editProduct(index: number) {
@@ -197,16 +211,28 @@ export class CardapioFormComponent implements OnInit {
   }
 
   protected clearProduct() {
-    this.buildProductForm();
+    this.productForm = this.buildProductForm();
     this.currentIndex = null;
   }
 
   private buildProductForm() {
-    this.productForm = this.builder.group({
+
+    const productForm = this.builder.group({
       id: [''],
-      product: [{ id: 1, name: 'Jean' }, Validators.required],
+      product: [null, Validators.required],
       price: [null, Validators.required],
       active: [true],
     });
+
+    productForm.get('product')?.valueChanges
+      .subscribe((product: any) => {
+
+        if (!product?.id)
+          return;
+
+        this.productForm.get('price')?.setValue(product.price);
+      });
+
+    return productForm;
   }
 }

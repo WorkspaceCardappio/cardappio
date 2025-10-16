@@ -22,7 +22,7 @@ public class ProductController extends CrudController<Product, UUID, ProductDTO,
     private final ProductService service;
 
     @GetMapping("/to-menu")
-    public List<ProductToMenuDTO> findToMenu(@RequestParam(value = "search",defaultValue = "") final String search) {
+    public List<ProductToMenuDTO> findToMenu(@RequestParam(value = "search", defaultValue = "") final String search) {
         return service.findToMenu(search);
     }
 

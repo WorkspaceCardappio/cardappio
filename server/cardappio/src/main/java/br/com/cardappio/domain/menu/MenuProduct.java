@@ -57,14 +57,15 @@ public class MenuProduct implements EntityModel<UUID> {
     @NotNull(message = Messages.STATUS_NOT_NULL)
     private Boolean active = true;
 
-    public static MenuProduct of(final MenuProductDTO dto) {
+    public static MenuProduct of(final MenuProductDTO dto, final Menu menu) {
 
-        final MenuProduct menu = new MenuProduct();
-        menu.setId(dto.id());
-        menu.setProduct(Product.of(dto.product().id()));
-        menu.setPrice(dto.price());
-        menu.setActive(dto.active());
+        final MenuProduct menuProduct = new MenuProduct();
+        menuProduct.setId(dto.id());
+        menuProduct.setProduct(Product.of(dto.product().id()));
+        menuProduct.setPrice(dto.price());
+        menuProduct.setActive(dto.active());
+        menuProduct.setMenu(menu);
 
-        return menu;
+        return menuProduct;
     }
 }
