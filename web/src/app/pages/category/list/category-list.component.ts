@@ -9,6 +9,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { finalize } from 'rxjs';
+import LoadUtils from '../../../utils/load-utils';
+import { RequestUtils } from '../../../utils/request-utils';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -28,11 +30,11 @@ import { CategoryService } from '../service/category.service';
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
 })
-export class CategoryComponent implements OnInit {
+export class CategoryListComponent implements OnInit {
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Categorias', routerLink: '/category' }];
+  items = [{ label: 'Categoria', routerLink: '/category' }];
 
   categories: any[] = [];
   totalRecords: number = 0;
@@ -41,13 +43,7 @@ export class CategoryComponent implements OnInit {
   constructor(public service: CategoryService, private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadCategories({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {},
-    });
+    this.loadCategories(LoadUtils.getDefault());
   }
 
   clear(table: any) {
@@ -59,28 +55,14 @@ export class CategoryComponent implements OnInit {
   }
 
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadCategories({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {},
-    }));
+    this.service.delete(id).subscribe(() => this.loadCategories(LoadUtils.getDefault()));
   }
 
   loadCategories(event: TableLazyLoadEvent) {
+
     this.loading = true;
 
-    const page = (event.first ?? 0) / (event?.rows ?? 20);
-    const size = event.rows ?? 20;
-    const sortField = event.sortField ?? '';
-    const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
-
-    let request = `page=${page}&size=${size}`;
-
-    if (sortField) {
-      request += `&sort=${sortField},${sortOrder}`;
-    }
+    const request = RequestUtils.build(event);
 
     this.service
       .findAllDTO(request)
