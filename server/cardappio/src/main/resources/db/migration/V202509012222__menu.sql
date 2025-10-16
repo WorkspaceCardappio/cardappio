@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS menu (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     note VARCHAR(255),
     theme VARCHAR(30),
-    restaurant_id UUID NOT NULL,
+    restaurant_id UUID,
+
     CONSTRAINT fk_menu_restaurant_id FOREIGN KEY (restaurant_id) REFERENCES restaurant(id)
 );
