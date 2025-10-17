@@ -1,9 +1,26 @@
+import { TableLazyLoadEvent } from "primeng/table";
 import { Filter } from "../model/filter.model";
 import { SortItem } from "../model/order-item.model";
 import { RequestParams } from "../model/request-params.model";
 
 
 export class RequestUtils {
+
+  static build(event: TableLazyLoadEvent): string {
+
+    const page = (event.first ?? 0) / (event?.rows ?? 20);
+    const size = event.rows ?? 20;
+    const sortField = event.sortField ?? '';
+    const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
+
+    let request = `page=${page}&size=${size}`;
+
+    if (sortField) {
+      request += `&sort=${sortField},${sortOrder}`;
+    }
+
+    return request;
+  }
 
   static buildRequest(params: RequestParams): string {
 
