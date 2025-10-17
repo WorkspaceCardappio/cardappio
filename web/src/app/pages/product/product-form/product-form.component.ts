@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -15,11 +15,11 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { Product } from '../../../model/product';
+import { Ingredient } from '../../../model/ingredient';
 import { ProductVariable } from '../../../model/product_variable';
 import { CategoryService } from '../../category/service/category.service';
+import { IngredientService } from '../../ingredient/service/ingredient.service';
 import { ProductService } from '../service/product.service';
-
 
 
 @Component({
@@ -40,7 +40,7 @@ import { ProductService } from '../service/product.service';
     StepperModule,
     ButtonModule,
     TableModule
-],
+  ],
   providers: [
     CategoryService,
     ProductService
@@ -51,23 +51,33 @@ import { ProductService } from '../service/product.service';
 export class ProductFormComponent implements OnInit {
   
   form: FormGroup<any> = new FormGroup({});
-  date1: Date | undefined;
+  additionalForm: FormGroup<any> = new FormGroup({});
+  ingredientForm: FormGroup<any> = new FormGroup({});
+  productVariableForm: FormGroup<any> = new FormGroup({});
+  isEdit = false;
+  
   items: MenuItem[] = [];
-  productVariables: ProductVariable[] = [];
   home: MenuItem = {};
+
+  productVariables: ProductVariable[] = [];
+  ingredients: Ingredient[] = [];
+  
   filteredCategories: any[] = [];
   filteredProducts: any[] = [];
   filteredIngredients: any[] = [];
+
   loading: boolean = false;
+  currentIndex: number | null = null;
+
+  imagePreview: string | ArrayBuffer | null = null;
   
   constructor(
     private readonly builder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private categoryService: CategoryService,
-    private productService: ProductService
-
-    // private ingredientService: IngredientService
+    private productService: ProductService,
+    private ingredientService: IngredientService
 
   ) { }
   
@@ -75,23 +85,26 @@ export class ProductFormComponent implements OnInit {
     this.initForm();
     this.initBreadcrumb();
     this.checkRoute();
+    this.ingredientForm = this.buildIngredientForm();
+    // this.additionalForm = this.buildAdditionalForm();
+    // this.productVariableForm = this.buildProductVariableForm();
   };
 
   private initForm(): void {
     this.form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
-      quantity: [null, Validators.required],
       price: [null, Validators.required],
-      expirationDate: [null, Validators.required],
+      quantity: [null, Validators.required],
       description: [''],
       active: [true],
-      image: [''],
-      category: [null, Validators.required],
-      parent: [null],
+      expirationDate: [null, Validators.required],
+      image: [null],
       note: [''],
-      product_variable: [''],
-      ingredient: [null]
+      category: [null, Validators.required],
+      additional: this.builder.array([]),
+      productVariables: this.builder.array([]),
+      ingredients: this.builder.array([])
     })
   }
   
@@ -105,51 +118,48 @@ export class ProductFormComponent implements OnInit {
 
   private checkRoute() {
     const { id } = this.route.snapshot.params;
-    if (id != 'new') {
+    this.isEdit = id !== 'new';
+
+    if (this.isEdit) {
       this.loadProduct(id);
     }
   }
 
-  private loadProduct(id: string) {
-    this.productService.findById(id).subscribe((product) => {
-      this.form.patchValue(product);
+  private loadProduct(id: string): void {
+    this.productService.findById(id).subscribe({
+      next: (product) => this.form.patchValue(product),
+      error: () => this.navigateToList()
     });
   }
 
-  create(): void {
+  onCancel(): void {
+    this.navigateToList();
+  }
+
+  onSave(): void {
     if (this.form.invalid) {
       return;
     }
-    const { id } = this.route.snapshot.params;
-    const formValue = this.form.value;
-    const product: Product = {
-      id: formValue.id,
-      name: formValue.name,
-      quantity: formValue.quantity,
-      price: formValue.price,
-      expirationDate: formValue.expirationDate,
-      description: formValue.description,
-      active: formValue.active,
-      image: formValue.image,
-      category: formValue.category,
-      parent: formValue.parent,
-      note: formValue.note,
-      productVariables: this.productVariables,
-  };
-    if (id != 'new') {
-      this.productService
-        .update(id, product)
-        .subscribe(() => this.router.navigate(['category']));
+
+    if (this.isEdit) {
+      this.updateProduct(this.form.get('id')?.value);
     } else {
-      this.productService
-        .create(product)
-        .subscribe(() => this.router.navigate(['category']));
+      this.createProduct();
     }
-    console.log(product);
   }
 
-  cancel() {
-    this.router.navigate(['product']);
+  private createProduct(): void {
+    const { id, ...productData } = this.form.value;
+
+    this.productService.create(productData).subscribe({
+      next: () => this.navigateToList()
+    })
+  }
+
+  private updateProduct(id: string): void {
+    this.productService.update(id, this.form.value).subscribe({
+      next: () => this.navigateToList()
+    })
   }
 
   searchCategories(event: any) {
@@ -158,11 +168,6 @@ export class ProductFormComponent implements OnInit {
 
     if (query) {
       searchs.push(`name=ilike=${query}%`);
-    }
-
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
     }
 
     this.categoryService.findAll(20, searchs.join(';')).subscribe({
@@ -178,7 +183,7 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-    searchProducts(event: any) {
+  searchProducts(event: any) {
     const query = event.query;
     const searchs = [];
 
@@ -186,14 +191,19 @@ export class ProductFormComponent implements OnInit {
       searchs.push(`name=ilike=${query}%`);
     }
 
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
+    const idsProduct = (this.form.get('products') as FormArray)
+      .value
+      .map((value: any) => value.product.id)
+      .filter((value: any) => value !== '');
+    
+    if (idsProduct.length) {
+      const ids = idsProduct.join(',');
+      searchs.push(`id=out=${ids}`);
     }
 
     this.productService.findAll(20, searchs.join(';')).subscribe({
       next: (data) => {
-        this.filteredCategories = data;
+        this.filteredProducts = data;
       },
       error: (err) => {
         console.error('Erro ao buscar produtos', err);
@@ -202,9 +212,9 @@ export class ProductFormComponent implements OnInit {
         this.loading = false;
       },
     });
-    }
+  }
   
-   searchIngredients(event: any) {
+  searchIngredients(event: any) {
     const query = event.query;
     const searchs = [];
 
@@ -212,35 +222,108 @@ export class ProductFormComponent implements OnInit {
       searchs.push(`name=ilike=${query}%`);
     }
 
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
+    const idsIngredient = (this.form.get('ingredients') as FormArray)
+      .value
+      .map((value: any) => value.ingredient.id)
+      .filter((value: any) => value !== '');
+    
+    if (idsIngredient) {
+      const ids = idsIngredient.join(',');
+      searchs.push(`id=out=${ids}`);
     }
 
-    // this.service.findAll(20, searchs.join(';')).subscribe({
-    //   next: (data) => {
-    //     this.filteredCategories = data;
-    //   },
-    //   error: (err) => {
-    //     console.error('Erro ao buscar produtos', err);
-    //   },
-    //   complete: () => {
-    //     this.loading = false;
-    //   },
-    // });
+    this.ingredientService.findAll(20, searchs.join(';')).subscribe({
+      next: (data: any) => {
+        this.filteredIngredients = data;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar ingredientes', err);
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
+  }
+
+  protected addIngredient() {
+    const ingredientValue = this.ingredientForm.getRawValue();
+
+    if (this.currentIndex !== null) {
+      (this.form.get('ingredients') as FormArray)
+        .at(this.currentIndex)
+        .patchValue(ingredientValue);
+      this.currentIndex = null;
+    } else {
+      const newIngredientForm = this.builder.group(ingredientValue);
+      (this.form.get('ingredients') as FormArray).push(newIngredientForm);
     }
+
+    this.ingredientForm.reset();
+    this.ingredientForm = this.buildIngredientForm();
+  }
+
+  protected editIngredient(index: number) {
+    const ingredient = (this.form.get('ingredients') as FormArray).at(index);
+    this.ingredientForm.patchValue(ingredient.value);
+    this.currentIndex = index;
+  }
+
+  protected deleteIngredient(index: number) {
+    (this.form.get('ingredients') as FormArray).removeAt(index);
+  }
+
+  protected clearIngredient() {
+    this.ingredientForm = this.buildIngredientForm();
+    this.currentIndex = null;
+  }
   
+  private buildIngredientForm() {
+    const ingredientForm = this.builder.group({
+      id: [''],
+      ingredient: [null, Validators.required],
+      quantity: [null, Validators.required],
+      active: [true],
+      unityOfMeasurement: [null, Validators.required],
+      allergenic: [true]
+    })
+    ingredientForm.get('ingredients')?.valueChanges
+      .subscribe((ingredient: any) => {
+        if (!ingredient?.id)
+          return;
+        this.ingredientForm.get('quantity')?.setValue(ingredient.quantity);
+      });
+    return ingredientForm;
+  }
+
   addProductVariable() {
-  const name = this.form.get('product_variable')?.value?.trim();
-  if (name) {
-    this.productVariables.push({ name } as ProductVariable);
-    this.form.get('product_variable')?.reset();
+    const name: ProductVariable = this.form.get('product_variable')?.value?.trim();
+    if (name) {
+      this.productVariables.push(name);
+      this.form.get('productVariables')?.reset();
+    }
   }
-  }
+
   editProductVariable(variable: any) {
-  this.form.get('product_variable')?.setValue(variable.name);
-}
+    this.form.get('product_variable')?.setValue(variable.name);
+  }
+  
   deleteProductVariable(variable: any) {
-  this.productVariables = this.productVariables.filter(v => v !== variable);
-}
+    this.productVariables = this.productVariables.filter(v => v !== variable);
+  }
+
+  protected navigateToList(): void {
+    this.router.navigate(['/product']);
+  }
+
+  onFileSelected(event: any) {
+    const file = event.files?.[0];
+    if (file) {
+      this.form.get('image')?.setValue(file);
+    }
+  const reader = new FileReader();
+    reader.onload = () => {
+    this.imagePreview = reader.result;
+    };
+  reader.readAsDataURL(file);
+  }
 }

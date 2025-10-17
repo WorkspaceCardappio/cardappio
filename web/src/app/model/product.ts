@@ -1,3 +1,4 @@
+import { Additional } from "./additional";
 import { Category } from "./category";
 import { Ingredient } from "./ingredient";
 import { ProductVariable } from "./product_variable";
@@ -9,11 +10,11 @@ export interface Product {
     quantity: number,
     description?: string,
     active: boolean,
-    category: Category,
-    expirationDate: Date,    
+    expirationDate: Date, 
     image?: String,
-    note?: String
-    parent?: Product,
+    note?: String,
+    category: Category,
+    additional?: Additional[],
     productVariables?: ProductVariable[],
-    ingredients?: Ingredient
+    ingredients: Ingredient[]    
 }

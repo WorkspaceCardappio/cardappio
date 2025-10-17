@@ -84,4 +84,13 @@ public class Ingredient implements EntityModel<UUID> {
         return ingredient;
     }
 
+    public static Ingredient of(final UUID id) {
+
+        final Ingredient ingredient = new Ingredient();
+        ingredient.setId(id);
+
+        return ingredient;
+    }
+
+
 }
