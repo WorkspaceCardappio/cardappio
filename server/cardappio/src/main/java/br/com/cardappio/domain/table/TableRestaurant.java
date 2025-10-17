@@ -1,18 +1,34 @@
 package br.com.cardappio.domain.table;
 
-import br.com.cardappio.converter.TableStatusConverter;
-import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
-import br.com.cardappio.enums.table.status.TableStatus;
-import br.com.cardappio.utils.Messages;
+import java.util.UUID;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.cardappio.core.entity.EntityModel;
-import jakarta.persistence.*;
+
+import br.com.cardappio.converter.TableStatusConverter;
+import br.com.cardappio.domain.restaurant.Restaurant;
+import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
+import br.com.cardappio.enums.TableStatus;
+import br.com.cardappio.utils.Messages;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -41,7 +57,12 @@ public class TableRestaurant implements EntityModel<UUID> {
     @Max(value = 10, message = Messages.SIZE_10)
     private Long places;
 
-    public static TableRestaurant of(final TableRestaurantInsertDTO dto) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    public static TableRestaurant of(final TableRestaurantDTO dto) {
+        
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());

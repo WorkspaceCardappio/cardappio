@@ -1,0 +1,1 @@
+INSERT INTO table_restaurant(id, number, status, places, restaurant_id) values ('df70242c-93ef-4748-a306-b8f02912ba5e', 1, 1, 4, '6bbb8d61-61e4-4f45-a13c-8b2a1f807894');

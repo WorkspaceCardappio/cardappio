@@ -1,14 +1,21 @@
 package br.com.cardappio.domain.ticket;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.converter.TicketStatusConverter;
+import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.domain.person.Person;
 import br.com.cardappio.domain.table.TableRestaurant;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.enums.TicketStatus;
+import br.com.cardappio.utils.Messages;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -17,7 +24,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -33,37 +42,61 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(of = {"id", "number", "total", "status"})
 public class Ticket implements EntityModel<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
-    private String number;
+    @Column(updatable = false, insertable = false)
+    private Long number;
+
+    @Column(nullable = false)
+    @NotNull(message = Messages.MIN_VALUE_ZERO)
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal total = BigDecimal.ZERO;
 
     @Column
     @Convert(converter = TicketStatusConverter.class)
     private TicketStatus status = TicketStatus.OPEN;
 
+    // TODO: PEGAR DO AUTHENTICATION
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "person_id")
     private Person owner;
 
     @ManyToOne
-    @JoinColumn(name = "table_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "table_id", nullable = false)
     private TableRestaurant table;
+
+    @JsonIgnoreProperties("ticket")
+    @OneToMany(mappedBy = "ticket", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public static Ticket of(final TicketDTO dto) {
 
         final Ticket ticket = new Ticket();
         ticket.setId(dto.id());
-        ticket.setNumber(dto.number());
-        ticket.setOwner(Person.of(dto.owner().id()));
         ticket.setTable(TableRestaurant.of(dto.table().id()));
+        ticket.setStatus(TicketStatus.fromCode(dto.status().code()));
 
         return ticket;
     }
 
+    public static Ticket of(final UUID id) {
+
+        Ticket ticket = new Ticket();
+        ticket.setId(id);
+        return ticket;
+
+    }
+
+    public final Ticket cloneByNewTicket() {
+
+        final Ticket ticket = new Ticket();
+        ticket.setTable(table);
+
+        return ticket;
+    }
 }

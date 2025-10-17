@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS state (
     id NUMERIC(10) PRIMARY KEY,
     acronym VARCHAR(2) NOT NULL,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(50) NOT NULL
 );
 
 INSERT INTO state (id, acronym, name) VALUES

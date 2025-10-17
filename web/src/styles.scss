@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import 'primeflex/primeflex.scss';
+
+.required-label::after {
+  content: " *";
+  color: red;
+}
+
+.input-readonly {
+  background-color: #f5f5f5 !important;
+  color: #555 !important;
+  cursor: default !important;
+  border: 1px solid #ddd !important;
+}
