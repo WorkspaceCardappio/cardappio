@@ -41,7 +41,6 @@ public class Ingredient implements EntityModel<UUID> {
 
     @Column(nullable = false)
     @NotNull
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal quantity = BigDecimal.ZERO;
 
     @Column(name="unity_of_measurement", nullable = false)

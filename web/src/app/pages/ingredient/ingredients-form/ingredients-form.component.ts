@@ -11,6 +11,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { map, Observable } from 'rxjs';
+import { Ingredient } from '../../../model/ingredient';
+import { IngredientStock } from '../../../model/ingredient-stock';
 import { IngredientService } from '../service/ingredient.service';
 
 
@@ -39,6 +41,9 @@ export class IngredientsFormComponent implements OnInit {
     { label: 'Ingredientes', routerLink: '/ingredient' },
     { label: 'Novo', routerLink: '/ingredient/new' },
   ];
+
+  ingredient!: Ingredient | null;
+  stocks: IngredientStock[] = [];
 
   form: FormGroup<any> = new FormGroup({});
 
@@ -73,11 +78,10 @@ export class IngredientsFormComponent implements OnInit {
     this.form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
-      quantity: [null, Validators.required],
-      active: [true],
-      unityOfMeasurement: ['Litro'],
-      expirationDate: [''],
-      allergenic: [false]
+      active: [true, Validators.required],
+      unityOfMeasurement: ['', Validators.required],
+      allergenic: [false, Validators.required],
+      stocks: this.builder.array([])
     });
   }
 
@@ -90,10 +94,16 @@ export class IngredientsFormComponent implements OnInit {
     }
   }
 
-  private loadIngredient(id: string) {
-    this.service.findById(id).subscribe(ingredient => {  
-      this.form.patchValue({...ingredient, expirationDate: new Date(ingredient.expirationDate)});      
-    })
+  private loadIngredient(id: string): void {
+    this.service.findById(id)
+      .subscribe({
+        next: (ingredient: Ingredient) => {
+          this.ingredient = ingredient;
+          this.form.patchValue(ingredient);
+          this.stocks = ingredient.stocks || [];
+        },
+        error: (err) => console.error('Erro ao carregar ingrediente', err),
+      });
   }
 
   create() {

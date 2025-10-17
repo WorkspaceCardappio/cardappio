@@ -1,7 +1,12 @@
+import { IngredientStock } from "./ingredient-stock";
+
 export interface Ingredient {
     id: string,
     name: string,
-    quantity: string,
+    active: boolean,
+    quantity: number,
     expirationDate: Date,
-    allergenic: boolean
+    unityOfMeasurement: number,
+    allergenic: boolean,
+    stocks: IngredientStock[]
 }
