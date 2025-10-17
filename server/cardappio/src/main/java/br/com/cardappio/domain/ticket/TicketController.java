@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardappio.core.controller.CrudController;
 
-import br.com.cardappio.domain.ticket.divider.DividerService;
-import br.com.cardappio.domain.ticket.divider.dto.DividerOrdersDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
+import br.com.cardappio.domain.ticket.split.SplitService;
+import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,11 +26,11 @@ public class TicketController extends CrudController<Ticket, UUID, TicketListDTO
     // TODO: REMOVER - VIRAR USUARIO LOGADO
     private final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
 
-    private final DividerService dividerService;
+    private final SplitService splitService;
 
-    @PostMapping("/divider/{id}")
-    public ResponseEntity<Void> divide(@PathVariable final UUID id, @RequestBody @Valid final DividerOrdersDTO bodyDivider) {
-        dividerService.ticket(id, idPerson, bodyDivider);
+    @PostMapping("/split/{id}")
+    public ResponseEntity<Void> split(@PathVariable final UUID id, @RequestBody @Valid final SplitOrdersDTO bodySplit) {
+        splitService.ticket(id, idPerson, bodySplit);
         return ResponseEntity.ok().build();
     }
 

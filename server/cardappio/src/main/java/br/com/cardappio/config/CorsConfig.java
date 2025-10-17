@@ -1,5 +1,8 @@
 package br.com.cardappio.config;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -17,10 +20,9 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(corsProperties.getAllowedOrigins().toArray(new String[0]))
-                .allowedMethods(corsProperties.getAllowedMethods().toArray(new String[0]))
-                .allowedHeaders(corsProperties.getAllowedHeaders().toArray(new String[0]));
-
+                .allowedOrigins(Optional.ofNullable(corsProperties.getAllowedOrigins()).orElse(List.of()).toArray(new String[0]))
+                .allowedMethods(Optional.ofNullable(corsProperties.getAllowedMethods()).orElse(List.of()).toArray(new String[0]))
+                .allowedHeaders(Optional.ofNullable(corsProperties.getAllowedHeaders()).orElse(List.of()).toArray(new String[0]));
     }
 
 }

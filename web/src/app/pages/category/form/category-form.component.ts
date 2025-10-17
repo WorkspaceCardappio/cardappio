@@ -16,7 +16,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -106,21 +105,6 @@ export class CategoryFormComponent implements OnInit {
   cancel() {
     this.router.navigate(['category']);
   }
-
-  categories = (query: string): Observable<any[]> => {
-    const searchs = [];
-
-    if (query) {
-      searchs.push(`name=ilike=${query}%`);
-    }
-
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
-    }
-
-    return this.service.findAll(20, searchs.join(';'));
-  };
 
   display = (item: any) => {
     return item.name;
