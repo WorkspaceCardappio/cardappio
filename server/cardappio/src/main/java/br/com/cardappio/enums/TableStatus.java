@@ -13,17 +13,17 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TableStatus {
-    FREE (1L, "Livre"),
-    RESERVED (2L, "Reservada"),
-    OCCUPIED (3L, "Ocupada"),
-    UNAVAILABLE (4L, "Indisponível");
+public enum TableStatus implements EnumSerialize {
 
-    private final Long code;
-    private final String description;
+    FREE(1L, "Livre"),
+    RESERVED(2L, "Reservada"),
+    OCCUPIED(3L, "Ocupada"),
+    UNAVAILABLE(4L, "Indisponível");
 
     private static final Map<Long, TableStatus> CODE_MAP =
             Arrays.stream(values()).collect(Collectors.toMap(TableStatus::getCode, Function.identity()));
+    private final Long code;
+    private final String description;
 
     public static TableStatus fromCode(final Long code) {
 

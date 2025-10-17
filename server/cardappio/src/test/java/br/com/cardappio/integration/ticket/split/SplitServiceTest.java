@@ -1,4 +1,4 @@
-package br.com.cardappio.integration.ticket.divider;
+package br.com.cardappio.integration.ticket.split;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -13,8 +13,8 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
-import br.com.cardappio.domain.ticket.divider.DividerService;
-import br.com.cardappio.domain.ticket.divider.dto.DividerOrdersDTO;
+import br.com.cardappio.domain.ticket.split.SplitService;
+import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
 import br.com.cardappio.enums.TicketStatus;
 import br.com.cardappio.integration.IntegrationTestBase;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,12 +30,12 @@ import static org.assertj.core.api.Assertions.within;
         "classpath:inserts/restaurant/insert_restaurant.sql",
         "classpath:inserts/table_restaurant/insert_table_restaurant.sql",
         "classpath:inserts/category/insert_category.sql",
-        "classpath:inserts/divider_ticket/insert_divider.sql",
+        "classpath:inserts/split_ticket/insert_split.sql",
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-public class DividerServiceTest extends IntegrationTestBase {
+public class SplitServiceTest extends IntegrationTestBase {
 
     @Autowired
-    private DividerService service;
+    private SplitService service;
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -43,7 +43,8 @@ public class DividerServiceTest extends IntegrationTestBase {
     @Test
     void ticketOriginNotFound() {
 
-        assertThatThrownBy(() -> service.ticket(UUID.fromString("fe410187-6662-4999-bc0c-2b1b1bea7e9e"), UUID.randomUUID(), new DividerOrdersDTO(Set.of())))
+        assertThatThrownBy(() -> service.ticket(UUID.fromString("fe410187-6662-4999-bc0c-2b1b1bea7e9e"), UUID.randomUUID(),
+                new SplitOrdersDTO(Set.of())))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Ticket fe410187-6662-4999-bc0c-2b1b1bea7e9e not found");
     }
@@ -54,14 +55,12 @@ public class DividerServiceTest extends IntegrationTestBase {
         final UUID order = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
         final UUID orderNotFound = UUID.fromString("fe410187-6662-4999-bc0c-2b1b1bea7e9e");
 
-        final DividerOrdersDTO dividerValue = DividerOrdersDTO.builder()
-                .orders(Set.of(order, orderNotFound))
-                .build();
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order, orderNotFound));
 
         final UUID idOrigin = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
         final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
 
-        assertThatThrownBy(() -> service.ticket(idOrigin, idPerson, dividerValue))
+        assertThatThrownBy(() -> service.ticket(idOrigin, idPerson, splitValue))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Order fe410187-6662-4999-bc0c-2b1b1bea7e9e not found");
     }
@@ -71,13 +70,11 @@ public class DividerServiceTest extends IntegrationTestBase {
 
         final UUID order = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
 
-        final DividerOrdersDTO dividerValue = DividerOrdersDTO.builder()
-                .orders(Set.of(order))
-                .build();
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order));
 
         final UUID idPerson = UUID.fromString("fb5836cd-aaab-47ab-9187-39f3e73d05d8");
 
-        assertThatThrownBy(() -> service.ticket(order, idPerson, dividerValue))
+        assertThatThrownBy(() -> service.ticket(order, idPerson, splitValue))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(String.format("Person %s not found", idPerson));
     }
@@ -88,14 +85,12 @@ public class DividerServiceTest extends IntegrationTestBase {
         final UUID orderOne = UUID.fromString("c69a173c-2156-4f49-b9d9-093b551e3099");
         final UUID orderTwo = UUID.fromString("80701206-d175-46af-aac1-f7afc5d82189");
 
-        final DividerOrdersDTO dividerValue = DividerOrdersDTO.builder()
-                .orders(Set.of(orderOne, orderTwo))
-                .build();
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(orderOne, orderTwo));
 
         final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
         final UUID idOrigin = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
 
-        service.ticket(idOrigin, idPerson, dividerValue);
+        service.ticket(idOrigin, idPerson, splitValue);
 
         final Optional<Ticket> ticketFound = ticketRepository.findByIdWithOrders(idOrigin);
         assertThat(ticketFound).isPresent();
@@ -118,7 +113,8 @@ public class DividerServiceTest extends IntegrationTestBase {
         assertThat(newTicket.getTable()).isEqualTo(ticket.getTable());
         assertThat(newTicket.getOrders()).hasSize(2);
         assertThat(newTicket.getOrders()).extracting(Order::getId)
-                .containsExactlyInAnyOrder(UUID.fromString("c69a173c-2156-4f49-b9d9-093b551e3099"), UUID.fromString("80701206-d175-46af-aac1-f7afc5d82189"));
+                .containsExactlyInAnyOrder(UUID.fromString("c69a173c-2156-4f49-b9d9-093b551e3099"),
+                        UUID.fromString("80701206-d175-46af-aac1-f7afc5d82189"));
     }
 
 }

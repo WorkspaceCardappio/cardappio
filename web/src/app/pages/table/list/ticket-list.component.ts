@@ -8,12 +8,13 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
-import { MenuService } from '../service/menu.service';
+import { TicketService } from '../service/table.service';
 
 @Component({
-  selector: 'menu-list',
+  selector: 'app-ticket',
   imports: [
     TableModule,
     ButtonModule,
@@ -24,32 +25,32 @@ import { MenuService } from '../service/menu.service';
     InputTextModule,
     RouterLink,
     BreadcrumbModule,
+    TagModule
   ],
-  providers: [MenuService],
-  templateUrl: './menu-list.component.html',
-  styleUrl: './menu-list.component.scss',
+  providers: [TicketService],
+  templateUrl: './ticket-list.component.html',
+  styleUrl: './ticket-list.component.scss',
 })
-export class MenuListComponent {
+export class TicketListComponent {
+
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Cardápio', routerLink: '/menu' }];
+  items = [{ label: 'Comanda', routerLink: '/ticket' }];
 
-  menus: any[] = [];
+  tickets: any[] = [];
   totalRecords: number = 0;
   loading = false;
 
   expandedRows: { [key: string]: boolean } = {};
   products: any[] = [];
 
+  pathNew = '/ticket/new';
+
   constructor(
-    private service: MenuService,
+    private service: TicketService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
-
-  ngOnInit(): void {
-    this.load(LoadUtils.getDefault());
-  }
 
   clear(table: any) {
     table.clear();
@@ -72,7 +73,7 @@ export class MenuListComponent {
       .findAllDTO(request)
       .subscribe({
         next: (response) => {
-          this.menus = response.content;
+          this.tickets = response.content;
           this.totalRecords = response.totalElements;
         },
         error: () => {},
@@ -100,17 +101,19 @@ export class MenuListComponent {
   loadProducts(menu: any) {
     menu.loadingProducts = true;
 
-    this.service.findProductsInMenu(menu.id).subscribe({
-      next: (products) => {
-        menu.products = products;
-      },
-      error: () => {
-        menu.products = [];
-      },
-      complete: () => {
-        menu.loadingProducts = false;
-        this.cdr.markForCheck();
-      },
-    });
+    return;
+
+    // this.service.findProductsInMenu(menu.id).subscribe({
+    //   next: (products) => {
+    //     menu.products = products;
+    //   },
+    //   error: () => {
+    //     menu.products = [];
+    //   },
+    //   complete: () => {
+    //     menu.loadingProducts = false;
+    //     this.cdr.markForCheck();
+    //   },
+    // });
   }
 }

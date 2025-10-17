@@ -15,10 +15,9 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableService } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { TicketStatusService } from '../../../entity-service/enums/ticket-status.service';
-import { TableService } from '../../table/service/table.service';
-import { TicketService } from '../service/ticket.service';
+import { TicketService } from '../service/table.service';
 
 @Component({
   selector: 'app-ticket-form',
@@ -44,7 +43,7 @@ export class TicketFormComponent implements OnInit {
 
   items = [
     { label: 'Comanda', routerLink: '/ticket' },
-    { label: 'Nova', routerLink: '/ticket/new' },
+    { label: 'Comanda', routerLink: '/ticket/new' },
   ];
 
   form: FormGroup<any> = new FormGroup({});
@@ -52,13 +51,10 @@ export class TicketFormComponent implements OnInit {
 
   loading = false;
   filteredTables: any[] = [];
-  filteredStatus: any[] = [];
-  allStatus: any[] = [];
 
   constructor(
     private readonly service: TicketService,
     private readonly tableService: TableService,
-    private readonly ticketStatusService: TicketStatusService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
@@ -67,7 +63,6 @@ export class TicketFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.findStatus();
     this.checkRoute();
   }
 
@@ -91,10 +86,9 @@ export class TicketFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.update(this.form.get('id')?.value);
-      return;
+    } else {
+      this.create();
     }
-
-    this.create();
   }
 
   private checkRoute() {
@@ -114,13 +108,15 @@ export class TicketFormComponent implements OnInit {
   }
 
   private create(): void {
-    this.service.create(this.form.getRawValue()).subscribe({
+    const { id, ...cardapioData } = this.form.value;
+
+    this.service.create(cardapioData).subscribe({
       next: () => this.navigateToList(),
     });
   }
 
   private update(id: string): void {
-    this.service.update(id, this.form.getRawValue()).subscribe({
+    this.service.update(id, this.form.value).subscribe({
       next: () => this.navigateToList(),
     });
   }
@@ -129,39 +125,16 @@ export class TicketFormComponent implements OnInit {
     this.router.navigate(['/ticket']);
   }
 
-  findStatus() {
-    this.ticketStatusService.find().subscribe((data) => {
-      this.allStatus = data;
-      const statusDefault = this.allStatus.find(
-        (status) => status.code === 1
-      );
-
-      if (statusDefault) this.form.get('status')?.patchValue(statusDefault);
-    });
-  }
-
-  filterStatus(event: any) {
-    const query = event.query?.toLowerCase() ?? '';
-
-    if (!query) {
-      this.filteredStatus = [...this.allStatus];
-      return;
-    }
-
-    this.filteredStatus = this.allStatus.filter((status) =>
-      status.description.toLowerCase().includes(query)
-    );
-  }
-
   searchTables(event: any) {
+
     const query = event.query;
-    const searchs = ['status.code!=4'];
+    const searchs = [];
 
     if (query) {
       searchs.push(`number==${query}`);
     }
 
-    this.tableService.findToTicket(searchs.join(';')).subscribe({
+    this.service.findAll(20, searchs.join(';')).subscribe({
       next: (data) => {
         this.filteredTables = data;
       },
@@ -169,6 +142,7 @@ export class TicketFormComponent implements OnInit {
         console.error('Erro ao buscar Mesas', err);
       },
       complete: () => {
+        this.loading = false;
         this.cdr.markForCheck();
       },
     });

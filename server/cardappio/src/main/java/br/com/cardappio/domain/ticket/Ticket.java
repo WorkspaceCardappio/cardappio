@@ -42,14 +42,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString(of = { "id", "number", "total", "status" })
+@ToString(of = {"id", "number", "total", "status"})
 public class Ticket implements EntityModel<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
+    @Column(updatable = false, insertable = false)
     private Long number;
 
     @Column(nullable = false)
@@ -61,8 +61,9 @@ public class Ticket implements EntityModel<UUID> {
     @Convert(converter = TicketStatusConverter.class)
     private TicketStatus status = TicketStatus.OPEN;
 
+    // TODO: PEGAR DO AUTHENTICATION
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private Person owner;
 
     @ManyToOne
@@ -77,17 +78,8 @@ public class Ticket implements EntityModel<UUID> {
 
         final Ticket ticket = new Ticket();
         ticket.setId(dto.id());
-        ticket.setOwner(Person.of(dto.owner().id()));
         ticket.setTable(TableRestaurant.of(dto.table().id()));
-
-        return ticket;
-    }
-
-    public final Ticket cloneAndIncrementNumber() {
-
-        final Ticket ticket = new Ticket();
-        ticket.setNumber(number + 1);
-        ticket.setTable(table);
+        ticket.setStatus(TicketStatus.fromCode(dto.status().code()));
 
         return ticket;
     }
@@ -98,5 +90,13 @@ public class Ticket implements EntityModel<UUID> {
         ticket.setId(id);
         return ticket;
 
+    }
+
+    public final Ticket cloneByNewTicket() {
+
+        final Ticket ticket = new Ticket();
+        ticket.setTable(table);
+
+        return ticket;
     }
 }

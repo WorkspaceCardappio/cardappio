@@ -1,4 +1,4 @@
-package br.com.cardappio.domain.ticket.divider;
+package br.com.cardappio.domain.ticket.split;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,28 +18,28 @@ import br.com.cardappio.domain.person.Person;
 import br.com.cardappio.domain.person.PersonRepository;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
-import br.com.cardappio.domain.ticket.divider.dto.DividerOrdersDTO;
+import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DividerService {
+public class SplitService {
 
     private final TicketRepository ticketRepository;
     private final OrderRepository orderRepository;
     private final PersonRepository personRepository;
 
-    public void ticket(final UUID id, final UUID idPerson, final DividerOrdersDTO valueToDivider) {
+    public void ticket(final UUID id, final UUID idPerson, final SplitOrdersDTO valueToSplit) {
 
         final Ticket ticket = find(id);
         final Person person = findPerson(idPerson);
-        final List<Order> orders = getOrders(valueToDivider.orders());
+        final List<Order> orders = getOrders(valueToSplit.orders());
 
-        final Ticket newTicket = ticket.cloneAndIncrementNumber();
+        final Ticket newTicket = ticket.cloneByNewTicket();
 
-        ticket.getOrders().removeIf(t -> valueToDivider.orders().contains(t.getId()));
+        ticket.getOrders().removeIf(t -> valueToSplit.orders().contains(t.getId()));
         ticket.setTotal(calculeTotal(ticket.getOrders()));
 
         newTicket.setOwner(person);
