@@ -11,6 +11,7 @@ public record ProductIngredientDTO(
         UUID id,
 
         Product product,
+        
 
         IdDTO ingredient,
 
