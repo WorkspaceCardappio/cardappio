@@ -16,11 +16,13 @@
                 [placeholder]="'quantidade'"
                 [label]="'Quantidade'"
                 formControlName="quantity"/>
-            <cardappio-date-picker class="date-picker"
-                [topLabel]="'Data de validade'"
-                [size]="'20'"
-                (dateChange)="selectedDate($event)"
-            />
+            <cardappio-date-picker
+            class="date-picker"
+            [topLabel]="'Data de validade'"
+            formControlName="expirationDate"
+            (selectedChange)="selectedDate($event)">
+            </cardappio-date-picker>
+
         </div>
         <div id="product-second-row" class="product-second-row">
             <cardappio-input class="input"

@@ -8,13 +8,13 @@ import { ProductService } from '../service/product.service';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent],
+  imports: [ReactiveFormsModule, DatePickerComponent, InputComponent, ToggleComponent, CancelButtonComponent, GenericButtonComponent, ImageUploadComponent, SaveButtonComponent, AutocompleteComponent],
   providers: [ProductService],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
-  
+
   form: FormGroup<any> = new FormGroup({});
 
   constructor(
@@ -24,10 +24,13 @@ export class ProductFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) { }
-  
+
   ngOnInit(): void {
     this.initForm();
     this.checkRoute();
+
+    this.form.get('expirationDate')?.reset();
+
   };
 
   private initForm(): void {
@@ -39,18 +42,18 @@ export class ProductFormComponent implements OnInit {
       description: [''],
       active: [true],
       category: [null],
-      expirationDate: [''],
+      expirationDate: [null],
       image: [''],
       note: ['']
     })
   }
-  
+
   private checkRoute(): void {
     const { id } = this.route.snapshot.params;
 
     if (id != 'new') {
       this.loadProduct(id);
-    }    
+    }
   }
 
   private loadProduct(id: string) {
@@ -65,7 +68,7 @@ export class ProductFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-      
+
 
     if (id != 'new') {
       this.service.update(id, this.form.value);
@@ -100,4 +103,6 @@ export class ProductFormComponent implements OnInit {
   getCategory = (item: any): string => {
     return `${item.name}`
   }
+
+
 }
