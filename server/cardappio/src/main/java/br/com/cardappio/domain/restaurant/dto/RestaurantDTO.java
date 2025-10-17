@@ -12,7 +12,7 @@ public record RestaurantDTO(
         String cnpj,
         Address address
 ) {
-    public RestaurantDTO(Restaurant restaurant) {
+    public RestaurantDTO(final Restaurant restaurant) {
         this(
                 restaurant.getId(),
                 restaurant.getName(),
