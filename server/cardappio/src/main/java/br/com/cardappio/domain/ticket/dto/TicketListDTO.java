@@ -1,8 +1,13 @@
 package br.com.cardappio.domain.ticket.dto;
 
+import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
+import br.com.cardappio.domain.person.Person;
+import br.com.cardappio.domain.table.dto.TableRestaurantToTicketDTO;
 import br.com.cardappio.domain.ticket.Ticket;
+import br.com.cardappio.utils.EnumDTO;
 
 public record TicketListDTO(
 
@@ -10,19 +15,22 @@ public record TicketListDTO(
 
         Long number,
 
-        Long code,
+        BigDecimal total,
+
+        EnumDTO status,
 
         String person,
 
-        String table
+        TableRestaurantToTicketDTO table
 ) {
-    public TicketListDTO(final Ticket ticket){
+    public TicketListDTO(final Ticket ticket) {
         this(
                 ticket.getId(),
                 ticket.getNumber(),
-                ticket.getStatus().getCode(),
-                ticket.getOwner().getName(),
-                ticket.getTable().getNumber()
+                ticket.getTotal(),
+                ticket.getStatus().toDTO(),
+                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Jean Soares"),
+                new TableRestaurantToTicketDTO(ticket.getTable())
         );
     }
 }

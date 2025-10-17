@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -44,8 +44,7 @@ export class MenuListComponent {
   constructor(
     private service: MenuService,
     private cdr: ChangeDetectorRef,
-    private router: Router,
-  private ngZone: NgZone
+    private router: Router
   ) {}
 
   ngOnInit(): void {

@@ -14,10 +14,10 @@ import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
@@ -65,7 +65,7 @@ public class TableRestaurant implements EntityModel<UUID> {
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());
-        table.setStatus(dto.status());
+        table.setStatus(TableStatus.fromCode(dto.status().code()));
         table.setPlaces(dto.places());
 
         return table;
