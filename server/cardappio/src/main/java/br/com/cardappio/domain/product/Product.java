@@ -101,6 +101,10 @@ public class Product implements EntityModel<UUID> {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductIngredient> productIngredients = new ArrayList<>();
 
+    @JsonIgnoreProperties("product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductItem> items = new ArrayList<>();
+
     public static Product of(final ProductDTO dto) {
 
         final Product product = new Product();

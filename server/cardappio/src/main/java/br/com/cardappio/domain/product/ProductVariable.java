@@ -4,11 +4,13 @@ import br.com.cardappio.domain.product.dto.ProductVariableDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +36,14 @@ public class ProductVariable implements EntityModel<UUID> {
     @NotNull
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column
+    @NotNull
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal price;
+
+    @Column
+    private Boolean active = Boolean.TRUE;
 
     public static ProductVariable of(final ProductVariableDTO dto, final Product product){
 

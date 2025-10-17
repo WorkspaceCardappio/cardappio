@@ -53,11 +53,6 @@ public class ProductOrder implements EntityModel<UUID> {
     private BigDecimal price;
 
     @Column
-    @NotNull
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal total = BigDecimal.ZERO;
-
-    @Column
     private String note;
 
     public static ProductOrder of(final ProductOrderDTO dto) {

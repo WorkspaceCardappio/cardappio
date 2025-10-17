@@ -30,8 +30,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(of = "id")
-@Table(name = "product_ingredient")
-public class ProductIngredient {
+@Table(name = "product_item_ingredient")
+public class ProductItemIngredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,20 +39,17 @@ public class ProductIngredient {
 
     @ManyToOne
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "product_item_id", nullable = false)
+    private ProductItem item;
 
     @ManyToOne
     @NotNull(message = Messages.INGREDIENT_NOT_NULL)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    public static ProductIngredient of(final ProductIngredientDTO dto, final Product product){
-        final ProductIngredient productIngredient = new ProductIngredient();
-        productIngredient.setId(dto.id());
-        productIngredient.setProduct(product);
-        productIngredient.setIngredient(Ingredient.of(dto.ingredient().id()));
+    @NotNull
+    @Column(nullable = false)
+    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
+    private BigDecimal quantity;
 
-        return productIngredient;
-    }
 }
