@@ -9,7 +9,6 @@ public record IngredientListDTO(
         UUID id,
         String name,
         UnityOfMeasurementDTO unityOfMeasurement,
-        LocalDate expirationDate,
         BigDecimal quantity,
         boolean active
 ) {
@@ -18,7 +17,6 @@ public record IngredientListDTO(
                 ingredient.getId(),
                 ingredient.getName(),
                 new UnityOfMeasurementDTO(ingredient.getUnityOfMeasurement()),
-                ingredient.getExpirationDate(),
                 ingredient.getQuantity(),
                 ingredient.getActive()
                 );

@@ -57,12 +57,16 @@ public class Additional implements EntityModel<UUID> {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     public static Additional of(final AdditionalDTO dto, final Product product) {
         final Additional additional = new Additional();
         additional.setId(dto.id());
         additional.setName(dto.name());
         additional.setPrice(dto.price());
         additional.setProduct(product);
+        additional.setActive(dto.active());
         return additional;
     }
 

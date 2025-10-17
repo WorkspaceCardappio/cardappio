@@ -18,13 +18,8 @@ public record AdditionalDTO(
 
         @NotNull
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-        BigDecimal price
+        BigDecimal price,
+
+        Boolean active
 ) {
-    public AdditionalDTO(final Additional additional) {
-        this(
-                additional.getId(),
-                additional.getName(),
-                additional.getPrice()
-        );
-    }
 }
