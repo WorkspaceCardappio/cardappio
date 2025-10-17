@@ -25,17 +25,17 @@ export const routes: Routes = [
     {
       path: 'menu',
       children: [
-        { path: '', loadComponent: () => import('./pages/cardapio/list/menu-list.component').then(m => m.MenuListComponent)},
-        { path: ':id', loadComponent: () => import('./pages/cardapio/form/menu-form.component').then(m => m.MenuFormComponent)},
+        { path: '', loadComponent: () => import('./pages/menu/list/menu-list.component').then(m => m.MenuListComponent)},
+        { path: ':id', loadComponent: () => import('./pages/menu/form/menu-form.component').then(m => m.MenuFormComponent)},
       ]
     },
-    // {
-  //   path: 'ticket',
-  //   children: [
-  //     { path: '', loadComponent: () => import('./pages/ticket/ticket.component').then(m => m.TicketsComponent)},
-  //     { path: ':id', loadComponent: () => import('./pages/ticket/ticket-form/ticket-form.component').then(m => m.TicketFormComponent)},
-  //   ]
-  // },
+    {
+      path: 'ticket',
+      children: [
+        { path: '', loadComponent: () => import('./pages/ticket/list/ticket-list.component').then(m => m.TicketListComponent)},
+        { path: ':id', loadComponent: () => import('./pages/ticket/form/ticket-form.component').then(m => m.TicketFormComponent)},
+      ]
+    },
   // {
   //   path: 'order',
   //   children: [
