@@ -2,6 +2,7 @@ package br.com.cardappio.domain.ingredient.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public record IngredientDTO(
@@ -11,6 +12,7 @@ public record IngredientDTO(
         LocalDate expirationDate,
         UnityOfMeasurementDTO unityOfMeasurement,
         Boolean active,
-        Boolean allergenic
+        Boolean allergenic,
+        List<IngredientStockDTO> stocks
 ) { }
 
