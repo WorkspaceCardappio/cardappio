@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS product (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     expiration_date DATE NOT NULL,
     image VARCHAR(255),
-    category_id UUID,
     note VARCHAR(255),
+    category_id UUID NOT NULL,
     CONSTRAINT fk_product_category_id FOREIGN KEY (category_id) REFERENCES category(id)
 );

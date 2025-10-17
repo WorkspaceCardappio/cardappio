@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tables")
+@RequestMapping("/api/tables")
 public class TableController extends CrudController<TableRestaurant, UUID, TableRestaurantDTO, TableRestaurantDTO> {
 }
