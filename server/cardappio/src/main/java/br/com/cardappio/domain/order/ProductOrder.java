@@ -34,7 +34,7 @@ public class ProductOrder implements EntityModel<UUID> {
 
     @NotNull(message = Messages.ORDER_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "client_order_id", nullable = false)
     private Order order;
 
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
