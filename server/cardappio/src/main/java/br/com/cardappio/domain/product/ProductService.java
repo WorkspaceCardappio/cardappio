@@ -1,19 +1,18 @@
 package br.com.cardappio.domain.product;
 
-import br.com.cardappio.domain.product.dto.ProductDTO;
-import br.com.cardappio.domain.product.adapter.ProductAdapter;
-import br.com.cardappio.domain.product.dto.ProductListDTO;
-import br.com.cardappio.domain.product.dto.ProductToMenuDTO;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
+import br.com.cardappio.domain.product.adapter.ProductAdapter;
+import br.com.cardappio.domain.product.dto.ProductDTO;
+import br.com.cardappio.domain.product.dto.ProductListDTO;
+import br.com.cardappio.domain.product.dto.ProductToMenuDTO;
 
 @Service
 public class ProductService extends CrudService<Product, UUID, ProductListDTO, ProductDTO> {

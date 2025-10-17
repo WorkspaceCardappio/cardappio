@@ -5,8 +5,6 @@ import java.util.UUID;
 import br.com.cardappio.domain.address.Address;
 import br.com.cardappio.domain.restaurant.Restaurant;
 
-import static org.apache.coyote.http11.Constants.a;
-
 public record RestaurantDTO(
         UUID id,
         String name,
