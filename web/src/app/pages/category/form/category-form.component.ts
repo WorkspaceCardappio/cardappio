@@ -12,6 +12,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Observable } from 'rxjs';
+import { S3StorageService } from '../../../s3/s3-storage.service';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -29,7 +30,7 @@ import { CategoryService } from '../service/category.service';
     CardModule,
     FieldsetModule,
   ],
-  providers: [CategoryService],
+  providers: [CategoryService, S3StorageService],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
@@ -46,9 +47,12 @@ export class CategoryFormComponent implements OnInit {
 
   form: FormGroup<any> = new FormGroup({});
 
+  file: any;
+
   constructor(
     private readonly builder: FormBuilder,
     private service: CategoryService,
+    private s3Service: S3StorageService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -63,7 +67,7 @@ export class CategoryFormComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       active: [true],
-      archive: [''],
+      image: [],
       parent: [null],
     });
   }
@@ -76,7 +80,9 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private loadCategory(id: string) {
+
     this.service.findById(id).subscribe((category) => {
+
       this.form.patchValue(category);
     });
   }
@@ -88,14 +94,11 @@ export class CategoryFormComponent implements OnInit {
 
     if (id != 'new') {
       this.service
-        .update(id, this.prepareForm())
+        .updateWithImage(id, this.prepareForm(), this.file)
         .subscribe(() => this.router.navigate(['category']));
     } else {
-
-      console.log(this.prepareForm());
-
       this.service
-        .create(this.prepareForm())
+        .saveWithImage(this.prepareForm(), this.file)
         .subscribe(() => this.router.navigate(['category']));
     }
   }
@@ -157,30 +160,9 @@ export class CategoryFormComponent implements OnInit {
     };
   }
 
-  // prepareForm() {
-  //   const raw = this.form.getRawValue();
-  //   const formData = new FormData();
-  //
-  //   formData.append('id', raw.id);
-  //
-  //   formData.append('name', raw.name);
-  //
-  //   formData.append('active', raw.active);
-  //
-  //   formData.append('archive', raw.archive);
-  //
-  //   if (raw.parent) {
-  //     formData.append('parent', raw.parent);
-  //   }
-  //
-  //   return {
-  //     ...formData,
-  //   };
-  // }
-
   onUpload(file: any) {
 
-    // this.form.get('archive')?.setValue(file.files[0]);
+    this.file = file.files[0];
   }
 
 }
