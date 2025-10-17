@@ -1,22 +1,22 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CategoryComponent } from './category-list.component';
+import { CategoryListComponent } from './category-list.component';
 
 
 
-describe('CategoryComponent', () => {
+describe('CategoryListComponent', () => {
 
-  let component: CategoryComponent;
-  let fixture: ComponentFixture<CategoryComponent>;
+  let component: CategoryListComponent;
+  let fixture: ComponentFixture<CategoryListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CategoryComponent],
+      imports: [CategoryListComponent],
       providers: [HttpClient, HttpHandler]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CategoryComponent);
+    fixture = TestBed.createComponent(CategoryListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

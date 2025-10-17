@@ -1,10 +1,7 @@
-
 export interface Ingredient {
     id: string,
     name: string,
-    quantity: number,
-    active: boolean,
-    unityOfMeasurement: string,
+    quantity: string,
     expirationDate: Date,
     allergenic: boolean
 }
