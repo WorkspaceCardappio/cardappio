@@ -15,6 +15,6 @@ export interface Product {
     note?: String,
     category: Category,
     additional?: Additional[],
-    productVariables: ProductVariable[],
+    productVariables?: ProductVariable[],
     ingredients: Ingredient[]    
 }

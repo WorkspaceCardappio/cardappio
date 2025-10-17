@@ -2,6 +2,7 @@ package br.com.cardappio.domain.product;
 
 import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.category.Category;
+import br.com.cardappio.domain.ingredient.Ingredient;
 import br.com.cardappio.domain.product.dto.ProductDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
@@ -17,6 +18,8 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -77,7 +80,7 @@ public class Product implements EntityModel<UUID> {
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ProductVariable> variables = new ArrayList<>();
+    private List<ProductVariable> productVariables = new ArrayList<>();
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -102,7 +105,19 @@ public class Product implements EntityModel<UUID> {
 
         product.setAdditional(additional);
 
-        final List<ProductVariable> variable = dto.
+        final List<ProductVariable> variables = dto.variables()
+                .stream()
+                .map(productVariable -> ProductVariable.of(productVariable, product))
+                .toList();
+
+        product.setProductVariables(variables);
+
+        final List<ProductIngredient> ingredients = dto.ingredients()
+                .stream()
+                .map(ingredient -> ProductIngredient.of(ingredient, product))
+                .toList();
+
+        product.setProductIngredients(ingredients);
 
         return product;
     }

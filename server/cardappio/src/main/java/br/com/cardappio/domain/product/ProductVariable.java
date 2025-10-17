@@ -1,9 +1,11 @@
 package br.com.cardappio.domain.product;
 
+import br.com.cardappio.domain.product.dto.ProductVariableDTO;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -28,4 +30,17 @@ public class ProductVariable implements EntityModel<UUID> {
     @Length(max = 255, message = Messages.SIZE_255)
     private String name;
 
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public static ProductVariable of(final ProductVariableDTO dto, final Product product){
+
+        final ProductVariable productVariable = new ProductVariable();
+        productVariable.setId(dto.id());
+        productVariable.setName(dto.name());
+
+        return productVariable;
+    }
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import br.com.cardappio.domain.ingredient.Ingredient;
+import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,4 +52,13 @@ public class ProductIngredient {
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal quantity;
 
+    public static ProductIngredient of(final ProductIngredientDTO dto, final Product product){
+        final ProductIngredient productIngredient = new ProductIngredient();
+        productIngredient.setId(dto.id());
+        productIngredient.setProduct(product);
+        productIngredient.setIngredient(Ingredient.of(dto.ingredient().id()));
+        productIngredient.setQuantity(dto.quantity());
+
+        return productIngredient;
+    }
 }

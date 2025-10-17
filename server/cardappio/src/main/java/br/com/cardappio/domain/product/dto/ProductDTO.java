@@ -48,5 +48,5 @@ public record ProductDTO(
 
         List<ProductVariableDTO> variables,
 
-        List<IngredientDTO> ingredients
+        List<ProductIngredientDTO> ingredients
 ) {}
