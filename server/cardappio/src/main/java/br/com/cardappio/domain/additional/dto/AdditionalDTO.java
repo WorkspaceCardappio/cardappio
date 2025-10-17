@@ -1,15 +1,13 @@
 package br.com.cardappio.domain.additional.dto;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 import br.com.cardappio.domain.additional.Additional;
-import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 public record AdditionalDTO(
 
@@ -22,7 +20,7 @@ public record AdditionalDTO(
         @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal price
 ) {
-    public AdditionalDTO(final Additional additional){
+    public AdditionalDTO(final Additional additional) {
         this(
                 additional.getId(),
                 additional.getName(),

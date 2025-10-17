@@ -5,7 +5,6 @@ import com.cardappio.core.adapter.Adapter;
 import br.com.cardappio.domain.menu.Menu;
 import br.com.cardappio.domain.menu.dto.MenuDTO;
 import br.com.cardappio.domain.menu.dto.MenuListDTO;
-import br.com.cardappio.domain.restaurant.Restaurant;
 
 public class MenuAdapter implements Adapter<Menu, MenuListDTO, MenuDTO> {
 

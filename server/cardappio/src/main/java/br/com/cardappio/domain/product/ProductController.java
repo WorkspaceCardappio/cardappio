@@ -1,6 +1,7 @@
 package br.com.cardappio.domain.product;
 
 import br.com.cardappio.domain.product.dto.ProductDTO;
+import br.com.cardappio.domain.product.dto.ProductListDTO;
 import br.com.cardappio.domain.product.dto.ProductToMenuDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/products")
-public class ProductController extends CrudController<Product, UUID, ProductDTO, ProductDTO> {
+public class ProductController extends CrudController<Product, UUID, ProductListDTO, ProductDTO> {
 
     private final ProductService service;
 
