@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import br.com.cardappio.domain.ingredient.Ingredient;
-import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

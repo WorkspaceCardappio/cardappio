@@ -3,7 +3,6 @@ package br.com.cardappio.domain.additional.dto;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

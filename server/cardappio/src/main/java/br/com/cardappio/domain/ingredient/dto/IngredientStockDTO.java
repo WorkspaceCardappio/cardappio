@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.springframework.data.jpa.repository.Meta;
-
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
@@ -26,5 +24,5 @@ public record IngredientStockDTO(
         @Future(message = Messages.EXPIRATION_DATE_NOT_PAST)
         LocalDate expirationDate
 
-) { }
-
+) {
+}

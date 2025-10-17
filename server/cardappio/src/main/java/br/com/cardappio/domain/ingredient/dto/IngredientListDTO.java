@@ -1,9 +1,9 @@
 package br.com.cardappio.domain.ingredient.dto;
-import br.com.cardappio.domain.ingredient.Ingredient;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
+
+import br.com.cardappio.domain.ingredient.Ingredient;
 
 public record IngredientListDTO(
         UUID id,
@@ -12,13 +12,13 @@ public record IngredientListDTO(
         BigDecimal quantity,
         boolean active
 ) {
-    public IngredientListDTO(final Ingredient ingredient){
+    public IngredientListDTO(final Ingredient ingredient) {
         this(
                 ingredient.getId(),
                 ingredient.getName(),
                 new UnityOfMeasurementDTO(ingredient.getUnityOfMeasurement()),
                 ingredient.getQuantity(),
                 ingredient.getActive()
-                );
+        );
     }
 }
