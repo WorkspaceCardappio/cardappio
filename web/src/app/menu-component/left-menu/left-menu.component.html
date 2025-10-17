@@ -1,0 +1,31 @@
+<main [ngClass]="{ expanded: expanded }">
+  <span class="on-expand" (click)="toggleExpand()">
+
+    <span>
+      @if (expanded) {
+        <i class="fa-solid fa-arrow-left"></i>
+      } @else {
+        <i class="fa-solid fa-arrow-right"></i>
+      }
+    </span>
+  </span>
+
+  <div class="items">
+    <ul>
+
+      @for (route of routes; track $index) {
+        <li [ngClass]="{ left: expanded }" (click)="redirectTo(route.path)">
+          <i [ngClass]="route.icon"></i>
+          @if (expanded) {
+            <p>{{ route.name }}</p>
+          }
+        </li>
+      }
+
+    </ul>
+  </div>
+
+  <span class="user">
+    <i class="fa-regular fa-circle-user"></i>
+  </span>
+</main>

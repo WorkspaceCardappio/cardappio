@@ -1,0 +1,1 @@
+INSERT INTO restaurant(id, name, cnpj) values ('6bbb8d61-61e4-4f45-a13c-8b2a1f807894', 'Teste', '87743211000100');

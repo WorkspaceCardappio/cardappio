@@ -1,0 +1,152 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-table
+  #dt1
+  [value]="menus"
+  [lazy]="true"
+  (onLazyLoad)="load($event)"
+  [paginator]="true"
+  [rows]="20"
+  [totalRecords]="totalRecords"
+  [loading]="false"
+  [globalFilterFields]="['name', 'status']"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  dataKey="id"
+  showGridlines
+  stripedRows
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template #caption>
+    <div class="flex">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="['/menu/new']">
+      </p-button>
+
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar"
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"></th>
+      <th pSortableColumn="name" style="width: 50%">
+        <div class="flex items-center gap-2">
+          Nome
+          <p-sortIcon field="name" />
+        </div>
+      </th>
+      <th style="width: 30%">Tema</th>
+      <th style="width: 10%">Status</th>
+      <th style="width: 10%">Ações</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-menu let-expanded="expanded">
+    <tr>
+      <td>
+        <p-button
+          type="button"
+          pRipple
+          [text]="true"
+          severity="secondary"
+          [rounded]="true"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          (click)="toggleRow(menu)"
+        />
+      </td>
+      <td>{{ menu.name }}</td>
+      <td>{{ menu.theme }}</td>
+      <td>
+        @if (menu.active) {
+        <i class="pi pi-check-circle" style="color: #51cf66"></i>
+        } @else {
+        <i class="pi pi-times-circle" style="color: #d33b19"></i>
+        }
+      </td>
+      <td>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-text p-button-sm"
+          (click)="onEdit(menu.id)"
+          style="margin-right: 0.5rem"
+          aria-label="Editar"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-danger"
+          (click)="onDelete(menu.id)"
+          aria-label="Excluir"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="12">Nenhum cardápio encontrado.</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-menu>
+    <tr>
+      <td colspan="5">
+        <div class="p-4">
+          @if (menu.loadingProducts) {
+          <p>Carregando...</p>
+          } @else {
+          <p-table
+            [value]="menu.products"
+            dataKey="id"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            showGridlines
+            stripedRows
+          >
+            <ng-template #header>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Status</th>
+              </tr>
+            </ng-template>
+
+            <ng-template #body let-item>
+              <tr>
+                <td>{{ item.product.name }}</td>
+                <td>
+                  {{ item.price | currency : "BRL" : "symbol" : "1.2-2" }}
+                </td>
+                <td>
+                  @if (item.active) {
+                  <i class="pi pi-check-circle" style="color: #51cf66"></i>
+                  } @else {
+                  <i class="pi pi-times-circle" style="color: #d33b19"></i>
+                  }
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="3">Nenhum produto encontrado.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          }
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

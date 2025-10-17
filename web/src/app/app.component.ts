@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent, LeftMenuComponent } from 'cardappio-component-hub';
+import { HeaderComponent } from './menu-component/header/header.component';
+import { LeftMenuComponent } from './menu-component/left-menu/left-menu.component';
 import { routesMenu } from './routes-menu.config';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LeftMenuComponent, HeaderComponent, RouterOutlet],
+  imports: [LeftMenuComponent, RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,68 +1,68 @@
-#product-row,
-#product-second-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  gap: 4px;
-  width: 100%;
-  margin-top: 10px;
-  align-items: end;
-}
 
-.input {
-  margin-top: 12px;
-}
+// #product-row,
+// #product-second-row {
+//   display: grid;
+//   grid-template-columns: 1fr auto auto auto;
+//   gap: 4px;
+//   width: 100%;
+//   margin-top: 10px;
+// }
 
-.category-btn {
-  margin-top: 30px;
-}
+// .input {
+//   margin-top: 12px;
+// }
 
-.active-btn {
-  margin-top: 20px;
-}
+// .category-btn {
+//   margin-top: 30px;
+// }
 
-#additional-btn,
-#ingredients-btn {
-  width: 100%;
-  display: flex;
-  border: 0.5px solid black;
-  justify-content: space-between;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #D0D0D2;
-  margin-top: 10px;
-}
+// .active-btn {
+//   margin-top: 20px;
+// }
 
-.button {
-  display: flex;
-  justify-content: space-between;
-  gap: 4px;
-  margin-top: 20px;
-}
+// #additional-btn,
+// #ingredients-btn {
+//   width: 100%;
+//   display: flex;
+//   border: 0.5px solid black;
+//   justify-content: space-between;
+//   padding: 20px;
+//   border-radius: 10px;
+//   background-color: #D0D0D2 ;
+//   margin-top: 10px;
+// }
 
-.auto-complete {
-  margin-top: 0px;
-}
+// .button {
+//   display: flex;
+//   justify-content: space-between;
+//   gap: 4px;
+//   margin-top: 20px;
+// }
 
-.actions-btn {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 20px;
-}
+// .auto-complete {
+//   margin-top: 0px;
+// }
 
-.third-row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  margin-top: 10px;
-  padding: 5px;
-  gap: 5px
-}
+// .actions-btn {
+//   margin-top: 20px;
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: flex-end;
+//   gap: 20px;
+// }
 
-.text-area {
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
+// .third-row {
+//   display: grid;
+//   grid-template-columns: auto 1fr;
+//   margin-top: 10px;
+//   padding: 5px;
+//   gap: 5px
+// }
+
+// .text-area {
+//   display: grid;
+//     grid-template-rows: auto 1fr;
+// }
 
 ::ng-deep .mat-datepicker-content-container {
   background: #fff !important;

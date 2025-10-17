@@ -1,0 +1,75 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Nova Comanda">
+  <form [formGroup]="form" class="p-fluid">
+    <div class="grid mt-4">
+      <div class="col-2 flex flex-column mb-4 gap-1">
+        <label for="number">Número</label>
+        <input
+          id="number"
+          pInputText
+          formControlName="number"
+          placeholder="Número"
+          readonly
+          class="input-readonly"
+        />
+      </div>
+
+      <div class="col-4 flex flex-column mb-4 gap-1">
+        <label for="person">Criado Por</label>
+        <input
+          id="person"
+          pInputText
+          formControlName="person"
+          placeholder="Criado por"
+          readonly
+          class="input-readonly"
+        />
+      </div>
+
+      <div class="col-3 flex flex-column mb-4 gap-1">
+        <label for="parent" class="required-label">Vincular uma mesa</label>
+        <p-autocomplete
+          formControlName="table"
+          optionLabel="number"
+          [suggestions]="filteredTables"
+          (completeMethod)="searchTables($event)"
+          [dropdown]="true"
+          [emptyMessage]="'Nenhuma mesa encontrada'"
+          fluid
+        />
+      </div>
+
+      <div class="col-3 flex flex-column mb-4 gap-1">
+        <label for="status">Status</label>
+        <p-autocomplete
+          formControlName="status"
+          optionLabel="description"
+          [suggestions]="filteredStatus"
+          [dropdown]="true"
+          [forceSelection]="true"
+          (completeMethod)="filterStatus($event)"
+          fluid
+        />
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="onCancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        class="p-button-primary"
+        (click)="onSave()"
+        [disabled]="this.form.invalid"
+      ></button>
+    </div>
+  </form>
+</p-fieldset>
