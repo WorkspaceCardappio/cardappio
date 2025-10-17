@@ -11,7 +11,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { finalize, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { IngredientService } from '../service/ingredient.service';
 
 @Component({
@@ -38,11 +38,10 @@ export class IngredientsComponent implements OnInit {
   items = [{ label: 'Ingredientes', routerLink: '/ingredients' }];
   @ViewChild('dt1') dt1!: Table;
   
-  expandedRows: any[] = [];
+  expandedRows: { [key: string]: boolean } = {};
   ingredients: any[] = [];
   totalRecords: number = 0;
   loading = false;
-  
 
   constructor(public service: IngredientService, private cdr: ChangeDetectorRef, private router: Router) { }
 
@@ -90,18 +89,16 @@ export class IngredientsComponent implements OnInit {
 
     this.service
       .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
       .subscribe({
         next: (response) => {
           this.ingredients = response.content;
           this.totalRecords = response.totalElements;
         },
-        error: () => {},
+        error: () => { },
+        complete: () => { 
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
       });
   }
   
@@ -117,13 +114,34 @@ export class IngredientsComponent implements OnInit {
   );
   }
 
-  toggleRow(ingredient: any) {
- const index = this.expandedRows.indexOf(ingredient.id);
-  if (index >= 0) {
-    this.expandedRows.splice(index, 1);
-  } else {
-    this.expandedRows.push(ingredient.id);
-  }
-}
+  loadStocks(event: TableLazyLoadEvent, ingredient: any) {
+    
+    ingredient.loadingStocks = true;
 
+    //TODO: IMPLEMENTAR AO TERMINAR O STOCK
+    ingredient.stocks = [{
+      id: 2,
+      batch: 1,
+      quantity: 1,
+      expirationDate: "2025-12-10"
+    }];
+    ingredient.totalStock = 0;
+    ingredient.loadingStocks = false;
+    this.cdr.markForCheck();
+
+  }
+
+  toggleRow(ingredient: any) {
+    if (this.expandedRows[ingredient.id]) {
+      delete this.expandedRows[ingredient.id];
+      return;
+    }
+      
+    this.expandedRows[ingredient.id] = true;
+
+    if (!ingredient.stocks) {
+      ingredient.stocks = [];
+      ingredient.totalStocks = 0;
+    }
+  }
 }

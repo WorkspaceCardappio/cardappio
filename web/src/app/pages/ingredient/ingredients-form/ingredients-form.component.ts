@@ -79,6 +79,7 @@ export class IngredientsFormComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       active: [true, Validators.required],
+      quantity: [0, Validators.required],
       unityOfMeasurement: ['', Validators.required],
       allergenic: [false, Validators.required],
       stocks: this.builder.array([])
