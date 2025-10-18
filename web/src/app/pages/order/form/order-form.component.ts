@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { forkJoin, of, switchMap } from "rxjs";
-import { OrderService } from "../service/order.service";
 import { ProductService } from "../../product/product.service";
 import { TicketService } from "../../ticket/service/ticket.service";
+import { OrderService } from "../service/order.service";
 
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { Breadcrumb } from "primeng/breadcrumb";
 import { ButtonModule } from 'primeng/button';
 import { Fieldset } from "primeng/fieldset";
-import { Breadcrumb } from "primeng/breadcrumb";
+import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
+import { StepperModule } from 'primeng/stepper';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-order-form',
@@ -21,7 +23,10 @@ import { Breadcrumb } from "primeng/breadcrumb";
     InputNumberModule,
     ButtonModule,
     Fieldset,
-    Breadcrumb
+    Breadcrumb,
+    TableModule,
+    StepperModule,
+    InputNumber,
   ],
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.scss']
@@ -30,7 +35,7 @@ export class OrderFormComponent implements OnInit {
 
   orderId: string | null = null;
   isEditMode = false;
-  orderForm: FormGroup;
+  form: FormGroup = new FormGroup({});
 
   filteredProducts: any[] = [];
   filteredTickets: any[] = [];
@@ -52,17 +57,11 @@ export class OrderFormComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder
   ) {
-
-    this.orderForm = this.fb.group({
-      id: [''],
-      total: [0, [Validators.required, Validators.min(0)]],
-      orderStatus: ['PENDING', Validators.required],
-      products: [[], Validators.required],
-      ticket: [null, Validators.required]
-    });
   }
 
   ngOnInit(): void {
+
+    this.form = this.initForm();
 
     this.orderId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.orderId;
@@ -70,6 +69,17 @@ export class OrderFormComponent implements OnInit {
     if (this.isEditMode) {
       this.loadOrder();
     }
+  }
+
+  private initForm() {
+
+    return this.fb.group({
+      id: [''],
+      total: [0, [Validators.required, Validators.min(0)]],
+      orderStatus: [null, Validators.required],
+      products: [[], Validators.required],
+      ticket: [null, Validators.required]
+    });
   }
 
   searchProducts(event: any): void {
@@ -107,11 +117,10 @@ export class OrderFormComponent implements OnInit {
   }
 
   onSave(): void {
-    if (this.orderForm.invalid) {
+    if (this.form.invalid)
       return;
-    }
 
-    const { total, orderStatus, products, ticket } = this.orderForm.value;
+    const { total, orderStatus, products, ticket } = this.form.value;
 
     const orderPayload = {
       total: total || 0,
@@ -157,7 +166,7 @@ export class OrderFormComponent implements OnInit {
       })
     ).subscribe(({ order, ticket, products }) => {
 
-      this.orderForm.patchValue({
+      this.form.patchValue({
         total: order.total,
         ticket: ticket,
         products: products.content

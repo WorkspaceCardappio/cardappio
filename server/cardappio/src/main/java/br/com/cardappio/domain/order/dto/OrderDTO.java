@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.enums.OrderStatus;
@@ -30,9 +29,7 @@ public record OrderDTO(
                 order.getId(),
                 order.getTotal(),
                 order.getStatus(),
-                order.getProductOrders().stream()
-                        .map(ProductOrderDTO::new)
-                        .collect(Collectors.toList()),
+                List.of(),
                 order.getTicket().getId(),
                 order.getNumber(),
                 order.getCreatedAt()

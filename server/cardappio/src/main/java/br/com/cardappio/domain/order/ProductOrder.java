@@ -1,13 +1,17 @@
 package br.com.cardappio.domain.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.domain.order.dto.ProductOrderDTO;
-import br.com.cardappio.domain.product.Product;
+import br.com.cardappio.domain.product.ProductItem;
 import br.com.cardappio.utils.Messages;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -48,7 +53,7 @@ public class ProductOrder implements EntityModel<UUID> {
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private ProductItem product;
 
     @Column
     @NotNull(message = Messages.INGREDIENT_NOT_NULL)
@@ -63,12 +68,19 @@ public class ProductOrder implements EntityModel<UUID> {
     @Column
     private String note;
 
+    @JsonIgnoreProperties("productOrder")
+    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductOrderVariable> variables = new ArrayList<>();
+
+    @JsonIgnoreProperties("productOrder")
+    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ProductOrderAdditional> additionals = new ArrayList<>();
+
     public static ProductOrder of(final ProductOrderDTO dto) {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(dto.id());
         productOrder.setOrder(Order.of(dto.orderId()));
-        productOrder.setProduct(Product.of(dto.productId()));
 
         return productOrder;
     }
