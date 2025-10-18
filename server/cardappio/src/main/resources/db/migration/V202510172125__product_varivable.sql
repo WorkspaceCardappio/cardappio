@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS product_variable (
    price DECIMAL(10,2) NOT NULL,
    active BOOLEAN NOT NULL DEFAULT TRUE,
 
-   CONSTRAINT fk_additional_product_id FOREIGN KEY (product_id) REFERENCES product(id)
+   CONSTRAINT fk_product_variable_product_id FOREIGN KEY (product_id) REFERENCES product(id)
 );

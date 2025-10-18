@@ -1,53 +1,41 @@
-<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<!-- <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
 <p-fieldset legend="Novo Produto">
-    <div class="card flex justify-center w-full">
-      <p-stepper [value]="1" class="w-full flex flex-column">
-        <p-step-list>
-          <p-step [value]="1">Informações Gerais</p-step>
-          <p-step [value]="2">Tamanhos disponíveis e preço</p-step>
-          <p-step [value]="3">Ingredientes</p-step>
-          <p-step [value]="4">Adicionais</p-step>
-          <p-step [value]="5">Variáveis do produto</p-step>
-        </p-step-list>
+  <div class="card flex justify-center w-full">
+    <p-stepper [value]="1" class="w-full flex flex-column">
+      <p-step-list>
+        <p-step [value]="1">Informações Gerais</p-step>
+        <p-step [value]="2">Ingredientes</p-step>
+        <p-step [value]="3">Tamanhos disponíveis e preço</p-step>
+        <p-step [value]="4">Adicionais</p-step>
+        <p-step [value]="5">Variáveis do produto</p-step>
+      </p-step-list>
 
-        <p-step-panels class="w-full flex-1">
-          <p-step-panel [value]="1" class="w-full">
-            <ng-template #content let-activateCallback="activateCallback">
-              <form [formGroup]="product" class="p-fluid w-full">
-                <div class="grid w-full mt-4">
-                  <div class="col-8 flex flex-column mb-4 gap-1">
-                    <label for="name" class="required-label">Nome</label>
-                    <input id="name" pInputText formControlName="name" placeholder="Nome" />
-                  </div>
+      <p-step-panels class="w-full flex-1">
+        <p-step-panel [value]="1" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-8 flex flex-column mb-4 gap-1">
+                  <label for="name" class="required-label">Nome</label>
+                  <input id="name" pInputText formControlName="name" placeholder="Nome" />
+                </div>
 
-                  <div class="col-3 flex flex-column mb-4 gap-1">
-                     <label for="expirationDate">Data de validade</label>
-                       <p-datepicker
-                         formControlName="expirationDate"
-                         [showIcon]="true"
-                         inputId="expirationDate"
-                         [showOnFocus]="true"
-                         dateFormat="dd/mm/yy"
-                         locale="pt-BR"
-                        />
-                  </div>
-  
-                <div class="col-1 flex flex-column mb-4 gap-1">
-                  <label for="active" class="required-label">Ativo</label>
-                  <p-toggle-switch
-                    inputId="active"
-                    formControlName="active"
-                  ></p-toggle-switch>
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="expirationDate">Data de validade</label>
+                  <p-datepicker
+                    formControlName="expirationDate"
+                    [showIcon]="true"
+                    inputId="expirationDate"
+                    [showOnFocus]="true"
+                    dateFormat="dd/mm/yy"
+                    locale="pt-BR"
+                  ></p-datepicker>
                 </div>
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="description">Descrição</label>
-                  <textarea
-                    rows="3"
-                    pTextarea
-                    formControlName="description"
-                  ></textarea>
+                  <textarea rows="3" pTextarea formControlName="description"></textarea>
                 </div>
 
                 <div class="col-4 flex flex-column mb-4 gap-1">
@@ -73,6 +61,7 @@
                     previewWidth="50"
                     (onSelect)="onFileSelected($event)"
                   ></p-fileUpload>
+
                   <div *ngIf="imagePreview" class="mt-3">
                     <img
                       [src]="imagePreview"
@@ -84,85 +73,28 @@
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="note">Informações adicionais</label>
-                  <textarea
-                    rows="3"
-                    pTextarea
-                    formControlName="note"
-                  ></textarea>
+                  <textarea rows="3" pTextarea formControlName="note"></textarea>
                 </div>
               </div>
-             </form>
-              <div class="flex pt-6 justify-end">
-                <p-button
-                  label="Próximo"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  (onClick)="activateCallback(2)"
-                ></p-button>                
-              </div>              
-            </ng-template>          
-          </p-step-panel>
+            </form>
 
-        <p-step-panels class="w-full flex-1">
-          <p-step-panel [value]="2" class="w-full">
-            <ng-template #content let-activateCallback="activateCallback">
-              <div class="grid w-full mt-4">
-                <form [formGroup]="productItem" class="p-fluid w-full">
-                  <div class="col-8 flex flex-column mb-4 gap-1">
-                    <label for="quantity">Quantidade</label>
-                    <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
-                  </div>
-
-                  <div class="col-3 flex flex-column mb-4 gap-1">
-                    <label for="itemSize" class="required-label">Tamanhos disponíveis</label>
-                    <p-select 
-                      [options]="itemSize" 
-                      formControlName="itemSize" 
-                      optionLabel="description" 
-                      placeholder="Selecione o tamanho"
-                      class="w-full md:w-56" />
-                  </div>
-                  <div class="col-3 flex flex-column mb-4 gap-1">
-                    <p-inputNumber
-                      inputId="additional_price"
-                      formControlName="additionalPrice"
-                      placeholder="Preço"
-                      mode="currency"
-                      currency="BRL"
-                      locale="pt-BR"
-                    />
-                  </div>
-                  <div class="col-1 flex flex-column mb-4 gap-1">
-                    <label for="active" class="required-label">Ativo</label>
-                      <p-toggle-switch
-                        inputId="active"
-                        formControlName="active"
-                      />
-                  </div>
-              </form>
+            <div class="flex pt-6 justify-end">
               <p-button
-                label="Adicionar"
-                icon="pi pi-plus"
-                (onClick)="addProductItem()"
-              />
-              </div>
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="activateCallback(2)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
 
-              <div class="flex pt-6 justify-end">
-                <p-button
-                  label="Próximo"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
-              </div>
-            </ng-template>
-          </p-step-panel>
-
-        <p-step-panels class="w-full flex-1">
-          <p-step-panel [value]="3" class="w-full">
-            <ng-template #content let-activateCallback="activateCallback">
+        <p-step-panel [value]="2" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productItemIngredientForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
-                <form [formGroup]="productItemIngredient" class="p-fluid w-full">
+                <div class="col-8 flex flex-column mb-4 gap-1">
+                  <label for="ingredient">Buscar ingrediente</label>
                   <p-autocomplete
                     formControlName="ingredient"
                     optionLabel="name"
@@ -171,174 +103,856 @@
                     [dropdown]="true"
                     fluid
                   ></p-autocomplete>
-                  <div class="col-8 flex flex-column mb-4 gap-1">
-                    <label for="quantity">Quantidade</label>
-                    <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
-                  </div>
-              </form>
+                </div>
+               </div>
+            </form>
+
+            <p-button
+              label="Adicionar"
+              icon="pi pi-plus"
+              (onClick)="addProductItemIngredient()"
+            ></p-button>
+            
+            <p-table
+              [value]="productItemIngredient"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">
+                    Nome <p-sortIcon field="name"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="unityOfMeasurement">
+                    Unidade de medida <p-sortIcon field="unityOfMeasurement"></p-sortIcon>
+                  </th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-ingredient>
+                <tr>
+                  <td>{{ ingredient.name }}</td>
+                  <td>{{ ingredient.unityOfMeasurement }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editProductVariable(ingredient)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteProductVariable(ingredient)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">
+                    Nenhum ingrediente cadastrado.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-end">
               <p-button
-                label="Adicionar"
-                icon="pi pi-plus"
-                (onClick)="addProductItemIngredient()"
-              />
-              </div>
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (onClick)="activateCallback(2)"
+              ></p-button>
+              <p-button
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="activateCallback(4)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
 
-              <div class="flex pt-6 justify-end">
-                <p-button
-                  label="Voltar"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
-                <p-button
-                  label="Próximo"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
-              </div>
-            </ng-template>
-          </p-step-panel>
-
-        <p-step-panels class="w-full flex-1">
-          <p-step-panel [value]="4" class="w-full">
-            <ng-template #content let-activateCallback="activateCallback">
+        <p-step-panel [value]="3" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productItemForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
-                <form [formGroup]="additional" class="p-fluid w-full">
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="itemSize" class="required-label">Tamanhos</label>
+                  <p-select
+                    [options]="itemSize"
+                    formControlName="size"
+                    optionLabel="description"
+                    placeholder="Selecione o tamanho"
+                    class="w-full md:w-56"
+                  ></p-select>
+                </div>
+
+                <div class="col-4 flex flex-column mb-4 gap-1">
+                  <label for="ingredients">Ingrediente</label>
+                  <p-select
+                    [options]="itemSize"
+                    formControlName="ingredients"
+                    optionLabel="name"
+                    placeholder="Selecione o ingrediente"
+                    class="w-full md:w-56"
+                  ></p-select>
+                </div>
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="quantity">Quantidade</label>
+                  <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
+                </div>                
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="additionalPrice">Preço</label>
+                  <p-inputNumber
+                    inputId="additional_price"
+                    formControlName="price"
+                    placeholder="Preço"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                  ></p-inputNumber>
+                </div>
+
+                <div class="col-1 flex flex-column mb-4 gap-1">
+                  <label for="active" class="required-label">Ativo</label>
+                  <p-toggle-switch inputId="active" formControlName="active"></p-toggle-switch>
+                </div>
+              </div>
+            </form>
+
+            <p-button label="Adicionar" 
+            icon="pi pi-plus" 
+            (onClick)="addProductItem()"
+            ></p-button>
+
+            <div class="flex pt-6 justify-end">
+              <p-button
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="activateCallback(3)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="4" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="additionalForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="additional" class="required-label">
+                    Escolha um adicional
+                  </label>
                   <p-autocomplete
-                    formControlName="additional"
+                    formControlName="name"
                     optionLabel="name"
                     [suggestions]="filteredProducts"
                     (completeMethod)="searchProducts($event)"
                     [dropdown]="true"
                     fluid
                   ></p-autocomplete>
-                  
-              </form>
+                </div>
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="additionalPrice" class="required-label">Preço</label>
+                  <p-inputNumber
+                    inputId="price"
+                    formControlName="price"
+                    placeholder="Preço"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                  ></p-inputNumber>
+                </div>
+              </div>
+            </form>
+
+            <p-button 
+              label="Adicionar"
+              icon="pi pi-plus"
+              (onClick)="addAdditional()">
+            </p-button>
+            <p-table
+              [value]="additional"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">
+                    Nome <p-sortIcon field="name"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="price">
+                    Preço <p-sortIcon field="price"></p-sortIcon>
+                  </th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-additional>
+                <tr>
+                  <td>{{ additional.name }}</td>
+                  <td>{{ additional.price }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editProductVariable(additional)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteProductVariable(additional)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">
+                    Nenhum adicional cadastrado.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-end">
               <p-button
-                label="Adicionar"
-                icon="pi pi-plus"
-                (onClick)="addAdditional()"
-              />
-              </div>
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (onClick)="activateCallback(3)"
+              ></p-button>
+              <p-button
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="activateCallback(5)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
 
-              <div class="flex pt-6 justify-end">
-                <p-button
-                  label="Voltar"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
-                <p-button
-                  label="Próximo"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
-              </div>
-            </ng-template>
-          </p-step-panel>
-
-          <p-step-panel [value]="5" class="w-full">
-            <ng-template #content let-activateCallback="activateCallback">
-              <div class="grid w-full mt-4">
-                <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
-                  <label for="product_variable">Cadastrar opção</label>
+        <p-step-panel [value]="5" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="grid w-full mt-4">
+              <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+                <label for="product_variable">Cadastrar opção</label>
+                <form [formGroup]="productVariableForm" class="p-fluid w-full">
                   <div class="flex gap-2">
                     <input
-                      id="product_variable"
                       pInputText
-                      formControlName="product_variable"
+                      formControlName="name"
                       placeholder="Ex: copo com gelo"
                       class="flex-auto"
                     />
                     <p-inputNumber
                       inputId="price"
-                      formControlName="additionalPrice"
+                      formControlName="price"
                       placeholder="Preço"
                       mode="currency"
                       currency="BRL"
                       locale="pt-BR"
-                    />               
+                    ></p-inputNumber>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <p-button
+              label="Adicionar"
+              icon="pi pi-plus"
+              (onClick)="addProductVariable()"
+            ></p-button>
+
+            <p-table
+              [value]="productVariables"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">
+                    Nome <p-sortIcon field="name"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="price">
+                    Preço <p-sortIcon field="price"></p-sortIcon>
+                  </th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-variable>
+                <tr>
+                  <td>{{ variable.name }}</td>
+                  <td>{{ variable.price | currency: 'BRL' }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editProductVariable(variable)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteProductVariable(variable)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">
+                    Nenhuma variável cadastrada.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-content-between">
+              <p-button
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (onClick)="activateCallback(4)"
+              ></p-button>
+            </div>
+          <div class="mt-4 flex justify-content-end gap-2">
+            <button
+              pButton
+              type="button"
+              label="Cancelar"
+              class="p-button-secondary"
+              (click)="onCancel()"
+            ></button>
+            <button
+              pButton
+              type="submit"
+              label="Salvar"
+              class="p-button-primary"
+              (click)="onSave()"
+            ></button>
+          </div>
+          </ng-template>
+         </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
+</p-fieldset> -->
+
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Novo Produto">
+  <div class="card flex justify-center w-full">
+    <p-stepper [value]="1" class="w-full flex flex-column">
+      <p-step-list>
+        <p-step [value]="1">Informações Gerais</p-step>
+        <p-step [value]="2">Ingredientes</p-step>
+        <p-step [value]="3">Tamanhos disponíveis e preço</p-step>
+        <p-step [value]="4">Adicionais</p-step>
+        <p-step [value]="5">Variáveis do produto</p-step>
+      </p-step-list>
+
+      <p-step-panels class="w-full flex-1">
+        <p-step-panel [value]="1" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-8 flex flex-column mb-4 gap-1">
+                  <label for="name" class="required-label">Nome</label>
+                  <input id="name" pInputText formControlName="name" placeholder="Nome" />
+                </div>
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="expirationDate">Data de validade</label>
+                  <p-datepicker
+                    formControlName="expirationDate"
+                    [showIcon]="true"
+                    inputId="expirationDate"
+                    [showOnFocus]="true"
+                    dateFormat="dd/mm/yy"
+                    locale="pt-BR"
+                  ></p-datepicker>
+                </div>
+
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="description">Descrição</label>
+                  <textarea rows="3" pTextarea formControlName="description"></textarea>
+                </div>
+
+                <div class="col-4 flex flex-column mb-4 gap-1">
+                  <label for="category" class="required-label">Vincular uma categoria</label>
+                  <p-autocomplete
+                    formControlName="category"
+                    optionLabel="name"
+                    [suggestions]="filteredCategories"
+                    (completeMethod)="searchCategories($event)"
+                    [dropdown]="true"
+                    fluid
+                  ></p-autocomplete>
+                </div>
+
+                <div class="col-2 flex flex-column mb-4 gap-1">
+                  <label for="image">Imagem</label>
+                  <p-fileUpload
+                    name="image"
+                    mode="basic"
+                    [auto]="true"
+                    customUpload="true"
+                    chooseLabel="Escolher Imagem"
+                    previewWidth="50"
+                    (onSelect)="onFileSelected($event)"
+                  ></p-fileUpload>
+
+                  <div *ngIf="imagePreview" class="mt-3">
+                    <img
+                      [src]="imagePreview"
+                      alt="Pré-visualização da imagem"
+                      style="max-width: 150px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2)"
+                    />
                   </div>
                 </div>
+
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="note">Informações adicionais</label>
+                  <textarea rows="3" pTextarea formControlName="note"></textarea>
+                </div>
               </div>
+            </form>
 
-              <p-table
-                [value]="productVariables"
-                [paginator]="true"
-                [rows]="5"
-                [responsiveLayout]="'scroll'"
-                class="mt-4"
-              >
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
-                    <th style="width: 10rem">Ações</th>
-                  </tr>
-                </ng-template>
+            <div class="flex pt-6 justify-end">
+              <p-button
+                type="button"
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="activateCallback(2)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
 
-                <ng-template pTemplate="body" let-variable>
-                  <tr>
-                    <td>{{ variable.name }}</td>
-                    <td>
-                      <button
-                        pButton
-                        type="button"
-                        icon="pi pi-pencil"
-                        class="p-button-text p-button-sm"
-                        style="margin-right: 0.5rem"
-                        aria-label="Editar"
-                        (click)="editProductVariable(variable)"
-                      ></button>
-                      <button
-                        pButton
-                        type="button"
-                        icon="pi pi-trash"
-                        class="p-button-text p-button-sm p-button-danger"
-                        aria-label="Excluir"
-                        (click)="deleteProductVariable(variable)"
-                      ></button>
-                    </td>
-                  </tr>
-                </ng-template>
+        <p-step-panel [value]="2" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productItemIngredientForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-8 flex flex-column mb-4 gap-1">
+                  <label for="ingredient">Buscar ingrediente</label>
+                  <p-autocomplete
+                    formControlName="ingredient"
+                    optionLabel="name"
+                    [suggestions]="filteredIngredients"
+                    (completeMethod)="searchIngredients($event)"
+                    [dropdown]="true"
+                    fluid
+                  ></p-autocomplete>
+                </div>
+               </div>
+            </form>
 
-                <ng-template pTemplate="emptymessage">
-                  <tr>
-                    <td colspan="2" class="text-center">Nenhuma variável cadastrada.</td>
-                  </tr>
-                </ng-template>
-              </p-table>
+            <p-button
+              type="button"
+              label="Adicionar"
+              icon="pi pi-plus"
+              (click)="addProductItemIngredient()"
+            ></p-button>
+            
+            <p-table
+              [value]="productItemIngredient"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">
+                    Nome <p-sortIcon field="name"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="unityOfMeasurement">
+                    Unidade de medida <p-sortIcon field="unityOfMeasurement"></p-sortIcon>
+                  </th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
 
-              <div class="flex pt-6 justify-content-between">
-                <p-button
-                  label="Voltar"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  (onClick)="activateCallback(2)"
-                ></p-button>
+              <ng-template pTemplate="body" let-ingredient let-i="rowIndex">
+                <tr>
+                  <td>{{ ingredient.name }}</td>
+                  <td>{{ ingredient.unityOfMeasurement }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editIngredient(i)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteIngredient(i)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">
+                    Nenhum ingrediente cadastrado.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-end gap-2">
+              <p-button
+                type="button"
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (click)="activateCallback(1)"
+              ></p-button>
+              <p-button
+                type="button"
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="activateCallback(3)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="3" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productItemForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="itemSize" class="required-label">Tamanhos</label>
+                  <p-select
+                    [options]="itemSize"
+                    formControlName="size"
+                    optionLabel="description"
+                    placeholder="Selecione o tamanho"
+                    class="w-full md:w-56"
+                  ></p-select>
+                </div>
+
+                <div class="col-4 flex flex-column mb-4 gap-1">
+                  <label for="ingredients">Ingrediente</label>
+                  <p-select
+                    [options]="filteredIngredients"
+                    formControlName="ingredients"
+                    optionLabel="name"
+                    placeholder="Selecione o ingrediente"
+                    class="w-full md:w-56"
+                  ></p-select>
+                </div>
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="quantity">Quantidade</label>
+                  <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
+                </div>                
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="additionalPrice">Preço</label>
+                  <p-inputNumber
+                    inputId="additional_price"
+                    formControlName="price"
+                    placeholder="Preço"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                  ></p-inputNumber>
+                </div>
+
+                <div class="col-1 flex flex-column mb-4 gap-1">
+                  <label for="active" class="required-label">Ativo</label>
+                  <p-toggle-switch inputId="active" formControlName="active"></p-toggle-switch>
+                </div>
               </div>
-            </ng-template>
-          </p-step-panel>
+            </form>
 
-              <div class="mt-4 flex justify-content-end gap-2">
-                <button
-                  pButton
-                  type="button"
-                  label="Cancelar"
-                  class="p-button-secondary"
-                  (click)="onCancel()"
-                ></button>
-                <button
-                  pButton
-                  type="submit"
-                  label="Salvar"
-                  class="p-button-primary"
-                  (click)="onSave()"
-                  [disabled]="form.invalid"
-                ></button>
+            <p-button
+              type="button"
+              label="Adicionar"
+              icon="pi pi-plus"
+              (click)="addProductItem()"
+            ></p-button>
+
+            <div class="flex pt-6 justify-end">
+              <p-button
+                type="button"
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (click)="activateCallback(2)"
+              ></p-button>
+              <p-button
+                type="button"
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="activateCallback(4)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="4" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="additionalForm" class="p-fluid w-full">
+              <div class="grid w-full mt-4">
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="additional" class="required-label">Escolha um adicional</label>
+                  <p-autocomplete
+                    formControlName="name"
+                    optionLabel="name"
+                    [suggestions]="filteredProducts"
+                    (completeMethod)="searchProducts($event)"
+                    [dropdown]="true"
+                    fluid
+                  ></p-autocomplete>
+                </div>
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="additionalPrice" class="required-label">Preço</label>
+                  <p-inputNumber
+                    inputId="price"
+                    formControlName="price"
+                    placeholder="Preço"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                  ></p-inputNumber>
+                </div>
               </div>
+            </form>
 
-        </p-step-panels>
+            <p-button 
+              type="button"
+              label="Adicionar"
+              icon="pi pi-plus"
+              (click)="addAdditional()"
+            ></p-button>
+
+            <p-table
+              [value]="additional"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
+                  <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-additional let-i="rowIndex">
+                <tr>
+                  <td>{{ additional.name }}</td>
+                  <td>{{ additional.price }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editAdditional(i)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteAdditional(i)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">Nenhum adicional cadastrado.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-end">
+              <p-button
+                type="button"
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (click)="activateCallback(3)"
+              ></p-button>
+              <p-button
+                type="button"
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="activateCallback(5)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="5" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="grid w-full mt-4">
+              <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+                <label for="product_variable">Cadastrar opção</label>
+                <form [formGroup]="productVariableForm" class="p-fluid w-full">
+                  <div class="flex gap-2">
+                    <input
+                      pInputText
+                      formControlName="name"
+                      placeholder="Ex: copo com gelo"
+                      class="flex-auto"
+                    />
+                    <p-inputNumber
+                      inputId="price"
+                      formControlName="price"
+                      placeholder="Preço"
+                      mode="currency"
+                      currency="BRL"
+                      locale="pt-BR"
+                    ></p-inputNumber>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <p-button
+              type="button"
+              label="Adicionar"
+              icon="pi pi-plus"
+              (click)="addProductVariable()"
+            ></p-button>
+
+            <p-table
+              [value]="productVariables"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
+                  <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-variable let-i="rowIndex">
+                <tr>
+                  <td>{{ variable.name }}</td>
+                  <td>{{ variable.price | currency: 'BRL' }}</td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-text p-button-sm"
+                      style="margin-right: 0.5rem"
+                      aria-label="Editar"
+                      (click)="editProductVariable(i)"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteProductVariable(i)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">Nenhuma variável cadastrada.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="flex pt-6 justify-content-between">
+              <p-button
+                type="button"
+                label="Voltar"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+                (click)="activateCallback(4)"
+              ></p-button>
+            </div>
+
+            <div class="mt-4 flex justify-content-end gap-2">
+              <button
+                pButton
+                type="button"
+                label="Cancelar"
+                class="p-button-secondary"
+                (click)="onCancel()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Salvar"
+                class="p-button-primary"
+                (click)="onSave()"
+              ></button>
+            </div>
+          </ng-template>
+         </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
 </p-fieldset>
