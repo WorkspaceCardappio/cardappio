@@ -1,66 +1,8 @@
-<!-- <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
-
-<p-fieldset legend="Novo Ingrediente">
-  <form [formGroup]="form" class="p-fluid">
-    <div class="grid mt-4">
-      <div class="col-9 flex flex-column mb-4 gap-1">
-        <label for="name" class="required-label">Nome</label>
-        <input id="name" pInputText formControlName="name" placeholder="Nome" />
-      </div>
-
-    <div class="col-3 flex flex-column mb-4 gap-1">
-        <label for="unityOfMeasurement" class="required-label">Unidade de medida</label>
-        <p-select 
-            [options]="unityOfMeasurement" 
-            formControlName="unityOfMeasurement" 
-            optionLabel="description" 
-            placeholder="Selecione a unidade de medida"
-            class="w-full md:w-56" />
-    </div>
-
-      <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
-        <label for="active">Ativo</label>
-        <p-toggle-switch
-          inputId="active"
-          formControlName="active"
-        ></p-toggle-switch>
-      </div>
-
-       <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
-        <label for="allergenic">Alergênico</label>
-        <p-toggle-switch
-          inputId="allergenic"
-          formControlName="allergenic"
-        ></p-toggle-switch>
-      </div>
-    </div>
-
-    <div class="mt-4 flex justify-content-end gap-2">
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        class="p-button-secondary"
-        (click)="cancel()"
-      ></button>
-      <button
-        pButton
-        type="submit"
-        label="Salvar"
-        class="p-button-primary"
-        (click)="create()"
-        [disabled]="this.form.invalid"
-      ></button>
-    </div>
-  </form>
-</p-fieldset> -->
-
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
 <p-fieldset legend="Novo Ingrediente">
   <form [formGroup]="form" class="p-fluid">
     <div class="grid mt-4">
-      <!-- Nome (linha completa) -->
       <div class="col-12 flex flex-column mb-4 gap-1">
         <label for="name" class="required-label">Nome</label>
         <input
@@ -71,9 +13,7 @@
         />
       </div>
 
-      <!-- Unidade de medida e switches lado a lado -->
       <div class="col-12 flex flex-wrap align-items-end gap-4 mb-4">
-        <!-- Unidade de medida -->
         <div class="flex flex-column gap-1" style="flex: 1">
           <label for="unityOfMeasurement" class="required-label"
             >Unidade de medida</label
@@ -87,7 +27,6 @@
           ></p-select>
         </div>
 
-        <!-- Ativo -->
         <div class="flex flex-column align-items-center gap-1">
           <label for="active">Ativo</label>
           <p-toggle-switch
@@ -96,7 +35,6 @@
           ></p-toggle-switch>
         </div>
 
-        <!-- Alergênico -->
         <div class="flex flex-column align-items-center gap-1">
           <label for="allergenic">Alergênico</label>
           <p-toggle-switch
