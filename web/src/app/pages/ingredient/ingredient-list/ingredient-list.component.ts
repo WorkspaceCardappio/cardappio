@@ -1,16 +1,17 @@
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
+import { FieldsetModule } from 'primeng/fieldset';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { finalize, map, Observable } from 'rxjs';
+import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { map, Observable } from 'rxjs';
 import { IngredientService } from '../service/ingredient.service';
 
 @Component({
@@ -25,7 +26,8 @@ import { IngredientService } from '../service/ingredient.service';
     InputTextModule,
     RouterLink,
     BreadcrumbModule,
-    SelectModule
+    SelectModule,
+    FieldsetModule
   ],
   providers: [ IngredientService],
   templateUrl: './ingredient-list.component.html',
@@ -33,13 +35,13 @@ import { IngredientService } from '../service/ingredient.service';
 })
 export class IngredientsComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
-
   items = [{ label: 'Ingredientes', routerLink: '/ingredients' }];
-
+  @ViewChild('dt1') dt1!: Table;
+  
+  expandedRows: { [key: string]: boolean } = {};
   ingredients: any[] = [];
   totalRecords: number = 0;
   loading = false;
-  
 
   constructor(public service: IngredientService, private cdr: ChangeDetectorRef, private router: Router) { }
 
@@ -87,18 +89,16 @@ export class IngredientsComponent implements OnInit {
 
     this.service
       .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
       .subscribe({
         next: (response) => {
           this.ingredients = response.content;
           this.totalRecords = response.totalElements;
         },
-        error: () => {},
+        error: () => { },
+        complete: () => { 
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
       });
   }
   
@@ -112,5 +112,36 @@ export class IngredientsComponent implements OnInit {
       return filtered;
     })
   );
+  }
+
+  loadStocks(event: TableLazyLoadEvent, ingredient: any) {
+    
+    ingredient.loadingStocks = true;
+
+    //TODO: IMPLEMENTAR AO TERMINAR O STOCK
+    ingredient.stocks = [{
+      id: 2,
+      batch: 1,
+      quantity: 1,
+      expirationDate: "2025-12-10"
+    }];
+    ingredient.totalStock = 0;
+    ingredient.loadingStocks = false;
+    this.cdr.markForCheck();
+
+  }
+
+  toggleRow(ingredient: any) {
+    if (this.expandedRows[ingredient.id]) {
+      delete this.expandedRows[ingredient.id];
+      return;
+    }
+      
+    this.expandedRows[ingredient.id] = true;
+
+    if (!ingredient.stocks) {
+      ingredient.stocks = [];
+      ingredient.totalStocks = 0;
+    }
   }
 }
