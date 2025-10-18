@@ -36,6 +36,13 @@ export const routes: Routes = [
         { path: ':id', loadComponent: () => import('./pages/ticket/form/ticket-form.component').then(m => m.TicketFormComponent)},
       ]
     },
+    {
+      path: 'table',
+      children: [
+        { path: '', loadComponent: () => import('./pages/table-restaurant/list/table-restaurant-list.component').then(m => m.TableRestaurantListComponent)},
+        { path: ':id', loadComponent: () => import('./pages/table-restaurant/form/table-restaurant-form.component').then(m => m.TableRestaurantFormComponent)},
+      ]
+    },
   // {
   //   path: 'order',
   //   children: [
