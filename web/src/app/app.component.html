@@ -1,12 +1,10 @@
-<main>
+<main [ngClass]="{ expanded: leftMenu.expanded }">
   <left-menu
     [routes]="routesMenu"
+    #leftMenu
   ></left-menu>
-  <div class="area">
-    <header-menu></header-menu>
-    <div class="content">
-      <router-outlet></router-outlet>
-    </div>
+  <header-menu></header-menu>
+  <div class="content">
+    <router-outlet></router-outlet>
   </div>
 </main>
-
