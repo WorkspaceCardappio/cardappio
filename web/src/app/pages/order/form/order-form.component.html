@@ -12,49 +12,124 @@
       <p-step-panels>
         <p-step-panel [value]="1">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="grid mt-4">
-              <div class="col-6 flex flex-column mb-4 gap-1">
-                <label for="products">Produtos</label>
-                <p-autoComplete
-                  id="products"
-                  formControlName="products"
-                  [suggestions]="filteredProducts"
-                  (completeMethod)="searchProducts($event)"
-                  [multiple]="true"
-                  [dropdown]="true"
-                  placeholder="Selecione os produtos"
-                  optionLabel="name"
-                  fluid
-                >
-                </p-autoComplete>
-              </div>
-
-              <div class="col-6 flex flex-column mb-4 gap-1">
-                <label for="ticket">Comanda</label>
+            <div class="grid mt-3">
+              <div class="col-12 flex flex-column gap-1">
+                <label for="ticket" class="required-label">Comanda</label>
                 <p-autoComplete
                   id="ticket"
                   formControlName="ticket"
-                  [suggestions]="filteredTickets"
+                  [suggestions]="tickets.values"
                   (completeMethod)="searchTickets($event)"
                   [dropdown]="true"
                   placeholder="Selecione a comanda"
                   optionLabel="number"
                   fluid
+                  [emptyMessage]="'Nenhuma comanda encontrada'"
                 >
                 </p-autoComplete>
               </div>
 
-              <div class="col-6 flex flex-column mb-4 gap-1">
-                <label for="total">Preço Final</label>
-                <p-inputNumber
-                  id="total"
-                  formControlName="total"
-                  mode="currency"
-                  currency="BRL"
-                  locale="pt-BR"
-                  placeholder="R$ 0,00"
+              <div class="col-12 flex flex-column mt-3 gap-1">
+                <label for="products" class="required-label">Produto</label>
+                <p-autoComplete
+                  id="products"
+                  formControlName="product"
+                  [suggestions]="products.values"
+                  (completeMethod)="searchTickets($event)"
+                  [dropdown]="true"
+                  placeholder="Selecione o produto"
+                  optionLabel="number"
+                  fluid
+                  [emptyMessage]="'Nenhum produto encontrado'"
+                  [disabled]="!this.form.get('ticket')?.value?.id"
                 >
-                </p-inputNumber>
+                </p-autoComplete>
+              </div>
+
+              <div [formGroup]="formProductItem" style="width: 100%">
+                <div class="flex col-12 gap-4">
+                  <span class="flex flex-column gap-1" style="width: 70vw">
+                    <label for="option" class="required-label">Opção</label>
+                    <p-selectButton
+                      id="option"
+                      [options]="productTypeOptions"
+                      formControlName="item"
+                      optionLabel="label"
+                      [optionDisabled]="'disabled'"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div
+                          class="p-d-flex p-flex-column p-ai-center p-p-4"
+                          [ngClass]="{
+                            available: option.disabled,
+                            unavailable: !option.disabled
+                          }"
+                        >
+                          <div class="font-bold mb-1">{{ option.label }}</div>
+                          <div class="text-sm text-gray-600">
+                            {{ option.description }}
+                          </div>
+
+                          <div class="text-sm font-bold mt-2">
+                            {{
+                              option.price
+                                | currency : "BRL" : "symbol" : "1.2-2"
+                            }}
+                          </div>
+
+                          @if (option.disabled) {
+                          <div class="text-xs font-semibold mt-1 text-red-600">
+                            Indisponível
+                          </div>
+                          }
+                        </div>
+                      </ng-template>
+                    </p-selectButton>
+                  </span>
+
+                  <span class="flex flex-column gap-1" style="width: 100%">
+                    <label for="note">Observações</label>
+                    <textarea
+                      pTextarea
+                      id="note"
+                      formControlName="note"
+                      rows="6"
+                      style="resize: none; outline: 0"
+                    ></textarea>
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-column gap-3"></div>
+
+              <div
+                [formGroup]="formProductItem"
+                class="col-12 mt-3 flex gap-6"
+                style="align-items: flex-start"
+              >
+                <span class="flex flex-column gap-1">
+                  <label for="quantity" class="required-label">
+                    Quantidade
+                  </label>
+                  <p-inputNumber
+                    id="quantity"
+                    formControlName="quantity"
+                    [showButtons]="true"
+                    [buttonLayout]="'horizontal'"
+                    [step]="1"
+                    [min]="1"
+                    [max]="20"
+                    decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    inputStyleClass="text-center w-4rem"
+                  />
+                </span>
+
+                <span class="total-price-highlight">
+                  {{ priceTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
+                </span>
               </div>
             </div>
 
@@ -69,14 +144,39 @@
               <button
                 pButton
                 type="button"
-                label="Salvar"
+                label="Próximo"
                 class="p-button-primary"
                 (click)="activateCallback(2)"
               ></button>
             </div>
           </ng-template>
         </p-step-panel>
-        <p-step-panel [value]="2"> </p-step-panel>
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="grid mt-3 col-12">
+              <div [formGroup]="formProductItem">
+                <pre>{{ formProductItem.value | json }}</pre>
+              </div>
+            </div>
+
+            <div class="mt-4 flex justify-content-end gap-2">
+              <button
+                pButton
+                type="button"
+                label="Cancelar"
+                severity="danger"
+                (click)="onCancel()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Próximo"
+                class="p-button-primary"
+                (click)="activateCallback(3)"
+              ></button>
+            </div>
+          </ng-template>
+        </p-step-panel>
         <p-step-panel [value]="3"> </p-step-panel>
         <p-step-panel [value]="4"> </p-step-panel>
       </p-step-panels>

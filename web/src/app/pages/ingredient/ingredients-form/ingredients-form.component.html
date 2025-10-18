@@ -11,32 +11,37 @@
       <div class="col-3 flex flex-column mb-4 gap-1">
         <label for="quantity" class="required-label">Quantidade</label>
         <p-inputNumber
-            inputId="quantity"
-            formControlName="quantity"
-            placeholder="Quantidade"
+          inputId="quantity"
+          formControlName="quantity"
+          placeholder="Quantidade"
         >
-        </p-inputNumber>        
-    </div>
-    <div class="col-3 flex flex-column mb-4 gap-1">
-        <label for="unityOfMeasurement" class="required-label">Unidade de medida</label>
-        <p-select 
-            [options]="unityOfMeasurement" 
-            formControlName="unityOfMeasurement" 
-            optionLabel="description" 
-            placeholder="Selecione a unidade de medida"
-            class="w-full md:w-56" />
-    </div>
+        </p-inputNumber>
+      </div>
+      <div class="col-3 flex flex-column mb-4 gap-1">
+        <label for="unityOfMeasurement" class="required-label"
+          >Unidade de medida</label
+        >
+        <p-select
+          [options]="unityOfMeasurement"
+          formControlName="unityOfMeasurement"
+          optionLabel="description"
+          placeholder="Selecione a unidade de medida"
+          class="w-full md:w-56"
+        />
+      </div>
 
-     <div class="col-3 flex flex-column mb-4 gap-1">
-        <label for="expirationDate" class="required-label">Data de validade</label>
-            <p-datepicker
-                formControlName="expirationDate"
-                [showIcon]="true"
-                inputId="expirationDate"
-                [showOnFocus]="true"
-                dateFormat="dd/mm/yy"
-            ></p-datepicker>
-    </div>
+      <div class="col-3 flex flex-column mb-4 gap-1">
+        <label for="expirationDate" class="required-label"
+          >Data de validade</label
+        >
+        <p-datepicker
+          formControlName="expirationDate"
+          [showIcon]="true"
+          inputId="expirationDate"
+          [showOnFocus]="true"
+          dateFormat="dd/mm/yy"
+        ></p-datepicker>
+      </div>
 
       <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
         <label for="active">Ativo</label>
@@ -46,7 +51,7 @@
         ></p-toggle-switch>
       </div>
 
-       <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
+      <div class="col-3 mb-4 flex flex-column align-items-center gap-1">
         <label for="allergenic">Alergênico</label>
         <p-toggle-switch
           inputId="allergenic"

@@ -1,18 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { forkJoin, of, switchMap } from "rxjs";
-import { ProductService } from "../../product/product.service";
-import { TicketService } from "../../ticket/service/ticket.service";
-import { OrderService } from "../service/order.service";
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, of, switchMap } from 'rxjs';
+import { ProductService } from '../../product/product.service';
+import { TicketService } from '../../ticket/service/ticket.service';
+import { OrderService } from '../service/order.service';
 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { Breadcrumb } from "primeng/breadcrumb";
+import { Breadcrumb } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
-import { Fieldset } from "primeng/fieldset";
-import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
+import { Fieldset } from 'primeng/fieldset';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
+import { Loader } from '../../../model/loader';
 
 @Component({
   selector: 'app-order-form',
@@ -26,20 +37,58 @@ import { TableModule } from 'primeng/table';
     Breadcrumb,
     TableModule,
     StepperModule,
-    InputNumber,
+    SelectButtonModule,
+    FormsModule,
+    CommonModule,
+    FloatLabelModule
   ],
   templateUrl: './order-form.component.html',
-  styleUrls: ['./order-form.component.scss']
+  styleUrls: ['./order-form.component.scss'],
 })
 export class OrderFormComponent implements OnInit {
+  selectedProductType: any = null;
+
+  productTypeOptions = [
+    {
+      label: 'Único',
+      value: 'unico',
+      price: 10.0,
+      description: 'Produto padrão, sem adicionais.',
+      disabled: false,
+    },
+    {
+      label: 'Pequeno',
+      value: 'pequeno',
+      price: 8.0,
+      description: 'Tamanho pequeno (250ml ou menos).',
+      disabled: false,
+    },
+    {
+      label: 'Médio',
+      value: 'medio',
+      price: 11.0,
+      description: 'tamanho médio',
+      disabled: false,
+    },
+    {
+      label: 'Grande',
+      value: 'grande',
+      price: 14.0,
+      description: 'Tamanho grande (500ml ou mais).',
+      disabled: true,
+    },
+  ];
 
   orderId: string | null = null;
   isEditMode = false;
+
   form: FormGroup = new FormGroup({});
+  formProductItem: FormGroup = new FormGroup({});
 
-  filteredProducts: any[] = [];
-  filteredTickets: any[] = [];
+  tickets: Loader = { values: [] };
+  products: Loader = { values: [] };
 
+  quantity = 1;
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
@@ -48,6 +97,7 @@ export class OrderFormComponent implements OnInit {
     { label: 'Novo', routerLink: '/order/new' },
   ];
 
+  priceTotal = signal(0);
 
   constructor(
     private readonly orderService: OrderService,
@@ -55,13 +105,13 @@ export class OrderFormComponent implements OnInit {
     private readonly productService: ProductService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly fb: FormBuilder
-  ) {
-  }
+    private readonly builder: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-
     this.form = this.initForm();
+    this.formProductItem = this.buildProductItemForm();
 
     this.orderId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.orderId;
@@ -72,13 +122,13 @@ export class OrderFormComponent implements OnInit {
   }
 
   private initForm() {
-
-    return this.fb.group({
+    return this.builder.group({
       id: [''],
       total: [0, [Validators.required, Validators.min(0)]],
-      orderStatus: [null, Validators.required],
-      products: [[], Validators.required],
-      ticket: [null, Validators.required]
+      status: [null, Validators.required],
+      product: [null],
+      products: this.builder.array([]),
+      ticket: [null, Validators.required],
     });
   }
 
@@ -89,26 +139,29 @@ export class OrderFormComponent implements OnInit {
 
     this.productService.findAllDTO(completeParams).subscribe({
       next: (page) => {
-        this.filteredProducts = page.content;
+        this.products.values = page.content;
       },
       error: () => {
-        this.filteredProducts = [];
-      }
+        this.products.values = [];
+      },
     });
   }
 
   searchTickets(event: any): void {
-    const query = event.query || '';
-    const searches = query ? [`number=ilike=${query}%`] : [];
-    const completeParams = `pageSize=20&search=${searches.join(';')}`;
+    this.tickets.isLoading = true;
+
+    const query = event.query;
+
+    const search = query ? `&search=number==${query}` : '';
+    const completeParams = `pageSize=100${search}`;
 
     this.ticketService.findAllDTO(completeParams).subscribe({
-      next: (page) => {
-        this.filteredTickets = page.content;
+      next: (page) => (this.tickets.values = page.content),
+      error: () => (this.tickets.values = []),
+      complete: () => {
+        this.tickets.isLoading = false;
+        this.cdr.markForCheck();
       },
-      error: () => {
-        this.filteredTickets = [];
-      }
     });
   }
 
@@ -117,8 +170,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   onSave(): void {
-    if (this.form.invalid)
-      return;
+    if (this.form.invalid) return;
 
     const { total, orderStatus, products, ticket } = this.form.value;
 
@@ -126,7 +178,7 @@ export class OrderFormComponent implements OnInit {
       total: total || 0,
       orderStatus: orderStatus || 'PENDING',
       ticketId: ticket?.id,
-      products: this.formatProducts(products)
+      products: this.formatProducts(products),
     };
 
     if (this.isEditMode && this.orderId) {
@@ -141,47 +193,46 @@ export class OrderFormComponent implements OnInit {
       return [];
     }
 
-    return products.map(product => ({
+    return products.map((product) => ({
       productId: product.id,
-      quantity: 1
+      quantity: 1,
     }));
   }
 
   private loadOrder(): void {
     if (!this.orderId) return;
 
-    this.orderService.findById(this.orderId).pipe(
-      switchMap(order => {
+    this.orderService
+      .findById(this.orderId)
+      .pipe(
+        switchMap((order) => {
+          const ticket$ = order.ticketId
+            ? this.ticketService.findById(order.ticketId)
+            : of(null);
 
-        const ticket$ = order.ticketId ? this.ticketService.findById(order.ticketId) : of(null);
+          const productIds = order.products.map((p: any) => p.productId);
+          const products$ = this.productService.findAllDTO(productIds);
 
-        const productIds = order.products.map((p: any) => p.productId);
-        const products$ = this.productService.findAllDTO(productIds);
-
-        return forkJoin({
-          order: of(order),
-          ticket: ticket$,
-          products: products$
+          return forkJoin({
+            order: of(order),
+            ticket: ticket$,
+            products: products$,
+          });
+        })
+      )
+      .subscribe(({ order, ticket, products }) => {
+        this.form.patchValue({
+          total: order.total,
+          ticket: ticket,
+          products: products.content,
         });
-      })
-    ).subscribe(({ order, ticket, products }) => {
-
-      this.form.patchValue({
-        total: order.total,
-        ticket: ticket,
-        products: products.content
       });
-    });
   }
 
   private createOrder(payload: any): void {
     this.orderService.create(payload).subscribe({
-      next: () => {
-        this.navigateToList();
-      },
-      error: (error) => {
-        console.error('Erro ao criar pedido:', error);
-      }
+      next: () => this.navigateToList(),
+      error: (error) => console.error('Erro ao criar pedido:', error),
     });
   }
 
@@ -189,16 +240,70 @@ export class OrderFormComponent implements OnInit {
     if (!this.orderId) return;
 
     this.orderService.update(this.orderId, payload).subscribe({
-      next: () => {
-        this.navigateToList();
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar pedido:', error);
-      }
+      next: () => this.navigateToList(),
+      error: (error) => console.error('Erro ao atualizar pedido:', error),
     });
   }
 
   navigateToList(): void {
     this.router.navigate(['/order']);
   }
+
+  isOptionDisabled = (option: any) => !option.active;
+
+  private buildProductItemForm() {
+    const form = this.builder.group({
+      id: [null],
+      item: [null, Validators.required],
+      quantity: [
+        1,
+        Validators.compose([Validators.required, Validators.min(1)]),
+      ],
+      variables: this.builder.array([]),
+      additionals: this.builder.array([]),
+      note: [null],
+    });
+
+    form.get('item')?.valueChanges
+      .subscribe((item: any) => {
+        const quantity = form.get('quantity')?.value;
+
+        if (item?.price && quantity) {
+          this.priceTotal.set(item.price * quantity);
+        }
+    })
+
+    form.get('quantity')?.valueChanges
+      .subscribe((quantity: any) => {
+        const item = (form.get('item')?.value as any);
+
+        if (item?.price && quantity) {
+          this.priceTotal.set(item.price * quantity);
+        }
+    })
+
+    const additionalsArray = form.get('additionals') as FormArray;
+
+    const adicionaisIniciais = [
+      { id: 1, name: 'Extra queijo', selected: false, quantity: 0 },
+      { id: 2, name: 'Bacon', selected: false, quantity: 0 },
+      { id: 3, name: 'Molho especial', selected: false, quantity: 0 },
+    ];
+
+    adicionaisIniciais.forEach(add => {
+      additionalsArray.push(this.builder.group({
+        id: [add.id],
+        name: [add.name],
+        selected: [add.selected],
+        quantity: [add.quantity, [Validators.min(0)]],
+      }));
+    });
+
+    return form;
+  }
+
+  get additionals() {
+    return this.formProductItem.get('additionals') as FormArray
+  }
+
 }
