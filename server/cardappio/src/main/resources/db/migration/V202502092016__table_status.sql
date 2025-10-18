@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS table_status (
 
 INSERT INTO table_status (code, description) VALUES
 (1, 'Livre'),
-(2, 'Reserva'),
+(2, 'Reservada'),
 (3, 'Ocupada'),
 (4, 'Indisponível');

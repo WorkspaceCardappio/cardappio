@@ -1,0 +1,47 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Nova Mesa">
+  <form [formGroup]="form" class="p-fluid">
+    <div class="grid mt-4">
+      <div class="col-6 flex flex-column mb-4 gap-1">
+        <label for="number" class="required-label">Número</label>
+        <input id="number" pInputText formControlName="number" placeholder="Número" />
+      </div>
+
+      <div class="col-6 flex flex-column mb-4 gap-1">
+        <label for="places" class="required-label">Lugares</label>
+        <input id="places" pInputText formControlName="places" placeholder="Lugares" />
+      </div>
+    </div>
+
+    <div class="flex flex-column mb-4 gap-1 col-12">
+      <label for="parent" class="required-label">Vincular um Status</label>
+      <p-autocomplete
+        formControlName="status"
+        optionLabel="description"
+        [suggestions]="filteredStatus"
+        (completeMethod)="searchStatus()"
+        [dropdown]="true"
+        fluid
+      />
+    </div>
+
+    <div class="mt-4 flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="onCancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        class="p-button-primary"
+        (click)="onSave()"
+        [disabled]="this.form.invalid"
+      ></button>
+    </div>
+  </form>
+</p-fieldset>

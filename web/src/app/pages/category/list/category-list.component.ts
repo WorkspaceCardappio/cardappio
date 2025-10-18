@@ -8,7 +8,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { finalize } from 'rxjs';
 import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
 import { CategoryService } from '../service/category.service';
@@ -66,18 +65,16 @@ export class CategoryListComponent implements OnInit {
 
     this.service
       .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
       .subscribe({
         next: (response) => {
           this.categories = response.content;
           this.totalRecords = response.totalElements;
         },
         error: () => {},
+        complete: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
       });
   }
 }

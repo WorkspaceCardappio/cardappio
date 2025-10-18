@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum TableStatus implements EnumSerialize {
 
     FREE(1L, "Livre"),
@@ -30,4 +30,5 @@ public enum TableStatus implements EnumSerialize {
         return Optional.ofNullable(CODE_MAP.get(code))
                 .orElseThrow(() -> new EntityNotFoundException(Messages.CODE_NOT_FOUND));
     }
+
 }
