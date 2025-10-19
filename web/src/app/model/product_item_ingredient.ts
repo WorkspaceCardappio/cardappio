@@ -5,4 +5,5 @@ export interface ProductItemIngredient {
     id: string,
     item: ProductItem,
     ingredients: Ingredient[],
+    quantity: number
 }

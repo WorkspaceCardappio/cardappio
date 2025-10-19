@@ -1,7 +1,6 @@
 import { Additional } from "./additional";
 import { Category } from "./category";
 import { ProductItem } from "./product_item";
-import { ProductItemIngredient } from "./product_item_ingredient";
 import { ProductVariable } from "./product_variable";
 
 export interface Product {
@@ -14,6 +13,5 @@ export interface Product {
     category: Category,
     additional?: Additional[],
     productVariables?: ProductVariable[],
-    ingredients: ProductItemIngredient[],
     productItem: ProductItem[]
 }

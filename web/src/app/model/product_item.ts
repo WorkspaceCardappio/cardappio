@@ -5,6 +5,7 @@ export interface ProductItem {
     id: string,
     product: Product
     quantity: number,
+    description: string,
     size: number,
     price: number,
     active: boolean,

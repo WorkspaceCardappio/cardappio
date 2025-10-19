@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
@@ -82,11 +82,12 @@ export class ProductFormComponent implements OnInit {
     private route: ActivatedRoute,
     private categoryService: CategoryService,
     private productService: ProductService,
-    private ingredientService: IngredientService
+    private ingredientService: IngredientService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
+    this.productForm = this.initForm();
     this.initBreadcrumb();
     this.checkRoute();
     this.itemSize = [
@@ -95,14 +96,14 @@ export class ProductFormComponent implements OnInit {
       { code: 3, description: 'Médio' },
       { code: 4, description: 'Grande' },
     ];
-    this.productItemIngredientForm = this.buildProductItemIngredientForm();
     this.productItemForm = this.buildProductItemForm();
+    this.productItemIngredientForm = this.buildProductItemIngredientForm();
     this.additionalForm = this.buildAdditionalForm();
     this.productVariableForm = this.buildProductVariableForm();
   }
 
-  private initForm(): void {
-    this.productForm = this.builder.group({
+  private initForm() {
+    const form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
       description: [''],
@@ -111,10 +112,14 @@ export class ProductFormComponent implements OnInit {
       note: [''],
       category: [null, Validators.required],
       productItem: this.builder.array([]),
+      ingredient: [''],
       ingredients: this.builder.array([]),
       additional: this.builder.array([]),
-      productVariables: this.builder.array([])
+      productVariables: this.builder.array([]),
+      productItemIngredient: this.builder.array([])
     });
+
+    return form;
   }
   
   private initBreadcrumb(): void {
@@ -140,64 +145,31 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+  private buildProductItemForm() {
+    const form = this.builder.group({
+      id: [''],
+      product: [null],
+      quantity: [0],
+      size: [null, Validators.required],
+      description: [''],
+      price: [0, Validators.required],
+      active: [true, Validators.required],
+      ingredients: this.builder.array([])
+    });
+
+    return form;
+
+  }
+
   private buildProductItemIngredientForm() {
-    return this.builder.group({
+    const productItemIngredientForm = this.builder.group({
       id: [''],
       productItem: [null],
       quantity: [0, Validators.required],
       ingredient: ['', Validators.required],
     });
-  }
 
-  protected addProductItemIngredient() {
-    const ingredientValue = this.productItemIngredientForm.getRawValue();
-    const ingredientsFA = this.productForm.get('ingredients') as FormArray;
-    if (this.currentIndex !== null) {
-      ingredientsFA.at(this.currentIndex).patchValue(ingredientValue);
-      this.productItemIngredient[this.currentIndex] = ingredientValue;
-      this.currentIndex = null;
-    } else {
-      const newIngredientForm = this.builder.group(ingredientValue);
-      ingredientsFA.push(newIngredientForm);
-      this.productItemIngredient.push(ingredientValue);
-    }
-    this.productItemIngredientForm.reset();
-    this.productItemIngredientForm = this.buildProductItemIngredientForm();
-  }
-
-  protected deleteIngredient(index: number) {
-    (this.productForm.get('ingredients') as FormArray).removeAt(index);
-    this.productItemIngredient.splice(index, 1);
-  }
-
-  private buildProductItemForm() {
-    return this.builder.group({
-      id: [''],
-      product: [null],
-      quantity: [0],
-      size: [null, Validators.required],
-      price: [0, Validators.required],
-      active: [true, Validators.required],
-      ingredients: [null, Validators.required]
-    });
-  }
-
-  protected addProductItem() {
-    const productItemValue = this.productItemForm.getRawValue();
-    const productItemFA = this.productForm.get('productItem') as FormArray;
-    if (this.currentIndex !== null) {
-      productItemFA.at(this.currentIndex).patchValue(productItemValue);
-      this.currentIndex = null;
-    } else {
-      const newProductItem = this.builder.group(productItemValue);
-      productItemFA.push(newProductItem);
-    }
-    this.productItemForm.reset();
-    this.productItemForm = this.buildProductItemForm();
-  }
-
-  protected deleteProductItem(index: number) {
-    (this.productForm.get('productItem') as FormArray).removeAt(index);
+    return productItemIngredientForm;
   }
 
   private buildAdditionalForm() {
@@ -206,6 +178,49 @@ export class ProductFormComponent implements OnInit {
       name: ['', Validators.required],
       price: [0, Validators.required]
     });
+  }
+
+  private buildProductVariableForm() {
+    return this.builder.group({
+      id: [''],
+      name: [''],
+      price: [0]
+    });
+  }
+
+  protected addIngredient() {
+    const ingredient = this.productForm.get('ingredient')?.getRawValue();
+    const form = this.builder.group(ingredient);
+    (this.productForm.get('ingredients') as FormArray).push(form);
+    this.productForm.get('ingredient')?.setValue(null);
+  }
+  
+  protected deleteIngredient(index: number) {
+    (this.productForm.get('ingredients') as FormArray).removeAt(index);
+    this.productItemIngredient.splice(index, 1);
+  }
+
+  protected addProductItem() {
+   
+    const productItemValue = this.productItemForm.getRawValue();
+    const productItemIngredientValue = this.productItemIngredientForm.getRawValue();
+
+    const productItemFA = this.productForm.get('productItem') as FormArray;
+    const productItemIngredientFA = this.productForm.get('productItemIngredient') as FormArray;
+    if (this.currentIndex !== null) {
+      productItemFA.at(this.currentIndex).patchValue(productItemValue);
+      this.currentIndex = null;
+    } else {
+      const newProductItem = this.builder.group(productItemValue)
+      const newProductItemIngredient = this.builder.group(productItemIngredientValue)
+      productItemFA.push(newProductItem);
+      productItemIngredientFA.push(newProductItemIngredient);
+    }
+    this.productItemForm.reset();
+  }
+
+  protected deleteProductItem(index: number) {
+    (this.productForm.get('productItem') as FormArray).removeAt(index);
   }
 
   protected addAdditional() {
@@ -221,20 +236,11 @@ export class ProductFormComponent implements OnInit {
       this.additional.push(additionalValue);
     }
     this.additionalForm.reset();
-    this.additionalForm = this.buildAdditionalForm();
   }
 
   protected deleteAdditional(index: number) {
     (this.productForm.get('additional') as FormArray).removeAt(index);
     this.additional.splice(index, 1);
-  }
-
-  private buildProductVariableForm() {
-    return this.builder.group({
-      id: [''],
-      name: [''],
-      price: [0]
-    });
   }
 
   protected addProductVariable() {
@@ -250,7 +256,6 @@ export class ProductFormComponent implements OnInit {
       this.productVariables.push(productVariable);
     }
     this.productVariableForm.reset();
-    this.productVariableForm = this.buildProductVariableForm();
   }
 
   protected deleteProductVariable(index: number) {
@@ -260,6 +265,10 @@ export class ProductFormComponent implements OnInit {
 
   onCancel(): void {
     this.navigateToList();
+  }
+
+  get ingredients(): FormArray {
+    return this.productForm.get('ingredients') as FormArray;
   }
 
   onSave(): void {
@@ -291,7 +300,10 @@ export class ProductFormComponent implements OnInit {
     this.categoryService.findAll(20, searchs.join(';')).subscribe({
       next: (data) => { this.filteredCategories = data; },
       error: (err) => { console.error('Erro ao buscar categorias', err); },
-      complete: () => { this.loading = false; },
+      complete: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 
@@ -327,36 +339,31 @@ export class ProductFormComponent implements OnInit {
   }
 
   searchIngredients(event: any) {
+
     const query = event.query;
     const searchs = [];
-    if (query) searchs.push(`name=ilike=${query}%`);
+
+    const ingredients = this.getFieldArray('ingredients');
+
+    if (ingredients.length) {
+      searchs.push(`id=out=(${ingredients.value.map((i: any) => i.id).join(',')})`)
+    }
+
+    this.productForm.get('ingredit')
+
+    if (query)
+      searchs.push(`name=ilike=${query}%`);
+
     this.ingredientService.findAll(20, searchs.join(';')).subscribe({
-      next: (data) => { this.filteredCategories = data; },
+      next: (data) => { this.filteredIngredients = data; },
       error: (err) => { console.error('Erro ao buscar ingredientes', err); },
-      complete: () => { this.loading = false; },
+      complete: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 
-  protected editIngredient(index: number): void {
-  const ingredientValue = (this.productForm.get('ingredients') as FormArray).at(index);
-  if (!ingredientValue) return;
-  this.productItemIngredientForm.patchValue(ingredientValue.value);
-  this.currentIndex = index;
-  }
-
-  protected editAdditional(index: number): void {
-    const additionalValue = (this.productForm.get('additional') as FormArray).at(index);
-    if (!additionalValue) return;
-    this.additionalForm.patchValue(additionalValue.value);
-    this.currentIndex = index;
-  }
-
-  protected editProductVariable(index: number): void {
-    const productVariableValue = (this.productForm.get('productVariables') as FormArray).at(index);
-    if (!productVariableValue) return;
-    this.productVariableForm.patchValue(productVariableValue.value);
-    this.currentIndex = index;
-  }
 
   protected navigateToList(): void {
     this.router.navigate(['/product']);
@@ -368,5 +375,14 @@ export class ProductFormComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => { this.imagePreview = reader.result; };
     reader.readAsDataURL(file);
+  }
+
+  private getFieldArray(field: string) {
+    return (this.productForm.get(field) as FormArray)
+  }
+
+  protected validFirstStep() {
+    return !this.productForm.get('name')?.value
+        || !this.productForm.get('category')?.value;
   }
 }

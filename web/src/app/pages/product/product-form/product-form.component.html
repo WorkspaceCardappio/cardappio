@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
 <p-fieldset legend="Novo Produto">
-  <div class="card flex justify-center w-full">
+   <div class="card flex justify-center w-full">
     <p-stepper [value]="1" class="w-full flex flex-column">
       <p-step-list>
         <p-step [value]="1">Informações Gerais</p-step>
@@ -12,9 +12,9 @@
       </p-step-list>
 
       <p-step-panels class="w-full flex-1">
-        <p-step-panel [value]="1" class="w-full">
+        <form [formGroup]="productForm" class="p-fluid w-full">
+          <p-step-panel [value]="1" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
-            <form [formGroup]="productForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
                 <div class="col-8 flex flex-column mb-4 gap-1">
                   <label for="name" class="required-label">Nome</label>
@@ -47,7 +47,7 @@
                     (completeMethod)="searchCategories($event)"
                     [dropdown]="true"
                     fluid
-                  ></p-autocomplete>
+                  />
                 </div>
 
                 <div class="col-2 flex flex-column mb-4 gap-1">
@@ -76,7 +76,6 @@
                   <textarea rows="3" pTextarea formControlName="note"></textarea>
                 </div>
               </div>
-            </form>
 
             <div class="flex pt-6 justify-end">
               <p-button
@@ -85,6 +84,7 @@
                 icon="pi pi-arrow-right"
                 iconPos="right"
                 (click)="activateCallback(2)"
+                [disabled]="validFirstStep()"
               ></p-button>
             </div>
           </ng-template>
@@ -92,7 +92,6 @@
 
         <p-step-panel [value]="2" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
-            <form [formGroup]="productItemIngredientForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
                 <div class="col-8 flex flex-column mb-4 gap-1">
                   <label for="ingredient">Buscar ingrediente</label>
@@ -103,58 +102,47 @@
                     (completeMethod)="searchIngredients($event)"
                     [dropdown]="true"
                     fluid
-                  ></p-autocomplete>
+                  />
                 </div>
                </div>
-            </form>
 
             <p-button
               type="button"
               label="Adicionar"
               icon="pi pi-plus"
-              (click)="addProductItemIngredient()"
+              (click)="addIngredient()"
+              [disabled]="!this.productForm.get('ingredient')?.value?.id"
             ></p-button>
             
             <p-table
-              [value]="productItemIngredient"
+              [value]="productForm.get('ingredients')?.value"
+              showGridlines
               [paginator]="true"
               [rows]="5"
               [responsiveLayout]="'scroll'"
               class="mt-4"
             >
-              <ng-template pTemplate="header">
+              <ng-template #header>
                 <tr>
                   <th pSortableColumn="name">
-                    Nome <p-sortIcon field="name"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="unityOfMeasurement">
-                    Unidade de medida <p-sortIcon field="unityOfMeasurement"></p-sortIcon>
+                    Nome 
+                    <p-sortIcon field="name"/>
                   </th>
                   <th style="width: 10rem">Ações</th>
                 </tr>
               </ng-template>
 
-              <ng-template pTemplate="body" let-ingredient let-i="rowIndex">
+              <ng-template #body let-ingredient let-rowIndex="rowIndex">
                 <tr>
                   <td>{{ ingredient.name }}</td>
-                  <td>{{ ingredient.unityOfMeasurement }}</td>
                   <td>
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-pencil"
-                      class="p-button-text p-button-sm"
-                      style="margin-right: 0.5rem"
-                      aria-label="Editar"
-                      (click)="editIngredient(i)"
-                    ></button>
-                    <button
+                      <button
                       pButton
                       type="button"
                       icon="pi pi-trash"
                       class="p-button-text p-button-sm p-button-danger"
                       aria-label="Excluir"
-                      (click)="deleteIngredient(i)"
+                      (click)="deleteIngredient(rowIndex)"
                     ></button>
                   </td>
                 </tr>
@@ -187,6 +175,7 @@
             </div>
           </ng-template>
         </p-step-panel>
+        </form>
 
         <p-step-panel [value]="3" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
@@ -203,22 +192,6 @@
                   ></p-select>
                 </div>
 
-                <div class="col-4 flex flex-column mb-4 gap-1">
-                  <label for="ingredients">Ingrediente</label>
-                  <p-select
-                    [options]="filteredIngredients"
-                    formControlName="ingredients"
-                    optionLabel="name"
-                    placeholder="Selecione o ingrediente"
-                    class="w-full md:w-56"
-                  ></p-select>
-                </div>
-
-                <div class="col-3 flex flex-column mb-4 gap-1">
-                  <label for="quantity">Quantidade</label>
-                  <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
-                </div>                
-
                 <div class="col-3 flex flex-column mb-4 gap-1">
                   <label for="additionalPrice">Preço</label>
                   <p-inputNumber
@@ -231,21 +204,82 @@
                   ></p-inputNumber>
                 </div>
 
-                <div class="col-1 flex flex-column mb-4 gap-1">
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="quantity">Quantidade disponível</label>
+                  <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
+                </div>
+                <div class="col-2 flex flex-column mb-4 gap-1">
                   <label for="active" class="required-label">Ativo</label>
                   <p-toggle-switch inputId="active" formControlName="active"></p-toggle-switch>
                 </div>
               </div>
+              <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="note">Descrição</label>
+                  <textarea rows="3" pTextarea formControlName="description"></textarea>
+              </div>
             </form>
 
-            <p-button
-              type="button"
-              label="Adicionar"
-              icon="pi pi-plus"
-              (click)="addProductItem()"
-            ></p-button>
+            <form [formGroup]="productItemIngredientForm" class="p-fluid w-full">
+              <p-table
+              [value]="productForm.get('ingredients')?.value"
+              showGridlines
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              class="mt-4"
+            >
+              <ng-template #header>
+                <tr>
+                  <th>Ingrediente</th>
+                  <th>Quantidade utilizada</th>
+                  <th>Unidade de medida</th>
+                  <th style="width: 10rem">Ações</th>
+                </tr>
+              </ng-template>
 
-            <div class="flex pt-6 justify-end">
+              <ng-template #body let-ingredient let-rowIndex="rowIndex">
+                <tr>
+                  <td style="width: 45%">{{ ingredient.name }}</td>
+                  <td style="width: 25%">
+                    <p-inputNumber
+                    formControlName="quantity"
+                    placeholder="Digite a quantidade"
+                    />
+                  </td>
+                  <td style="width: 20%">{{ ingredient.unityOfMeasurement }}</td>
+                  <td>
+                      <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm p-button-danger"
+                      aria-label="Excluir"
+                      (click)="deleteIngredient(rowIndex)"
+                    ></button>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center">
+                    Nenhum ingrediente cadastrado.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            </form>
+       
+            <div class="flex justify-end w-full mt-4">
+              <p-button
+                type="button"
+                label="Adicionar"
+                icon="pi pi-plus"
+                (click)="addProductItem()"
+              ></p-button>
+            </div>
+
+            <div class="flex justify-between w-full mt-6">
               <p-button
                 type="button"
                 label="Voltar"
@@ -253,6 +287,7 @@
                 icon="pi pi-arrow-left"
                 (click)="activateCallback(2)"
               ></p-button>
+
               <p-button
                 type="button"
                 label="Próximo"
@@ -269,7 +304,7 @@
             <form [formGroup]="additionalForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
                 <div class="col-6 flex flex-column mb-4 gap-1">
-                  <label for="additional" class="required-label">Escolha um adicional</label>
+                  <label for="additional">Escolha um adicional</label>
                   <p-autocomplete
                     formControlName="name"
                     optionLabel="name"
@@ -280,7 +315,7 @@
                   ></p-autocomplete>
                 </div>
                 <div class="col-3 flex flex-column mb-4 gap-1">
-                  <label for="additionalPrice" class="required-label">Preço</label>
+                  <label for="additionalPrice">Preço</label>
                   <p-inputNumber
                     inputId="price"
                     formControlName="price"
@@ -320,16 +355,7 @@
                   <td>{{ additional.name }}</td>
                   <td>{{ additional.price }}</td>
                   <td>
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-pencil"
-                      class="p-button-text p-button-sm"
-                      style="margin-right: 0.5rem"
-                      aria-label="Editar"
-                      (click)="editAdditional(i)"
-                    ></button>
-                    <button
+                     <button
                       pButton
                       type="button"
                       icon="pi pi-trash"
@@ -420,15 +446,6 @@
                   <td>{{ variable.name }}</td>
                   <td>{{ variable.price | currency: 'BRL' }}</td>
                   <td>
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-pencil"
-                      class="p-button-text p-button-sm"
-                      style="margin-right: 0.5rem"
-                      aria-label="Editar"
-                      (click)="editProductVariable(i)"
-                    ></button>
                     <button
                       pButton
                       type="button"
