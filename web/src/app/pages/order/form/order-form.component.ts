@@ -40,7 +40,7 @@ import { Loader } from '../../../model/loader';
     SelectButtonModule,
     FormsModule,
     CommonModule,
-    FloatLabelModule
+    FloatLabelModule,
   ],
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.scss'],
@@ -264,46 +264,69 @@ export class OrderFormComponent implements OnInit {
       note: [null],
     });
 
-    form.get('item')?.valueChanges
-      .subscribe((item: any) => {
-        const quantity = form.get('quantity')?.value;
+    form.get('item')?.valueChanges.subscribe((item: any) => {
+      const quantity = form.get('quantity')?.value;
 
-        if (item?.price && quantity) {
-          this.priceTotal.set(item.price * quantity);
-        }
-    })
+      if (item?.price && quantity) {
+        this.priceTotal.set(item.price * quantity);
+      }
+    });
 
-    form.get('quantity')?.valueChanges
-      .subscribe((quantity: any) => {
-        const item = (form.get('item')?.value as any);
+    form.get('quantity')?.valueChanges.subscribe((quantity: any) => {
+      const item = form.get('item')?.value as any;
 
-        if (item?.price && quantity) {
-          this.priceTotal.set(item.price * quantity);
-        }
-    })
-
-    const additionalsArray = form.get('additionals') as FormArray;
-
-    const adicionaisIniciais = [
-      { id: 1, name: 'Extra queijo', selected: false, quantity: 0 },
-      { id: 2, name: 'Bacon', selected: false, quantity: 0 },
-      { id: 3, name: 'Molho especial', selected: false, quantity: 0 },
-    ];
-
-    adicionaisIniciais.forEach(add => {
-      additionalsArray.push(this.builder.group({
-        id: [add.id],
-        name: [add.name],
-        selected: [add.selected],
-        quantity: [add.quantity, [Validators.min(0)]],
-      }));
+      if (item?.price && quantity) {
+        this.priceTotal.set(item.price * quantity);
+      }
     });
 
     return form;
   }
 
-  get additionals() {
-    return this.formProductItem.get('additionals') as FormArray
+  protected adicionaisIniciais = [
+    { id: 1, name: 'Extra queijo', selected: false, quantity: 1 },
+    { id: 2, name: 'Bacon', selected: false, quantity: 1 },
+    { id: 3, name: 'Molho especial', selected: false, quantity: 1 },
+  ];
+
+  selectedAdicionais: any[] = [];
+
+  onSelectionChange(selected: any[]) {
+
+    this.selectedAdicionais = selected;
+
+    this.additionals.clear();
+
+    selected.forEach((product) => {
+      const form = this.builder.group({
+        id: [product.id],
+        item: [product.name, Validators.required],
+        quantity: [
+          product.quantity || 1,
+          [Validators.required, Validators.min(1)],
+        ],
+        variables: this.builder.array([]),
+        additionals: this.builder.array([]),
+        note: [''],
+      });
+
+      this.additionals.push(form);
+    });
+
+    console.log(this.formProductItem);
+
   }
 
+  getFormGroupByProductId(id: number): FormGroup {
+    const index = this.additionals.controls.findIndex(ctrl => ctrl.get('id')?.value === id);
+    return index >= 0 ? (this.additionals.at(index) as FormGroup) : new FormGroup({});
+  }
+
+  isProductSelected(id: number): boolean {
+    return this.selectedAdicionais.some(p => p.id === id);
+  }
+
+  get additionals() {
+    return this.formProductItem.get('additionals') as FormArray;
+  }
 }
