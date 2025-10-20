@@ -12,7 +12,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Observable } from 'rxjs';
-import { S3StorageService } from '../../../s3/s3-storage.service';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -30,7 +29,7 @@ import { CategoryService } from '../service/category.service';
     CardModule,
     FieldsetModule,
   ],
-  providers: [CategoryService, S3StorageService],
+  providers: [CategoryService],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
@@ -52,7 +51,6 @@ export class CategoryFormComponent implements OnInit {
   constructor(
     private readonly builder: FormBuilder,
     private service: CategoryService,
-    private s3Service: S3StorageService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

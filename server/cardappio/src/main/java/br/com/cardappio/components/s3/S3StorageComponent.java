@@ -9,11 +9,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
@@ -28,9 +25,8 @@ public class S3StorageComponent {
     @Value("${AWS_SECRET}")
     private String secretKey;
 
-    private final S3Presigner s3Presigner;
-
-    private static final String BUCKET_NAME = "cardappio-bucket";
+    @Value("${AWS_BUCKET}")
+    private String bucketName;
 
     public void saveFile(MultipartFile file, String oldFileName) {
 
@@ -54,21 +50,6 @@ public class S3StorageComponent {
         }
     }
 
-    public String getPresignedUrl(String objectKey) {
-
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(BUCKET_NAME)
-                .key(objectKey)
-                .build();
-
-        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(15))
-                .getObjectRequest(getObjectRequest)
-                .build();
-
-        return s3Presigner.presignGetObject(presignRequest).url().toString();
-    }
-
     public String getKey(MultipartFile file) {
 
         return LocalDate.now() + " - " + file.getOriginalFilename();
@@ -79,7 +60,7 @@ public class S3StorageComponent {
         if (objectExists(oldFileName, client)) {
 
             DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-                    .bucket(BUCKET_NAME)
+                    .bucket(bucketName)
                     .key(oldFileName)
                     .build();
 
@@ -92,7 +73,7 @@ public class S3StorageComponent {
         try {
 
             HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
-                    .bucket(BUCKET_NAME)
+                    .bucket(bucketName)
                     .key(oldFileName)
                     .build();
 
@@ -106,6 +87,7 @@ public class S3StorageComponent {
     }
 
     private S3Client buildClient() {
+
         return S3Client
                 .builder()
                 .region(Region.US_EAST_1)
@@ -114,8 +96,9 @@ public class S3StorageComponent {
     }
 
     private PutObjectRequest buildRequest(MultipartFile file) {
+
         return PutObjectRequest.builder()
-                .bucket(BUCKET_NAME)
+                .bucket(bucketName)
                 .key(getKey(file))
                 .contentType(file.getContentType())
                 .metadata(Map.of("original-filename", file.getOriginalFilename()))
@@ -128,7 +111,7 @@ public class S3StorageComponent {
                 .buckets()
                 .stream()
                 .map(Bucket::name)
-                .anyMatch(BUCKET_NAME::equals);
+                .anyMatch(bucketName::equals);
 
         if (bucketAlreadyExists) {
 
@@ -140,7 +123,7 @@ public class S3StorageComponent {
 
     private void createBucket(S3Client client) {
 
-        client.createBucket(request -> request.bucket(BUCKET_NAME));
+        client.createBucket(request -> request.bucket(bucketName));
     }
 
 
