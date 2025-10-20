@@ -25,6 +25,7 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
 import { Loader } from '../../../model/loader';
 import FormatterUtils from '../../../utils/formatter.utils';
+import { AdditionalService } from '../../additional/additional.service';
 
 @Component({
   selector: 'app-order-form',
@@ -80,7 +81,7 @@ export class OrderFormComponent implements OnInit {
     },
   ];
 
-  orderId: string | null = null;
+  id: string | null = null;
   isEditMode = false;
 
   form: FormGroup = new FormGroup({});
@@ -100,9 +101,13 @@ export class OrderFormComponent implements OnInit {
 
   priceTotal = signal(0);
 
+  initialAdditionals = [];
+  selectedAdditionals: any[] = [];
+
   constructor(
     private readonly orderService: OrderService,
     private readonly ticketService: TicketService,
+    private readonly additionalService: AdditionalService,
     private readonly productService: ProductService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -114,8 +119,8 @@ export class OrderFormComponent implements OnInit {
     this.form = this.initForm();
     this.formProductItem = this.buildProductItemForm();
 
-    this.orderId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.orderId;
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.id;
 
     if (this.isEditMode) {
       this.loadOrder();
@@ -123,7 +128,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   private initForm() {
-    return this.builder.group({
+    const form = this.builder.group({
       id: [''],
       total: [0, [Validators.required, Validators.min(0)]],
       status: [null, Validators.required],
@@ -131,6 +136,17 @@ export class OrderFormComponent implements OnInit {
       products: this.builder.array([]),
       ticket: [null, Validators.required],
     });
+
+    form.get('product')
+      ?.valueChanges
+      .subscribe((product: any) => {
+
+        if (product?.id) return;
+
+        this.findAdditionals(product.id);
+      });
+
+    return form;
   }
 
   searchProducts(event: any): void {
@@ -182,7 +198,7 @@ export class OrderFormComponent implements OnInit {
       products: this.formatProducts(products),
     };
 
-    if (this.isEditMode && this.orderId) {
+    if (this.isEditMode && this.id) {
       this.updateOrder(orderPayload);
     } else {
       this.createOrder(orderPayload);
@@ -201,10 +217,10 @@ export class OrderFormComponent implements OnInit {
   }
 
   private loadOrder(): void {
-    if (!this.orderId) return;
+    if (!this.id) return;
 
     this.orderService
-      .findById(this.orderId)
+      .findById(this.id)
       .pipe(
         switchMap((order) => {
           const ticket$ = order.ticketId
@@ -238,9 +254,9 @@ export class OrderFormComponent implements OnInit {
   }
 
   private updateOrder(payload: any): void {
-    if (!this.orderId) return;
+    if (!this.id) return;
 
-    this.orderService.update(this.orderId, payload).subscribe({
+    this.orderService.update(this.id, payload).subscribe({
       next: () => this.navigateToList(),
       error: (error) => console.error('Erro ao atualizar pedido:', error),
     });
@@ -284,43 +300,6 @@ export class OrderFormComponent implements OnInit {
     return form;
   }
 
-  protected adicionaisIniciais = [
-    {
-      id: 1,
-      nome: 'Extra queijo',
-      opcoes: [
-        { id: 101, tamanho: 'pequeno', preco: 2.0 },
-        { id: 102, tamanho: 'médio', preco: 3.0 },
-        { id: 103, tamanho: 'grande', preco: 4.0 },
-      ],
-      category: 12,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      nome: 'Bacon',
-      opcoes: [
-        { id: 201, tamanho: 'fatias', preco: 3.5 },
-        { id: 202, tamanho: 'crocante', preco: 4.0 },
-      ],
-      category: 12,
-      quantity: 1,
-    },
-    {
-      id: 3,
-      nome: 'Molho especial',
-      opcoes: [
-        { id: 301, tamanho: 'picante', preco: 1.5 },
-        { id: 302, tamanho: 'doce', preco: 1.8 },
-        { id: 303, tamanho: 'barbecue', preco: 2.0 },
-      ],
-      category: 13,
-      quantity: 1,
-    },
-  ];
-
-  selectedAdicionais: any[] = [];
-
   onSelectionChange(selected: any[]) {
     const formArray = this.additionals;
     const selectedIds = new Set(selected.map((s) => s.id));
@@ -336,7 +315,7 @@ export class OrderFormComponent implements OnInit {
         formArray.push(this.createAdicionalFormGroup(item.id))
       );
 
-    this.selectedAdicionais = selected;
+    this.selectedAdditionals = selected;
   }
 
   createAdicionalFormGroup(id: number): FormGroup {
@@ -361,7 +340,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   isProductSelected(id: number): boolean {
-    return this.selectedAdicionais.some((p) => p.id === id);
+    return this.selectedAdditionals.some((p) => p.id === id);
   }
 
   get additionals() {
@@ -384,5 +363,21 @@ export class OrderFormComponent implements OnInit {
   buildOptionLabel(item: any) {
     const price = FormatterUtils.price(item.preco);
     return `${item.tamanho} - ${price}`;
+  }
+
+  private findAdditionals(productId: string) {
+
+    this.additionalService.findByProductIdToOrder(productId)
+      .subscribe((values: any) => this.initialAdditionals = values);
+
+  }
+
+  private findOptions(productId: string) {
+
+    // TODO: Buscar opções do produto
+
+    this.additionalService.findByProductIdToOrder(productId)
+      .subscribe((values: any) => this.initialAdditionals = values);
+
   }
 }

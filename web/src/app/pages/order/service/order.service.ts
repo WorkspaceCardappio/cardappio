@@ -10,7 +10,7 @@ import { Page } from "../../../model/page.model";
 })
 export class OrderService extends EntityService<any, any> {
 
-  override resource: string = `http://localhost:8080/orders`;
+  override resource: string = `${environment.apiUrl}/orders`;
 
   constructor(public http: HttpClient) {
     super(http);
@@ -21,3 +21,4 @@ export class OrderService extends EntityService<any, any> {
   }
 
 }
+

@@ -156,8 +156,8 @@
             <div class="flex mt-3">
               <div [formGroup]="formProductItem" class="flex w-full">
                 <p-table
-                  [value]="adicionaisIniciais"
-                  [(selection)]="selectedAdicionais"
+                  [value]="initialAdditionals"
+                  [(selection)]="selectedAdditionals"
                   (selectionChange)="onSelectionChange($event)"
                   dataKey="id"
                   showGridlines
