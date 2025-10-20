@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
-import br.com.cardappio.domain.additional.Additional;
+import br.com.cardappio.domain.product.ProductItem;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,7 +47,7 @@ public class ProductOrderAdditional implements EntityModel<UUID> {
     @NotNull(message = Messages.PRODUCT_VARIABLE_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "additional_id", nullable = false)
-    private Additional additional;
+    private ProductItem productItem;
 
     @Column
     @NotNull(message = Messages.INGREDIENT_NOT_NULL)

@@ -24,6 +24,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
 import { Loader } from '../../../model/loader';
+import FormatterUtils from '../../../utils/formatter.utils';
 
 @Component({
   selector: 'app-order-form',
@@ -284,49 +285,104 @@ export class OrderFormComponent implements OnInit {
   }
 
   protected adicionaisIniciais = [
-    { id: 1, name: 'Extra queijo', selected: false, quantity: 1 },
-    { id: 2, name: 'Bacon', selected: false, quantity: 1 },
-    { id: 3, name: 'Molho especial', selected: false, quantity: 1 },
+    {
+      id: 1,
+      nome: 'Extra queijo',
+      opcoes: [
+        { id: 101, tamanho: 'pequeno', preco: 2.0 },
+        { id: 102, tamanho: 'médio', preco: 3.0 },
+        { id: 103, tamanho: 'grande', preco: 4.0 },
+      ],
+      category: 12,
+      quantity: 1,
+    },
+    {
+      id: 2,
+      nome: 'Bacon',
+      opcoes: [
+        { id: 201, tamanho: 'fatias', preco: 3.5 },
+        { id: 202, tamanho: 'crocante', preco: 4.0 },
+      ],
+      category: 12,
+      quantity: 1,
+    },
+    {
+      id: 3,
+      nome: 'Molho especial',
+      opcoes: [
+        { id: 301, tamanho: 'picante', preco: 1.5 },
+        { id: 302, tamanho: 'doce', preco: 1.8 },
+        { id: 303, tamanho: 'barbecue', preco: 2.0 },
+      ],
+      category: 13,
+      quantity: 1,
+    },
   ];
 
   selectedAdicionais: any[] = [];
 
   onSelectionChange(selected: any[]) {
+    const formArray = this.additionals;
+    const selectedIds = new Set(selected.map((s) => s.id));
+    const currentIds = new Set(formArray.controls.map((item) => item.value.id));
+
+    formArray.controls
+      .filter((ctrl) => !selectedIds.has(ctrl.value.id))
+      .forEach((ctrl) => formArray.removeAt(formArray.controls.indexOf(ctrl)));
+
+    selected
+      .filter((item) => !currentIds.has(item.id))
+      .forEach((item) =>
+        formArray.push(this.createAdicionalFormGroup(item.id))
+      );
 
     this.selectedAdicionais = selected;
+  }
 
-    this.additionals.clear();
-
-    selected.forEach((product) => {
-      const form = this.builder.group({
-        id: [product.id],
-        item: [product.name, Validators.required],
-        quantity: [
-          product.quantity || 1,
-          [Validators.required, Validators.min(1)],
-        ],
-        variables: this.builder.array([]),
-        additionals: this.builder.array([]),
-        note: [''],
-      });
-
-      this.additionals.push(form);
+  createAdicionalFormGroup(id: number): FormGroup {
+    const form = this.builder.group({
+      id: [id],
+      opcao: [null, Validators.required],
+      quantity: [
+        1,
+        Validators.compose([Validators.required, Validators.min(1)]),
+      ],
     });
 
-    console.log(this.formProductItem);
-
+    return form;
   }
 
   getFormGroupByProductId(id: number): FormGroup {
-    const index = this.additionals.controls.findIndex(ctrl => ctrl.get('id')?.value === id);
-    return index >= 0 ? (this.additionals.at(index) as FormGroup) : new FormGroup({});
+    return (
+      (this.additionals.controls.find(
+        (value) => value.get('id')?.value === id
+      ) as FormGroup) || this.createAdicionalFormGroup(0)
+    );
   }
 
   isProductSelected(id: number): boolean {
-    return this.selectedAdicionais.some(p => p.id === id);
+    return this.selectedAdicionais.some((p) => p.id === id);
   }
 
   get additionals() {
     return this.formProductItem.get('additionals') as FormArray;
+  }
+
+  filterOpcoes(product: any) {
+
+    product.opcoes = product.opcoes
+      .map((item: any) => ({
+        ...item,
+        label: this.buildOptionLabel(item),
+      }));
+  }
+
+  getSelectedItemName(item: any): string {
+    return `${item.id} - ${item.name}`;
+  }
+
+  buildOptionLabel(item: any) {
+    const price = FormatterUtils.price(item.preco);
+    return `${item.tamanho} - ${price}`;
   }
 }

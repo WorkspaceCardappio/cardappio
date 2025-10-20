@@ -163,55 +163,61 @@
                   showGridlines
                   stripedRows
                   style="width: 100%"
+                  [scrollable]="true"
+                  scrollHeight="70vh"
                 >
-                  <ng-template #header>
+                  <ng-template pTemplate="header">
                     <tr>
                       <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
                       <th>Código</th>
-                      <th>Name</th>
-                      <th>Category</th>
-                      <th>Quantity</th>
+                      <th>Nome</th>
+                      <th>Categoria</th>
+                      <th>Opção</th>
+                      <th>Quantidade</th>
                     </tr>
                   </ng-template>
 
-                  <ng-template #body let-product>
+                  <ng-template pTemplate="body" let-product>
                     <tr>
-                      <td>
-                        <p-tableCheckbox [value]="product" />
-                      </td>
+                      <td><p-tableCheckbox [value]="product" /></td>
                       <td>{{ product.id }}</td>
-                      <td>{{ product.name }}</td>
+                      <td>{{ product.nome }}</td>
                       <td>{{ product.category }}</td>
-                      <td>
-                        <ng-container
-                          *ngIf="
-                            isProductSelected(product.id);
-                            else showQuantity
-                          "
-                        >
-                          <div
-                            [formGroup]="getFormGroupByProductId(product.id)"
-                            style="display: inline-block"
-                          >
-                            <p-inputNumber
-                              formControlName="quantity"
-                              [showButtons]="true"
-                              [buttonLayout]="'horizontal'"
-                              [step]="1"
-                              [min]="1"
-                              [max]="20"
-                              decrementButtonClass="p-button-secondary"
-                              incrementButtonClass="p-button-secondary"
-                              incrementButtonIcon="pi pi-plus"
-                              decrementButtonIcon="pi pi-minus"
-                              inputStyleClass="text-center w-4rem"
-                              [useGrouping]="false"
-                            ></p-inputNumber>
-                          </div>
-                        </ng-container>
-                        <ng-template #showQuantity>
-                          {{ product.quantity }}
-                        </ng-template>
+
+                      <td
+                        [formGroup]="
+                          getFormGroupByProductId(product.id)
+                        "
+                      >
+                        <p-autocomplete
+                          formControlName="opcao"
+                          [suggestions]="product.opcoes"
+                          [disabled]="!isProductSelected(product.id)"
+                          [dropdown]="true"
+                          field=""
+                          [forceSelection]="true"
+                          placeholder="Escolha uma opção"
+                          [style]="{ width: '100%' }"
+                          (completeMethod)="filterOpcoes(product)"
+                          appendTo="body"
+                          [optionLabel]="'label'"
+                        ></p-autocomplete>
+                      </td>
+
+                      <td
+                        [formGroup]="
+                          getFormGroupByProductId(product.id)
+                        "
+                      >
+                        <p-inputNumber
+                          formControlName="quantity"
+                          [showButtons]="true"
+                          [disabled]="!isProductSelected(product.id)"
+                          [min]="1"
+                          [max]="20"
+                          placeholder="Escolha a quantidade"
+                          [useGrouping]="false"
+                        ></p-inputNumber>
                       </td>
                     </tr>
                   </ng-template>
