@@ -135,12 +135,12 @@
           >
             <ng-template #header>
               <tr>
-                <th sortable="true" sortField="number">Número</th>
-                <th sortable="true" sortField="total">Total</th>
-                <th sortable="true" sortField="orderStatus.description">
+                <th style="width: 20%" sortable="true" sortField="number">Número</th>
+                <th style="width: 20%" sortable="true" sortField="total">Total</th>
+                <th style="width: 30%" sortable="true" sortField="orderStatus.description">
                   Status
                 </th>
-                <th sortable="true" sortField="createdAt">Data de Criação</th>
+                <th style="width: 20%" sortable="true" sortField="createdAt">Data de Criação</th>
                 <th style="width: 10%">Ações</th>
               </tr>
             </ng-template>
@@ -193,7 +193,7 @@
 
             <ng-template #emptymessage>
               <tr>
-                <td colspan="4">Nenhum pedido encontrado.</td>
+                <td colspan="12">Nenhum pedido encontrado.</td>
               </tr>
             </ng-template>
           </p-table>
@@ -276,7 +276,7 @@
       <p-button
         label="Cancelar"
         severity="secondary"
-        (click)="visibleSplit = false"
+        (click)="closeSplit()"
       />
       <p-button
         label="Dividir"

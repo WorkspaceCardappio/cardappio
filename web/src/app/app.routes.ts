@@ -44,13 +44,20 @@ export const routes: Routes = [
     ]
   },
   {
-    path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
+    path: 'table',
+    children: [
+      { path: '', loadComponent: () => import('./pages/table-restaurant/list/table-restaurant-list.component').then(m => m.TableRestaurantListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/table-restaurant/form/table-restaurant-form.component').then(m => m.TableRestaurantFormComponent)},
+    ]
   },
   {
     path: 'home',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
   },
   {
     path: '**',

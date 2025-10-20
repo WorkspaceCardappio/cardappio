@@ -104,4 +104,5 @@ public class Ingredient implements EntityModel<UUID> {
         return ingredient;
     }
 
+
 }

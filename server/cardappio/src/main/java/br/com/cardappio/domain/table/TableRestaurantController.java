@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardappio.core.controller.CrudController;
 
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantListDTO;
 import br.com.cardappio.domain.table.dto.TableRestaurantToTicketDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/tables")
+@RequestMapping("api/tables-restaurant")
 @RequiredArgsConstructor
-public class TableController extends CrudController<TableRestaurant, UUID, TableRestaurantDTO, TableRestaurantDTO> {
+public class TableRestaurantController extends CrudController<TableRestaurant, UUID, TableRestaurantListDTO, TableRestaurantInsertDTO> {
 
-    private final TableService service;
+    private final TableRestaurantService service;
 
     @GetMapping("/to-ticket")
     public List<TableRestaurantToTicketDTO> findToTicket(@RequestParam(value = "search", defaultValue = "") final String search) {

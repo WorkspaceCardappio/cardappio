@@ -7,13 +7,14 @@
   [paginator]="true"
   [rows]="20"
   [totalRecords]="totalRecords"
-  [loading]="false"
+  [loading]="loading"
   [globalFilterFields]="['name', 'status']"
   [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
   [tableStyle]="{ 'min-width': '75rem' }"
   dataKey="id"
   showGridlines
   stripedRows
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template #caption>
     <div class="flex">
@@ -36,42 +37,34 @@
 
   <ng-template #header>
     <tr>
-      <th pSortableColumn="name" style="width: 40%">
+      <th style="width: 1rem"></th>
+      <th pSortableColumn="name" style="width: 67%">
         <div class="flex items-center gap-2">
           Nome
           <p-sortIcon field="name" />
         </div>
       </th>
-      <th pSortableColumn="quantity" style="width: 10%">
-        <div class="flex items-center gap-2">
-          Quantidade
-          <p-sortIcon field="quantity" />
-        </div>
-      </th>
-      <th pSortableColumn="unityOfMeasurement" style="width: 10%">
-         <div class="flex items-center gap-2">
-          Unidade de medida
-          <p-sortIcon field="unityOfMeasurement"/>
-        </div>
-      </th>
-      <th pSortableColumn="expirationDate" style="width: 10%">
-         <div class="flex items-center gap-2">
-          Data de validade
-          <p-sortIcon field="expirationDate"/>
-        </div>
-      </th>
-      <th style="width: 10%">Alergênico</th>
-      <th style="width: 10%">Status</th>
-      <th style="width: 10%">Ações</th>
+      <th style="width: 11%">Alergênico</th>
+      <th style="width: 11%">Status</th>
+      <th style="width: 11%">Ações</th>
     </tr>
   </ng-template>
 
-  <ng-template #body let-ingredient>
+  <ng-template #body let-ingredient let-expanded="expanded">
     <tr>
+      <td>
+        <p-button
+          type="button"
+          pRipple
+          [text]="true"
+          severity="secondary"
+          [rounded]="true"
+          [icon]="expanded? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          (click)="toggleRow(ingredient)"
+          aria-label="Expandir estoque"
+        />
+      </td>
       <td>{{ ingredient.name }}</td>
-      <td>{{ ingredient.quantity }}</td>
-      <td>{{ ingredient.unityOfMeasurement?.description }}</td>
-      <td>{{ ingredient.expirationDate | date: 'dd/MM/yyyy' }}</td>
       <td>
         @if (ingredient.allergenic) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>
@@ -108,10 +101,54 @@
       </td>
     </tr>
   </ng-template>
-
   <ng-template #emptymessage>
     <tr>
-      <td colspan="12">Nenhum ingrediente encontrado.</td>
+      <td colspan="8">Nenhum ingrediente encontrado.</td>
     </tr>
   </ng-template>
+
+ <ng-template #expandedrow let-ingredient>
+  <tr>
+    <td colspan="12">
+      <div class="p-4">
+        <p-table
+            [lazy]="true"
+            [paginator]="true"
+            [rows]="20"
+            [value]="ingredient.stocks"
+            [totalRecords]="ingredient.totalStocks"
+            [loading]="ingredient.loadingStocks"
+            (onLazyLoad)="loadStocks($event, ingredient)"
+            dataKey="id"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            showGridlines
+            stripedRows
+          >
+        <ng-template pTemplate="header">
+              <tr>
+                <th>Lote</th>
+                <th>Quantidade</th>
+                <th>Unidade</th>
+                <th>Data de Validade</th>
+              </tr>
+        </ng-template>
+
+        <ng-template #body let-stock>
+              <tr>
+                <td>{{ stock.batch }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ ingredient.unityOfMeasurement?.description }}</td>
+                <td>{{ stock.expirationDate | date: 'dd/MM/yyyy' }}</td>
+              </tr>
+        </ng-template>
+       <ng-template #emptymessage>
+       <p class="text-center text-color-secondary mt-2">
+         Nenhum estoque cadastrado para este ingrediente.
+       </p>
+  </ng-template>
+  </p-table>
+      </div>
+    </td>
+  </tr>
+ </ng-template>
 </p-table>
