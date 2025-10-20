@@ -17,7 +17,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TicketStatusService } from '../../../entity-service/enums/ticket-status.service';
-import { TableService } from '../../table/service/table.service';
+import { TableRestaurantService } from '../../table-restaurant/service/table-restaurant.service';
 import { TicketService } from '../service/ticket.service';
 
 @Component({
@@ -57,7 +57,7 @@ export class TicketFormComponent implements OnInit {
 
   constructor(
     private readonly service: TicketService,
-    private readonly tableService: TableService,
+    private readonly tableService: TableRestaurantService,
     private readonly ticketStatusService: TicketStatusService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -155,7 +155,7 @@ export class TicketFormComponent implements OnInit {
 
   searchTables(event: any) {
     const query = event.query;
-    const searchs = ['status.code!=4'];
+    const searchs = ['status!=UNAVAILABLE'];
 
     if (query) {
       searchs.push(`number==${query}`);
