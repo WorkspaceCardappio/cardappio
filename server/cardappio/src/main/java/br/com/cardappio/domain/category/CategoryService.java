@@ -51,4 +51,15 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
         update(id, dto);
 
     }
+
+    @Override
+    protected void beforeDelete(Category category) {
+
+        String image = category.getImage();
+
+        if (Objects.nonNull(image)) {
+
+            s3StorageComponent.deleteMatchingObject(image);
+        }
+    }
 }

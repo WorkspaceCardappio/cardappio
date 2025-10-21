@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -19,24 +17,18 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class S3StorageComponent {
 
-    @Value("${AWS_ACCESS}")
-    private String accessKey;
-
-    @Value("${AWS_SECRET}")
-    private String secretKey;
-
     @Value("${AWS_BUCKET}")
     private String bucketName;
 
+    private final S3Client client;
+
     public void saveFile(MultipartFile file, String oldFileName) {
 
-        S3Client client = buildClient();
-
-        createDefaultBucket(client);
+        createDefaultBucket();
 
         if (Objects.nonNull(oldFileName)) {
 
-            deleteMatchingObject(oldFileName, client);
+            deleteMatchingObject(oldFileName);
         }
 
         PutObjectRequest request = buildRequest(file);
@@ -55,9 +47,9 @@ public class S3StorageComponent {
         return LocalDate.now() + " - " + file.getOriginalFilename();
     }
 
-    private void deleteMatchingObject(String oldFileName, S3Client client) {
+    public void deleteMatchingObject(String oldFileName) {
 
-        if (objectExists(oldFileName, client)) {
+        if (objectExists(oldFileName)) {
 
             DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)
@@ -68,7 +60,7 @@ public class S3StorageComponent {
         }
     }
 
-    private boolean objectExists(String oldFileName, S3Client client) {
+    private boolean objectExists(String oldFileName) {
 
         try {
 
@@ -86,15 +78,6 @@ public class S3StorageComponent {
         }
     }
 
-    private S3Client buildClient() {
-
-        return S3Client
-                .builder()
-                .region(Region.US_EAST_1)
-                .credentialsProvider(this::getCredentials)
-                .build();
-    }
-
     private PutObjectRequest buildRequest(MultipartFile file) {
 
         return PutObjectRequest.builder()
@@ -105,7 +88,7 @@ public class S3StorageComponent {
                 .build();
     }
 
-    private void createDefaultBucket(S3Client client) {
+    private void createDefaultBucket() {
 
         boolean bucketAlreadyExists = client.listBuckets()
                 .buckets()
@@ -118,17 +101,11 @@ public class S3StorageComponent {
             return;
         }
 
-        createBucket(client);
+        createBucket();
     }
 
-    private void createBucket(S3Client client) {
+    private void createBucket() {
 
         client.createBucket(request -> request.bucket(bucketName));
-    }
-
-
-    public AwsBasicCredentials getCredentials() {
-
-        return AwsBasicCredentials.create(this.accessKey, this.secretKey);
     }
 }
