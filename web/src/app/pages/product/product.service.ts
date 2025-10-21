@@ -20,4 +20,8 @@ export class ProductService extends EntityService<any, any> {
     return this.http.get(`${this.resource}/to-menu${finalSearch}`);
   }
 
+  findOptionsById(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resource}/${id}/options`);
+  }
+
 }
