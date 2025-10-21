@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
 <p-fieldset legend="Novo Pedido">
-  <p-stepper [value]="1" class="basis-[50rem]">
+  <p-stepper [value]="stepIndex" class="basis-[50rem]" [linear]="true">
     <p-step-list>
       <p-step [value]="1">Informações Gerais</p-step>
       <p-step [value]="2">Adicionais</p-step>
@@ -146,14 +146,14 @@
                 type="button"
                 label="Próximo"
                 class="p-button-primary"
-                (click)="activateCallback(2)"
+                (click)="next(activateCallback)"
               ></button>
             </div>
           </ng-template>
         </p-step-panel>
         <p-step-panel [value]="2">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex mt-3">
+          <!--   <div class="flex mt-3">
               <div [formGroup]="formProductItem" class="flex w-full">
                 <p-table
                   [value]="initialAdditionals"
@@ -223,7 +223,7 @@
                   </ng-template>
                 </p-table>
               </div>
-            </div>
+            </div> -->
 
             <div class="mt-4 flex justify-content-end gap-2">
               <button
@@ -231,14 +231,14 @@
                 type="button"
                 label="Cancelar"
                 severity="danger"
-                (click)="onCancel()"
+                (click)="prev(activateCallback)"
               ></button>
               <button
                 pButton
                 type="button"
                 label="Próximo"
                 class="p-button-primary"
-                (click)="activateCallback(3)"
+                (click)="next(activateCallback)"
               ></button>
             </div>
           </ng-template>

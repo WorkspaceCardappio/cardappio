@@ -1,0 +1,100 @@
+<div class="grid mt-3">
+  <div class="flex col-12 gap-4">
+    <span class="flex flex-column gap-1" style="width: 70vw">
+      <label for="option" class="required-label">Opção</label>
+      <p-selectButton
+        id="option"
+        [options]="productTypeOptions"
+        formControlName="item"
+        optionLabel="label"
+        [optionDisabled]="'disabled'"
+      >
+        <ng-template let-option pTemplate="item">
+          <div
+            class="p-d-flex p-flex-column p-ai-center p-p-4"
+            [ngClass]="{
+              available: option.disabled,
+              unavailable: !option.disabled
+            }"
+          >
+            <div class="font-bold mb-1">{{ option.label }}</div>
+            <div class="text-sm text-gray-600">
+              {{ option.description }}
+            </div>
+
+            <div class="text-sm font-bold mt-2">
+              {{ option.price | currency : "BRL" : "symbol" : "1.2-2" }}
+            </div>
+
+            @if (option.disabled) {
+            <div class="text-xs font-semibold mt-1 text-red-600">
+              Indisponível
+            </div>
+            }
+          </div>
+        </ng-template>
+      </p-selectButton>
+    </span>
+
+    <span class="flex flex-column gap-1" style="width: 100%">
+      <label for="note">Observações</label>
+      <textarea
+        pTextarea
+        id="note"
+        formControlName="note"
+        rows="6"
+        style="resize: none; outline: 0"
+      ></textarea>
+    </span>
+  </div>
+
+  <div class="flex flex-column gap-3"></div>
+
+  <!-- <div
+                [formGroup]="formProductItem"
+                class="col-12 mt-3 flex gap-6"
+                style="align-items: flex-start"
+              >
+                <span class="flex flex-column gap-1">
+                  <label for="quantity" class="required-label">
+                    Quantidade
+                  </label>
+                  <p-inputNumber
+                    id="quantity"
+                    formControlName="quantity"
+                    [showButtons]="true"
+                    [buttonLayout]="'horizontal'"
+                    [step]="1"
+                    [min]="1"
+                    [max]="20"
+                    decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    inputStyleClass="text-center w-4rem"
+                  />
+                </span>
+
+                <span class="total-price-highlight">
+                  {{ priceTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
+                </span>
+              </div>
+            </div> -->
+
+  <div class="mt-4 flex justify-content-end gap-2">
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      severity="danger"
+      (click)="prev()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Próximo"
+      class="p-button-primary"
+      (click)="next()"
+    ></button>
+  </div>
+</div>

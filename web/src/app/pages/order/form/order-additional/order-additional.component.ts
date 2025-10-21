@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, signal } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -7,48 +7,50 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, of, switchMap } from 'rxjs';
-import { ProductService } from '../../product/product.service';
-import { TicketService } from '../../ticket/service/ticket.service';
-import { OrderService } from '../service/order.service';
+import { ProductService } from '../../../product/product.service';
+import { OrderService } from '../../service/order.service';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { Breadcrumb } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
-import { Fieldset } from 'primeng/fieldset';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
-import { Loader } from '../../../model/loader';
-import FormatterUtils from '../../../utils/formatter.utils';
-import { AdditionalService } from '../../additional/additional.service';
+import { Loader } from '../../../../model/loader';
+import FormatterUtils from '../../../../utils/formatter.utils';
+import { AdditionalService } from '../../../additional/additional.service';
 
 @Component({
-  selector: 'app-order-form',
+  selector: 'app-order-additional',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     AutoCompleteModule,
     InputNumberModule,
     ButtonModule,
-    Fieldset,
-    Breadcrumb,
     TableModule,
-    StepperModule,
     SelectButtonModule,
     FormsModule,
     CommonModule,
     FloatLabelModule,
   ],
-  templateUrl: './order-form.component.html',
-  styleUrls: ['./order-form.component.scss'],
+  providers: [
+    ProductService
+  ],
+  templateUrl: './order-additional.component.html',
+  styleUrls: ['./order-additional.component.scss'],
 })
-export class OrderFormComponent implements OnInit {
+export class OrderAdditionalComponent implements OnInit {
+
+  @Input({ required: true }) orderId!: string;
+  @Input({ required: true }) activateCallback!: () => void;
+
+
   selectedProductType: any = null;
+
+  stepIndex = 1;
 
   productTypeOptions = [
     {
@@ -81,13 +83,8 @@ export class OrderFormComponent implements OnInit {
     },
   ];
 
-  id: string | null = null;
-  isEditMode = false;
-
   form: FormGroup = new FormGroup({});
-  formProductItem: FormGroup = new FormGroup({});
 
-  tickets: Loader = { values: [] };
   products: Loader = { values: [] };
 
   quantity = 1;
@@ -106,7 +103,6 @@ export class OrderFormComponent implements OnInit {
 
   constructor(
     private readonly orderService: OrderService,
-    private readonly ticketService: TicketService,
     private readonly additionalService: AdditionalService,
     private readonly productService: ProductService,
     private readonly router: Router,
@@ -117,14 +113,6 @@ export class OrderFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.initForm();
-    this.formProductItem = this.buildProductItemForm();
-
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.id;
-
-    if (this.isEditMode) {
-      this.loadOrder();
-    }
   }
 
   private initForm() {
@@ -164,109 +152,52 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
-  searchTickets(event: any): void {
-    this.tickets.isLoading = true;
+  // onSave(): void {
 
-    const query = event.query;
+  //   if (this.form.invalid) return;
 
-    const search = query ? `&search=number==${query}` : '';
-    const completeParams = `pageSize=100${search}`;
+  //   const { total, orderStatus, products, ticket } = this.form.value;
 
-    this.ticketService.findAllDTO(completeParams).subscribe({
-      next: (page) => (this.tickets.values = page.content),
-      error: () => (this.tickets.values = []),
-      complete: () => {
-        this.tickets.isLoading = false;
-        this.cdr.markForCheck();
-      },
-    });
-  }
+  //   const orderPayload = {
+  //     total: total || 0,
+  //     orderStatus: orderStatus || 'PENDING',
+  //     ticketId: ticket?.id,
+  //     products: this.formatProducts(products),
+  //   };
 
-  onCancel(): void {
-    this.navigateToList();
-  }
+  //   if (this.isEditMode) {
+  //     this.updateOrder(orderPayload);
+  //   } else {
+  //     this.createOrder(orderPayload);
+  //   }
+  // }
 
-  onSave(): void {
-    if (this.form.invalid) return;
+  // private formatProducts(products: any[]): any[] {
+  //   if (!products || !Array.isArray(products)) {
+  //     return [];
+  //   }
 
-    const { total, orderStatus, products, ticket } = this.form.value;
+  //   return products.map((product) => ({
+  //     productId: product.id,
+  //     quantity: 1,
+  //   }));
+  // }
 
-    const orderPayload = {
-      total: total || 0,
-      orderStatus: orderStatus || 'PENDING',
-      ticketId: ticket?.id,
-      products: this.formatProducts(products),
-    };
+  // private createOrder(payload: any): void {
+  //   this.orderService.create(payload).subscribe({
+  //     next: () => this.navigateToList(),
+  //     error: (error) => console.error('Erro ao criar pedido:', error),
+  //   });
+  // }
 
-    if (this.isEditMode && this.id) {
-      this.updateOrder(orderPayload);
-    } else {
-      this.createOrder(orderPayload);
-    }
-  }
+  // private updateOrder(payload: any): void {
+  //   if (!this.id) return;
 
-  private formatProducts(products: any[]): any[] {
-    if (!products || !Array.isArray(products)) {
-      return [];
-    }
-
-    return products.map((product) => ({
-      productId: product.id,
-      quantity: 1,
-    }));
-  }
-
-  private loadOrder(): void {
-    if (!this.id) return;
-
-    this.orderService
-      .findById(this.id)
-      .pipe(
-        switchMap((order) => {
-          const ticket$ = order.ticketId
-            ? this.ticketService.findById(order.ticketId)
-            : of(null);
-
-          const productIds = order.products.map((p: any) => p.productId);
-          const products$ = this.productService.findAllDTO(productIds);
-
-          return forkJoin({
-            order: of(order),
-            ticket: ticket$,
-            products: products$,
-          });
-        })
-      )
-      .subscribe(({ order, ticket, products }) => {
-        this.form.patchValue({
-          total: order.total,
-          ticket: ticket,
-          products: products.content,
-        });
-      });
-  }
-
-  private createOrder(payload: any): void {
-    this.orderService.create(payload).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao criar pedido:', error),
-    });
-  }
-
-  private updateOrder(payload: any): void {
-    if (!this.id) return;
-
-    this.orderService.update(this.id, payload).subscribe({
-      next: () => this.navigateToList(),
-      error: (error) => console.error('Erro ao atualizar pedido:', error),
-    });
-  }
-
-  navigateToList(): void {
-    this.router.navigate(['/order']);
-  }
-
-  isOptionDisabled = (option: any) => !option.active;
+  //   this.orderService.update(this.id, payload).subscribe({
+  //     next: () => this.navigateToList(),
+  //     error: (error) => console.error('Erro ao atualizar pedido:', error),
+  //   });
+  // }
 
   private buildProductItemForm() {
     const form = this.builder.group({
@@ -344,7 +275,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   get additionals() {
-    return this.formProductItem.get('additionals') as FormArray;
+    return this.form.get('additionals') as FormArray;
   }
 
   filterOpcoes(product: any) {
@@ -370,6 +301,16 @@ export class OrderFormComponent implements OnInit {
     this.additionalService.findByProductIdToOrder(productId)
       .subscribe((values: any) => this.initialAdditionals = values);
 
+  }
+
+  prev() {
+    this.stepIndex--;
+    this.activateCallback();
+  }
+
+  next() {
+    this.stepIndex++;
+    this.activateCallback();
   }
 
   private findOptions(productId: string) {

@@ -14,11 +14,11 @@ import br.com.cardappio.domain.order.dto.ProductAdditionalDTO;
 public interface AdditionalRepository extends JpaRepository<Additional, UUID> {
 
     @Query("""
-            SELECT NEW br.com.cardappio.domain.order.dto.ProductAdditionalDTO(
+            SELECT new br.com.cardappio.domain.order.dto.ProductAdditionalDTO(
                 product.id, product.name, items.size, items.price
             )
             FROM Additional additional
-            INNER JOIN add.product product
+            INNER JOIN additional.product product
             INNER JOIN product.items items
             WHERE product.id = :productId
             """)

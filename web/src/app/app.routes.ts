@@ -40,7 +40,7 @@ export const routes: Routes = [
     path: 'order',
     children: [
       { path: '', loadComponent: () => import('./pages/order/list/order-list.component').then(m => m.OrderListComponent)},
-      { path: ':id', loadComponent: () => import('./pages/order/form/order-form.component').then(m => m.OrderFormComponent)},
+      { path: ':id', loadComponent: () => import('./pages/order/form/form/order-form.component').then(m => m.OrderFormComponent)},
     ]
   },
   {
