@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import br.com.cardappio.domain.order.dto.ProductOrderDTO;
+import br.com.cardappio.domain.order.item.dto.OrderItemDTO;
 import br.com.cardappio.domain.product.ProductItem;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.CascadeType;
@@ -52,8 +52,8 @@ public class ProductOrder implements EntityModel<UUID> {
 
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductItem product;
+    @JoinColumn(name = "product_item_id", nullable = false)
+    private ProductItem productItem;
 
     @Column
     @NotNull(message = Messages.INGREDIENT_NOT_NULL)
@@ -76,11 +76,14 @@ public class ProductOrder implements EntityModel<UUID> {
     @OneToMany(mappedBy = "productOrder", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductOrderAdditional> additionals = new ArrayList<>();
 
-    public static ProductOrder of(final ProductOrderDTO dto) {
+    public static ProductOrder of(final OrderItemDTO dto) {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(dto.id());
-        productOrder.setOrder(Order.of(dto.orderId()));
+        productOrder.setOrder(Order.of(dto.order()));
+        productOrder.setProductItem(ProductItem.of(dto.item().id()));
+        productOrder.setQuantity(dto.quantity());
+        productOrder.setPrice(dto.price());
 
         return productOrder;
     }

@@ -14,13 +14,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/additionals")
-public class AdditionalResource {
+public class AdditionalController {
 
     private final AdditionalService service;
 
     @GetMapping("/product/{id}")
-    public List<ProductAdditionalDTO> findByProductToOrder(@PathVariable final UUID productId) {
-        return service.findByProductIdToOrder(productId);
+    public List<ProductAdditionalDTO> findByProductToOrder(@PathVariable final UUID id) {
+        return service.findByProductIdToOrder(id);
     }
 
 }

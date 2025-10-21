@@ -5,10 +5,8 @@ import {
   Input,
   OnInit,
   Output,
-  signal,
 } from '@angular/core';
 import {
-  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -27,8 +25,7 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
 import { combineLatest, startWith } from 'rxjs';
 import { Loader } from '../../../../model/loader';
-import FormatterUtils from '../../../../utils/formatter.utils';
-import { AdditionalService } from '../../../additional/additional.service';
+import { OrderOptionsService } from './service/order-options.service';
 
 @Component({
   selector: 'app-order-options',
@@ -45,7 +42,7 @@ import { AdditionalService } from '../../../additional/additional.service';
     CommonModule,
     FloatLabelModule,
   ],
-  providers: [ProductService],
+  providers: [ProductService, OrderOptionsService],
   templateUrl: './order-options.component.html',
   styleUrls: ['./order-options.component.scss'],
 })
@@ -53,6 +50,8 @@ export class OrderOptionsComponent implements OnInit {
   @Input({ required: true }) orderId!: string;
   @Output() prevEmitter: EventEmitter<void> = new EventEmitter();
   @Output() nextEmitter: EventEmitter<void> = new EventEmitter();
+  @Output() onProductSelect: EventEmitter<string> = new EventEmitter();
+  @Output() onItemSelect: EventEmitter<string> = new EventEmitter();
 
   selectedProductType: any = null;
 
@@ -72,13 +71,8 @@ export class OrderOptionsComponent implements OnInit {
     { label: 'Novo', routerLink: '/order/new' },
   ];
 
-  priceTotal = signal(0);
-
-  initialAdditionals = [];
-  selectedAdditionals: any[] = [];
-
   constructor(
-    private readonly additionalService: AdditionalService,
+    private readonly service: OrderOptionsService,
     private readonly productService: ProductService,
     private readonly builder: FormBuilder,
     private cdr: ChangeDetectorRef
@@ -86,6 +80,7 @@ export class OrderOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.initForm();
+    this.onItemSelect.emit('103feb5d-baba-463f-8e3c-8c5d93b8d945');
   }
 
   private initForm() {
@@ -102,37 +97,33 @@ export class OrderOptionsComponent implements OnInit {
       total: [0],
     });
 
-    form.get('product')?.valueChanges
-      .subscribe((product: any) => {
+    form.get('product')?.valueChanges.subscribe((product: any) => {
+      if (!product?.id) return;
 
-        if(product?.id)
-          this.productService.findOptionsById(product?.id)
-          .subscribe((options: any) => {
-            this.options.values = options;
+      this.onProductSelect.emit(product.id);
 
-            if (!options.length) {
-              this.form.get('item')?.setValue(null);
-              this.form.get('price')?.setValue(0);
-              return;
-            }
+      this.productService
+        .findOptionsById(product?.id)
+        .subscribe((options: any) => {
+          this.options.values = options;
 
+          if (!options.length) {
+            this.form.get('item')?.setValue(null);
+            this.form.get('price')?.setValue(0);
+            return;
+          }
 
-            if (options.length === 1) {
-              form.get('item')?.setValue(options[0]);
-            }
+          if (options.length === 1) {
+            form.get('item')?.setValue(options[0]);
+          }
 
-            this.cdr.markForCheck();
-          });
+          this.cdr.markForCheck();
+        });
+    });
 
-      });
-
-    form.get('item')?.valueChanges
-      .subscribe((item: any) => {
-
-        if (item?.price)
-          form.get('price')?.setValue(item.price);
-
-      });
+    form.get('item')?.valueChanges.subscribe((item: any) => {
+      if (item?.price) form.get('price')?.setValue(item.price);
+    });
 
     this.setupTotalCalculation(form);
 
@@ -152,138 +143,23 @@ export class OrderOptionsComponent implements OnInit {
   }
 
   private setupTotalCalculation(form: FormGroup<any>) {
-    const quantityForm = form.get('quantity')!.valueChanges.pipe(startWith(form.get('quantity')!.value));
-    const priceForm = form.get('price')!.valueChanges.pipe(startWith(form.get('price')!.value));
+    const quantityForm = form
+      .get('quantity')!
+      .valueChanges.pipe(startWith(form.get('quantity')!.value));
+    const priceForm = form
+      .get('price')!
+      .valueChanges.pipe(startWith(form.get('price')!.value));
 
-    combineLatest([quantityForm, priceForm])
-      .subscribe(([quantity, price]) => {
-        form.get('quantity')!.valid && form.get('price')!.valid
-          ? form.get('total')!.setValue(quantity * price)
-          : form.get('total')!.setValue(0);
-      });
-  }
-
-  // onSave(): void {
-
-  //   if (this.form.invalid) return;
-
-  //   const { total, orderStatus, products, ticket } = this.form.value;
-
-  //   const orderPayload = {
-  //     total: total || 0,
-  //     orderStatus: orderStatus || 'PENDING',
-  //     ticketId: ticket?.id,
-  //     products: this.formatProducts(products),
-  //   };
-
-  //   if (this.isEditMode) {
-  //     this.updateOrder(orderPayload);
-  //   } else {
-  //     this.createOrder(orderPayload);
-  //   }
-  // }
-
-  // private formatProducts(products: any[]): any[] {
-  //   if (!products || !Array.isArray(products)) {
-  //     return [];
-  //   }
-
-  //   return products.map((product) => ({
-  //     productId: product.id,
-  //     quantity: 1,
-  //   }));
-  // }
-
-  // private createOrder(payload: any): void {
-  //   this.orderService.create(payload).subscribe({
-  //     next: () => this.navigateToList(),
-  //     error: (error) => console.error('Erro ao criar pedido:', error),
-  //   });
-  // }
-
-  // private updateOrder(payload: any): void {
-  //   if (!this.id) return;
-
-  //   this.orderService.update(this.id, payload).subscribe({
-  //     next: () => this.navigateToList(),
-  //     error: (error) => console.error('Erro ao atualizar pedido:', error),
-  //   });
-  // }
-
-  onSelectionChange(selected: any[]) {
-    const formArray = this.additionals;
-    const selectedIds = new Set(selected.map((s) => s.id));
-    const currentIds = new Set(formArray.controls.map((item) => item.value.id));
-
-    formArray.controls
-      .filter((ctrl) => !selectedIds.has(ctrl.value.id))
-      .forEach((ctrl) => formArray.removeAt(formArray.controls.indexOf(ctrl)));
-
-    selected
-      .filter((item) => !currentIds.has(item.id))
-      .forEach((item) =>
-        formArray.push(this.createAdicionalFormGroup(item.id))
-      );
-
-    this.selectedAdditionals = selected;
-  }
-
-  createAdicionalFormGroup(id: number): FormGroup {
-    const form = this.builder.group({
-      id: [id],
-      opcao: [null, Validators.required],
-      quantity: [
-        1,
-        Validators.compose([Validators.required, Validators.min(1)]),
-      ],
+    combineLatest([quantityForm, priceForm]).subscribe(([quantity, price]) => {
+      form.get('quantity')!.valid && form.get('price')!.valid
+        ? form.get('total')!.setValue(quantity * price)
+        : form.get('total')!.setValue(0);
     });
-
-    return form;
   }
 
-  getFormGroupByProductId(id: number): FormGroup {
-    return (
-      (this.additionals.controls.find(
-        (value) => value.get('id')?.value === id
-      ) as FormGroup) || this.createAdicionalFormGroup(0)
-    );
-  }
-
-  isProductSelected(id: number): boolean {
-    return this.selectedAdditionals.some((p) => p.id === id);
-  }
-
-  get additionals() {
-    return this.form.get('additionals') as FormArray;
-  }
-
-  filterOpcoes(product: any) {
-    product.opcoes = product.opcoes.map((item: any) => ({
-      ...item,
-      label: this.buildOptionLabel(item),
-    }));
-  }
-
-  getSelectedItemName(item: any): string {
-    return `${item.id} - ${item.name}`;
-  }
-
-  buildOptionLabel(item: any) {
-    const price = FormatterUtils.price(item.preco);
-    return `${item.tamanho} - ${price}`;
-  }
-
-  private findAdditionals(productId: string) {
-    this.additionalService
-      .findByProductIdToOrder(productId)
-      .subscribe((values: any) => (this.initialAdditionals = values));
-  }
-
-  private findOptions(productId: string) {
-    // TODO: Buscar opções do produto
-
-    this.additionalService
-      .findByProductIdToOrder(productId)
-      .subscribe((values: any) => (this.initialAdditionals = values));
+  onSave() {
+    this.service
+      .create(this.form.getRawValue())
+      .subscribe((item: any) => this.nextEmitter.emit());
   }
 }

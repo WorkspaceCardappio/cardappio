@@ -76,4 +76,12 @@ public class ProductItem implements EntityModel<UUID> {
     @OneToMany(mappedBy = "item", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductItemIngredient> ingredients = new ArrayList<>();
 
+    public static ProductItem of(final UUID id) {
+
+        final ProductItem item = new ProductItem();
+        item.setId(id);
+
+        return item;
+    }
+
 }

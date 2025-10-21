@@ -13,6 +13,7 @@ public class Messages {
     public static final String EMPTY_STATUS = "Status não pode ficar vazio";
     public static final String FUTURE_DATE = "A data deve ser maior que a data atual";
     public static final String MIN_VALUE_ZERO = "Informe um valor maior ou igual a zero.";
+    public static final String MIN_VALUE_ONE = "Informe um valor maior ou igual a um.";
     public static final String SIZE_14 = "Tamanho não pode ultrapassar 14 caractess";
     public static final String SIZE_10 = "Tamanho não pode ultrapassar 10 caracteres";
     public static final String SIZE_8 = "Tamanho não pode ultrapassar 8 caracteres";

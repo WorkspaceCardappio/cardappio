@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -24,7 +24,9 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
 import { Loader } from '../../../../model/loader';
+import { OrderGroupId } from '../../model/order-group-id.model';
 import { OrderStatusService } from '../../service/order-status.service';
+import { OrderAdditionalComponent } from '../order-additional/order-additional.component';
 import { OrderOptionsComponent } from "../order-options/order-options.component";
 
 @Component({
@@ -45,13 +47,15 @@ import { OrderOptionsComponent } from "../order-options/order-options.component"
     FloatLabelModule,
     DatePickerModule,
     InputTextModule,
-    OrderOptionsComponent
+    OrderOptionsComponent,
+    OrderAdditionalComponent
 ],
   providers: [OrderStatusService, TicketService, ProductService],
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.scss'],
 })
 export class OrderFormComponent implements OnInit {
+
   stepIndex = 1;
 
   id: string | null = null;
@@ -69,6 +73,12 @@ export class OrderFormComponent implements OnInit {
     { label: 'Pedidos', routerLink: '/order' },
     { label: 'Novo', routerLink: '/order/new' },
   ];
+
+  orderGroupId: WritableSignal<OrderGroupId> = signal({
+    order: '2447d8ee-4d73-4d4a-819b-c7150988a16b',
+    product: null,
+    item: null
+  });
 
   constructor(
     private readonly orderService: OrderService,
@@ -201,6 +211,20 @@ export class OrderFormComponent implements OnInit {
       },
       error: (err) => console.error('Erro ao buscar status', err),
       complete: () => this.cdr.markForCheck(),
+    });
+  }
+
+  protected setProductInGroup(id: string) {
+    this.orderGroupId.set({
+      ...this.orderGroupId(),
+      product: id
+    });
+  }
+
+  protected setItemInGroup(id: string) {
+    this.orderGroupId.set({
+      ...this.orderGroupId(),
+      item: id
     });
   }
 

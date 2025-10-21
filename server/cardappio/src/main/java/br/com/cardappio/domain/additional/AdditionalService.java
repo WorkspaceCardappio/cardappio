@@ -26,11 +26,11 @@ public class AdditionalService {
                 .collect(Collectors.toMap(
                         ProductAdditionalDTO::id,
                         dto -> {
-                            dto.items().add(new ProductAdditionalItemDTO(dto.size(), dto.price()));
+                            dto.items().add(new ProductAdditionalItemDTO(dto.itemId(), dto.size(), dto.price()));
                             return dto;
                         },
                         (existing, incoming) -> {
-                            existing.items().add(new ProductAdditionalItemDTO(incoming.name(), incoming.price()));
+                            existing.items().add(new ProductAdditionalItemDTO(incoming.itemId(), incoming.size(), incoming.price()));
                             return existing;
                         }
                 ));

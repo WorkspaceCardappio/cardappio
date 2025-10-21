@@ -15,12 +15,13 @@ public interface AdditionalRepository extends JpaRepository<Additional, UUID> {
 
     @Query("""
             SELECT new br.com.cardappio.domain.order.dto.ProductAdditionalDTO(
-                product.id, product.name, items.size, items.price
+                product.id, product.name, items.size, items.price, items.id
             )
             FROM Additional additional
             INNER JOIN additional.product product
             INNER JOIN product.items items
             WHERE product.id = :productId
+                AND additional.active = true
             """)
     List<ProductAdditionalDTO> findByProductToOrder(@Param("productId") UUID productId);
 
