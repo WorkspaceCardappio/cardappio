@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -11,7 +11,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 
 @Component({
@@ -29,7 +28,9 @@ import { CategoryService } from '../service/category.service';
     CardModule,
     FieldsetModule,
   ],
-  providers: [CategoryService],
+  providers: [
+    CategoryService
+  ],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
@@ -37,7 +38,7 @@ export class CategoryFormComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [
-    { label: 'Categorias', routerLink: '/category' },
+    { label: 'Categoria', routerLink: '/category' },
     { label: 'Novo', routerLink: '/category/new' },
   ];
 
@@ -52,7 +53,8 @@ export class CategoryFormComponent implements OnInit {
     private readonly builder: FormBuilder,
     private service: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -79,10 +81,9 @@ export class CategoryFormComponent implements OnInit {
 
   private loadCategory(id: string) {
 
-    this.service.findById(id).subscribe((category) => {
+    this.service.findById(id).subscribe((category) =>
 
-      this.form.patchValue(category);
-    });
+      this.form.patchValue(category));
   }
 
   create() {
@@ -104,21 +105,6 @@ export class CategoryFormComponent implements OnInit {
   cancel() {
     this.router.navigate(['category']);
   }
-
-  categories = (query: string): Observable<any[]> => {
-    const searchs = [];
-
-    if (query) {
-      searchs.push(`name=ilike=${query}%`);
-    }
-
-    const id = this.form.get('id')?.value;
-    if (id) {
-      searchs.push(`id=out=${id}`);
-    }
-
-    return this.service.findAll(20, searchs.join(';'));
-  };
 
   display = (item: any) => {
     return item.name;
@@ -146,6 +132,7 @@ export class CategoryFormComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }

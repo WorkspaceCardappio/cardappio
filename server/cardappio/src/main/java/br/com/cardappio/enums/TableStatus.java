@@ -8,26 +8,27 @@ import java.util.stream.Collectors;
 
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public enum TableStatus {
-    FREE (1L, "Livre"),
-    RESERVED (2L, "Reservada"),
-    OCCUPIED (3L, "Ocupada"),
-    UNAVAILABLE (4L, "Indisponível");
+@RequiredArgsConstructor
+public enum TableStatus implements EnumSerialize {
 
-    private final Long code;
-    private final String description;
+    FREE(1L, "Livre"),
+    RESERVED(2L, "Reservada"),
+    OCCUPIED(3L, "Ocupada"),
+    UNAVAILABLE(4L, "Indisponível");
 
     private static final Map<Long, TableStatus> CODE_MAP =
             Arrays.stream(values()).collect(Collectors.toMap(TableStatus::getCode, Function.identity()));
+    private final Long code;
+    private final String description;
 
     public static TableStatus fromCode(final Long code) {
 
         return Optional.ofNullable(CODE_MAP.get(code))
                 .orElseThrow(() -> new EntityNotFoundException(Messages.CODE_NOT_FOUND));
     }
+
 }

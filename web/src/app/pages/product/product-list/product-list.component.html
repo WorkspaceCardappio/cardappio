@@ -2,18 +2,23 @@
 <p-table
   #dt2
   [value]="products"
-  dataKey="id"
-  [rows]="10"
+  [lazy]="true"
+  (onLazyLoad)="loadProducts($event)"
+  [rows]="20"
   [paginator]="true"
-  [rowsPerPageOptions]="[10, 25, 50]"
+  [totalRecords]="totalRecords"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
   [loading]="loading"
   [globalFilterFields]="['name', 'category', 'price', 'active']"
   [tableStyle]="{ 'min-width': '75rem' }"
+  dataKey="id"
+  showGridLines
+  stripedRows
 >
 <ng-template #caption>
   <div class="flex">
     <p-button
-      label="Novo Produto"
+      label="Novo"
       icon="pi pi-plus"
       styleClass="p-button-success"
       routerLink="/product/new"
@@ -27,7 +32,7 @@
         pInputText
         type="text"
         (input)="dt2.filterGlobal($event.target.value, 'contains')"
-        placeholder="Buscar produto..."
+        placeholder="Buscar"
       />
     </p-iconfield>
   </div>
@@ -35,9 +40,24 @@
 
   <ng-template #header>
     <tr>
-      <th style="width: 25%">Produto</th>
-      <th style="width: 25%">Categoria</th>
-      <th style="width: 25%">Preço</th>
+      <th pSortableColumn="name" style="width: 60%">
+        <div class="flex items-center gap-2">
+          Produto
+          <p-sortIcon field="name"/>
+        </div>
+      </th>
+      <th pSortableColumn="category" style="width: 25%">
+        <div class="flex items-center gap-2">
+          Categoria
+          <p-sortIcon field="category"/>
+        </div>
+      </th>
+      <th pSortableColumn="price" style="width: 25%">
+        <div class="flex items-center gap-2">
+          Preço
+          <p-sortIcon field="price"/>
+        </div>
+      </th>
       <th style="width: 25%">Status</th>
     </tr>
 
@@ -96,10 +116,30 @@
       <td>{{ product.category }}</td>
       <td>{{ product.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
       <td>
-        <p-tag
-          [value]="product.active ? 'Ativo' : 'Inativo'"
-          [severity]="product.active ? 'success' : 'danger'"
-        ></p-tag>
+        @if (product.active){
+          <i class="pi pi-check-circle" style="color: #51cf66"></i>
+        } @else {
+          <i class="pi pi-times-circle" style="color: #d33b19"></i>
+        }
+      </td>
+      <td>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-text p-button-sm"
+          (click)="onEdit(product.id)"
+          style="margin-right: 0.5rem"
+          aria-label="Editar"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-danger"
+          (click)="onDelete(product.id)"
+          aria-label="Excluir"
+        ></button>
       </td>
     </tr>
   </ng-template>
@@ -110,59 +150,3 @@
     </tr>
   </ng-template>
 </p-table>
-
-
-
-<!-- <cardappio-list
-    [params]="{
-        service: service,
-        route: 'product',
-        columns: [
-            {title: 'Nome', field: 'name', size: 5},
-            {title: 'Categoria', field: 'category', size: 3},
-            {title: 'Preço', field: 'price', size: 3},
-            {title: 'Status', field: 'active', size: 3}
-        ],
-        filters: [
-            {
-                icon: 'fa-solid fa-bowl-food',
-                title: 'Produto',
-                value: 'name',
-                typeValue: 'string'
-            },
-                        {
-                icon: 'fa-solid fa-circle-check',
-                title: 'Status',
-                value: 'active',
-                typeValue: 'boolean'
-            },
-                        {
-                icon: 'fa-solid fa-money-bill',
-                title: 'Preço',
-                value: 'price',
-                typeValue: 'number'
-            }
-        ]
-    }"
->
-<ng-template #active let-item>
-    @if(item.active){
-        <span style="color: #51CF66;">
-            <i class="fa-solid fa-circle-check"></i>
-        </span>
-    } @else {
-        <span style="color: #D33B19;">
-            <i class="fa-solid fa-circle-xmark"></i>
-        </span>
-    }
-</ng-template>
-<ng-template #category let-item>
-    {{ item.category.name }}
-</ng-template>
-<ng-template #expirationDate let-item>
-    {{ item.expirationDate | date:'dd/MM/yyyy' }}
-</ng-template>
-<ng-template #price let-item>
-    {{ item.price | currency:'BRL' }}
-</ng-template>
-</cardappio-list> -->

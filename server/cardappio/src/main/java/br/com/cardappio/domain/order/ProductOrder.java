@@ -1,7 +1,5 @@
 package br.com.cardappio.domain.order;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -36,7 +34,7 @@ public class ProductOrder implements EntityModel<UUID> {
 
     @NotNull(message = Messages.ORDER_NOT_NULL)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "client_order_id", nullable = false)
     private Order order;
 
     @NotNull(message = Messages.PRODUCT_NOT_NULL)
@@ -53,11 +51,6 @@ public class ProductOrder implements EntityModel<UUID> {
     @NotNull
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal price;
-
-    @Column
-    @NotNull
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal total = BigDecimal.ZERO;
 
     @Column
     private String note;

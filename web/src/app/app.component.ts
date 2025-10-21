@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './menu/header/header.component';
-import { LeftMenuComponent } from './menu/left-menu/left-menu.component';
+import { HeaderComponent } from './menu-component/header/header.component';
+import { LeftMenuComponent } from './menu-component/left-menu/left-menu.component';
 import { routesMenu } from './routes-menu.config';
 
 @Component({

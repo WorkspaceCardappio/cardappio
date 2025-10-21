@@ -1,0 +1,288 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-table
+  #dt1
+  [value]="tickets"
+  [lazy]="true"
+  (onLazyLoad)="load($event)"
+  [paginator]="true"
+  [rows]="20"
+  [totalRecords]="totalRecords"
+  [loading]="false"
+  [globalFilterFields]="['name', 'status']"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  dataKey="id"
+  showGridlines
+  stripedRows
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template #caption>
+    <div class="flex">
+      <p-button label="Novo" icon="pi pi-plus" [routerLink]="[pathNew]">
+      </p-button>
+
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar"
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"></th>
+      <th pSortableColumn="name" style="width: 15%">
+        <div class="flex items-center gap-2">
+          Número
+          <p-sortIcon field="name" />
+        </div>
+      </th>
+      <th style="width: 15%">Total</th>
+      <th style="width: 15%">Status</th>
+      <th style="width: 25%">Criado por</th>
+      <th style="width: 15%">Mesa</th>
+      <th style="width: 15%">Ações</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-ticket let-expanded="expanded">
+    <tr>
+      <td>
+        <p-button
+          type="button"
+          pRipple
+          [text]="true"
+          severity="secondary"
+          [rounded]="true"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          (click)="toggleRow(ticket)"
+        />
+      </td>
+      <td>{{ ticket.number }}</td>
+      <td>{{ ticket.total | currency : "BRL" : "symbol" : "1.2-2" }}</td>
+      <td>
+        @switch (ticket.status.code) { @case (1) {
+        <p-tag severity="info" [value]="ticket.status.description"></p-tag> }
+        @case (2) {
+        <p-tag severity="success" [value]="ticket.status.description"></p-tag> }
+        @case (3) {
+        <p-tag severity="danger" [value]="ticket.status.description"></p-tag> }
+        @default { <p-tag severity="danger" value="Não encontrado"></p-tag> } }
+      </td>
+      <td>{{ ticket.person }}</td>
+      <td>{{ ticket.table.number }}</td>
+      <td>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-text p-button-sm"
+          (click)="onEdit(ticket.id)"
+          style="margin-right: 0.5rem"
+          aria-label="Editar"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-danger"
+          (click)="onDelete(ticket.id)"
+          aria-label="Excluir"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-money-bill"
+          class="p-button-text p-button-sm p-button-info"
+          (click)="showSplit(ticket.id)"
+          aria-label="Dividir Comanda"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="12">Nenhuma comanda encontrada.</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-ticket>
+    <tr>
+      <td colspan="12">
+        <div class="p-4">
+          <p-table
+            [lazy]="true"
+            [paginator]="true"
+            [rows]="20"
+            [value]="ticket.orders"
+            [totalRecords]="ticket.totalOrders"
+            (onLazyLoad)="loadOrders($event, ticket)"
+            [loading]="ticket.loadingOrders"
+            dataKey="id"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            showGridlines
+            stripedRows
+            [sortField]="'createdAt'"
+            [sortOrder]="-1"
+          >
+            <ng-template #header>
+              <tr>
+                <th style="width: 20%" sortable="true" sortField="number">Número</th>
+                <th style="width: 20%" sortable="true" sortField="total">Total</th>
+                <th style="width: 30%" sortable="true" sortField="orderStatus.description">
+                  Status
+                </th>
+                <th style="width: 20%" sortable="true" sortField="createdAt">Data de Criação</th>
+                <th style="width: 10%">Ações</th>
+              </tr>
+            </ng-template>
+
+            <ng-template #body let-item>
+              <tr>
+                <td>{{ item.number }}</td>
+                <td>
+                  {{ item.total | currency : "BRL" : "symbol" : "1.2-2" }}
+                </td>
+                <td>
+                  @switch (item.status.code) { @case (1) {
+                  <p-tag
+                    severity="warn"
+                    [value]="item.status.description"
+                  ></p-tag>
+                  } @case (2) {
+                  <p-tag
+                    severity="info"
+                    [value]="item.status.description"
+                  ></p-tag>
+                  } @case (3) {
+                  <p-tag
+                    severity="success"
+                    [value]="item.status.description"
+                  ></p-tag>
+                  } @case (4) {
+                  <p-tag
+                    severity="contrast"
+                    [value]="item.status.description"
+                  ></p-tag>
+                  } @default {
+                  <p-tag severity="danger" value="Não encontrado"></p-tag>
+                  } }
+                </td>
+                <td>{{ item.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-pencil"
+                    class="p-button-text p-button-sm"
+                    (click)="redirectToOrder(item.id)"
+                    style="margin-right: 0.5rem"
+                    aria-label="Editar"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="12">Nenhum pedido encontrado.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  header="Dividir Comanda"
+  [modal]="true"
+  [(visible)]="visibleSplit"
+  [style]="{ width: '60rem' }"
+>
+  <span class="p-text-secondary block mb-4"
+    >Escolha os pedidos para divisão em uma nova comanda.</span
+  >
+
+  <p-table
+    [value]="ordersToSplit"
+    [(selection)]="selectedOrders"
+    [loading]="splitLoading"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalRecordsSplit"
+    dataKey="id"
+    [lazy]="false"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Número</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-order>
+      <tr [pSelectableRow]="order">
+        <td>
+          <p-tableCheckbox [value]="order"></p-tableCheckbox>
+        </td>
+        <td>{{ order.number }}</td>
+        <td>{{ order.total | currency : "BRL" }}</td>
+        <td>
+          @switch (order.status.code) { @case (1) {
+          <p-tag severity="warn" [value]="order.status.description"></p-tag>
+          } @case (2) {
+          <p-tag severity="info" [value]="order.status.description"></p-tag>
+          } @case (3) {
+          <p-tag severity="success" [value]="order.status.description"></p-tag>
+          } @case (4) {
+          <p-tag severity="contrast" [value]="order.status.description"></p-tag>
+          } @default {
+          <p-tag severity="danger" value="Não encontrado"></p-tag>
+          } }
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">Nenhum pedido disponível.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div
+    class="flex mt-4"
+    style="align-items: center; justify-content: space-between"
+  >
+    <span class="font-semibold text-lg">
+      Total: {{ getSelectedTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
+    </span>
+
+    <div class="flex gap-2">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        (click)="closeSplit()"
+      />
+      <p-button
+        label="Dividir"
+        (click)="confirmSplit()"
+        [disabled]="!selectedOrders.length"
+      />
+    </div>
+  </div>
+</p-dialog>

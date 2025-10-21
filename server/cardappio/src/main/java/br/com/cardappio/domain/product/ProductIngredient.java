@@ -1,11 +1,10 @@
 package br.com.cardappio.domain.product;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import br.com.cardappio.domain.ingredient.Ingredient;
+import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -46,9 +44,13 @@ public class ProductIngredient {
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    @NotNull
-    @Column(nullable = false)
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal quantity;
+    public static ProductIngredient of(final ProductIngredientDTO dto, final Product product) {
 
+        final ProductIngredient productIngredient = new ProductIngredient();
+        productIngredient.setId(dto.id());
+        productIngredient.setProduct(product);
+        productIngredient.setIngredient(Ingredient.of(dto.ingredient().id()));
+
+        return productIngredient;
+    }
 }

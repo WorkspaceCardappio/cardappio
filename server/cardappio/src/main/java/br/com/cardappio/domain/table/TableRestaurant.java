@@ -8,16 +8,16 @@ import com.cardappio.core.entity.EntityModel;
 
 import br.com.cardappio.converter.TableStatusConverter;
 import br.com.cardappio.domain.restaurant.Restaurant;
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
 import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
@@ -61,11 +61,12 @@ public class TableRestaurant implements EntityModel<UUID> {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    public static TableRestaurant of(final TableRestaurantDTO dto) {
+    public static TableRestaurant of(final TableRestaurantInsertDTO dto) {
+
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());
-        table.setStatus(dto.status());
+        table.setStatus(TableStatus.fromCode(dto.status().code()));
         table.setPlaces(dto.places());
 
         return table;

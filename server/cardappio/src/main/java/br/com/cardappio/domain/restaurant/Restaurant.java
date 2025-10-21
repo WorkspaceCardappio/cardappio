@@ -28,10 +28,10 @@ import lombok.ToString;
 
 @Entity
 @Table
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @ToString
 @EqualsAndHashCode(of = "id")
 public class Restaurant {
