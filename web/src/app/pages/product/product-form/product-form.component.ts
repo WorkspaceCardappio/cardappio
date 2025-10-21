@@ -273,7 +273,7 @@ export class ProductFormComponent implements OnInit {
   //     this.createProduct();
   //   }
   // }
-
+  private onNextStep(activateCallback: (value: any) => )
   private createProduct(): void {
     const { id, ...productData } = this.productForm.value;
     this.productService.create(productData).subscribe({

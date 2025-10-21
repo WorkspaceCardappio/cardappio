@@ -1,0 +1,251 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Novo Pedido">
+  <p-stepper [value]="stepIndex" class="basis-[50rem]" [linear]="true">
+    <p-step-list>
+      <p-step [value]="1">Informações Gerais</p-step>
+      <p-step [value]="2">Adicionais</p-step>
+      <p-step [value]="3">Variáveis</p-step>
+      <p-step [value]="4">Resumo</p-step>
+    </p-step-list>
+    <form [formGroup]="form" class="p-fluid">
+      <p-step-panels>
+        <p-step-panel [value]="1">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="grid mt-3">
+              <div class="col-12 flex flex-column gap-1">
+                <label for="ticket" class="required-label">Comanda</label>
+                <p-autoComplete
+                  id="ticket"
+                  formControlName="ticket"
+                  [suggestions]="tickets.values"
+                  (completeMethod)="searchTickets($event)"
+                  [dropdown]="true"
+                  placeholder="Selecione a comanda"
+                  optionLabel="number"
+                  fluid
+                  [emptyMessage]="'Nenhuma comanda encontrada'"
+                >
+                </p-autoComplete>
+              </div>
+
+              <div class="col-12 flex flex-column mt-3 gap-1">
+                <label for="products" class="required-label">Produto</label>
+                <p-autoComplete
+                  id="products"
+                  formControlName="product"
+                  [suggestions]="products.values"
+                  (completeMethod)="searchTickets($event)"
+                  [dropdown]="true"
+                  placeholder="Selecione o produto"
+                  optionLabel="number"
+                  fluid
+                  [emptyMessage]="'Nenhum produto encontrado'"
+                  [disabled]="!this.form.get('ticket')?.value?.id"
+                >
+                </p-autoComplete>
+              </div>
+
+              <div [formGroup]="formProductItem" style="width: 100%">
+                <div class="flex col-12 gap-4">
+                  <span class="flex flex-column gap-1" style="width: 70vw">
+                    <label for="option" class="required-label">Opção</label>
+                    <p-selectButton
+                      id="option"
+                      [options]="productTypeOptions"
+                      formControlName="item"
+                      optionLabel="label"
+                      [optionDisabled]="'disabled'"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div
+                          class="p-d-flex p-flex-column p-ai-center p-p-4"
+                          [ngClass]="{
+                            available: option.disabled,
+                            unavailable: !option.disabled
+                          }"
+                        >
+                          <div class="font-bold mb-1">{{ option.label }}</div>
+                          <div class="text-sm text-gray-600">
+                            {{ option.description }}
+                          </div>
+
+                          <div class="text-sm font-bold mt-2">
+                            {{
+                              option.price
+                                | currency : "BRL" : "symbol" : "1.2-2"
+                            }}
+                          </div>
+
+                          @if (option.disabled) {
+                          <div class="text-xs font-semibold mt-1 text-red-600">
+                            Indisponível
+                          </div>
+                          }
+                        </div>
+                      </ng-template>
+                    </p-selectButton>
+                  </span>
+
+                  <span class="flex flex-column gap-1" style="width: 100%">
+                    <label for="note">Observações</label>
+                    <textarea
+                      pTextarea
+                      id="note"
+                      formControlName="note"
+                      rows="6"
+                      style="resize: none; outline: 0"
+                    ></textarea>
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-column gap-3"></div>
+
+              <div
+                [formGroup]="formProductItem"
+                class="col-12 mt-3 flex gap-6"
+                style="align-items: flex-start"
+              >
+                <span class="flex flex-column gap-1">
+                  <label for="quantity" class="required-label">
+                    Quantidade
+                  </label>
+                  <p-inputNumber
+                    id="quantity"
+                    formControlName="quantity"
+                    [showButtons]="true"
+                    [buttonLayout]="'horizontal'"
+                    [step]="1"
+                    [min]="1"
+                    [max]="20"
+                    decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    inputStyleClass="text-center w-4rem"
+                  />
+                </span>
+
+                <span class="total-price-highlight">
+                  {{ priceTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-4 flex justify-content-end gap-2">
+              <button
+                pButton
+                type="button"
+                label="Cancelar"
+                severity="danger"
+                (click)="onCancel()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Próximo"
+                class="p-button-primary"
+                (click)="next(activateCallback)"
+              ></button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+          <!--   <div class="flex mt-3">
+              <div [formGroup]="formProductItem" class="flex w-full">
+                <p-table
+                  [value]="initialAdditionals"
+                  [(selection)]="selectedAdditionals"
+                  (selectionChange)="onSelectionChange($event)"
+                  dataKey="id"
+                  showGridlines
+                  stripedRows
+                  style="width: 100%"
+                  [scrollable]="true"
+                  scrollHeight="70vh"
+                >
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Categoria</th>
+                      <th>Opção</th>
+                      <th>Quantidade</th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-product>
+                    <tr>
+                      <td><p-tableCheckbox [value]="product" /></td>
+                      <td>{{ product.id }}</td>
+                      <td>{{ product.nome }}</td>
+                      <td>{{ product.category }}</td>
+
+                      <td
+                        [formGroup]="
+                          getFormGroupByProductId(product.id)
+                        "
+                      >
+                        <p-autocomplete
+                          formControlName="opcao"
+                          [suggestions]="product.opcoes"
+                          [disabled]="!isProductSelected(product.id)"
+                          [dropdown]="true"
+                          field=""
+                          [forceSelection]="true"
+                          placeholder="Escolha uma opção"
+                          [style]="{ width: '100%' }"
+                          (completeMethod)="filterOpcoes(product)"
+                          appendTo="body"
+                          [optionLabel]="'label'"
+                        ></p-autocomplete>
+                      </td>
+
+                      <td
+                        [formGroup]="
+                          getFormGroupByProductId(product.id)
+                        "
+                      >
+                        <p-inputNumber
+                          formControlName="quantity"
+                          [showButtons]="true"
+                          [disabled]="!isProductSelected(product.id)"
+                          [min]="1"
+                          [max]="20"
+                          placeholder="Escolha a quantidade"
+                          [useGrouping]="false"
+                        ></p-inputNumber>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div> -->
+
+            <div class="mt-4 flex justify-content-end gap-2">
+              <button
+                pButton
+                type="button"
+                label="Cancelar"
+                severity="danger"
+                (click)="prev(activateCallback)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Próximo"
+                class="p-button-primary"
+                (click)="next(activateCallback)"
+              ></button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel [value]="3"> </p-step-panel>
+        <p-step-panel [value]="4"> </p-step-panel>
+      </p-step-panels>
+    </form>
+  </p-stepper>
+</p-fieldset>

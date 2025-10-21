@@ -26,7 +26,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -42,7 +41,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "client_order")
 @EqualsAndHashCode(of = {"id"})
-@ToString(of = {"id", "total", "status"})
+@ToString(of = {"id", "number", "status"})
 public class Order implements EntityModel<UUID> {
 
     @Id
@@ -52,10 +51,7 @@ public class Order implements EntityModel<UUID> {
     @Column(insertable = false, updatable = false)
     private Long number;
 
-    @Column(nullable = false)
-    @NotNull(message = Messages.MIN_VALUE_ZERO)
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal total = BigDecimal.ZERO;
+    private BigDecimal total;
 
     @Column(nullable = false)
     @NotNull(message = Messages.STATUS_NOT_NULL)
@@ -78,15 +74,10 @@ public class Order implements EntityModel<UUID> {
 
         final Order order = new Order();
         order.setId(dto.id());
-        order.setTotal(dto.total());
-        order.setStatus(dto.orderStatus());
-        order.setTicket(Ticket.of(dto.ticketId()));
+        order.setStatus(OrderStatus.fromCode(dto.status().code()));
+        order.setTicket(Ticket.of(dto.ticket().id()));
+        order.setTotal(BigDecimal.ONE);
 
-        List<ProductOrder> productOrders = dto.products().stream()
-                .map(ProductOrder::of)
-                .toList();
-
-        order.productOrders.addAll(productOrders);
         return order;
     }
 

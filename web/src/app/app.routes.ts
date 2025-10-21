@@ -36,31 +36,28 @@ export const routes: Routes = [
         { path: ':id', loadComponent: () => import('./pages/ticket/form/ticket-form.component').then(m => m.TicketFormComponent)},
       ]
     },
-  // {
-  //   path: 'order',
-  //   children: [
-  //     {
-  //       path: '',
-  //       loadComponent: () => import('./pages/order/order-list/order-list.component').then(m => m.OrderListComponent)
-  //     },
-  //     {
-  //       path: 'new',
-  //       loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
-  //     },
-  //     {
-  //       path: ':id',
-  //       loadComponent: () => import('./pages/order/order-form/order-form.component').then(m => m.OrderFormComponent)
-  //     },
-  //   ]
-  // },
   {
-    path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
+    path: 'order',
+    children: [
+      { path: '', loadComponent: () => import('./pages/order/list/order-list.component').then(m => m.OrderListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/order/form/form/order-form.component').then(m => m.OrderFormComponent)},
+    ]
+  },
+  {
+    path: 'table',
+    children: [
+      { path: '', loadComponent: () => import('./pages/table-restaurant/list/table-restaurant-list.component').then(m => m.TableRestaurantListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/table-restaurant/form/table-restaurant-form.component').then(m => m.TableRestaurantFormComponent)},
+    ]
   },
   {
     path: 'home',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
   },
   {
     path: '**',

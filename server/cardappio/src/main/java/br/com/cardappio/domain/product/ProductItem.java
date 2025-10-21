@@ -24,6 +24,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,7 +38,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(of = { "id", "quantity", "size" })
+@ToString(of = {"id", "quantity", "size"})
 @EqualsAndHashCode(of = "id")
 public class ProductItem implements EntityModel<UUID> {
 
@@ -59,6 +60,10 @@ public class ProductItem implements EntityModel<UUID> {
     @Convert(converter = ItemTypeConverter.class)
     private ItemSize size = ItemSize.UNIQUE;
 
+    @Column
+    @Size(max = 255)
+    private String description;
+
     @Column(nullable = false)
     @NotNull(message = Messages.EMPTY_PRICE)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
@@ -70,5 +75,13 @@ public class ProductItem implements EntityModel<UUID> {
     @JsonIgnoreProperties("item")
     @OneToMany(mappedBy = "item", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductItemIngredient> ingredients = new ArrayList<>();
+
+    public static ProductItem of(final UUID id) {
+
+        final ProductItem item = new ProductItem();
+        item.setId(id);
+
+        return item;
+    }
 
 }

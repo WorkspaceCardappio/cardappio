@@ -8,7 +8,7 @@ import com.cardappio.core.entity.EntityModel;
 
 import br.com.cardappio.converter.TableStatusConverter;
 import br.com.cardappio.domain.restaurant.Restaurant;
-import br.com.cardappio.domain.table.dto.TableRestaurantDTO;
+import br.com.cardappio.domain.table.dto.TableRestaurantInsertDTO;
 import br.com.cardappio.enums.TableStatus;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
@@ -61,7 +61,8 @@ public class TableRestaurant implements EntityModel<UUID> {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    public static TableRestaurant of(final TableRestaurantDTO dto) {
+    public static TableRestaurant of(final TableRestaurantInsertDTO dto) {
+
         final TableRestaurant table = new TableRestaurant();
         table.setId(dto.id());
         table.setNumber(dto.number());
