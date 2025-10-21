@@ -2,13 +2,13 @@
 
 <p-fieldset legend="Novo Produto">
    <div class="card flex justify-center w-full">
-    <p-stepper [value]="1" class="w-full flex flex-column">
+    <p-stepper [value]="1" class="w-full flex flex-column" [linear]="true">
       <p-step-list>
         <p-step [value]="1">Informações Gerais</p-step>
         <p-step [value]="2">Ingredientes</p-step>
         <p-step [value]="3">Tamanhos disponíveis e preço</p-step>
         <p-step [value]="4">Adicionais</p-step>
-        <p-step [value]="5">Variáveis do produto</p-step>
+        <p-step [value]="5">Variáveis</p-step>
       </p-step-list>
 
       <p-step-panels class="w-full flex-1">
@@ -46,6 +46,7 @@
                     [suggestions]="filteredCategories"
                     (completeMethod)="searchCategories($event)"
                     [dropdown]="true"
+                    [emptyMessage]="'Categoria não encontrada'"
                     fluid
                   />
                 </div>
@@ -83,14 +84,21 @@
                 label="Próximo"
                 icon="pi pi-arrow-right"
                 iconPos="right"
-                (click)="activateCallback(2)"
+                (click)="onNextStep(activateCallback, 2)"
                 [disabled]="validFirstStep()"
-              ></p-button>
+              />
+              <p-button
+                pButton
+                type="button"
+                label="Cancelar"
+                class="p-button-secondary"
+                (click)="onCancel()"
+              />
             </div>
           </ng-template>
         </p-step-panel>
-
-        <p-step-panel [value]="2" class="w-full">
+        </form>
+        <!-- <p-step-panel [value]="2" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
               <div class="grid w-full mt-4">
                 <div class="col-8 flex flex-column mb-4 gap-1">
@@ -492,7 +500,8 @@
               ></button>
             </div>
           </ng-template>
-         </p-step-panel>
+         </p-step-panel> -->
+        
       </p-step-panels>
     </p-stepper>
   </div>
