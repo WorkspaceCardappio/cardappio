@@ -20,7 +20,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(of = { "id", "name" })
+@ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = "id")
 public class Category implements EntityModel<UUID> {
 
@@ -37,7 +37,6 @@ public class Category implements EntityModel<UUID> {
     private Boolean active = true;
 
     @Column
-    @Length(max = 255, message = Messages.SIZE_255)
     private String image;
 
     @ManyToOne
@@ -51,13 +50,13 @@ public class Category implements EntityModel<UUID> {
 
     public static Category of(final CategoryDTO dto) {
         final Category category = new Category();
-        category.setId(dto.id());
-        category.setName(dto.name());
-        category.setActive(dto.active());
-        category.setImage(dto.image());
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        category.setActive(dto.getActive());
+        category.setImage(dto.getImage());
 
-        Optional.ofNullable(dto.parent())
-                        .ifPresent(parent -> category.setParent(of(parent.id())));
+        Optional.ofNullable(dto.getParent())
+                .ifPresent(parent -> category.setParent(of(parent.id())));
 
         return category;
     }
