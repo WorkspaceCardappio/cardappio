@@ -8,7 +8,7 @@ import br.com.cardappio.utils.IdDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-
+@SuppressWarnings("PMD")
 public record OrderItemDTO(
 
         UUID id,
@@ -28,9 +28,8 @@ public record OrderItemDTO(
         BigDecimal price
 
 ) {
-
-    public OrderItemDTO(final ProductOrder order) {
-        this(null, null, null, null, null);
-    }
-
+            public OrderItemDTO(final ProductOrder order) {
+                this(null, null, null, null, null);
+            }
+            //TODO: após implementação remover SuppressWarnings
 }
