@@ -1,5 +1,6 @@
 package br.com.cardappio.domain.menu;
 
+<<<<<<< Updated upstream
 import java.util.List;
 import java.util.UUID;
 
@@ -24,5 +25,32 @@ public class MenuController extends CrudController<Menu, UUID, MenuListDTO, Menu
     public List<MenuProductListDTO> findProductsInMenu(@PathVariable final UUID id) {
         return service.findProductsInMenu(id);
     }
+=======
+import br.com.cardappio.domain.menu.dto.FlutterMenuDTO;
+import br.com.cardappio.domain.menu.dto.MenuDTO;
+import com.cardappio.core.controller.CrudController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/menus")
+@RequiredArgsConstructor
+public class MenuController extends CrudController<Menu, UUID, MenuDTO, MenuDTO> {
+>>>>>>> Stashed changes
+
+    private final MenuService service;
+
+    @GetMapping("/actives")
+    ResponseEntity<List<FlutterMenuDTO>> getFlutterMenus() {
+
+
+    }
+
 
 }
