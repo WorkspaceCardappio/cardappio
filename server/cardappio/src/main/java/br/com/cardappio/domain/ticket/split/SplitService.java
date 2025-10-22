@@ -80,12 +80,10 @@ public class SplitService {
 
     private BigDecimal calculeTotal(final List<Order> orders) {
 
-        return BigDecimal.ZERO;
-
-        //        return orders
-        //                .stream()
-        //                .map(Order::getTotal)
-        //                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return orders
+                .stream()
+                .map(Order::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }
