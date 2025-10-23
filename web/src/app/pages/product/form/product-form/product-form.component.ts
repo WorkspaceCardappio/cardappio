@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -16,8 +16,9 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { CategoryService } from '../../category/service/category.service';
-import { ProductService } from '../service/product.service';
+import { CategoryService } from '../../../category/service/category.service';
+import { ProductService } from '../../service/product.service';
+import { ProductIngredientComponent } from '../product-ingredient/product-ingredient.component';
 
 @Component({
   selector: 'app-product-form',
@@ -37,7 +38,8 @@ import { ProductService } from '../service/product.service';
     StepperModule,
     ButtonModule,
     TableModule,
-    SelectModule
+    SelectModule,
+    ProductIngredientComponent
   ],
   providers: [
     CategoryService,
@@ -47,13 +49,18 @@ import { ProductService } from '../service/product.service';
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
+  
+  stepIndex = 1;
+
+  id: string | null = null;
+  isEdit = false;
 
   productForm: FormGroup<any> = new FormGroup({});
   // productItemForm: FormGroup<any> = new FormGroup({});
   // additionalForm: FormGroup<any> = new FormGroup({});
   // productItemIngredientForm: FormGroup<any> = new FormGroup({});
   // productVariableForm: FormGroup<any> = new FormGroup({});
-  isEdit = false;
+  
   
   items: MenuItem[] = [];
   home: MenuItem = {};
@@ -65,7 +72,6 @@ export class ProductFormComponent implements OnInit {
   
   filteredCategories: any[] = [];
   // filteredProducts: any[] = [];
-  // filteredIngredients: any[] = [];
 
   loading: boolean = false;
   currentIndex: number | null = null;
@@ -75,17 +81,19 @@ export class ProductFormComponent implements OnInit {
   
   constructor(
     private readonly builder: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private categoryService: CategoryService,
-    private productService: ProductService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly categoryService: CategoryService,
+    private readonly productService: ProductService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.productForm = this.initForm();
     this.initBreadcrumb();
-    this.checkRoute();
+
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.isEdit = this.id != 'new'
     // this.itemSize = [
     //   { code: 1, description: 'Único' },
     //   { code: 2, description: 'Pequeno' },
@@ -106,13 +114,6 @@ export class ProductFormComponent implements OnInit {
     this.home = { icon: 'pi pi-home', routerLink: '/' };
   }
 
-  private checkRoute() {
-    const { id } = this.route.snapshot.params;
-    this.isEdit = id !== 'new';
-    if (this.isEdit) {
-      this.loadProduct(id);
-    }
-  }
   private initForm() {
     const form = this.builder.group({
       id: [''],
@@ -121,23 +122,92 @@ export class ProductFormComponent implements OnInit {
       expirationDate: [null],
       image: [null],
       note: [''],
-      category: [null, Validators.required],
-      productItem: this.builder.array([]),
-      ingredients: this.builder.array([]),
-      additional: this.builder.array([]),
-      productVariables: this.builder.array([]),
-      productItemIngredient: this.builder.array([])
+      category: [null, Validators.required]
     });
 
     return form;
   }
 
-  private loadProduct(id: string): void {
-    this.productService.findById(id).subscribe({
-      next: (product) => this.productForm.patchValue(product),
-      error: () => this.navigateToList()
+  searchCategories(event: any) {
+    const query = event.query;
+    const searchs = [];
+    if (query) searchs.push(`name=ilike=${query}%`);
+    this.categoryService.findAll(20, searchs.join(';')).subscribe({
+      next: (data) => { this.filteredCategories = data; },
+      error: (err) => { console.error('Erro ao buscar categorias', err); },
+      complete: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
+
+  onCancel(): void {
+    this.navigateToList();
+  }
+
+  onSave(activateCallback: () => void): void {
+    if (this.productForm.invalid) return;
+
+    const payload = this.productForm.getRawValue();
+
+    if (this.isEdit) {
+      this.updateProduct(payload, activateCallback);
+      return;
+    } 
+    
+    this.createProduct(payload, activateCallback);
+  }
+  
+  private createProduct(payload: any, activateCallback: () => void): void {
+    this.productService.create(payload).subscribe({
+      next: () => this.next(activateCallback),
+      error: (error: any) => console.error('Erro ao criar produto: ', error)
+    });
+  }
+
+  private updateProduct(payload: any, activateCallback: () => void): void {
+    this.productService.update(this.id, payload).subscribe({
+      next: () => this.next(activateCallback),
+      error: (error: any) => console.error('Erro ao atualizar produto: ', error),
+    });
+  }
+
+  protected navigateToList(): void {
+    this.router.navigate(['/product']);
+  }
+
+  prev(activateCallback: () => void) {
+    this.stepIndex--;
+    activateCallback();
+  }
+
+  next(activateCallback: () => void) {
+    this.stepIndex++;
+    activateCallback();
+  }
+
+  onFileSelected(event: any) {
+    const file = event.files?.[0];
+    if (file) this.productForm.get('image')?.setValue(file);
+    const reader = new FileReader();
+    reader.onload = () => { this.imagePreview = reader.result; };
+    reader.readAsDataURL(file);
+  }
+
+  protected validFirstStep() {
+    return !this.productForm.get('name')?.value
+        || !this.productForm.get('category')?.value;
+  }
+
+
+
+  // private loadProduct(id: string): void {
+  //   this.productService.findById(id).subscribe({
+  //     next: (product) => this.productForm.patchValue(product),
+  //     error: () => this.navigateToList()
+  //   });
+  // }
 
   // private buildProductItemForm() {
   //   const form = this.builder.group({
@@ -182,17 +252,8 @@ export class ProductFormComponent implements OnInit {
   //   });
   // }
 
-  // protected addIngredient() {
-  //   const ingredient = this.productForm.get('ingredient')?.getRawValue();
-  //   const form = this.builder.group(ingredient);
-  //   (this.productForm.get('ingredients') as FormArray).push(form);
-  //   this.productForm.get('ingredient')?.setValue(null);
-  // }
-  
-  // protected deleteIngredient(index: number) {
-  //   (this.productForm.get('ingredients') as FormArray).removeAt(index);
-  //   this.productItemIngredient.splice(index, 1);
-  // }
+
+
 
   // protected addProductItem() {
    
@@ -257,50 +318,6 @@ export class ProductFormComponent implements OnInit {
   //   this.productVariables.splice(index, 1);
   // }
 
-  onCancel(): void {
-    this.navigateToList();
-  }
-
-  // get ingredients(): FormArray {
-  //   return this.productForm.get('ingredients') as FormArray;
-  // }
-
-  // onSave(): void {
-  //   if (this.productForm.invalid) return;
-  //   if (this.isEdit) {
-  //     this.updateProduct(this.productForm.get('id')?.value);
-  //   } else {
-  //     this.createProduct();
-  //   }
-  // }
-  private onNextStep(activateCallback: (value: any) => )
-  private createProduct(): void {
-    const { id, ...productData } = this.productForm.value;
-    this.productService.create(productData).subscribe({
-      next: () => this.navigateToList()
-    });
-  }
-
-  private updateProduct(id: string): void {
-    this.productService.update(id, this.productForm.value).subscribe({
-      next: () => this.navigateToList()
-    });
-  }
-
-  searchCategories(event: any) {
-    const query = event.query;
-    const searchs = [];
-    if (query) searchs.push(`name=ilike=${query}%`);
-    this.categoryService.findAll(20, searchs.join(';')).subscribe({
-      next: (data) => { this.filteredCategories = data; },
-      error: (err) => { console.error('Erro ao buscar categorias', err); },
-      complete: () => {
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-    });
-  }
-
   // searchProducts(event: any) {
   //   const query = event.query;
   //   const searchs = [];
@@ -331,52 +348,4 @@ export class ProductFormComponent implements OnInit {
   //     },
   //   });
   // }
-
-  // searchIngredients(event: any) {
-
-  //   const query = event.query;
-  //   const searchs = [];
-
-  //   const ingredients = this.getFieldArray('ingredients');
-
-  //   if (ingredients.length) {
-  //     searchs.push(`id=out=(${ingredients.value.map((i: any) => i.id).join(',')})`)
-  //   }
-
-  //   this.productForm.get('ingredit')
-
-  //   if (query)
-  //     searchs.push(`name=ilike=${query}%`);
-
-  //   this.ingredientService.findAll(20, searchs.join(';')).subscribe({
-  //     next: (data) => { this.filteredIngredients = data; },
-  //     error: (err) => { console.error('Erro ao buscar ingredientes', err); },
-  //     complete: () => {
-  //       this.loading = false;
-  //       this.cdr.markForCheck();
-  //     },
-  //   });
-  // }
-
-
-  protected navigateToList(): void {
-    this.router.navigate(['/product']);
-  }
-
-  onFileSelected(event: any) {
-    const file = event.files?.[0];
-    if (file) this.productForm.get('image')?.setValue(file);
-    const reader = new FileReader();
-    reader.onload = () => { this.imagePreview = reader.result; };
-    reader.readAsDataURL(file);
-  }
-
-  private getFieldArray(field: string) {
-    return (this.productForm.get(field) as FormArray)
-  }
-
-  protected validFirstStep() {
-    return !this.productForm.get('name')?.value
-        || !this.productForm.get('category')?.value;
-  }
 }

@@ -5,7 +5,7 @@ export const routes: Routes = [
       path: 'product',
       children: [
         { path: '', loadComponent: () => import('./pages/product/product-list/product-list.component').then(m => m.ProductComponent)},
-        { path: ':id', loadComponent: () => import('./pages/product/product-form/product-form.component').then(m => m.ProductFormComponent)}
+        { path: ':id', loadComponent: () => import('./pages/product/form/product-form/product-form.component').then(m => m.ProductFormComponent)}
       ]
     },
     {
