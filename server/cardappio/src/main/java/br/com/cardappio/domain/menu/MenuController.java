@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/menus")
+@RequestMapping("/api/menus")
 @RequiredArgsConstructor
 public class MenuController extends CrudController<Menu, UUID, MenuListDTO, MenuDTO> {
 
@@ -28,10 +28,10 @@ public class MenuController extends CrudController<Menu, UUID, MenuListDTO, Menu
     }
 
 
-    @GetMapping("/actives")
-    ResponseEntity<List<FlutterMenuDTO>> getFlutterMenus() {
+    @GetMapping("/{idRestaurant}/flutter-menus/")
+    ResponseEntity<List<FlutterMenuDTO>> findFlutterMenus(@PathVariable UUID idRestaurant) {
 
-        return null;
+        return ResponseEntity.ok(service.findFlutterMenus(idRestaurant));
     }
 
 

@@ -32,8 +32,8 @@ public class MenuService extends CrudService<Menu, UUID, MenuListDTO, MenuDTO> {
                 .toList();
     }
 
-    public List<FlutterMenuDTO> getFlutterMenus() {
+    public List<FlutterMenuDTO> findFlutterMenus(UUID idRestaurant) {
 
-        return null;
+        return repository.findFlutterMenus(idRestaurant);
     }
 }

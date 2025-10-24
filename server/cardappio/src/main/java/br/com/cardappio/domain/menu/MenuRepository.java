@@ -18,6 +18,8 @@ public interface MenuRepository extends CrudRepository<Menu, UUID> {
     @Query("""
             SELECT new br.com.cardappio.domain.menu.dto.FlutterMenuDTO(m.id, m.name)
             FROM Menu m
+            WHERE m.active = true
+            AND m.restaurant.id = :idRestaurant
             """)
-    List<FlutterMenuDTO> getFlutterMenus();
+    List<FlutterMenuDTO> findFlutterMenus(@Param("idRestaurant") UUID idRestaurant);
 }

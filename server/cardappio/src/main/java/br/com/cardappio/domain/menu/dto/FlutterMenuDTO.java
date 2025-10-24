@@ -1,6 +1,6 @@
 package br.com.cardappio.domain.menu.dto;
 
-public record FlutterMenuDTO(
-   String name
-) {
+import java.util.UUID;
+
+public record FlutterMenuDTO(UUID id, String name) {
 }
