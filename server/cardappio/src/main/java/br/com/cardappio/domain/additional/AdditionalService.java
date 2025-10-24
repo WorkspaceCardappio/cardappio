@@ -1,16 +1,16 @@
 package br.com.cardappio.domain.additional;
 
+import br.com.cardappio.domain.additional.dto.FlutterAdditionalDTO;
+import br.com.cardappio.domain.order.dto.ProductAdditionalDTO;
+import br.com.cardappio.domain.order.dto.ProductAdditionalItemDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
-import br.com.cardappio.domain.order.dto.ProductAdditionalDTO;
-import br.com.cardappio.domain.order.dto.ProductAdditionalItemDTO;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +37,11 @@ public class AdditionalService {
 
         return new ArrayList<>(grouped.values());
 
+    }
+
+    public List<FlutterAdditionalDTO> findFlutterAdditionals(UUID idRestaurant) {
+
+        return repository.findFlutterAdditionals(idRestaurant);
     }
 
 }
