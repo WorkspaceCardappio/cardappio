@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.domain.product.dto.ProductDTO;
+import br.com.cardappio.domain.variable.ProductVariable;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

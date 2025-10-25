@@ -88,4 +88,12 @@ public class ProductOrder implements EntityModel<UUID> {
         return productOrder;
     }
 
+    public static ProductOrder of(final UUID id) {
+
+        final ProductOrder productOrder = new ProductOrder();
+        productOrder.setId(id);
+
+        return productOrder;
+    }
+
 }

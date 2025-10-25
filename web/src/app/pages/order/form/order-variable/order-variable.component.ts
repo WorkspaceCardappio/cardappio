@@ -23,12 +23,11 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
-import FormatterUtils from '../../../../utils/formatter.utils';
-import { AdditionalService } from '../../../additional/additional.service';
-import { OrderAdditionalService } from './service/order-additional.service';
+import { VariableService } from '../../../variable/variable.service';
+import { OrderVariableService } from './service/order-variable.service';
 
 @Component({
-  selector: 'app-order-additional',
+  selector: 'app-order-variable',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -42,10 +41,11 @@ import { OrderAdditionalService } from './service/order-additional.service';
     FloatLabelModule
   ],
   providers: [ProductService],
-  templateUrl: './order-additional.component.html',
-  styleUrls: ['./order-additional.component.scss'],
+  templateUrl: './order-variable.component.html',
+  styleUrls: ['./order-variable.component.scss'],
 })
-export class OrderAdditionalComponent implements OnInit {
+export class OrderVariableComponent implements OnInit {
+
   @Input({ required: true }) productId!: string;
   @Input({ required: true }) itemId!: string;
   @Output() prevEmitter: EventEmitter<void> = new EventEmitter();
@@ -53,18 +53,18 @@ export class OrderAdditionalComponent implements OnInit {
 
   form: FormArray<FormGroup<any>> = new FormArray<FormGroup<any>>([]);
 
-  initialAdditionals = [];
-  selectedAdditionals: any[] = [];
+  initialVariables = [];
+  selectedVariables: any[] = [];
 
   constructor(
-    private readonly additionalService: AdditionalService,
+    private readonly service: VariableService,
     private readonly builder: FormBuilder,
-    private orderAdditionalService: OrderAdditionalService,
+    private orderVariableService: OrderVariableService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.findAdditionals(this.productId);
+    this.findVariables(this.productId);
   }
 
   onSelectionChange(selected: any[]) {
@@ -79,64 +79,46 @@ export class OrderAdditionalComponent implements OnInit {
     selected
       .filter((item) => !currentIds.has(item.id))
       .forEach((item) =>
-        formArray.push(this.createAdicionalFormGroup(item.id))
+        formArray.push(this.createVariableFormGroup(item.id, item.price))
       );
 
-    this.selectedAdditionals = selected;
+    this.selectedVariables = selected;
   }
 
-  createAdicionalFormGroup(id: number): FormGroup {
+  createVariableFormGroup(id: number, price: number): FormGroup {
     const form = this.builder.group({
       id: [''],
-      productId: [id],
+      variable: [id],
+      price: [price],
       order: [this.itemId],
       item: [null, Validators.required],
       quantity: [
         1,
         Validators.compose([Validators.required, Validators.min(1)]),
       ],
-      total: [0],
-    });
-
-    form.get('item')?.valueChanges.subscribe((item: any) => {
-      const quantity = form.get('quantity')?.value;
-
-      if (item?.price && quantity)
-        form.get('total')?.setValue(item.price * quantity);
+      total: [price],
     });
 
     form.get('quantity')?.valueChanges.subscribe((quantity: any) => {
-      const item = form.get('item')?.value as any;
+      const price = form.get('price')?.value;
 
-      if (item?.price && quantity)
-        form.get('total')?.setValue(item.price * quantity);
+      if (price && quantity)
+        form.get('total')?.setValue(price * quantity);
     });
 
     return form;
   }
 
-  getFormGroupByProductId(id: number): FormGroup {
+  getFormGroupByVariableId(id: number): FormGroup {
     return (
       (this.form.controls.find(
-        (value) => value.get('productId')?.value === id
-      ) as FormGroup) || this.createAdicionalFormGroup(0)
+        (value) => value.get('variable')?.value === id
+      ) as FormGroup) || this.createVariableFormGroup(0, 0)
     );
   }
 
-  isProductSelected(id: number): boolean {
-    return this.selectedAdditionals.some((p) => p.id === id);
-  }
-
-  filterItems(product: any) {
-    product.items = product.items.map((item: any) => ({
-      ...item,
-      label: this.buildOptionLabel(item),
-    }));
-  }
-
-  buildOptionLabel(item: any) {
-    const price = FormatterUtils.price(item.price);
-    return `${item.name} - ${price}`;
+  isVariableSelected(id: number): boolean {
+    return this.selectedVariables.some((v) => v.id === id);
   }
 
   onSave() {
@@ -146,7 +128,7 @@ export class OrderAdditionalComponent implements OnInit {
       return;
     }
 
-    this.orderAdditionalService.createItems(this.form.getRawValue())
+    this.orderVariableService.createItems(this.form.getRawValue())
       .subscribe(() => this.nextEmitter.emit());
   }
 
@@ -156,11 +138,11 @@ export class OrderAdditionalComponent implements OnInit {
       .reduce((acc, current) => acc + current, 0);
   }
 
-  private findAdditionals(productId: string) {
-    this.additionalService
+  private findVariables(productId: string) {
+    this.service
       .findByProductIdToOrder(productId)
       .subscribe((values: any) => {
-        this.initialAdditionals = values;
+        this.initialVariables = values;
         this.cdr.markForCheck();
       });
   }

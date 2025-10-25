@@ -20,5 +20,25 @@ export class OrderService extends EntityService<any, any> {
     return this.http.get<Page<any>>(`${this.resource}/to-ticket/${id}?${params}`);
   }
 
+  findToSummary(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resource}/items/to-summary/${id}`);
+  }
+
+  updateNoteInProductOrder(id: string, body: any) {
+    return this.http.put<any>(`${this.resource}/product/${id}/note`, body);
+  }
+
+  updateNoteInOrder(id: string, body: any) {
+    return this.http.put<any>(`${this.resource}/${id}/note`, body);
+  }
+
+  deleteProductInOrder(id: string) {
+    return this.http.delete<any>(`${this.resource}/product/${id}`);
+  }
+
+  finalize(id: string) {
+    return this.http.post<any>(`${this.resource}/${id}/finalize`, {});
+  }
+
 }
 

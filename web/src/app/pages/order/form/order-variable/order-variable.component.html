@@ -1,7 +1,7 @@
 <div class="flex mt-3">
   <p-table
-    [value]="initialAdditionals"
-    [(selection)]="selectedAdditionals"
+    [value]="initialVariables"
+    [(selection)]="selectedVariables"
     (selectionChange)="onSelectionChange($event)"
     dataKey="id"
     showGridlines
@@ -14,38 +14,33 @@
       <tr>
         <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
         <th>Nome</th>
-        <th>Opção</th>
+        <th>Preço</th>
         <th>Quantidade</th>
         <th>Total</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-product>
+    <ng-template pTemplate="body" let-variable>
       <tr>
-        <td><p-tableCheckbox [value]="product" /></td>
-        <td>{{ product.name }}</td>
+        <td><p-tableCheckbox [value]="variable" /></td>
+        <td>{{ variable.name }}</td>
 
-        <td [formGroup]="getFormGroupByProductId(product.id)">
-          <p-autocomplete
-            formControlName="item"
-            [suggestions]="product.items"
-            [disabled]="!isProductSelected(product.id)"
-            [dropdown]="true"
-            field=""
-            [forceSelection]="true"
-            placeholder="Escolha uma opção"
-            [style]="{ width: '100%' }"
-            (completeMethod)="filterItems(product)"
-            appendTo="body"
-            [optionLabel]="'label'"
-          ></p-autocomplete>
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
+          <p-inputNumber
+            inputId="price"
+            formControlName="price"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            [disabled]="true"
+          ></p-inputNumber>
         </td>
 
-        <td [formGroup]="getFormGroupByProductId(product.id)">
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
           <p-inputNumber
             formControlName="quantity"
             [showButtons]="true"
-            [disabled]="!isProductSelected(product.id)"
+            [disabled]="!isVariableSelected(variable.id)"
             [min]="1"
             [max]="20"
             placeholder="Escolha a quantidade"
@@ -53,7 +48,7 @@
           ></p-inputNumber>
         </td>
 
-        <td [formGroup]="getFormGroupByProductId(product.id)">
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
           <p-inputNumber
             inputId="total"
             formControlName="total"
@@ -70,7 +65,7 @@
       <tr>
         <td colspan="4" class="text-right font-bold">Total Geral:</td>
         <td class="font-bold">
-          {{ getTotal() | currency:'BRL':'symbol':'1.2-2' }}
+          {{ getTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
         </td>
       </tr>
     </ng-template>

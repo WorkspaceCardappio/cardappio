@@ -28,6 +28,8 @@ import { OrderGroupId } from '../../model/order-group-id.model';
 import { OrderStatusService } from '../../service/order-status.service';
 import { OrderAdditionalComponent } from '../order-additional/order-additional.component';
 import { OrderOptionsComponent } from "../order-options/order-options.component";
+import { OrderSummaryComponent } from "../order-summary/order-summary.component";
+import { OrderVariableComponent } from '../order-variable/order-variable.component';
 
 @Component({
   selector: 'app-order-form',
@@ -48,7 +50,9 @@ import { OrderOptionsComponent } from "../order-options/order-options.component"
     DatePickerModule,
     InputTextModule,
     OrderOptionsComponent,
-    OrderAdditionalComponent
+    OrderAdditionalComponent,
+    OrderVariableComponent,
+    OrderSummaryComponent
 ],
   providers: [OrderStatusService, TicketService, ProductService],
   templateUrl: './order-form.component.html',
@@ -75,7 +79,7 @@ export class OrderFormComponent implements OnInit {
   ];
 
   orderGroupId: WritableSignal<OrderGroupId> = signal({
-    order: '2447d8ee-4d73-4d4a-819b-c7150988a16b',
+    order: '1c9587fa-3afb-440d-ae69-0c1736b3f623',
     product: null,
     item: null
   });
@@ -149,7 +153,13 @@ export class OrderFormComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.navigateToList();
+
+    if (this.isEditMode) {
+      return;
+    }
+
+    this.orderService.delete(this.orderGroupId().order)
+      .subscribe(() => this.navigateToList());
   }
 
   onSave(activateCallback: () => void): void {

@@ -1,0 +1,215 @@
+<div class="grid mt-3">
+  <div
+    class="col-12 flex justify-content-between items-center border-round-lg p-4 bg-primary-50"
+  >
+    @if (!order) {
+    <div class="flex flex-column gap-2 w-8">
+      <p-skeleton width="60%" height="2rem" class="mb-2"></p-skeleton>
+      <p-skeleton width="40%" height="1.2rem"></p-skeleton>
+    </div>
+
+    <p-skeleton shape="circle" size="3rem"></p-skeleton>
+    } @else {
+    <div>
+      <h2 class="m-0 text-2xl font-semibold text-primary-800">
+        Comanda nº {{ order.ticket.number }}
+      </h2>
+      <p class="m-0 text-base text-primary-700">
+        Mesa {{ order.ticket.table.number }}
+      </p>
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <button
+        pButton
+        icon="pi pi-comment"
+        label="Observação da Comanda"
+        class="p-button-text p-button-sm p-button-info"
+        (click)="openOrderNoteDialog()"
+      ></button>
+
+      <i class="pi pi-receipt text-4xl text-primary-400"></i>
+    </div>
+    }
+  </div>
+
+  <div class="col-12 flex mt-3">
+    <p-table
+      [value]="orderSummary"
+      dataKey="id"
+      showGridlines
+      stripedRows
+      [scrollable]="true"
+      scrollHeight="60vh"
+      style="width: 100%"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Produto</th>
+          <th>Tamanho</th>
+          <th class="text-right">Quantidade</th>
+          <th class="text-right">Preço Base</th>
+          <th class="text-right">Total</th>
+          <th class="text-right">Adicionais</th>
+          <th class="text-right">Variáveis</th>
+          <th class="text-right">Total</th>
+          <th>Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.productName }}</td>
+          <td>{{ product.itemSize?.description || "" }}</td>
+          <td class="text-right">{{ product.quantity }}</td>
+          <td class="text-right">{{ product.price | currency : "BRL" }}</td>
+          <td class="text-right">{{ product.totalPrice | currency : "BRL" }}</td>
+          <td class="text-right">
+            {{ product.additionalsPrice | currency : "BRL" }}
+          </td>
+          <td class="text-right">
+            {{ product.variablesPrice | currency : "BRL" }}
+          </td>
+          <td class="text-right font-bold">
+            {{
+              product.price + product.additionalsPrice + product.variablesPrice
+                | currency : "BRL"
+            }}
+          </td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-comment"
+              class="p-button-text p-button-sm p-button-info"
+              (click)="openObservationDialog(product)"
+              aria-label="Adicionar observação"
+            ></button>
+
+            @if (orderSummary.length > 1) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-sm p-button-danger"
+              aria-label="Excluir"
+              (click)="deleteItem(product.id)"
+              [disabled]="orderSummary.length === 1"
+            ></button>
+            }
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="8" class="text-right font-bold">Total Geral:</td>
+          <td class="text-right font-bold">
+            {{ getTotalGeneral() | currency : "BRL" }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="col-12 mt-4 flex justify-content-end gap-2">
+    <button
+      pButton
+      type="button"
+      label="Anterior"
+      severity="danger"
+      (click)="prevEmitter.emit()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Finalizar Pedido"
+      class="p-button-primary"
+      (click)="onSave()"
+    ></button>
+  </div>
+</div>
+
+<p-dialog
+  header="Observação do Produto"
+  [(visible)]="showNoteDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '30rem' }"
+>
+  <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
+    <div class="flex flex-column gap-3">
+      <p class="m-0 text-primary-700 font-semibold">
+        {{ selectedProduct?.productName }}
+      </p>
+
+      <input type="hidden" formControlName="id" />
+
+      <textarea
+        pInputTextarea
+        formControlName="note"
+        rows="6"
+        placeholder="Digite uma observação..."
+        class="w-full"
+        style="outline: 0; resize: none !important"
+      ></textarea>
+      <div class="flex justify-content-end gap-2 mt-3">
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          severity="secondary"
+          (click)="showNoteDialog = false"
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          class="p-button-primary"
+          [disabled]="noteForm.invalid"
+        ></button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Observação da Comanda"
+  [(visible)]="showOrderNoteDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '30rem' }"
+>
+  <form [formGroup]="orderNoteForm" (ngSubmit)="saveOrderNote()">
+    <div class="flex flex-column gap-3">
+      <textarea
+        pInputTextarea
+        formControlName="note"
+        rows="6"
+        placeholder="Digite uma observação geral..."
+        class="w-full"
+        style="outline: 0; resize: none !important;"
+      ></textarea>
+
+      <div class="flex justify-content-end gap-2 mt-3">
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          severity="secondary"
+          (click)="showOrderNoteDialog = false"
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          class="p-button-primary"
+          [disabled]="orderNoteForm.invalid"
+        ></button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+

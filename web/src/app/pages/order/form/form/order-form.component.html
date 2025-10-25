@@ -94,7 +94,7 @@
       <p-step-panel [value]="2">
         <ng-template #content let-activateCallback="activateCallback">
           <app-order-options
-            [orderId]="'2447d8ee-4d73-4d4a-819b-c7150988a16b'"
+            [orderId]="'5cee2933-92ec-4336-991d-f8ffc129345b'"
             (prevEmitter)="prev(activateCallback)"
             (nextEmitter)="next(activateCallback)"
             (onItemSelect)="setItemInGroup($event)"
@@ -112,8 +112,26 @@
           ></app-order-additional>
         </ng-template>
       </p-step-panel>
-      <p-step-panel [value]="4"> </p-step-panel>
-      <p-step-panel [value]="5"> </p-step-panel>
+      <p-step-panel [value]="4">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-variable
+            [productId]="orderGroupId().product!"
+            [itemId]="orderGroupId().item!"
+            (prevEmitter)="prev(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+          ></app-order-variable>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="5">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-summary
+            [orderId]="'5cee2933-92ec-4336-991d-f8ffc129345b'"
+            [itemId]="orderGroupId().item!"
+            (prevEmitter)="prev(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+          ></app-order-summary>
+        </ng-template>
+      </p-step-panel>
     </p-step-panels>
   </p-stepper>
 </p-fieldset>
