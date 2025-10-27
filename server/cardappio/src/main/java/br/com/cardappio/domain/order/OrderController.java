@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardappio.core.controller.CrudController;
 
+import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
 import br.com.cardappio.domain.order.dto.OrderDTO;
 import br.com.cardappio.domain.order.dto.OrderListDTO;
 import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
 import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
+import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -45,8 +47,6 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
         return service.findToSummaryDTO(id);
     }
 
-    // TODO: AJUSTAR LISTAGEM
-
     @PutMapping("/product/{id}/note")
     public void updateNoteInProductOrder(@PathVariable final UUID id, @RequestBody @Valid NoteDTO dto) {
         service.updateNoteInProductOrder(id, dto);
@@ -66,6 +66,11 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
     @PostMapping("/{id}/finalize")
     public void finalize(@PathVariable final UUID id) {
         service.finalize(id);
+    }
+
+    @PostMapping("/total-by-ids")
+    public List<TotalAndIdDTO> totalByIds(@RequestBody @Valid IdsDTO ids) {
+        return service.getTotalByids(ids);
     }
 
 }

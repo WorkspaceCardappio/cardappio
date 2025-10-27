@@ -11,11 +11,13 @@ import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 
 import br.com.cardappio.domain.order.adapter.OrderAdapter;
+import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
 import br.com.cardappio.domain.order.dto.OrderDTO;
 import br.com.cardappio.domain.order.dto.OrderListDTO;
 import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
 import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
+import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -74,5 +76,9 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         order.markAsFinalized();
         repository.save(order);
 
+    }
+
+    public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
+        return repository.findTotalByIds(body.ids());
     }
 }

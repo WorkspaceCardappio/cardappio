@@ -9,8 +9,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { finalize, switchMap, tap } from 'rxjs';
-import { TicketService } from '../../ticket/service/ticket.service';
+import LoadUtils from '../../../utils/load-utils';
+import { RequestUtils } from '../../../utils/request-utils';
 import { OrderService } from '../service/order.service';
 
 @Component({
@@ -33,64 +33,41 @@ import { OrderService } from '../service/order.service';
   styleUrl: './order-list.component.scss',
 })
 export class OrderListComponent {
+
   orders: any[] = [];
   totalRecords = 0;
   loading = false;
+  totalById: Map<string, number> = new Map();
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
-  items = [{ label: 'Pedidos', routerLink: '/order' }];
+  items = [
+    { label: 'Pedidos', routerLink: '/order' }
+  ];
 
   constructor(
-    private orderService: OrderService,
-    private ticketService: TicketService,
+    private service: OrderService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
   loadOrders(event: TableLazyLoadEvent) {
-    this.loading = true;
-    const page = (event.first ?? 0) / (event.rows ?? 20);
-    const size = event.rows ?? 20;
-    const sort = event.sortField
-      ? `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}`
-      : '';
-    const request = `page=${page}&size=${size}&sort=${sort}`;
 
-    this.orderService
+    this.loading = true;
+    let request = RequestUtils.build(event);
+    request += `&search=saveStatus==FINALIZED`;
+
+    this.service
       .findAllDTO(request)
-      .pipe(
-        tap((response) => {
-          this.orders = response.content;
-          this.totalRecords = response.totalElements;
-        }),
-        switchMap((response) => {
-          const ticketIds = [
-            ...new Set(response.content.map((order: any) => order.ticketId)),
-          ];
-          if (ticketIds.length === 0) {
-            return [];
-          }
-          const paramsRequest = `ids=${ticketIds.join(',')}`;
-          return this.ticketService.findAllDTO(paramsRequest);
-        }),
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
       .subscribe({
-        next: (ticketResponse) => {
-          if (!ticketResponse?.content) return;
-          const ticketMap = new Map<string, any>();
-          ticketResponse.content.forEach((ticket: any) =>
-            ticketMap.set(ticket.id, ticket)
-          );
-          this.orders.forEach((order) => {
-            order.ticketDetails = ticketMap.get(order.ticketId);
-          });
+        next: (page) => {
+          this.orders = page.content;
+          this.findTotalByIds(this.orders.map(order => order.id));
         },
-        error: (err) =>
-          console.error('Erro ao carregar pedidos ou comandas', err),
+        error: () => this.orders = [],
+        complete: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
       });
   }
 
@@ -99,8 +76,28 @@ export class OrderListComponent {
   }
 
   onDelete(id: any) {
-    this.orderService
+    this.service
       .delete(id)
-      .subscribe(() => this.loadOrders({ first: 0, rows: 20 }));
+      .subscribe(() => this.loadOrders(LoadUtils.getDefault()));
+  }
+
+  findTotalByIds(ids: string[]) {
+
+    this.service
+      .findTotalByIds(ids)
+      .subscribe({
+        next: (values: any[]) => {
+
+          values.forEach(value => {
+            if (!this.totalById.has(value.id))
+              this.totalById.set(value.id, value.total);
+          });
+
+        },
+        complete: () => {
+            this.cdr.markForCheck();
+        }
+      });
+
   }
 }
