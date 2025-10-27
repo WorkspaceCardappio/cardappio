@@ -13,18 +13,17 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public enum UnityOfMeasurement {
+public enum UnityOfMeasurement implements EnumSerialize {
     LITER(1L, "Litro"),
     MILLILITER(2L, "Mililitro"),
     GRAM(3L, "Grama"),
     KILOGRAM(4L, "Quilograma"),
     UNIT(5L, "Unidade");
 
-    private final Long code;
-    private final String description;
-
     private static final Map<Long, UnityOfMeasurement> CODE_MAP =
             Arrays.stream(values()).collect(Collectors.toMap(UnityOfMeasurement::getCode, Function.identity()));
+    private final Long code;
+    private final String description;
 
     public static UnityOfMeasurement fromCode(final Long code) {
 

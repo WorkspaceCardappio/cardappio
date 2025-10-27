@@ -1,14 +1,15 @@
 package br.com.cardappio.domain.ingredient.dto;
 
+import br.com.cardappio.domain.ingredient.Ingredient;
+import br.com.cardappio.utils.EnumDTO;
+
 import java.math.BigDecimal;
 import java.util.UUID;
-
-import br.com.cardappio.domain.ingredient.Ingredient;
 
 public record IngredientListDTO(
         UUID id,
         String name,
-        UnityOfMeasurementDTO unityOfMeasurement,
+        EnumDTO unityOfMeasurement,
         BigDecimal quantity,
         boolean active
 ) {
@@ -16,7 +17,7 @@ public record IngredientListDTO(
         this(
                 ingredient.getId(),
                 ingredient.getName(),
-                new UnityOfMeasurementDTO(ingredient.getUnityOfMeasurement()),
+                ingredient.getUnityOfMeasurement().toDTO(),
                 ingredient.getQuantity(),
                 ingredient.getActive()
         );
