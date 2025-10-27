@@ -37,8 +37,7 @@ export class ProductIngredientComponent implements OnInit {
 
   loading: boolean = false;
 
-
-  constructor(
+ constructor(
     private readonly ingredientService: IngredientService,
     private readonly builder: FormBuilder,
     private cdr: ChangeDetectorRef,
@@ -66,7 +65,7 @@ export class ProductIngredientComponent implements OnInit {
     const form = this.builder.group({
       id: [ingredient.id],
       name: [ingredient.name, Validators.required],
-      quantity: [ingredient.quantity || 1, [Validators.required, Validators.min(1)]],
+      quantity: [ingredient.quantity, Validators.required],
       unityOfMeasurement: [ingredient.unityOfMeasurement],
       active: [ingredient.active ?? true],
       allergenic: [ingredient.allergenic ?? false],

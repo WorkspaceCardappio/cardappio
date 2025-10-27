@@ -19,6 +19,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CategoryService } from '../../../category/service/category.service';
 import { ProductService } from '../../service/product.service';
 import { ProductIngredientComponent } from '../product-ingredient/product-ingredient.component';
+import { ProductProductItemComponent } from '../product-product-item/product-product-item.component';
 
 @Component({
   selector: 'app-product-form',
@@ -39,7 +40,8 @@ import { ProductIngredientComponent } from '../product-ingredient/product-ingred
     ButtonModule,
     TableModule,
     SelectModule,
-    ProductIngredientComponent
+    ProductIngredientComponent,
+    ProductProductItemComponent
   ],
   providers: [
     CategoryService,
@@ -56,9 +58,7 @@ export class ProductFormComponent implements OnInit {
   isEdit = false;
 
   productForm: FormGroup<any> = new FormGroup({});
-  // productItemForm: FormGroup<any> = new FormGroup({});
-  // additionalForm: FormGroup<any> = new FormGroup({});
-  // productItemIngredientForm: FormGroup<any> = new FormGroup({});
+   // additionalForm: FormGroup<any> = new FormGroup({});
   // productVariableForm: FormGroup<any> = new FormGroup({});
   
   
@@ -68,15 +68,12 @@ export class ProductFormComponent implements OnInit {
   // productVariables: ProductVariable[] = [];
   // productItemIngredient: Ingredient[] = [];
   // additional: Additional[] = [];
-  // itemSize: any[] = [];
-  
-  filteredCategories: any[] = [];
-  // filteredProducts: any[] = [];
+    
+  filteredCategories: any[] = []; 
 
   loading: boolean = false;
   currentIndex: number | null = null;
 
-  // activeStep: number = 1;
   imagePreview: string | ArrayBuffer | null = null;
   
   constructor(
@@ -94,14 +91,7 @@ export class ProductFormComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = this.id != 'new'
-    // this.itemSize = [
-    //   { code: 1, description: 'Único' },
-    //   { code: 2, description: 'Pequeno' },
-    //   { code: 3, description: 'Médio' },
-    //   { code: 4, description: 'Grande' },
-    // ];
-    // this.productItemForm = this.buildProductItemForm();
-    // this.productItemIngredientForm = this.buildProductItemIngredientForm();
+
     // this.additionalForm = this.buildAdditionalForm();
     // this.productVariableForm = this.buildProductVariableForm();
   }
@@ -158,6 +148,16 @@ export class ProductFormComponent implements OnInit {
     
     this.createProduct(payload, activateCallback);
   }
+
+  nextStep(activateCallback: Function, step: number) {
+  this.saveDraftProduct();
+  activateCallback(step);
+  }
+
+  saveDraftProduct() {
+  const draft = this.productForm.getRawValue();
+  localStorage.setItem('product_draft', JSON.stringify(draft));
+}
   
   private createProduct(payload: any, activateCallback: () => void): void {
     this.productService.create(payload).subscribe({
@@ -207,33 +207,6 @@ export class ProductFormComponent implements OnInit {
   //     next: (product) => this.productForm.patchValue(product),
   //     error: () => this.navigateToList()
   //   });
-  // }
-
-  // private buildProductItemForm() {
-  //   const form = this.builder.group({
-  //     id: [''],
-  //     product: [null],
-  //     quantity: [0],
-  //     size: [null, Validators.required],
-  //     description: [''],
-  //     price: [0, Validators.required],
-  //     active: [true, Validators.required],
-  //     ingredients: this.builder.array([])
-  //   });
-
-  //   return form;
-
-  // }
-
-  // private buildProductItemIngredientForm() {
-  //   const productItemIngredientForm = this.builder.group({
-  //     id: [''],
-  //     productItem: [null],
-  //     quantity: [0, Validators.required],
-  //     ingredient: ['', Validators.required],
-  //   });
-
-  //   return productItemIngredientForm;
   // }
 
   // private buildAdditionalForm() {
@@ -317,8 +290,7 @@ export class ProductFormComponent implements OnInit {
   //   (this.productForm.get('productVariables') as FormArray).removeAt(index);
   //   this.productVariables.splice(index, 1);
   // }
-
-  // searchProducts(event: any) {
+  //   searchProducts(event: any) {
   //   const query = event.query;
   //   const searchs = [];
 

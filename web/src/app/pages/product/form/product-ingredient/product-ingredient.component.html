@@ -13,13 +13,12 @@
     ></p-autoComplete>
   </div>
 
-  <div class="col-4 flex align-items-end">
+  <div class="col-4 flex flex-column mb-4 gap-2">
     <p-button
       label="Adicionar"
       icon="pi pi-plus"
       (click)="addIngredient()"
       [disabled]="!selectedIngredient"
-      class="ml-2"
     ></p-button>
   </div>
 </div>
@@ -37,16 +36,14 @@
         Nome <p-sortIcon field="name" />
       </th>
       <th>Unidade</th>
-      <th>Quantidade</th>
-      <th style="width: 8rem">Ações</th>
+        <th style="width: 8rem">Ações</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-ingredient let-rowIndex="rowIndex">
     <tr>
       <td>{{ ingredient.name }}</td>
-      <td>{{ ingredient.unityOfMeasurement }}</td>
-      <td>{{ ingredient.quantity }}</td>
+      <td>{{ ingredient.unityOfMeasurement.description }}</td>
       <td>
         <button
           pButton

@@ -100,8 +100,8 @@
                 label="Próximo"
                 icon="pi pi-arrow-right"
                 iconPos="right"
-                (click)="next(activateCallback)"
-                [disabled]="validFirstStep()"
+                (click)="nextStep(activateCallback, 2)"
+                [disabled]="!productForm.valid"
               />
             </div>
           </ng-template>
@@ -110,136 +110,20 @@
         <p-step-panel [value]="2" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <app-product-ingredient
-              [productId]="''"
-              (prevEmitter)="prev(activateCallback)"
-              (nextEmitter)="next(activateCallback)"
+              [productId]="productForm.get('id')?.value || 'temp-id'"
+              (prevEmitter)="activateCallback(1)"
+              (nextEmitter)="activateCallback(3)"
             ></app-product-ingredient>
           </ng-template>
         </p-step-panel>
 
-        <!-- <p-step-panel [value]="3" class="w-full">
+        <p-step-panel [value]="3" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
-            <form [formGroup]="productItemForm" class="p-fluid w-full">
-              <div class="grid w-full mt-4">
-                <div class="col-3 flex flex-column mb-4 gap-1">
-                  <label for="itemSize" class="required-label">Tamanhos</label>
-                  <p-select
-                    [options]="itemSize"
-                    formControlName="size"
-                    optionLabel="description"
-                    placeholder="Selecione o tamanho"
-                    class="w-full md:w-56"
-                  ></p-select>
-                </div>
-
-                <div class="col-3 flex flex-column mb-4 gap-1">
-                  <label for="additionalPrice">Preço</label>
-                  <p-inputNumber
-                    inputId="additional_price"
-                    formControlName="price"
-                    placeholder="Preço"
-                    mode="currency"
-                    currency="BRL"
-                    locale="pt-BR"
-                  ></p-inputNumber>
-                </div>
-
-                <div class="col-3 flex flex-column mb-4 gap-1">
-                  <label for="quantity">Quantidade disponível</label>
-                  <input id="quantity" pInputText formControlName="quantity" placeholder="Quantidade" />
-                </div>
-                <div class="col-2 flex flex-column mb-4 gap-1">
-                  <label for="active" class="required-label">Ativo</label>
-                  <p-toggle-switch inputId="active" formControlName="active"></p-toggle-switch>
-                </div>
-              </div>
-              <div class="col-6 flex flex-column mb-4 gap-1">
-                  <label for="note">Descrição</label>
-                  <textarea rows="3" pTextarea formControlName="description"></textarea>
-              </div>
-            </form>
-
-            <form [formGroup]="productItemIngredientForm" class="p-fluid w-full">
-              <p-table
-              [value]="productForm.get('ingredients')?.value"
-              showGridlines
-              [paginator]="true"
-              [rows]="5"
-              [responsiveLayout]="'scroll'"
-              class="mt-4"
-            >
-              <ng-template #header>
-                <tr>
-                  <th>Ingrediente</th>
-                  <th>Quantidade utilizada</th>
-                  <th>Unidade de medida</th>
-                  <th style="width: 10rem">Ações</th>
-                </tr>
-              </ng-template>
-
-              <ng-template #body let-ingredient let-rowIndex="rowIndex">
-                <tr>
-                  <td style="width: 45%">{{ ingredient.name }}</td>
-                  <td style="width: 25%">
-                    <p-inputNumber
-                    formControlName="quantity"
-                    placeholder="Digite a quantidade"
-                    />
-                  </td>
-                  <td style="width: 20%">{{ ingredient.unityOfMeasurement }}</td>
-                  <td>
-                      <button
-                      pButton
-                      type="button"
-                      icon="pi pi-trash"
-                      class="p-button-text p-button-sm p-button-danger"
-                      aria-label="Excluir"
-                      (click)="deleteIngredient(rowIndex)"
-                    ></button>
-                  </td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="3" class="text-center">
-                    Nenhum ingrediente cadastrado.
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-            </form>
-       
-            <div class="flex justify-end w-full mt-4">
-              <p-button
-                type="button"
-                label="Adicionar"
-                icon="pi pi-plus"
-                (click)="addProductItem()"
-              ></p-button>
-            </div>
-
-            <div class="flex justify-between w-full mt-6">
-              <p-button
-                type="button"
-                label="Voltar"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-                (click)="activateCallback(2)"
-              ></p-button>
-
-              <p-button
-                type="button"
-                label="Próximo"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-                (click)="activateCallback(4)"
-              ></p-button>
-            </div>
+            <app-product-product-item></app-product-product-item>
           </ng-template>
         </p-step-panel>
 
-        <p-step-panel [value]="4" class="w-full">
+        <!-- <p-step-panel [value]="4" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <form [formGroup]="additionalForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
