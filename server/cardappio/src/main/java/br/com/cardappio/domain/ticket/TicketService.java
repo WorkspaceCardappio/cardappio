@@ -1,21 +1,36 @@
 package br.com.cardappio.domain.ticket;
 
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
+import br.com.cardappio.domain.order.OrderRepository;
+import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
+import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;/
+import br.com.cardappio.domain.ticket.dto.TicketDTO;
+import br.com.cardappio.domain.ticket.dto.TicketListDTO;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import br.com.cardappio.domain.ticket.dto.TicketDTO;
-import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
-import br.com.cardappio.domain.ticket.dto.TicketListDTO;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, TicketDTO> {
+
+    private final TicketRepository repository;
+
+    private final OrderRepository orderRepository;
 
     @Override
     protected Adapter<Ticket, TicketListDTO, TicketDTO> getAdapter() {
         return new TicketAdapter();
+    }
+
+    public FlutterTicketDTO findFlutterTicket(UUID idTicket) {
+
+        FlutterTicketDTO ticket = repository.findFlutterTicket(idTicket);
+
+        ticket.getOrders().addAll();
+
+        return ticket;
     }
 }

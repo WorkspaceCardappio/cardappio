@@ -1,13 +1,13 @@
 package br.com.cardappio.domain.ticket;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
+import com.cardappio.core.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.cardappio.core.repository.CrudRepository;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, UUID> {
@@ -25,4 +25,11 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
             WHERE t.id = :id
             """)
     Optional<Ticket> findByIdWithOrders(@Param("id") UUID id);
+
+    @Query(value = """
+            SELECT new br.com.cardappio.domain.ticket.dto.FlutterTicketDTO(t.total)
+            FROM Ticket t
+            WHERE t.id = :idTicket
+            """)
+    FlutterTicketDTO findFlutterTicket(UUID idTicket);
 }
