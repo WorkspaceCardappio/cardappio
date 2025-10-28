@@ -17,6 +17,7 @@
         [ngClass]="{ active: router.url === route.path }"
         pTooltip="{{ route.name }}"
         tooltipPosition="right"
+        [tooltipOptions]="{ disabled: expanded }"
       >
         <i [ngClass]="route.icon"></i>
         @if (expanded) {
