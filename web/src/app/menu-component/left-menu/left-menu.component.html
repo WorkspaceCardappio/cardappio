@@ -2,9 +2,9 @@
   <div class="header">
     <button (click)="toggleExpand()">
       @if (expanded) {
-        <span>&times;</span>
+      <span>&times;</span>
       } @else {
-        <span>&equiv;</span>
+      <span>&equiv;</span>
       }
     </button>
   </div>
@@ -12,13 +12,20 @@
   <nav>
     <ul>
       @for (route of routes; track $index) {
-        <li (click)="redirectTo(route.path)" [ngClass]="{ 'active': router.url === route.path }">
-            <i [ngClass]="route.icon"></i>
-            @if (expanded) {
-              <span>{{ route.name }}</span>
-            }
-        </li>
+      <li
+        (click)="redirectTo(route.path)"
+        [ngClass]="{ active: router.url === route.path }"
+        pTooltip="{{ route.name }}"
+        tooltipPosition="right"
+      >
+        <i [ngClass]="route.icon"></i>
+        @if (expanded) {
+        <span>{{ route.name }}</span>
+        }
+      </li>
       }
     </ul>
   </nav>
+
+  <div></div>
 </aside>

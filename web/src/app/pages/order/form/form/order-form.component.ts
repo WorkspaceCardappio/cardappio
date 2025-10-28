@@ -79,7 +79,7 @@ export class OrderFormComponent implements OnInit {
   ];
 
   orderGroupId: WritableSignal<OrderGroupId> = signal({
-    order: '1c9587fa-3afb-440d-ae69-0c1736b3f623',
+    order: null,
     product: null,
     item: null
   });
