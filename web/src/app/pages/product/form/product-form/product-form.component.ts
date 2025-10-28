@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
@@ -17,6 +17,7 @@ import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CategoryService } from '../../../category/service/category.service';
+import { OrderGroupId } from '../../../order/model/order-group-id.model';
 import { ProductService } from '../../service/product.service';
 import { ProductIngredientComponent } from '../product-ingredient/product-ingredient.component';
 import { ProductProductItemComponent } from '../product-product-item/product-product-item.component';
@@ -65,6 +66,12 @@ export class ProductFormComponent implements OnInit {
   items: MenuItem[] = [];
   home: MenuItem = {};
 
+  productGroupId: WritableSignal<OrderGroupId> = signal({
+    order: null,
+    product: null,
+    item: null
+  });
+
   // productVariables: ProductVariable[] = [];
   // productItemIngredient: Ingredient[] = [];
   // additional: Additional[] = [];
@@ -110,6 +117,7 @@ export class ProductFormComponent implements OnInit {
       name: ['', Validators.required],
       description: [''],
       expirationDate: [null],
+      active: [true],
       image: [null],
       note: [''],
       category: [null, Validators.required]
@@ -140,18 +148,12 @@ export class ProductFormComponent implements OnInit {
     if (this.productForm.invalid) return;
 
     const payload = this.productForm.getRawValue();
-
+    this.saveDraftProduct();
     if (this.isEdit) {
-      this.updateProduct(payload, activateCallback);
+      this.updateProduct(payload, activateCallback); 
       return;
     } 
-    
     this.createProduct(payload, activateCallback);
-  }
-
-  nextStep(activateCallback: Function, step: number) {
-  this.saveDraftProduct();
-  activateCallback(step);
   }
 
   saveDraftProduct() {
@@ -194,13 +196,6 @@ export class ProductFormComponent implements OnInit {
     reader.onload = () => { this.imagePreview = reader.result; };
     reader.readAsDataURL(file);
   }
-
-  protected validFirstStep() {
-    return !this.productForm.get('name')?.value
-        || !this.productForm.get('category')?.value;
-  }
-
-
 
   // private loadProduct(id: string): void {
   //   this.productService.findById(id).subscribe({

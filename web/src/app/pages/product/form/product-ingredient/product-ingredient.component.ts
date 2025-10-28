@@ -26,7 +26,7 @@ import { ProductService } from '../../service/product.service';
   styleUrl: './product-ingredient.component.scss'
 })
 export class ProductIngredientComponent implements OnInit {
-  @Input({ required: true }) productId!: string;
+  @Input({ required: true }) productId!: string | null;
   @Output() prevEmitter: EventEmitter<void> = new EventEmitter();
   @Output() nextEmitter: EventEmitter<void> = new EventEmitter();
 

@@ -16,7 +16,7 @@
           <ng-template #content let-activateCallback="activateCallback">
             <form [formGroup]="productForm" class="p-fluid w-full">
               <div class="grid w-full mt-4">
-                <div class="col-8 flex flex-column mb-4 gap-1">
+                <div class="col-7 flex flex-column mb-4 gap-1">
                   <label for="name" class="required-label">Nome</label>
                   <input 
                     id="name" 
@@ -26,7 +26,7 @@
                     />
                 </div>
 
-                <div class="col-3 flex flex-column mb-4 gap-1">
+                <div class="col-2 flex flex-column mb-4 gap-1">
                   <label for="expirationDate">Data de validade</label>
                   <p-datepicker
                     formControlName="expirationDate"
@@ -36,6 +36,14 @@
                     dateFormat="dd/mm/yy"
                     locale="pt-BR"
                   ></p-datepicker>
+                </div>
+
+                <div class="col-1 flex flex-column mb-4 gap-1">
+                  <label for="active" class="required-label">Ativo</label>
+                  <p-toggle-switch
+                      inputId="active"
+                      formControlName="active"
+                  ></p-toggle-switch>
                 </div>
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
@@ -100,9 +108,9 @@
                 label="Próximo"
                 icon="pi pi-arrow-right"
                 iconPos="right"
-                (click)="nextStep(activateCallback, 2)"
+                (click)="onSave(activateCallback)"
                 [disabled]="!productForm.valid"
-              />
+                />
             </div>
           </ng-template>
         </p-step-panel>
@@ -110,7 +118,7 @@
         <p-step-panel [value]="2" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <app-product-ingredient
-              [productId]="productForm.get('id')?.value || 'temp-id'"
+              [productId]="productGroupId().product"
               (prevEmitter)="activateCallback(1)"
               (nextEmitter)="activateCallback(3)"
             ></app-product-ingredient>
@@ -119,7 +127,9 @@
 
         <p-step-panel [value]="3" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
-            <app-product-product-item></app-product-product-item>
+            <app-product-product-item
+              [productId]="productForm.get('id')?.value || 'temp-id'"
+            ></app-product-product-item>
           </ng-template>
         </p-step-panel>
 

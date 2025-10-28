@@ -26,7 +26,7 @@ import { ProductItemService } from './service/product-item.service';
   styleUrl: './product-product-item.component.scss'
 })
 export class ProductProductItemComponent implements OnInit {
-  @Input({ required: true }) ingredientId!: string;
+  @Input({ required: true }) productId!: string;
   @Output() nextEmitter: EventEmitter<void> = new EventEmitter();
   @Output() onProductSelect: EventEmitter<void> = new EventEmitter();
 
@@ -57,8 +57,8 @@ export class ProductProductItemComponent implements OnInit {
       { code: 3, description: 'Médio' },
       { code: 4, description: 'Grande' },
     ];
-    this.productItemForm = this.initForm();
     this.loadFromStorage();
+    this.productItemForm = this.initForm();    
   }
 
   private initForm(product: any = null, data: any = null) {
@@ -142,6 +142,7 @@ export class ProductProductItemComponent implements OnInit {
         });
       });
     }
+    return;
   }
 
   onSave() {
