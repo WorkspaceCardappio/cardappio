@@ -85,7 +85,7 @@
               type="button"
               label="Próximo"
               class="p-button-primary"
-              (click)="next(activateCallback)"
+              (click)="onSave(activateCallback)"
               [disabled]="this.form.invalid"
             ></button>
           </div>
@@ -94,7 +94,7 @@
       <p-step-panel [value]="2">
         <ng-template #content let-activateCallback="activateCallback">
           <app-order-options
-            [orderId]="'5cee2933-92ec-4336-991d-f8ffc129345b'"
+            [orderId]="orderGroupId().order!"
             (prevEmitter)="prev(activateCallback)"
             (nextEmitter)="next(activateCallback)"
             (onItemSelect)="setItemInGroup($event)"
@@ -125,9 +125,10 @@
       <p-step-panel [value]="5">
         <ng-template #content let-activateCallback="activateCallback">
           <app-order-summary
-            [orderId]="'5cee2933-92ec-4336-991d-f8ffc129345b'"
+            [orderId]="orderGroupId().order!"
             [itemId]="orderGroupId().item!"
             (prevEmitter)="prev(activateCallback)"
+            (newItemEmitter)="addNewItem(activateCallback)"
             (nextEmitter)="next(activateCallback)"
           ></app-order-summary>
         </ng-template>

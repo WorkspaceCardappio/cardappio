@@ -15,6 +15,7 @@ import {
 import { ProductService } from '../../../product/product.service';
 
 import { CommonModule } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -80,7 +81,6 @@ export class OrderOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.initForm();
-    this.onItemSelect.emit('395ebd60-f6ed-430a-ae23-43dc9e8d9bd0');
   }
 
   private initForm() {
@@ -160,6 +160,9 @@ export class OrderOptionsComponent implements OnInit {
   onSave() {
     this.service
       .create(this.form.getRawValue())
-      .subscribe((item: any) => this.nextEmitter.emit());
+      .subscribe((response: HttpResponse<any>) => {
+        this.onItemSelect.emit(response.body);
+        this.nextEmitter.emit()
+      });
   }
 }

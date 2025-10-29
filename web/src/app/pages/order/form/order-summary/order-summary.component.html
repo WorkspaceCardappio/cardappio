@@ -72,7 +72,7 @@
           </td>
           <td class="text-right font-bold">
             {{
-              product.price + product.additionalsPrice + product.variablesPrice
+              product.totalPrice + product.additionalsPrice + product.variablesPrice
                 | currency : "BRL"
             }}
           </td>
@@ -119,6 +119,13 @@
       label="Anterior"
       severity="danger"
       (click)="prevEmitter.emit()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Adicionar mais itens"
+      severity="info"
+      (click)="goToNewItem()"
     ></button>
     <button
       pButton

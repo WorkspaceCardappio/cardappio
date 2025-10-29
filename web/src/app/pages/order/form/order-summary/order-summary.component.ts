@@ -49,10 +49,12 @@ import { OrderService } from '../../service/order.service';
   styleUrls: ['./order-summary.component.scss'],
 })
 export class OrderSummaryComponent implements OnInit {
+
   @Input({ required: true }) orderId!: string;
   @Input({ required: true }) itemId!: string;
   @Output() prevEmitter: EventEmitter<void> = new EventEmitter();
   @Output() nextEmitter: EventEmitter<void> = new EventEmitter();
+  @Output() newItemEmitter: EventEmitter<void> = new EventEmitter();
 
   form: FormArray<FormGroup<any>> = new FormArray<FormGroup<any>>([]);
 
@@ -138,8 +140,7 @@ export class OrderSummaryComponent implements OnInit {
   getTotalGeneral(): number {
     return this.orderSummary.reduce(
       (acc, item) =>
-        acc + item.price + item.additionalsPrice + item.variablesPrice,
-      0
+        acc + item.totalPrice + item.additionalsPrice + item.variablesPrice, 0
     );
   }
 
@@ -174,6 +175,10 @@ export class OrderSummaryComponent implements OnInit {
 
   navigateToList(): void {
     this.router.navigate(['/order']);
+  }
+
+  goToNewItem() {
+    this.newItemEmitter.emit();
   }
 
   onSave() {

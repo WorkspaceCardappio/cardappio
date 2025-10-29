@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -32,7 +32,7 @@ import { OrderService } from '../service/order.service';
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss',
 })
-export class OrderListComponent {
+export class OrderListComponent implements OnInit {
 
   orders: any[] = [];
   totalRecords = 0;
@@ -43,6 +43,10 @@ export class OrderListComponent {
   items = [
     { label: 'Pedidos', routerLink: '/order' }
   ];
+
+  ngOnInit(): void {
+    this.loadOrders(LoadUtils.getDefault());
+  }
 
   constructor(
     private service: OrderService,
@@ -59,8 +63,9 @@ export class OrderListComponent {
     this.service
       .findAllDTO(request)
       .subscribe({
-        next: (page) => {
-          this.orders = page.content;
+        next: (response) => {
+          this.orders = response.content;
+          this.totalRecords = response.totalElements;
           this.findTotalByIds(this.orders.map(order => order.id));
         },
         error: () => this.orders = [],
