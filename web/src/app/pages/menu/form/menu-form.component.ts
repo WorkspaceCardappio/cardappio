@@ -135,6 +135,7 @@ export class MenuFormComponent implements OnInit {
         },
         complete: () => {
           this.loading = false;
+          this.cdr.markForCheck();
         }
       });
   }
