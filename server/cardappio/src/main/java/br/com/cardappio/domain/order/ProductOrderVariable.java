@@ -5,7 +5,8 @@ import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 
-import br.com.cardappio.domain.product.ProductVariable;
+import br.com.cardappio.domain.order.variable.dto.OrderVariableDTO;
+import br.com.cardappio.domain.variable.ProductVariable;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,5 +54,16 @@ public class ProductOrderVariable implements EntityModel<UUID> {
     @NotNull(message = Messages.INGREDIENT_NOT_NULL)
     @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
     private BigDecimal quantity;
+
+    public static ProductOrderVariable of(final OrderVariableDTO dto) {
+
+        final ProductOrderVariable order = new ProductOrderVariable();
+        order.setId(dto.id());
+        order.setQuantity(dto.quantity());
+        order.setProductOrder(ProductOrder.of(dto.order()));
+        order.setProductVariable(ProductVariable.of(dto.variable()));
+
+        return order;
+    }
 
 }

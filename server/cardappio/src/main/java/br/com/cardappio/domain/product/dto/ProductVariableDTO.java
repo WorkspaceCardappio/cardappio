@@ -1,9 +1,9 @@
 package br.com.cardappio.domain.product.dto;
 
-import br.com.cardappio.domain.product.ProductVariable;
-import jakarta.validation.constraints.NotBlank;
-
 import java.util.UUID;
+
+import br.com.cardappio.domain.variable.ProductVariable;
+import jakarta.validation.constraints.NotBlank;
 
 public record ProductVariableDTO(
 
@@ -12,7 +12,7 @@ public record ProductVariableDTO(
         @NotBlank
         String name
 ) {
-    public ProductVariableDTO(final ProductVariable productVariable){
+    public ProductVariableDTO(final ProductVariable productVariable) {
         this(
                 productVariable.getId(),
                 productVariable.getName()

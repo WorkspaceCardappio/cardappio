@@ -8,17 +8,22 @@ aside {
   color: #ecf0f1;
   overflow: hidden;
   transition: width 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
   &.expanded {
     width: 200px;
   }
 
   .header {
+    width: 100%;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 10px;
+    padding: 0 15px;
 
     button {
       background: none;
@@ -30,6 +35,8 @@ aside {
   }
 
   nav {
+    width: 100%;
+
     ul {
       list-style: none;
       padding: 0;
