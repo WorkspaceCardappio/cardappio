@@ -33,4 +33,12 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
         return ticket;
     }
+
+//    public List<TicketDTO> findTicketsByTable(UUID tableId) {
+//        List<Ticket> tickets = repository.findByTableId(tableId);
+//
+//        return tickets.stream()
+////                .map(TicketDTO::new)
+//                .null;
+//    }
 }

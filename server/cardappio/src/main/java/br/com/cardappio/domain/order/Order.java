@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.converter.OrderStatusConverter;
 import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.save.SaveStatus;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
@@ -18,6 +19,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -67,6 +70,13 @@ public class Order implements EntityModel<UUID> {
     @JsonIgnoreProperties("order")
     private List<ProductOrder> productOrders = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "save_status", nullable = false, length = 10)
+    private SaveStatus saveStatus = SaveStatus.DRAFT;
+
+    @Column
+    private String note;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -85,6 +95,10 @@ public class Order implements EntityModel<UUID> {
         final Order order = new Order();
         order.setId(id);
         return order;
+    }
+
+    public void markAsFinalized() {
+        saveStatus = SaveStatus.FINALIZED;
     }
 
 }
