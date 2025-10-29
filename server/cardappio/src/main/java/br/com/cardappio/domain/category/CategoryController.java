@@ -7,6 +7,7 @@ import com.cardappio.core.controller.CrudController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,9 +21,8 @@ public class CategoryController extends CrudController<Category, UUID, CategoryL
 
     private final CategoryService service;
 
-    @GetMapping("/{idRestaurant}/flutter-categories")
-    ResponseEntity<List<FlutterCategoryDTO>> findFlutterCategories(UUID idRestaurant) {
-
-        return ResponseEntity.ok(service.findFlutterCategories(idRestaurant));
+    @GetMapping("/{idMenu}/flutter-categories")
+    ResponseEntity<List<FlutterCategoryDTO>> findFlutterCategories(@PathVariable UUID idMenu) {
+        return ResponseEntity.ok(service.findFlutterCategories(idMenu));
     }
 }

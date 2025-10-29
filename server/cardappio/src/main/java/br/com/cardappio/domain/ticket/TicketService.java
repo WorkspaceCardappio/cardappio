@@ -2,7 +2,7 @@ package br.com.cardappio.domain.ticket;
 
 import br.com.cardappio.domain.order.OrderRepository;
 import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
-import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;/
+import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
 import com.cardappio.core.adapter.Adapter;
@@ -29,7 +29,7 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
         FlutterTicketDTO ticket = repository.findFlutterTicket(idTicket);
 
-        ticket.getOrders().addAll();
+//        ticket.getOrders().addAll();
 
         return ticket;
     }

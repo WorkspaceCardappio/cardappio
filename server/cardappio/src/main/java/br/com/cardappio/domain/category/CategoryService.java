@@ -23,8 +23,8 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
         return new CategoryAdapter();
     }
 
-    public List<FlutterCategoryDTO> findFlutterCategories(UUID idRestaurant) {
+    public List<FlutterCategoryDTO> findFlutterCategories(UUID idMenu) {
 
-        return repository.findFlutterCategories(idRestaurant);
+        return repository.findFlutterCategories(idMenu);
     }
 }

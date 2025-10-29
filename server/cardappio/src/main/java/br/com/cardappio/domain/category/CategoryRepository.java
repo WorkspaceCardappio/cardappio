@@ -19,7 +19,7 @@ public interface CategoryRepository extends CrudRepository<Category, UUID> {
             JOIN MenuProduct mp ON mp.product = p
             JOIN mp.menu m
             WHERE c.active = true
-            AND m.restaurant.id = :idRestaurant
+            AND m.id = :idMenu
             """)
-    List<FlutterCategoryDTO> findFlutterCategories(@Param("idRestaurant") UUID idRestaurant);
+    List<FlutterCategoryDTO> findFlutterCategories(@Param("idMenu") UUID idMenu);
 }

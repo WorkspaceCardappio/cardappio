@@ -21,6 +21,7 @@ public class ProductVariableController {
     @GetMapping("/{idProduct}/flutter-product-variables")
     public ResponseEntity<List<FlutterProductVariableDTO>> findFlutterProductVariables(@PathVariable UUID idProduct) {
 
-        return ResponseEntity.ok(service.findFlutterProductVariables(idProduct));
+//        return ResponseEntity.ok(service.findFlutterProductVariables(idProduct));
+        return null;
     }
 }
