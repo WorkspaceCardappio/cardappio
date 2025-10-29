@@ -37,7 +37,7 @@ keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
   resource: ${KEYCLOAK_REALM:backend-app}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET:zwOF9YcWLubVeuAhL4tVvXiM552cIEBh}
+    secret: ${KEYCLOAK_CLIENT_SECRET:55C9UfvLcuia9vfU0KveXz53oksH5Rff}
     public-client: false
   bearer-only: true
   ssl-required: external

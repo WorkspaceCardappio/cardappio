@@ -3,13 +3,18 @@ package br.com.cardappio.integration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import br.com.cardappio.config.PostgresTestContainerConfig;
+import br.com.cardappio.config.SecurityConfig;
 
 @SpringBootTest
 @Testcontainers
 public abstract class IntegrationTestBase {
+
+    @MockitoBean
+    private SecurityConfig securityConfig;
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
