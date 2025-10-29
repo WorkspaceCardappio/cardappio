@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideHttpClient } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideRouter } from '@angular/router';
 import { MenuListComponent } from './menu-list.component';
 
 describe('MenuListComponent', () => {
@@ -13,6 +14,7 @@ describe('MenuListComponent', () => {
       imports: [MenuListComponent],
       providers: [
         provideHttpClient(),
+        provideRouter([]),
         provideHttpClientTesting(),
       ]
     })
