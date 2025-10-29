@@ -37,7 +37,7 @@ export class ProductIngredientComponent implements OnInit {
 
   loading: boolean = false;
 
- constructor(
+  constructor(
     private readonly ingredientService: IngredientService,
     private readonly builder: FormBuilder,
     private cdr: ChangeDetectorRef,

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS product (
     quantity DECIMAL(10,2) NOT NULL CHECK (quantity >= 0),
     description VARCHAR(255),
     active BOOLEAN NOT NULL DEFAULT TRUE,
-    expiration_date DATE NOT NULL,
+    expiration_date DATE,
     image VARCHAR(255),
     note VARCHAR(255),
     category_id UUID NOT NULL,

@@ -95,33 +95,13 @@ public class Product implements EntityModel<UUID> {
         final Product product = new Product();
         product.setId(dto.id());
         product.setName(dto.name());
-        product.setPrice(dto.price());
-        product.setQuantity(dto.quantity());
+        product.setPrice(BigDecimal.ONE);
+        product.setQuantity(BigDecimal.ONE);
         product.setActive(dto.active());
         product.setExpirationDate(dto.expirationDate());
         product.setImage(dto.image());
         product.setCategory(dto.category());
 
-        final List<Additional> additional = dto.additional()
-                .stream()
-                .map(additionalDTO -> Additional.of(additionalDTO, product))
-                .toList();
-
-        product.setAdditional(additional);
-
-        final List<ProductVariable> variables = dto.variables()
-                .stream()
-                .map(productVariable -> ProductVariable.of(productVariable, product))
-                .toList();
-
-        product.setProductVariables(variables);
-
-        final List<ProductIngredient> ingredients = dto.ingredients()
-                .stream()
-                .map(ingredient -> ProductIngredient.of(ingredient, product))
-                .toList();
-
-        product.setProductIngredients(ingredients);
 
         return product;
     }
