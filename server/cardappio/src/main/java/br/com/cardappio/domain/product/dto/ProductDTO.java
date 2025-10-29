@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,10 @@ public record ProductDTO(
         @Length(max = 255, message = Messages.SIZE_255)
         String name,
 
+        BigDecimal price,
+
+        BigDecimal quantity,
+        
         Boolean active,
 
         @Future
