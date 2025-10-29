@@ -11,7 +11,8 @@ public record IngredientListDTO(
         String name,
         EnumDTO unityOfMeasurement,
         BigDecimal quantity,
-        boolean active
+        boolean active,
+        boolean allergenic
 ) {
     public IngredientListDTO(final Ingredient ingredient) {
         this(
@@ -19,7 +20,8 @@ public record IngredientListDTO(
                 ingredient.getName(),
                 ingredient.getUnityOfMeasurement().toDTO(),
                 ingredient.getQuantity(),
-                ingredient.getActive()
+                ingredient.getActive(),
+                ingredient.getAllergenic()
         );
     }
 }

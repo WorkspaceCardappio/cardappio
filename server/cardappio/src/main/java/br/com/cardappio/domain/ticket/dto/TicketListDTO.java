@@ -29,7 +29,7 @@ public record TicketListDTO(
                 ticket.getNumber(),
                 ticket.getTotal(),
                 ticket.getStatus().toDTO(),
-                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Jean Soares"),
+                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Darth Vader"),
                 new TableRestaurantToTicketDTO(ticket.getTable())
         );
     }

@@ -3,15 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { provideRouter } from "@angular/router";
-import { OrderFormComponent } from './order-form.component';
+import { OrderVariableComponent } from './order-variable.component';
 
-describe('OrderFormComponent', () => {
-  let component: OrderFormComponent;
-  let fixture: ComponentFixture<OrderFormComponent>;
+describe('OrderVariableComponent', () => {
+  let component: OrderVariableComponent;
+  let fixture: ComponentFixture<OrderVariableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrderFormComponent],
+      imports: [OrderVariableComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -20,7 +20,7 @@ describe('OrderFormComponent', () => {
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(OrderFormComponent);
+    fixture = TestBed.createComponent(OrderVariableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

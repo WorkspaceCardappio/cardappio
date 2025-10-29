@@ -25,6 +25,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import FormatterUtils from '../../../../utils/formatter.utils';
 import { AdditionalService } from '../../../additional/additional.service';
+import { OrderAdditionalService } from './service/order-additional.service';
 
 @Component({
   selector: 'app-order-additional',
@@ -58,6 +59,7 @@ export class OrderAdditionalComponent implements OnInit {
   constructor(
     private readonly additionalService: AdditionalService,
     private readonly builder: FormBuilder,
+    private orderAdditionalService: OrderAdditionalService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -85,7 +87,8 @@ export class OrderAdditionalComponent implements OnInit {
 
   createAdicionalFormGroup(id: number): FormGroup {
     const form = this.builder.group({
-      id: [id],
+      id: [''],
+      productId: [id],
       order: [this.itemId],
       item: [null, Validators.required],
       quantity: [
@@ -115,7 +118,7 @@ export class OrderAdditionalComponent implements OnInit {
   getFormGroupByProductId(id: number): FormGroup {
     return (
       (this.form.controls.find(
-        (value) => value.get('id')?.value === id
+        (value) => value.get('productId')?.value === id
       ) as FormGroup) || this.createAdicionalFormGroup(0)
     );
   }
@@ -136,10 +139,21 @@ export class OrderAdditionalComponent implements OnInit {
     return `${item.name} - ${price}`;
   }
 
+  onSave() {
+
+    if (!this.form.value.length) {
+      this.nextEmitter.emit();
+      return;
+    }
+
+    this.orderAdditionalService.createItems(this.form.getRawValue())
+      .subscribe(() => this.nextEmitter.emit());
+  }
+
   getTotal() {
     return this.form.value
       .map(item => item.total)
-      .reduce((acc, current) => acc+ current, 0);
+      .reduce((acc, current) => acc + current, 0);
   }
 
   private findAdditionals(productId: string) {

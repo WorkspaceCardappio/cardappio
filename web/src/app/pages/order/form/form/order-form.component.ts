@@ -11,6 +11,7 @@ import { TicketService } from '../../../ticket/service/ticket.service';
 import { OrderService } from '../../service/order.service';
 
 import { CommonModule } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { Breadcrumb } from 'primeng/breadcrumb';
@@ -28,6 +29,8 @@ import { OrderGroupId } from '../../model/order-group-id.model';
 import { OrderStatusService } from '../../service/order-status.service';
 import { OrderAdditionalComponent } from '../order-additional/order-additional.component';
 import { OrderOptionsComponent } from "../order-options/order-options.component";
+import { OrderSummaryComponent } from "../order-summary/order-summary.component";
+import { OrderVariableComponent } from '../order-variable/order-variable.component';
 
 @Component({
   selector: 'app-order-form',
@@ -48,7 +51,9 @@ import { OrderOptionsComponent } from "../order-options/order-options.component"
     DatePickerModule,
     InputTextModule,
     OrderOptionsComponent,
-    OrderAdditionalComponent
+    OrderAdditionalComponent,
+    OrderVariableComponent,
+    OrderSummaryComponent
 ],
   providers: [OrderStatusService, TicketService, ProductService],
   templateUrl: './order-form.component.html',
@@ -75,7 +80,7 @@ export class OrderFormComponent implements OnInit {
   ];
 
   orderGroupId: WritableSignal<OrderGroupId> = signal({
-    order: '2447d8ee-4d73-4d4a-819b-c7150988a16b',
+    order: null,
     product: null,
     item: null
   });
@@ -131,11 +136,13 @@ export class OrderFormComponent implements OnInit {
   }
 
   searchTickets(event: any): void {
+
     this.tickets.isLoading = true;
 
     const query = event.query;
 
-    const search = query ? `&search=number==${query}` : '';
+    let search = '&search=status==OPEN';
+    search += query ? `;number==${query}` : '';
     const completeParams = `pageSize=100${search}`;
 
     this.ticketService.findAllDTO(completeParams).subscribe({
@@ -149,7 +156,16 @@ export class OrderFormComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.navigateToList();
+
+    if (this.isEditMode) {
+      return;
+    }
+
+    this.orderService.delete(this.orderGroupId().order)
+      .subscribe({
+        next: () => this.navigateToList(),
+        error: () => this.navigateToList(),
+      });
   }
 
   onSave(activateCallback: () => void): void {
@@ -167,7 +183,10 @@ export class OrderFormComponent implements OnInit {
 
   private create(payload: any, activateCallback: () => void): void {
     this.orderService.create(payload).subscribe({
-      next: () => this.next(activateCallback),
+      next: (value: HttpResponse<any>) => {
+        this.setOrderInGroup(value.body);
+        this.next(activateCallback);
+      },
       error: (error) => console.error('Erro ao criar pedido:', error),
     });
   }
@@ -193,6 +212,11 @@ export class OrderFormComponent implements OnInit {
     activateCallback();
   }
 
+  addNewItem(activateCallback: () => void) {
+    this.stepIndex = 2;
+    activateCallback();
+  }
+
   searchStatus() {
     this.status.values = [...this.status.values];
   }
@@ -211,6 +235,13 @@ export class OrderFormComponent implements OnInit {
       },
       error: (err) => console.error('Erro ao buscar status', err),
       complete: () => this.cdr.markForCheck(),
+    });
+  }
+
+  protected setOrderInGroup(id: string) {
+    this.orderGroupId.set({
+      ...this.orderGroupId(),
+      order: id
     });
   }
 
