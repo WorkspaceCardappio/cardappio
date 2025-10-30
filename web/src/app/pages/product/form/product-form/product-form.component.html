@@ -2,7 +2,7 @@
 
 <p-fieldset legend="Novo Produto">
    <div class="card flex justify-center w-full">
-    <p-stepper [value]="1" class="w-full flex flex-column" [linear]="true">
+    <p-stepper [value]="stepIndex" class="w-full flex flex-column" [linear]="true">
       <p-step-list>
         <p-step [value]="1">Informações Gerais</p-step>
         <p-step [value]="2">Ingredientes</p-step>
@@ -38,11 +38,11 @@
                   ></p-datepicker>
                 </div>
 
-                <div class="col-1 flex flex-column mb-4 gap-1">
-                  <label for="active" class="required-label">Ativo</label>
+                <div class="col-1 mb-4 flex flex-column align-items-center gap-1">
+                  <label for="active">Ativo</label>
                   <p-toggle-switch
-                      inputId="active"
-                      formControlName="active"
+                    inputId="active"
+                    formControlName="active"
                   ></p-toggle-switch>
                 </div>
 
@@ -119,8 +119,8 @@
           <ng-template #content let-activateCallback="activateCallback">
             <app-product-ingredient
               [productId]="productGroupId().product"
-              (prevEmitter)="activateCallback(1)"
-              (nextEmitter)="activateCallback(3)"
+              (prevEmitter)="prev(activateCallback)"
+              (nextEmitter)="next(activateCallback)"
             ></app-product-ingredient>
           </ng-template>
         </p-step-panel>

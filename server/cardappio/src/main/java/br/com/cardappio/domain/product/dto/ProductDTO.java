@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.product.dto;
 
-import br.com.cardappio.domain.additional.dto.AdditionalDTO;
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Future;
@@ -10,7 +9,6 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 public record ProductDTO(
@@ -24,7 +22,7 @@ public record ProductDTO(
         BigDecimal price,
 
         BigDecimal quantity,
-        
+
         Boolean active,
 
         @Future
@@ -34,12 +32,6 @@ public record ProductDTO(
         String image,
 
         @NotNull
-        Category category,
-
-        List<AdditionalDTO> additional,
-
-        List<ProductVariableDTO> variables,
-
-        List<ProductIngredientDTO> ingredients
+        Category category
 ) {
 }

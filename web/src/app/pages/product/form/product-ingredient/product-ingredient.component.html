@@ -2,9 +2,9 @@
   <div class="col-8 flex flex-column mb-4 gap-1">
     <label for="ingredient">Buscar ingrediente</label>
     <p-autoComplete
-      [(ngModel)]="selectedIngredient"
       [suggestions]="filteredIngredients"
       (completeMethod)="searchIngredients($event)"
+      (onSelect)="onSelectionChange($event)"
       optionLabel="name"
       [dropdown]="true"
       placeholder="Digite o nome do ingrediente"
@@ -40,10 +40,10 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-ingredient let-rowIndex="rowIndex">
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
     <tr>
-      <td>{{ ingredient.name }}</td>
-      <td>{{ ingredient.unityOfMeasurement.description }}</td>
+      <td>{{ item.ingredient?.name }}</td>
+      <td>{{ item.ingredient?.unityOfMeasurement.description }}</td>
       <td>
         <button
           pButton
@@ -68,5 +68,5 @@
 
 <div class="flex justify-content-between mt-4">
   <p-button label="Voltar" icon="pi pi-arrow-left" (click)="prev()"></p-button>
-  <p-button label="Avançar" icon="pi pi-arrow-right" (click)="next()" [disabled]="form.length === 0"></p-button>
+  <p-button label="Avançar" icon="pi pi-arrow-right" (click)="onSave()" [disabled]="form.length === 0"></p-button>
 </div>

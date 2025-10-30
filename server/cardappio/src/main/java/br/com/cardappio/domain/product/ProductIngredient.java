@@ -1,24 +1,14 @@
 package br.com.cardappio.domain.product;
 
-import java.util.UUID;
-
 import br.com.cardappio.domain.ingredient.Ingredient;
 import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.utils.Messages;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.cardappio.core.entity.EntityModel;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -28,7 +18,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(of = "id")
 @Table(name = "product_ingredient")
-public class ProductIngredient {
+public class ProductIngredient implements EntityModel<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,11 +34,11 @@ public class ProductIngredient {
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    public static ProductIngredient of(final ProductIngredientDTO dto, final Product product) {
+    public static ProductIngredient of(final ProductIngredientDTO dto) {
 
         final ProductIngredient productIngredient = new ProductIngredient();
         productIngredient.setId(dto.id());
-        productIngredient.setProduct(product);
+        productIngredient.setProduct(Product.of(dto.product()));
         productIngredient.setIngredient(Ingredient.of(dto.ingredient().id()));
 
         return productIngredient;

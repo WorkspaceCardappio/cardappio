@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { IngredientService } from '../../../ingredient/service/ingredient.service';
 import { ProductService } from '../../service/product.service';
+import { ProductIngredientService } from './service/product-ingredient.service';
 
 @Component({
   selector: 'app-product-ingredient',
@@ -26,7 +27,8 @@ import { ProductService } from '../../service/product.service';
   styleUrl: './product-ingredient.component.scss'
 })
 export class ProductIngredientComponent implements OnInit {
-  @Input({ required: true }) productId!: string | null;
+  
+  @Input({ required: true }) productId?: string | null;
   @Output() prevEmitter: EventEmitter<void> = new EventEmitter();
   @Output() nextEmitter: EventEmitter<void> = new EventEmitter();
 
@@ -34,18 +36,18 @@ export class ProductIngredientComponent implements OnInit {
 
   filteredIngredients: any[] = [];
   selectedIngredient: any = null;
+  ingredients: any[] = [];
 
   loading: boolean = false;
 
   constructor(
     private readonly ingredientService: IngredientService,
+    private readonly productIngredientService: ProductIngredientService,
     private readonly builder: FormBuilder,
     private cdr: ChangeDetectorRef,
   ){}
 
-  ngOnInit(): void {
-    this.loadFromStorage();
-  }
+  ngOnInit(): void {}
 
   searchIngredients(event: any) {
     const query = event.query;
@@ -53,7 +55,7 @@ export class ProductIngredientComponent implements OnInit {
     if (query) searchs.push(`name=ilike=${query}%`);
     this.ingredientService.findAll(20, searchs.join(';')).subscribe({
       next: (data) => { this.filteredIngredients = data; },
-      error: (err) => { console.error('Erro ao buscar ingredients', err); },
+      error: (err) => { console.error('Erro ao buscar ingredientes', err); },
       complete: () => {
         this.loading = false;
         this.cdr.markForCheck();
@@ -63,15 +65,16 @@ export class ProductIngredientComponent implements OnInit {
 
   createIngredientForm(ingredient: any): FormGroup {
     const form = this.builder.group({
-      id: [ingredient.id],
-      name: [ingredient.name, Validators.required],
-      quantity: [ingredient.quantity, Validators.required],
-      unityOfMeasurement: [ingredient.unityOfMeasurement],
-      active: [ingredient.active ?? true],
-      allergenic: [ingredient.allergenic ?? false],
-      stocks: [ingredient.stocks || []],
+      id: [''],
+      product: [this.productId],
+      ingredient: this.builder.group(ingredient),
     });
+
     return form;
+  }
+
+  onSelectionChange(event: any) {
+    this.selectedIngredient = event.value;
   }
 
   protected addIngredient() {
@@ -96,27 +99,24 @@ export class ProductIngredientComponent implements OnInit {
     const ingredients = this.form.getRawValue();
     const draft = this.getDraftProduct();
     draft.ingredients = ingredients;
-    localStorage.setItem('product_draft', JSON.stringify(draft));
+    localStorage.setItem('product_ingredient', JSON.stringify(draft));
   }
 
-  private loadFromStorage() {
-    const draft = this.getDraftProduct();
-
-    if (draft.ingredients?.length) {
-      draft.ingredients.forEach((ingredient: any) => {
-        this.form.push(this.createIngredientForm(ingredient));
-      });
-    }
-  }
 
   private getDraftProduct(): any {
-    const draft = localStorage.getItem('product_draft');
+    const draft = localStorage.getItem('product_ingredient');
     return draft ? JSON.parse(draft) : { id: this.productId, ingredients: [] };
   }
 
-  next() {
+  onSave() {
+    if (!this.form.value.length) {
+      this.nextEmitter.emit();
+      return;
+    }
     this.saveLocalStorage();
-    this.nextEmitter.emit();
+    this.productIngredientService.createProductIngredient(this.form.getRawValue())
+      .subscribe(() => this.nextEmitter.emit());
+    
   }
 
   prev() {

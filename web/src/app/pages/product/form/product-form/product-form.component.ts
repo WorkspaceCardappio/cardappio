@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,9 +60,6 @@ export class ProductFormComponent implements OnInit {
   isEdit = false;
 
   productForm: FormGroup<any> = new FormGroup({});
-   // additionalForm: FormGroup<any> = new FormGroup({});
-  // productVariableForm: FormGroup<any> = new FormGroup({});
-  
   
   items: MenuItem[] = [];
   home: MenuItem = {};
@@ -72,10 +70,6 @@ export class ProductFormComponent implements OnInit {
     item: null
   });
 
-  // productVariables: ProductVariable[] = [];
-  // productItemIngredient: Ingredient[] = [];
-  // additional: Additional[] = [];
-    
   filteredCategories: any[] = []; 
 
   loading: boolean = false;
@@ -98,9 +92,6 @@ export class ProductFormComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = this.id != 'new'
-
-    // this.additionalForm = this.buildAdditionalForm();
-    // this.productVariableForm = this.buildProductVariableForm();
   }
 
   private initBreadcrumb(): void {
@@ -115,12 +106,14 @@ export class ProductFormComponent implements OnInit {
     const form = this.builder.group({
       id: [''],
       name: ['', Validators.required],
+      price: [1],
+      quantity: [1],
       description: [''],
       expirationDate: [null],
       active: [true],
       image: [null],
       note: [''],
-      category: [null, Validators.required]
+      category: [null, Validators.required],
     });
 
     return form;
@@ -163,7 +156,10 @@ export class ProductFormComponent implements OnInit {
   
   private createProduct(payload: any, activateCallback: () => void): void {
     this.productService.create(payload).subscribe({
-      next: () => this.next(activateCallback),
+      next: (response: HttpResponse<any>) => {
+        this.next(activateCallback);
+        this.setProductId(response.body);
+      },
       error: (error: any) => console.error('Erro ao criar produto: ', error)
     });
   }
@@ -197,6 +193,12 @@ export class ProductFormComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  private setProductId(id: string) {
+    this.productGroupId.set({
+      ...this.productGroupId(),
+      product: id
+    })
+  }
   // private loadProduct(id: string): void {
   //   this.productService.findById(id).subscribe({
   //     next: (product) => this.productForm.patchValue(product),
