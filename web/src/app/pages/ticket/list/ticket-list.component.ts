@@ -2,14 +2,18 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { Loader } from '../../../model/loader';
 import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
 import { OrderService } from '../../order/service/order.service';
@@ -29,12 +33,16 @@ import { TicketService } from '../service/ticket.service';
     BreadcrumbModule,
     TagModule,
     DialogModule,
+    SelectButtonModule,
+    AutoCompleteModule,
+    MessageModule
   ],
   providers: [TicketService],
   templateUrl: './ticket-list.component.html',
   styleUrl: './ticket-list.component.scss',
 })
 export class TicketListComponent implements OnInit {
+
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
   items = [{ label: 'Comanda', routerLink: '/ticket' }];
@@ -54,6 +62,16 @@ export class TicketListComponent implements OnInit {
   totalRecordsSplit: number = 0;
   ticketToSplit: string | null = null;
   splitLoading = false;
+
+  ticketsToOption: Loader = { values: [] };
+
+  ticketOptions = [
+    { label: 'Nova comanda', value: 'criar' },
+    { label: 'Vincular comanda', value: 'vincular' }
+  ];
+
+  optionsSelected: string = 'criar';
+  selectedTicketToSplit: any = null;
 
   constructor(
     private service: TicketService,
@@ -179,7 +197,11 @@ export class TicketListComponent implements OnInit {
 
     const ids = this.selectedOrders.map(order => order.id);
 
-    this.service.split(this.ticketToSplit!, ids)
+    const ticketToSplit = this.optionsSelected === 'vincular'
+      ? this.selectedTicketToSplit?.id
+      : null;
+
+    this.service.split(this.ticketToSplit!, ids, ticketToSplit)
       .subscribe(() => {
         this.closeSplit();
         this.load(LoadUtils.getDefault());
@@ -192,5 +214,30 @@ export class TicketListComponent implements OnInit {
     return this.selectedOrders.reduce((total, order) => {
       return total + (order.total || 0);
     }, 0);
+  }
+
+  disabledConfirmSplit() {
+    return !this.selectedOrders.length
+      || this.selectedOrders.length === this.ordersToSplit.length
+      || (this.optionsSelected === 'vincular' && !this.selectedTicketToSplit);
+  }
+
+  searchTickets(event: any): void {
+
+    this.ticketsToOption.isLoading = true;
+
+    const query = event.query;
+
+    let search = `&search=status==OPEN;id!=${this.ticketToSplit}`;
+    const completeParams = `pageSize=100${search}`;
+
+    this.service.findAllDTO(completeParams).subscribe({
+      next: (page) => (this.ticketsToOption.values = page.content),
+      error: () => (this.ticketsToOption.values = []),
+      complete: () => {
+        this.ticketsToOption.isLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 }

@@ -135,12 +135,22 @@
           >
             <ng-template #header>
               <tr>
-                <th style="width: 20%" sortable="true" sortField="number">Número</th>
-                <th style="width: 20%" sortable="true" sortField="total">Total</th>
-                <th style="width: 30%" sortable="true" sortField="orderStatus.description">
+                <th style="width: 20%" sortable="true" sortField="number">
+                  Número
+                </th>
+                <th style="width: 20%" sortable="true" sortField="total">
+                  Total
+                </th>
+                <th
+                  style="width: 30%"
+                  sortable="true"
+                  sortField="orderStatus.description"
+                >
                   Status
                 </th>
-                <th style="width: 20%" sortable="true" sortField="createdAt">Data de Criação</th>
+                <th style="width: 20%" sortable="true" sortField="createdAt">
+                  Data de Criação
+                </th>
                 <th style="width: 10%">Ações</th>
               </tr>
             </ng-template>
@@ -209,9 +219,47 @@
   [(visible)]="visibleSplit"
   [style]="{ width: '60rem' }"
 >
-  <span class="p-text-secondary block mb-4"
+  <span class="p-text-secondary block"
     >Escolha os pedidos para divisão em uma nova comanda.</span
   >
+
+  @if (this.selectedOrders.length === this.ordersToSplit.length) {
+  <div class="block mt-3">
+    <p-message severity="warn" class="p-text-secondary">A comanda não pode ficar vazia.</p-message>
+  </div>
+  }
+
+  <div
+    class="flex mt-4 mb-3 w-full"
+    style="justify-content: space-between; align-items: center"
+  >
+    <p-selectbutton
+      [options]="ticketOptions"
+      [(ngModel)]="optionsSelected"
+      optionLabel="label"
+      optionValue="value"
+      styleClass="flex gap-2"
+    >
+    </p-selectbutton>
+
+    @if (optionsSelected === 'vincular') {
+    <div class="flex flex-column gap-1">
+      <label for="ticket" class="required-label">Comanda</label>
+      <p-autoComplete
+        id="ticket"
+        [(ngModel)]="selectedTicketToSplit"
+        [suggestions]="ticketsToOption.values"
+        (completeMethod)="searchTickets($event)"
+        [dropdown]="true"
+        placeholder="Selecione a comanda"
+        optionLabel="number"
+        fluid
+        [emptyMessage]="'Nenhuma comanda encontrada'"
+      >
+      </p-autoComplete>
+    </div>
+    }
+  </div>
 
   <p-table
     [value]="ordersToSplit"
@@ -273,15 +321,11 @@
     </span>
 
     <div class="flex gap-2">
-      <p-button
-        label="Cancelar"
-        severity="secondary"
-        (click)="closeSplit()"
-      />
+      <p-button label="Cancelar" severity="secondary" (click)="closeSplit()" />
       <p-button
         label="Dividir"
         (click)="confirmSplit()"
-        [disabled]="!selectedOrders.length"
+        [disabled]="disabledConfirmSplit()"
       />
     </div>
   </div>
