@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideHttpClient } from "@angular/common/http";
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TicketListComponent } from './ticket-list.component';
 
@@ -11,7 +12,7 @@ describe('TicketListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TicketListComponent],
-      providers: [provideHttpClient(), provideRouter([])]
+      providers: [provideHttpClient(), provideRouter([]), provideNoopAnimations()]
     })
     .compileComponents();
 
