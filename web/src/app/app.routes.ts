@@ -51,6 +51,13 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'stock',
+    children: [
+      { path: '', loadComponent: () => import('./pages/stock/stock-list/stock-list.component').then(m => m.StockListComponent)},
+      { path: ':id', loadComponent: () => import('./pages/stock/stock-form/stock-form.component').then(m => m.StockFormComponent)},
+    ]
+  },
+  {
     path: 'home',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },

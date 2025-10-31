@@ -39,4 +39,9 @@ export const routesMenu = [
     name: 'Mesas',
     icon: 'fa fa fa-th',
   },
+  {
+    path: 'stock',
+    name: 'Estoque',
+    icon: 'fa-solid fa-box',
+  }
 ];
