@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS ticket (
     id UUID PRIMARY KEY,
     number NUMERIC(18) NOT NULL DEFAULT nextval('ticket_number_seq') UNIQUE,
     status NUMERIC(10),
-    total DECIMAL(10,2) NOT NULL,
     person_id UUID,
     table_id UUID,
 

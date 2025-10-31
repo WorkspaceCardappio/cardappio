@@ -60,7 +60,7 @@ export class TicketListComponent implements OnInit {
   selectedOrders: any[] = [];
   ordersToSplit: any[] = [];
   totalRecordsSplit: number = 0;
-  ticketToSplit: string | null = null;
+  ticketToSplit: any | null = null;
   splitLoading = false;
 
   ticketsToOption: Loader = { values: [] };
@@ -71,7 +71,7 @@ export class TicketListComponent implements OnInit {
   ];
 
   optionsSelected: string = 'criar';
-  selectedTicketToSplit: any = null;
+  selectedTicketToSend: any = null;
 
   constructor(
     private service: TicketService,
@@ -141,7 +141,7 @@ export class TicketListComponent implements OnInit {
 
     const request = RequestUtils.build(event);
 
-    this.orderService.findToTicket(this.ticketToSplit!, request).subscribe({
+    this.orderService.findToTicket(this.ticketToSplit?.id, request).subscribe({
       next: (response) => {
         this.ordersToSplit = response.content;
         this.totalRecordsSplit = response.totalElements;
@@ -158,6 +158,7 @@ export class TicketListComponent implements OnInit {
   }
 
   loadOrders(event: TableLazyLoadEvent, ticket: any) {
+
     ticket.loadingOrders = true;
 
     const request = RequestUtils.build(event);
@@ -182,9 +183,10 @@ export class TicketListComponent implements OnInit {
     this.router.navigate([`order`, id]);
   }
 
-  showSplit(id: string) {
+  showSplit(ticket: any) {
+    console.log(ticket);
     this.visibleSplit = true;
-    this.ticketToSplit = id;
+    this.ticketToSplit = ticket;
     this.loadOrdersToSplit();
   }
 
@@ -197,11 +199,11 @@ export class TicketListComponent implements OnInit {
 
     const ids = this.selectedOrders.map(order => order.id);
 
-    const ticketToSplit = this.optionsSelected === 'vincular'
-      ? this.selectedTicketToSplit?.id
+    const ticketToSend = this.optionsSelected === 'vincular'
+      ? this.selectedTicketToSend?.id
       : null;
 
-    this.service.split(this.ticketToSplit!, ids, ticketToSplit)
+    this.service.split(this.ticketToSplit?.id, ids, ticketToSend)
       .subscribe(() => {
         this.closeSplit();
         this.load(LoadUtils.getDefault());
@@ -219,16 +221,14 @@ export class TicketListComponent implements OnInit {
   disabledConfirmSplit() {
     return !this.selectedOrders.length
       || this.selectedOrders.length === this.ordersToSplit.length
-      || (this.optionsSelected === 'vincular' && !this.selectedTicketToSplit);
+      || (this.optionsSelected === 'vincular' && !this.selectedTicketToSend);
   }
 
-  searchTickets(event: any): void {
+  searchTickets(): void {
 
     this.ticketsToOption.isLoading = true;
 
-    const query = event.query;
-
-    let search = `&search=status==OPEN;id!=${this.ticketToSplit}`;
+    let search = `&search=status==OPEN;id!=${this.ticketToSplit?.id};table.id==${this.ticketToSplit?.table?.id}`;
     const completeParams = `pageSize=100${search}`;
 
     this.service.findAllDTO(completeParams).subscribe({
