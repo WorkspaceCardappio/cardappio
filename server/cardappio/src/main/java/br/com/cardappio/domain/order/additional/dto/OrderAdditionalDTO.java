@@ -26,7 +26,7 @@ public record OrderAdditionalDTO(
 ) {
 
     public OrderAdditionalDTO(final ProductOrderAdditional order) {
-        this(null, null, null, null);
+        this(null, order.getProductOrder().getId(), null, null);
     }
 
 }

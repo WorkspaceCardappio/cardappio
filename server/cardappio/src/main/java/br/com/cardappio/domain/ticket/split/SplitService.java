@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.ticket.split;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,18 +36,38 @@ public class SplitService {
         final Person person = findPerson(idPerson);
         final List<Order> orders = getOrders(valueToSplit.orders());
 
-        final Ticket newTicket = ticket.cloneByNewTicket();
+        validateSizeToSplit(ticket, orders);
+
+        final Ticket newTicket = defineTicketToSend(ticket, valueToSplit.ticket());
 
         ticket.getOrders().removeIf(t -> valueToSplit.orders().contains(t.getId()));
-        ticket.setTotal(calculeTotal(ticket.getOrders()));
 
         newTicket.setOwner(person);
         orders.forEach(order -> order.setTicket(newTicket));
         newTicket.getOrders().addAll(orders);
 
-        newTicket.setTotal(calculeTotal(newTicket.getOrders()));
-
         ticketRepository.saveAll(List.of(ticket, newTicket));
+    }
+
+    private void validateSizeToSplit(final Ticket ticket, final List<Order> orders) {
+
+        final int sizeOrders = ticket.getOrders().size();
+        final int sizeOrdersToSplit = orders.size();
+
+        if (sizeOrdersToSplit == sizeOrders) {
+            throw new IllegalArgumentException("Não é permitido dividir todos os itens da comanda");
+        }
+
+    }
+
+    private Ticket defineTicketToSend(final Ticket origin, final UUID ticketToSend) {
+
+        if (Objects.isNull(ticketToSend)) {
+            return origin.cloneByNewTicket();
+        }
+
+        return ticketRepository.findById(ticketToSend)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Ticket %s not found", ticketToSend)));
     }
 
     private Ticket find(final UUID ticketId) {
@@ -76,14 +95,6 @@ public class SplitService {
 
         return orderById.values().stream().toList();
 
-    }
-
-    private BigDecimal calculeTotal(final List<Order> orders) {
-
-        return orders
-                .stream()
-                .map(Order::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }
