@@ -59,11 +59,11 @@ public class IngredientStock implements EntityModel<UUID> {
     @NotNull(message = Messages.EXPIRATION_DATE_NOT_NULL)
     private LocalDate expirationDate;
 
-    public static IngredientStock of(final IngredientStockDTO dto, final Ingredient ingredient) {
+    public static IngredientStock of(final IngredientStockDTO dto) {
 
         final IngredientStock stock = new IngredientStock();
         stock.setId(dto.id());
-        stock.setIngredient(ingredient);
+        stock.setIngredient(Ingredient.of(dto.ingredient().id()));
         stock.setNumber(dto.number());
         stock.setQuantity(dto.quantity());
         stock.setExpirationDate(dto.expirationDate());
