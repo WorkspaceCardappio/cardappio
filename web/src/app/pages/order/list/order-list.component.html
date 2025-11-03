@@ -40,7 +40,9 @@
       <th pSortableColumn="number" style="width: 15%">Nº Pedido</th>
       <th pSortableColumn="status" style="width: 20%">Status</th>
       <th pSortableColumn="createdAt" style="width: 20%">Data</th>
-      <th class="text-right" pSortableColumn="total" style="width: 20%">Total</th>
+      <th class="text-right" pSortableColumn="total" style="width: 20%">
+        Total
+      </th>
       <th style="width: 10%">Ações</th>
     </tr>
   </ng-template>
@@ -50,17 +52,22 @@
       <td>{{ order.ticket?.number }}</td>
       <td>{{ order.number }}</td>
       <td>
-        @switch (order.status?.code) {
-          @case (1) { <p-tag severity="warn" value="Pendente"></p-tag> }
-          @case (2) { <p-tag severity="info" value="Em Andamento"></p-tag> }
-          @case (3) { <p-tag severity="success" value="Finalizado"></p-tag> }
-          @case (4) { <p-tag [style]="{'background': '#22c55e'}" value="Entregue"></p-tag> }
-          @default { <p-tag severity="danger" value="Desconhecido"></p-tag> }
-        }
+        @switch (order.status?.code) { @case (1) {
+        <p-tag severity="warn" value="Pendente"></p-tag> } @case (2) {
+        <p-tag severity="info" value="Em Andamento"></p-tag> } @case (3) {
+        <p-tag severity="success" value="Finalizado"></p-tag> } @case (4) {
+        <p-tag [style]="{ background: '#22c55e' }" value="Entregue"></p-tag> }
+        @default { <p-tag severity="danger" value="Desconhecido"></p-tag> } }
       </td>
-      <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
-      <td class="text-right">{{ totalById.get(order.id) || 0.00 | currency:'BRL':'symbol':'1.2-2' }}</td>
+      <td>{{ order.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
+      <td class="text-right">
+        {{
+          totalById.get(order.id) || 0.0 | currency : "BRL" : "symbol" : "1.2-2"
+        }}
+      </td>
       <td>
+        @if (order.status?.code === 1) {
+
         <button
           pButton
           type="button"
@@ -70,6 +77,8 @@
           style="margin-right: 0.5rem"
           aria-label="Editar"
         ></button>
+
+        }
         <button
           pButton
           type="button"
