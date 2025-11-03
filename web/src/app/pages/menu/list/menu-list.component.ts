@@ -40,6 +40,7 @@ export class MenuListComponent {
 
   expandedRows: { [key: string]: boolean } = {};
   products: any[] = [];
+dt2: any;
 
   constructor(
     private service: MenuService,

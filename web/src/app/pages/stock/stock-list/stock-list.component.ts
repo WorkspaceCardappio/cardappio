@@ -1,40 +1,51 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { StockService } from '../service/stock.service';
+import { Router, RouterModule } from '@angular/router';
+import { DatePipe, CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
-import { Product } from '../../../model/product';
-import { Stock } from '../../../model/stock';
+
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { Router } from '@angular/router';
-import { Button } from "primeng/button";
-import { IconField } from "primeng/iconfield";
-import { InputIcon } from "primeng/inputicon";
-import { DatePipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+
+import { StockService } from '../service/stock.service';
+import { Stock } from '../../../model/stock';
 
 @Component({
   selector: 'app-stock',
-  imports: [TableModule, Button, IconField, InputIcon, DatePipe],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    DatePipe,
+    RouterModule
+
+  ],
   templateUrl: './stock-list.component.html',
   styleUrls: ['./stock-list.component.scss'],
   providers: [StockService],
 })
 export class StockListComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
-
   items = [{ label: 'Estoques', routerLink: '/stocks' }];
-  stocks: Stock[] = [];
-  totalRecords: number = 0;
-  loading: boolean = true;
 
-  constructor(private service: StockService, private router: Router, private cdr: ChangeDetectorRef) { }
+  stocks: Stock[] = [];
+  totalRecords = 0;
+  loading = true;
+
+  constructor(
+    private service: StockService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.loadStocks({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {}
-    });
+    this.loadStocks({ first: 0, rows: 20, sortField: '', sortOrder: 1, filters: {} });
     this.loading = false;
   }
 
@@ -43,16 +54,13 @@ export class StockListComponent implements OnInit {
   }
 
   onEdit(id: any) {
-    this.router.navigate([`stocks`, id]);
+    this.router.navigate([`stock`, id]);
   }
+
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadStocks({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {},
-    }));
+    this.service.delete(id).subscribe(() =>
+      this.loadStocks({ first: 0, rows: 20, sortField: '', sortOrder: 1, filters: {} })
+    );
   }
 
   loadStocks(event: TableLazyLoadEvent) {
@@ -64,10 +72,7 @@ export class StockListComponent implements OnInit {
     const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
 
     let request = `page=${page}&size=${size}`;
-
-    if (sortField) {
-      request += `&sort=${sortField},${sortOrder}`;
-    }
+    if (sortField) request += `&sort=${sortField},${sortOrder}`;
 
     this.service
       .findAllDTO(request)
@@ -82,7 +87,7 @@ export class StockListComponent implements OnInit {
           this.stocks = response.content;
           this.totalRecords = response.totalElements;
         },
-        error: () => { },
+        error: () => {},
       });
   }
 }
