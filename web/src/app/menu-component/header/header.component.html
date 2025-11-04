@@ -6,58 +6,5 @@
         Cardappio
       </h1>
     </div>
-
-    <div class="header-right">
-      <!-- Quando não está logado -->
-      <div *ngIf="!isLoggedIn" class="login-section">
-        <p-button
-          label="Entrar"
-          icon="pi pi-sign-in"
-          (onClick)="login()"
-          severity="success">
-        </p-button>
-      </div>
-
-      <!-- Quando está logado -->
-      <div *ngIf="isLoggedIn" class="user-section">
-        <div class="user-info">
-          <span class="username">{{ username }}</span>
-          <span
-            class="role-badge"
-            [class.admin]="authService.isAdmin()"
-            [class.user]="authService.isUser()">
-            {{ getPrimaryRole() }}
-          </span>
-        </div>
-
-        <!-- Avatar com menu dropdown -->
-        <div class="user-avatar-container" (click)="toggleUserMenu()">
-          <div class="user-avatar">
-            {{ getUserInitials() }}
-          </div>
-
-          <!-- Dropdown Menu -->
-          <div class="user-menu" *ngIf="showUserMenu" (click)="$event.stopPropagation()">
-            <div class="menu-header">
-              <strong>{{ username }}</strong>
-              <small>{{ getPrimaryRole() }}</small>
-            </div>
-            <div class="menu-divider"></div>
-            <button class="menu-item" (click)="closeUserMenu()">
-              <i class="pi pi-user"></i>
-              <span>Perfil</span>
-            </button>
-            <div class="menu-divider"></div>
-            <button class="menu-item logout" (click)="logout()">
-              <i class="pi pi-sign-out"></i>
-              <span>Sair</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </header>
-
-<!-- Overlay para fechar menu quando clicar fora -->
-<div class="menu-overlay" *ngIf="showUserMenu" (click)="closeUserMenu()"></div>

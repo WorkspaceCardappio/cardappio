@@ -8,7 +8,7 @@ import { KeycloakProfile } from 'keycloak-js';
 export class AuthService {
   constructor(private keycloakService: KeycloakService) {}
 
-  private isBrowser(): boolean {
+  private isBrowser() {
     return typeof window !== 'undefined';
   }
 
@@ -23,42 +23,62 @@ export class AuthService {
     }
   }
 
-  getUsername(): string {
+  getUsername() {
     if (!this.isBrowser()) return '';
-    return this.keycloakService.getUsername();
+    try {
+      return this.keycloakService.getUsername();
+    } catch (error) {
+      return '';
+    }
   }
 
-  getUserRoles(): string[] {
+  getUserRoles() {
     if (!this.isBrowser()) return [];
-    return this.keycloakService.getUserRoles();
+    try {
+      return this.keycloakService.getUserRoles();
+    } catch (error) {
+      return [];
+    }
   }
 
-  hasRole(role: string): boolean {
+  hasRole(role: string) {
     if (!this.isBrowser()) return false;
     return this.keycloakService.isUserInRole(role);
   }
 
-  isAdmin(): boolean {
+  isAdmin() {
     return this.hasRole('ADMIN');
   }
 
-  isUser(): boolean {
+  isUser() {
     return this.hasRole('USER');
   }
 
-  isLoggedIn(): boolean {
+  isLoggedIn() {
     if (!this.isBrowser()) return false;
     return this.keycloakService.isLoggedIn();
   }
 
-  login(): void {
-    if (!this.isBrowser()) return;
-    this.keycloakService.login();
+  login(): Promise<void> {
+    if (!this.isBrowser()) return Promise.resolve();
+    return this.keycloakService.login({
+      redirectUri: window.location.origin + '/home'
+    });
   }
 
-  logout(): void {
+  logout() {
     if (!this.isBrowser()) return;
-    this.keycloakService.logout(window.location.origin);
+
+    try {
+      const logoutUrl = this.keycloakService.getKeycloakInstance().createLogoutUrl({
+        redirectUri: window.location.origin
+      });
+      window.location.href = logoutUrl;
+    } catch (error) {
+      this.keycloakService.logout(window.location.origin).catch(() => {
+        window.location.href = window.location.origin;
+      });
+    }
   }
 
   async getToken(): Promise<string> {

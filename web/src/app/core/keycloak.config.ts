@@ -1,7 +1,8 @@
 import { KeycloakConfig } from 'keycloak-js';
+import { environment } from '../../environments/environment';
 
 export const keycloakConfig: KeycloakConfig = {
-  url: 'http://localhost:8090',
-  realm: 'cardappio-app',
-  clientId: 'frontend-app',
+  url: environment.keycloak.url,
+  realm: environment.keycloak.realm,
+  clientId: environment.keycloak.clientId,
 };
