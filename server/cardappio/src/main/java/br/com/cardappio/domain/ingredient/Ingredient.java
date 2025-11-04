@@ -81,18 +81,6 @@ public class Ingredient implements EntityModel<UUID> {
         ingredient.setActive(dto.active());
         ingredient.setAllergenic(dto.allergenic());
 
-        final BigDecimal quantity = dto.stocks()
-                .stream()
-                .map(IngredientStockDTO::quantity)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        final List<IngredientStock> stocks = dto.stocks()
-                .stream()
-                .map(stock -> IngredientStock.of(stock, ingredient))
-                .toList();
-
-        ingredient.setQuantity(quantity);
-        ingredient.setStocks(stocks);
         return ingredient;
     }
 
