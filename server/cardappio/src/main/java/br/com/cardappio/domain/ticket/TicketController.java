@@ -9,7 +9,12 @@ import com.cardappio.core.controller.CrudController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -32,9 +37,8 @@ public class TicketController extends CrudController<Ticket, UUID, TicketListDTO
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{idTicket}/flutter-tickets")
+    @GetMapping("/flutter-tickets/by-ticket/{idTicket}")
     public ResponseEntity<FlutterTicketDTO> findFlutterTicket(@PathVariable UUID idTicket) {
-
         return ResponseEntity.ok(service.findFlutterTicket(idTicket));
     }
 

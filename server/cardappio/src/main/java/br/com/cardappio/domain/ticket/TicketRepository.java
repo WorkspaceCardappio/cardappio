@@ -35,4 +35,11 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
     FlutterTicketDTO findFlutterTicket(UUID idTicket);
 
     List<Ticket> findByTableId(UUID tableId);
+
+    @Query(value = """
+            SELECT t FROM Ticket t
+            JOIN FETCH t.orders o
+            WHERE t.id = :id
+            """)
+    Optional<Ticket> findByIdWithOrdersFlutter(@Param("id") UUID id);
 }

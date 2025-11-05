@@ -22,4 +22,10 @@ public class FlutterTicketDTO {
 
         this.total = total;
     }
+
+    public FlutterTicketDTO(BigDecimal total, List<FlutterOrderDTO> orders) {
+        this.total = total;
+        this.orders = orders;
+    }
+
 }

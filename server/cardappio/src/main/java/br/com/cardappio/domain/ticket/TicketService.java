@@ -1,15 +1,18 @@
 package br.com.cardappio.domain.ticket;
 
 import br.com.cardappio.domain.order.OrderRepository;
+import br.com.cardappio.domain.order.dto.FlutterOrderDTO;
 import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
 import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,18 +30,27 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
     public FlutterTicketDTO findFlutterTicket(UUID idTicket) {
 
-        FlutterTicketDTO ticket = repository.findFlutterTicket(idTicket);
+        Ticket ticketEntity = repository.findByIdWithOrders(idTicket)
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
 
-//        ticket.getOrders().addAll();
+        FlutterTicketDTO ticketDTO = new FlutterTicketDTO(ticketEntity.getTotal());
 
-        return ticket;
+        List<FlutterOrderDTO> aggregatedOrderItems = ticketEntity.getOrders().stream()
+
+                .flatMap(order -> order.getProductOrders().stream())
+                .map(productOrder -> new FlutterOrderDTO(
+
+                        productOrder.getProductItem().getProduct().getName(),
+                        productOrder.getPrice(),
+                        productOrder.getQuantity().longValue()
+
+                ))
+                .toList();
+
+
+        ticketDTO.getOrders().addAll(aggregatedOrderItems);
+
+        return ticketDTO;
     }
 
-//    public List<TicketDTO> findTicketsByTable(UUID tableId) {
-//        List<Ticket> tickets = repository.findByTableId(tableId);
-//
-//        return tickets.stream()
-////                .map(TicketDTO::new)
-//                .null;
-//    }
 }
