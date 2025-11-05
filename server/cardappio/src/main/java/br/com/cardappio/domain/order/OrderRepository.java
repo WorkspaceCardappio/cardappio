@@ -1,6 +1,7 @@
 package br.com.cardappio.domain.order;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,5 +40,6 @@ public interface OrderRepository extends CrudRepository<Order, UUID> {
             GROUP BY order.id
             """)
     List<TotalAndIdDTO> findTotalByIds(@Param("ids") Set<UUID> ids);
+    Optional<Order> findByPaymentIntentId(String paymentIntentId);
 
 }

@@ -80,6 +80,9 @@ public class Order implements EntityModel<UUID> {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "payment_intent_id", unique = true, length = 255)
+    private String paymentIntentId;
+
     public static Order of(final OrderDTO dto) {
 
         final Order order = new Order();
