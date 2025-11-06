@@ -17,5 +17,9 @@ export class ProductIngredientService extends EntityService<any, any>{
   createProductIngredient(body: any[]) {
     return this.http.post(`${this.resource}/ingredients`, body);
   }
+
+  getProductIngredient(id: string) {
+    return this.http.get(`${this.resource}/ingredients/by-product/${id}`)
+  }
   
 }

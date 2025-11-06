@@ -40,6 +40,13 @@ export class ProductIngredientComponent implements OnInit {
 
   loading: boolean = false;
 
+  home = { icon: 'pi pi-home', routerLink: '/home' };
+
+  items = [
+    { label: 'Produto', routerLink: '/product' },
+    { label: 'Novo', routerLink: '/product/new' },
+  ];
+
   constructor(
     private readonly ingredientService: IngredientService,
     private readonly productIngredientService: ProductIngredientService,
@@ -51,10 +58,14 @@ export class ProductIngredientComponent implements OnInit {
 
   searchIngredients(event: any) {
     const query = event.query;
-    const searchs = [];
-    if (query) searchs.push(`name=ilike=${query}%`);
-    this.ingredientService.findAll(20, searchs.join(';')).subscribe({
-      next: (data) => { this.filteredIngredients = data; },
+    
+    let search = '&search=active==TRUE';
+    search += query ? `;name=ilike=${query}` : '';
+
+    const completeParams = `pageSize=20;${search}`
+    
+    this.ingredientService.findAllDTO(completeParams).subscribe({
+      next: (data) => { this.filteredIngredients = data.content; },
       error: (err) => { console.error('Erro ao buscar ingredientes', err); },
       complete: () => {
         this.loading = false;

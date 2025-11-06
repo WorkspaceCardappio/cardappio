@@ -17,6 +17,7 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from "primeng/table";
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Loader } from '../../../../model/loader';
 import { CategoryService } from '../../../category/service/category.service';
 import { OrderGroupId } from '../../../order/model/order-group-id.model';
 import { ProductService } from '../../service/product.service';
@@ -56,7 +57,7 @@ export class ProductFormComponent implements OnInit {
   
   stepIndex = 1;
 
-  id: string | null = null;
+  id: string = '';
   isEdit = false;
 
   productForm: FormGroup<any> = new FormGroup({});
@@ -71,7 +72,7 @@ export class ProductFormComponent implements OnInit {
   });
 
   filteredCategories: any[] = []; 
-
+  categories: Loader = { values: [] }; 
   loading: boolean = false;
   currentIndex: number | null = null;
 
@@ -90,7 +91,7 @@ export class ProductFormComponent implements OnInit {
     this.productForm = this.initForm();
     this.initBreadcrumb();
 
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('id') || '';
     this.isEdit = this.id != 'new'
   }
 
@@ -120,16 +121,14 @@ export class ProductFormComponent implements OnInit {
   }
 
   searchCategories(event: any) {
-    const query = event.query;
-    const searchs = [];
-    if (query) searchs.push(`name=ilike=${query}%`);
-    this.categoryService.findAll(20, searchs.join(';')).subscribe({
-      next: (data) => { this.filteredCategories = data; },
-      error: (err) => { console.error('Erro ao buscar categorias', err); },
-      complete: () => {
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
+    const query = event.query || '';
+    const searches = query ? [`name=ilike=${query}%`] : [];
+    const completeParams = `pageSize=20&search=${searches.join(';')}`;
+
+    this.categoryService.findAllDTO(completeParams).subscribe({
+      next: (page) => (this.filteredCategories = page.content),
+      error: () => (this.categories.values = []),
+      complete: () => this.cdr.markForCheck(),
     });
   }
 

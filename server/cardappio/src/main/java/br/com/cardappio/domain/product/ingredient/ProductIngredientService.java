@@ -6,6 +6,7 @@ import br.com.cardappio.domain.product.ProductRepository;
 import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.domain.product.dto.ProductIngredientListDTO;
 import br.com.cardappio.domain.product.ingredient.adapter.ProductIngredientAdapter;
+import br.com.cardappio.domain.product.ingredient.dto.IngredientDTO;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductIngredientService extends CrudService<ProductIngredient, UUID, ProductIngredientListDTO, ProductIngredientDTO> {
     private final ProductRepository productRepository;
+    private final ProductIngredientRepository repository;
 
     @Override
     protected Adapter<ProductIngredient, ProductIngredientListDTO, ProductIngredientDTO> getAdapter() {
@@ -44,5 +46,9 @@ public class ProductIngredientService extends CrudService<ProductIngredient, UUI
         product.getProductIngredients().addAll(ingredientsToSave);
 
         productRepository.save(product);
+    }
+
+    public List<IngredientDTO> findIngredientsByProductId(final UUID productId) {
+        return repository.findIngredientsByProductId(productId);
     }
 }

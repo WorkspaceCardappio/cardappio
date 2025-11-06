@@ -128,7 +128,9 @@
         <p-step-panel [value]="3" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <app-product-product-item
-              [productId]="productForm.get('id')?.value || 'temp-id'"
+              [productId]="productGroupId().product"
+              (prevEmitter)="prev(activateCallback)"
+              (nextEmitter)="next(activateCallback)"
             ></app-product-product-item>
           </ng-template>
         </p-step-panel>
