@@ -26,7 +26,7 @@ public class TicketController extends CrudController<Ticket, UUID, TicketListDTO
     private final TicketService service;
 
     // TODO: REMOVER - VIRAR USUARIO LOGADO
-    private final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
+    private final UUID idPerson = UUID.fromString("a4b5c6d7-e1f2-3456-7890-123456abcded");
 
     private final SplitService splitService;
 

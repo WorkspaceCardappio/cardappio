@@ -1,17 +1,5 @@
 package br.com.cardappio.domain.ticket.split;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.domain.order.OrderRepository;
 import br.com.cardappio.domain.person.Person;
@@ -21,6 +9,17 @@ import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional

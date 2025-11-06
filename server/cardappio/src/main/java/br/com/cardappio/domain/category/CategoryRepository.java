@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface CategoryRepository extends CrudRepository<Category, UUID> {
 
     @Query("""
-            SELECT DISTINCT new br.com.cardappio.domain.category.dto.FlutterCategoryDTO(c.id, c.name)
+            SELECT DISTINCT new br.com.cardappio.domain.category.dto.FlutterCategoryDTO(c.id, c.name, c.image)
             FROM Category c
             JOIN Product p ON p.category = c
             JOIN MenuProduct mp ON mp.product = p
