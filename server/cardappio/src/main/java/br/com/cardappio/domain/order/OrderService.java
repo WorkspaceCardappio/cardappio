@@ -1,25 +1,19 @@
 package br.com.cardappio.domain.order;
 
-import java.util.List;
-import java.util.UUID;
-
+import br.com.cardappio.domain.order.adapter.OrderAdapter;
+import br.com.cardappio.domain.order.dto.*;
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-
-import br.com.cardappio.domain.order.adapter.OrderAdapter;
-import br.com.cardappio.domain.order.dto.IdsDTO;
-import br.com.cardappio.domain.order.dto.NoteDTO;
-import br.com.cardappio.domain.order.dto.OrderDTO;
-import br.com.cardappio.domain.order.dto.OrderListDTO;
-import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
-import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
-import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -80,5 +74,26 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
     public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
         return repository.findTotalByIds(body.ids());
+    }
+
+    @Transactional
+    public void createFlutterOrder(FlutterCreateOrderDTO dto) {
+
+        UUID idSavedOrder = repository.save(Order.of(dto)).getId();
+
+        List<ProductOrder> productOrders = new ArrayList<>();
+
+        dto.items().forEach(item -> {
+
+            ProductOrder productOrder = ProductOrder.of(item);
+            productOrder.setOrder(Order.of(idSavedOrder));
+            productOrder.getVariables().add(ProductOrderVariable.of(item.variableId()));
+            productOrder.getAdditionals().addAll(item.additionals()
+                    .stream()
+                    .map(ProductOrderAdditional::of)
+                    .toList());
+        });
+
+
     }
 }
