@@ -15,8 +15,8 @@ export class TicketService extends EntityService<any, any>{
     super(http);
   }
 
-  split(id: string, orders: string[]) {
-    return this.http.post(`${this.resource}/split/${id}`, { orders: orders });
+  split(id: string, orders: string[], ticketToSplit: any) {
+    return this.http.post(`${this.resource}/split/${id}`, { orders: orders, ticket: ticketToSplit });
   }
 
 }

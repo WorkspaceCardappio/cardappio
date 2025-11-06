@@ -25,7 +25,7 @@ public record OrderVariableDTO(
 ) {
 
     public OrderVariableDTO(final ProductOrderVariable order) {
-        this(null, null, null, null);
+        this(null, order.getProductOrder().getId(), null, null);
     }
 
 }

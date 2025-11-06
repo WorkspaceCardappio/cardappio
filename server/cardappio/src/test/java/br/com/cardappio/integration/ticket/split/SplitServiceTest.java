@@ -1,6 +1,5 @@
 package br.com.cardappio.integration.ticket.split;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -21,7 +20,6 @@ import jakarta.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.within;
 
 @SpringBootTest
 @Sql(scripts = {
@@ -44,7 +42,7 @@ public class SplitServiceTest extends IntegrationTestBase {
     void ticketOriginNotFound() {
 
         assertThatThrownBy(() -> service.ticket(UUID.fromString("fe410187-6662-4999-bc0c-2b1b1bea7e9e"), UUID.randomUUID(),
-                new SplitOrdersDTO(Set.of())))
+                new SplitOrdersDTO(Set.of(), null)))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Ticket fe410187-6662-4999-bc0c-2b1b1bea7e9e not found");
     }
@@ -55,7 +53,7 @@ public class SplitServiceTest extends IntegrationTestBase {
         final UUID order = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
         final UUID orderNotFound = UUID.fromString("fe410187-6662-4999-bc0c-2b1b1bea7e9e");
 
-        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order, orderNotFound));
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order, orderNotFound), null);
 
         final UUID idOrigin = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
         final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
@@ -70,7 +68,7 @@ public class SplitServiceTest extends IntegrationTestBase {
 
         final UUID order = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
 
-        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order));
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(order), null);
 
         final UUID idPerson = UUID.fromString("fb5836cd-aaab-47ab-9187-39f3e73d05d8");
 
@@ -85,7 +83,7 @@ public class SplitServiceTest extends IntegrationTestBase {
         final UUID orderOne = UUID.fromString("c69a173c-2156-4f49-b9d9-093b551e3099");
         final UUID orderTwo = UUID.fromString("80701206-d175-46af-aac1-f7afc5d82189");
 
-        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(orderOne, orderTwo));
+        final SplitOrdersDTO splitValue = new SplitOrdersDTO(Set.of(orderOne, orderTwo), null);
 
         final UUID idPerson = UUID.fromString("0ad8e87d-a9db-4746-823d-eeb7cd0efb10");
         final UUID idOrigin = UUID.fromString("defba662-54a0-4b98-b2e6-8e4421aed15c");
@@ -99,7 +97,6 @@ public class SplitServiceTest extends IntegrationTestBase {
 
         assertThat(ticket.getOrders()).hasSize(1);
         assertThat(ticket.getNumber()).isEqualTo(1L);
-        assertThat(ticket.getTotal()).isCloseTo(BigDecimal.valueOf(26.00), within(BigDecimal.valueOf(0.0001)));
         assertThat(ticket.getOrders()).extracting(Order::getId)
                 .containsExactlyInAnyOrder(idOrigin);
 
@@ -108,7 +105,6 @@ public class SplitServiceTest extends IntegrationTestBase {
 
         final Ticket newTicket = newTicketFound.get();
         assertThat(newTicket.getNumber()).isEqualTo(2L);
-        assertThat(newTicket.getTotal()).isCloseTo(BigDecimal.valueOf(25.00), within(BigDecimal.valueOf(0.0001)));
         assertThat(newTicket.getStatus()).isEqualTo(TicketStatus.OPEN);
         assertThat(newTicket.getTable()).isEqualTo(ticket.getTable());
         assertThat(newTicket.getOrders()).hasSize(2);

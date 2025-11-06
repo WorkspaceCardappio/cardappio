@@ -1,8 +1,10 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { provideRouter, ActivatedRoute } from '@angular/router';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { TableRestaurantFormComponent } from '../table-restaurant-form.component';
+
 
 describe('table-restaurant-form.component.spec.ts', () => {
 
@@ -19,6 +21,7 @@ describe('table-restaurant-form.component.spec.ts', () => {
       providers: [
         HttpClient,
         HttpHandler,
+        provideNoopAnimations(),
         provideRouter([]),
         {
           provide: ActivatedRoute,
