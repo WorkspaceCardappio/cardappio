@@ -22,7 +22,7 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
 
     @Query(value = """
             SELECT t FROM Ticket t
-            JOIN FETCH t.orders
+            LEFT JOIN t.orders
             WHERE t.id = :id
             """)
     Optional<Ticket> findByIdWithOrders(@Param("id") UUID id);

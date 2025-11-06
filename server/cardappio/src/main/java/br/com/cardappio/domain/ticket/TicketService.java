@@ -39,7 +39,7 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
                 .flatMap(order -> order.getProductOrders().stream())
                 .map(productOrder -> new FlutterOrderDTO(
-                        productOrder.getId(),
+                        productOrder.getOrder().getId(),
                         productOrder.getProductItem().getProduct().getName(),
                         productOrder.getPrice(),
                         productOrder.getQuantity().longValue()
