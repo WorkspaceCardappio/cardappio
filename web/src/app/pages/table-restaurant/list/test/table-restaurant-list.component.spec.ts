@@ -1,5 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { TableRestaurantListComponent } from '../table-restaurant-list.component';
 
 describe('table-restaurant-list.component.spec.ts', () => {
@@ -11,7 +12,7 @@ describe('table-restaurant-list.component.spec.ts', () => {
 
     TestBed.configureTestingModule({
       imports: [TableRestaurantListComponent],
-      providers: [HttpClient, HttpHandler],
+      providers: [HttpClient, HttpHandler, provideRouter([])],
     })
       .compileComponents();
 

@@ -5,16 +5,3 @@ spring:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
-  # Bloco JPA adicionado para formatar o SQL
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-
-# Bloco de LOGGING adicionado para exibir o SQL e os parâmetros
-logging:
-  level:
-    # Mostra as queries SQL geradas pelo Hibernate
-    org.hibernate.SQL: DEBUG
-    # Mostra os valores dos parâmetros usados nas queries (útil para depuração)
-    org.hibernate.type.descriptor.sql: TRACE

@@ -23,8 +23,9 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
     List<ProductItemDTO> findOptionsById(@Param("id") UUID id);
 
     @Query("""
-            SELECT new br.com.cardappio.domain.product.dto.FlutterProductDTO(p.id, p.name, p.price, p.description, p.note, p.image)
-            FROM Product p
+            SELECT new br.com.cardappio.domain.product.dto.FlutterProductDTO(pi.id, p.id, p.name, pi.price, pi.description, p.note, p.image)
+            FROM ProductItem pi
+            JOIN pi.product p
             JOIN p.category c
             WHERE p.active = true
             AND c.id = :idCategory
