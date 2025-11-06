@@ -19,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDTO> {
 
+    private static final String ORDER_NOT_FOUND = "Pedido não encontrado";
     private final OrderRepository repository;
     private final ProductOrderRepository productOrderRepository;
 
@@ -39,7 +40,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     public void updateNoteInProductOrder(final UUID id, final NoteDTO dto) {
 
         final ProductOrder productOrder = productOrderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
 
         productOrder.setNote(dto.note());
         productOrderRepository.save(productOrder);
@@ -48,7 +49,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     public void updateNoteInOrder(final UUID id, final NoteDTO dto) {
 
         final Order order = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
 
         order.setNote(dto.note());
         repository.save(order);
@@ -57,7 +58,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     public void deleteProductInOrder(final UUID id) {
 
         final ProductOrder productOrder = productOrderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
 
         productOrderRepository.delete(productOrder);
     }
@@ -65,7 +66,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     public void finalize(final UUID id) {
 
         final Order order = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
 
         order.markAsFinalized();
         repository.save(order);

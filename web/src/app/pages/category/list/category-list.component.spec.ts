@@ -1,5 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { CategoryListComponent } from './category-list.component';
 
 
@@ -12,7 +13,7 @@ describe('CategoryListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CategoryListComponent],
-      providers: [HttpClient, HttpHandler]
+      providers: [HttpClient, HttpHandler, provideRouter([])]
     })
     .compileComponents();
 

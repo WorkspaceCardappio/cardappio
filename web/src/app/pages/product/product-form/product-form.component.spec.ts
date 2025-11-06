@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { ProductFormComponent } from './product-form.component';
 
@@ -11,7 +12,7 @@ describe('ProductFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProductFormComponent],
-      providers: [HttpClient, HttpHandler, {
+      providers: [HttpClient, HttpHandler, provideNoopAnimations(), {
         provide: ActivatedRoute,
         useValue: {snapshot: {params: {id: 'new'}}}
       }]

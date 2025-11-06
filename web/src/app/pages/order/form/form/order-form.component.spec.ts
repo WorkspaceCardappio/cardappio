@@ -4,6 +4,7 @@ import { provideHttpClient } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { provideRouter } from "@angular/router";
 import { OrderFormComponent } from './order-form.component';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 describe('OrderFormComponent', () => {
   let component: OrderFormComponent;
@@ -14,6 +15,7 @@ describe('OrderFormComponent', () => {
       imports: [OrderFormComponent],
       providers: [
         provideHttpClient(),
+        provideNoopAnimations(),
         provideHttpClientTesting(),
         provideRouter([]),
       ]

@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryFormComponent } from './category-form.component';
 
-describe('TesteComponent', () => {
+describe('CategoryFormComponent', () => {
   let component: CategoryFormComponent;
   let fixture: ComponentFixture<CategoryFormComponent>;
 
@@ -12,7 +13,7 @@ describe('TesteComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [CategoryFormComponent],
-      providers: [HttpClient, HttpHandler, {
+      providers: [HttpClient, HttpHandler, provideNoopAnimations(), {
         provide: ActivatedRoute,
         useValue: { snapshot: { params: { id: 'new' } }}
       }]
