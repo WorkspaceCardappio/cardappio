@@ -30,13 +30,12 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
     public FlutterTicketDTO findFlutterTicket(UUID idTicket) {
 
-        Ticket ticketEntity = repository.findByIdWithOrders(idTicket)
+        Ticket ticketEntity = repository.findByIdWithOrdersFlutter(idTicket)
                 .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
 
-        FlutterTicketDTO ticketDTO = new FlutterTicketDTO(ticketEntity.getTotal());
+        FlutterTicketDTO ticketDTO = new FlutterTicketDTO();
 
         List<FlutterOrderDTO> aggregatedOrderItems = ticketEntity.getOrders().stream()
-
                 .flatMap(order -> order.getProductOrders().stream())
                 .map(productOrder -> new FlutterOrderDTO(
                         productOrder.getOrder().getId(),
@@ -46,7 +45,6 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
 
                 ))
                 .toList();
-
 
         ticketDTO.getOrders().addAll(aggregatedOrderItems);
 
