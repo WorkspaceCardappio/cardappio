@@ -89,11 +89,15 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
             ProductOrder productOrder = ProductOrder.of(item);
             productOrder.setOrder(Order.of(idSavedOrder));
             productOrder.getVariables().add(ProductOrderVariable.of(item.variableId()));
-            productOrder.getAdditionals().addAll(item.additionals()
-                    .stream()
-                    .map(ProductOrderAdditional::of)
-                    .toList());
+
+            productOrders.add(productOrder);
+//            productOrder.getAdditionals().addAll(item.additionals()
+//                    .stream()
+//                    .map(ProductOrderAdditional::of)
+//                    .toList());
         });
+
+        productOrderRepository.saveAll(productOrders);
 
 
     }

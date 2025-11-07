@@ -28,7 +28,7 @@ public class MenuController extends CrudController<Menu, UUID, MenuListDTO, Menu
     }
 
 
-    @GetMapping("/{idRestaurant}/flutter-menus/")
+    @GetMapping("/{idRestaurant}/flutter-menus")
     ResponseEntity<List<FlutterMenuDTO>> findFlutterMenus(@PathVariable UUID idRestaurant) {
 
         return ResponseEntity.ok(service.findFlutterMenus(idRestaurant));
