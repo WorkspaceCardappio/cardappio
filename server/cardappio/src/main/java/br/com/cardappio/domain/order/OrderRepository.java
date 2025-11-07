@@ -40,6 +40,6 @@ public interface OrderRepository extends CrudRepository<Order, UUID> {
             GROUP BY order.id
             """)
     List<TotalAndIdDTO> findTotalByIds(@Param("ids") Set<UUID> ids);
-    Optional<Order> findByPaymentIntentId(String paymentIntentId);
+    Optional<Order> findByExternalReferenceId(String paymentIntentId);
 
 }

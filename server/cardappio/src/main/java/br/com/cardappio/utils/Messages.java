@@ -44,4 +44,5 @@ public class Messages {
     public static final String EMPTY_INGREDIENT = "Ingrediente não pode ficar vazio";
     public static final String AMOUNT_MORE_ZERO = "O valor tem que ser maior que zero";
     public static final String CURRENCY_DEFINITION = "A moeda é obrigatória";
+    public static final String ONLY_PIX = "Apenas a moeda BRL (Real Brasileiro) é permitida para Pix.";
 }
