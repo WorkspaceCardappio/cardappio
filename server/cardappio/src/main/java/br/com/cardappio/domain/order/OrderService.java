@@ -1,25 +1,20 @@
 package br.com.cardappio.domain.order;
 
-import java.util.List;
-import java.util.UUID;
-
+import br.com.cardappio.domain.order.adapter.OrderAdapter;
+import br.com.cardappio.domain.order.dto.*;
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-
-import br.com.cardappio.domain.order.adapter.OrderAdapter;
-import br.com.cardappio.domain.order.dto.IdsDTO;
-import br.com.cardappio.domain.order.dto.NoteDTO;
-import br.com.cardappio.domain.order.dto.OrderDTO;
-import br.com.cardappio.domain.order.dto.OrderListDTO;
-import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
-import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
-import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -81,5 +76,28 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
     public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
         return repository.findTotalByIds(body.ids());
+    }
+
+    public void createFlutterOrder(FlutterCreateOrderDTO dto) {
+
+        UUID idSavedOrder = repository.save(Order.of(dto)).getId();
+
+        List<ProductOrder> productOrders = new ArrayList<>();
+
+        dto.items().forEach(item -> {
+
+            ProductOrder productOrder = ProductOrder.of(item);
+            productOrder.setOrder(Order.of(idSavedOrder));
+            productOrder.setPrice(BigDecimal.valueOf(item.lineTotal()));
+
+            if (Objects.nonNull(item.variableId())) {
+
+                productOrder.getVariables().add(ProductOrderVariable.ofFlutter(item.variableId(), productOrder));
+            }
+
+            productOrders.add(productOrder);
+        });
+
+        productOrderRepository.saveAll(productOrders);
     }
 }
