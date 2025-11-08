@@ -5,14 +5,15 @@ import br.com.cardappio.domain.order.dto.*;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -77,7 +78,6 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         return repository.findTotalByIds(body.ids());
     }
 
-    @Transactional
     public void createFlutterOrder(FlutterCreateOrderDTO dto) {
 
         UUID idSavedOrder = repository.save(Order.of(dto)).getId();
@@ -88,17 +88,16 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
             ProductOrder productOrder = ProductOrder.of(item);
             productOrder.setOrder(Order.of(idSavedOrder));
-            productOrder.getVariables().add(ProductOrderVariable.of(item.variableId()));
+            productOrder.setPrice(BigDecimal.valueOf(item.lineTotal()));
+
+            if (Objects.nonNull(item.variableId())) {
+
+                productOrder.getVariables().add(ProductOrderVariable.ofFlutter(item.variableId(), productOrder));
+            }
 
             productOrders.add(productOrder);
-//            productOrder.getAdditionals().addAll(item.additionals()
-//                    .stream()
-//                    .map(ProductOrderAdditional::of)
-//                    .toList());
         });
 
         productOrderRepository.saveAll(productOrders);
-
-
     }
 }

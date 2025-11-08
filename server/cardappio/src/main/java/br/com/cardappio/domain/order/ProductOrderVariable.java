@@ -52,10 +52,12 @@ public class ProductOrderVariable implements EntityModel<UUID> {
         return order;
     }
 
-    public static ProductOrderVariable of(UUID id) {
+    public static ProductOrderVariable ofFlutter(UUID id, ProductOrder productOrder) {
 
         ProductOrderVariable order = new ProductOrderVariable();
-        order.setId(id);
+        order.setProductVariable(ProductVariable.of(id));
+        order.setProductOrder(productOrder);
+        order.setQuantity(BigDecimal.ONE);
 
         return order;
     }

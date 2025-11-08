@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -58,12 +60,15 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
         return service.getTotalByids(ids);
     }
 
-    @PostMapping("/flutter-orders")
-    public ResponseEntity<Void> createFlutterOrders(@RequestBody FlutterCreateOrderDTO order) {
+    @PostMapping(value = "/flutter-orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> createFlutterOrders(@RequestBody FlutterCreateOrderDTO order) {
 
         service.createFlutterOrder(order);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of(
+                "status", "200",
+                "message", "Pedido criado com sucesso"
+        ));
     }
 
 }

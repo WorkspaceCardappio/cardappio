@@ -8,6 +8,7 @@ import java.util.UUID;
 public record FlutterCreateOrderItemDTO(
         UUID productId,
         int quantity,
+        Double lineTotal,
         UUID variableId,
         String observations,
         List<FlutterCreateOrderItemAdditionalDTO> additionals
