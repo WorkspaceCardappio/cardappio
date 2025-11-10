@@ -1,7 +1,8 @@
 package br.com.cardappio.domain.order;
 
 import br.com.cardappio.domain.order.additional.dto.OrderAdditionalDTO;
-import br.com.cardappio.domain.product.item.ProductItem;
+import br.com.cardappio.domain.order.item.dto.FlutterCreateOrderItemAdditionalDTO;
+import br.com.cardappio.domain.product.ProductItem;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import jakarta.persistence.*;
@@ -50,6 +51,15 @@ public class ProductOrderAdditional implements EntityModel<UUID> {
         order.setProductItem(ProductItem.of(dto.item().id()));
 
         return order;
+    }
+
+    public static ProductOrderAdditional of(FlutterCreateOrderItemAdditionalDTO dto) {
+
+        ProductOrderAdditional additional = new ProductOrderAdditional();
+        additional.setId(dto.additionalId());
+        additional.setQuantity(BigDecimal.valueOf(dto.quantity()));
+
+        return additional;
     }
 
 }

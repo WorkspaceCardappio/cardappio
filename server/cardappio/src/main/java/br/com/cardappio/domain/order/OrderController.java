@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,14 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
     @PostMapping("/total-by-ids")
     public List<TotalAndIdDTO> totalByIds(@RequestBody @Valid IdsDTO ids) {
         return service.getTotalByids(ids);
+    }
+
+    @PostMapping("/flutter-orders")
+    public ResponseEntity<Void> createFlutterOrders(@RequestBody FlutterCreateOrderDTO order) {
+
+        service.createFlutterOrder(order);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

@@ -1,7 +1,8 @@
 package br.com.cardappio.domain.order;
 
+import br.com.cardappio.domain.order.dto.FlutterCreateOrderItemDTO;
 import br.com.cardappio.domain.order.item.dto.OrderItemDTO;
-import br.com.cardappio.domain.product.item.ProductItem;
+import br.com.cardappio.domain.product.ProductItem;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -76,6 +77,16 @@ public class ProductOrder implements EntityModel<UUID> {
 
         final ProductOrder productOrder = new ProductOrder();
         productOrder.setId(id);
+
+        return productOrder;
+    }
+
+    public static ProductOrder of(FlutterCreateOrderItemDTO dto) {
+
+        ProductOrder productOrder = new ProductOrder();
+        productOrder.setProductItem(ProductItem.of(dto.productId()));
+        productOrder.setQuantity(BigDecimal.valueOf(dto.quantity()));
+        productOrder.setNote(dto.observations());
 
         return productOrder;
     }

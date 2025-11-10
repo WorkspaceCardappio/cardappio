@@ -1,20 +1,17 @@
 package br.com.cardappio.domain.product;
 
-import br.com.cardappio.domain.product.dto.ProductDTO;
-import br.com.cardappio.domain.product.dto.ProductItemDTO;
-import br.com.cardappio.domain.product.dto.ProductListDTO;
-import br.com.cardappio.domain.product.dto.ProductToMenuDTO;
+import br.com.cardappio.domain.product.dto.*;
 import com.cardappio.core.controller.CrudController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/products")
+@RequestMapping("/api/products")
 public class ProductController extends CrudController<Product, UUID, ProductListDTO, ProductDTO> {
 
     private final ProductService service;
@@ -27,6 +24,12 @@ public class ProductController extends CrudController<Product, UUID, ProductList
     @GetMapping("/{id}/options")
     public List<ProductItemDTO> findOptionsById(@PathVariable final UUID id) {
         return service.findOptionsById(id);
+    }
+
+    @GetMapping("/{idCategory}/flutter-products")
+    public ResponseEntity<List<FlutterProductDTO>> findFlutterProducts(@PathVariable UUID idCategory) {
+
+        return ResponseEntity.ok(service.findFlutterProducts(idCategory));
     }
 
 }
