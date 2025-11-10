@@ -1,33 +1,19 @@
 package br.com.cardappio.domain.order;
 
-import java.util.List;
-import java.util.UUID;
-
+import br.com.cardappio.domain.order.dto.*;
+import com.cardappio.core.controller.CrudController;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.cardappio.core.controller.CrudController;
+import java.util.List;
+import java.util.UUID;
 
-import br.com.cardappio.domain.order.dto.IdsDTO;
-import br.com.cardappio.domain.order.dto.NoteDTO;
-import br.com.cardappio.domain.order.dto.OrderDTO;
-import br.com.cardappio.domain.order.dto.OrderListDTO;
-import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
-import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
-import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
@@ -37,7 +23,7 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
 
     @GetMapping("/to-ticket/{id}")
     public Page<OrderToTicketDTO> findToTicket(@PathVariable final UUID id,
-            @PageableDefault(size = 20) final Pageable pageable) {
+                                               @PageableDefault(size = 20) final Pageable pageable) {
 
         return service.findToTicket(id, pageable);
     }

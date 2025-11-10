@@ -11,12 +11,12 @@
         <p-step [value]="5">Variáveis</p-step>
       </p-step-list>
 
-      <p-step-panels class="w-full flex-1">
+      <p-step-panels class="w-full flex-2">
         <p-step-panel [value]="1" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <form [formGroup]="productForm" class="p-fluid w-full">
-              <div class="grid w-full mt-4">
-                <div class="col-7 flex flex-column mb-4 gap-1">
+              <div class="grid w-full mt-3">
+                <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="name" class="required-label">Nome</label>
                   <input 
                     id="name" 
@@ -26,7 +26,7 @@
                     />
                 </div>
 
-                <div class="col-2 flex flex-column mb-4 gap-1">
+                <div class="col-3 flex flex-column mb-4 gap-1">
                   <label for="expirationDate">Data de validade</label>
                   <p-datepicker
                     formControlName="expirationDate"
@@ -38,7 +38,7 @@
                   ></p-datepicker>
                 </div>
 
-                <div class="col-1 mb-4 flex flex-column align-items-center gap-1">
+                <div class="col-2 flex flex-column mb-4 gap-2">
                   <label for="active">Ativo</label>
                   <p-toggle-switch
                     inputId="active"
@@ -95,12 +95,13 @@
                 </div>
               </div>
             </form>
-            <div class="flex pt-6 justify-end">
+            <div class="flex justify-content-end gap-3 mt-3">
               <p-button
                 pButton
                 type="button"
                 label="Cancelar"
                 severity="danger"
+                class="p-button-sm min-w-[5rem]"
                 (click)="onCancel()"
               />
               <p-button
@@ -108,6 +109,8 @@
                 label="Próximo"
                 icon="pi pi-arrow-right"
                 iconPos="right"
+                  class="p-button-sm"
+
                 (click)="onSave(activateCallback)"
                 [disabled]="!productForm.valid"
                 />

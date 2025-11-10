@@ -1,6 +1,6 @@
 package br.com.cardappio.domain.product.dto;
 
-import br.com.cardappio.domain.product.ProductIngredient;
+import br.com.cardappio.domain.product.ingredient.ProductIngredient;
 import br.com.cardappio.utils.EnumDTO;
 
 import java.util.UUID;

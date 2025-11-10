@@ -3,6 +3,8 @@ package br.com.cardappio.domain.product;
 import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.domain.product.dto.ProductDTO;
+import br.com.cardappio.domain.product.ingredient.ProductIngredient;
+import br.com.cardappio.domain.product.item.ProductItem;
 import br.com.cardappio.domain.variable.ProductVariable;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;

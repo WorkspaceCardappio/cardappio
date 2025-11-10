@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.product.ingredient;
 
-import br.com.cardappio.domain.product.ProductIngredient;
 import br.com.cardappio.domain.product.ingredient.dto.IngredientDTO;
 import com.cardappio.core.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;

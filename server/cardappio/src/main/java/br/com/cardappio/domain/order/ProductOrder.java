@@ -1,35 +1,19 @@
 package br.com.cardappio.domain.order;
 
+import br.com.cardappio.domain.order.item.dto.OrderItemDTO;
+import br.com.cardappio.domain.product.item.ProductItem;
+import br.com.cardappio.utils.Messages;
+import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import br.com.cardappio.domain.order.item.dto.OrderItemDTO;
-import br.com.cardappio.domain.product.ProductItem;
-import br.com.cardappio.utils.Messages;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Table(name = "product_order")
 @Entity

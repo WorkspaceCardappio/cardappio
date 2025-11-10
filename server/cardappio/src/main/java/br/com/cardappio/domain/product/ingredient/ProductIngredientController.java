@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.product.ingredient;
 
-import br.com.cardappio.domain.product.ProductIngredient;
 import br.com.cardappio.domain.product.dto.ProductIngredientDTO;
 import br.com.cardappio.domain.product.dto.ProductIngredientListDTO;
 import br.com.cardappio.domain.product.ingredient.dto.IngredientDTO;

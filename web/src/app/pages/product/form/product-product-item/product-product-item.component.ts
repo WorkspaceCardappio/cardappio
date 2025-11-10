@@ -9,6 +9,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Loader } from '../../../../model/loader';
 import { ProductService } from '../../service/product.service';
 import { ProductIngredientService } from '../product-ingredient/service/product-ingredient.service';
+import { ProductItemService } from './service/product-item.service';
 
 @Component({
   selector: 'app-product-product-item',
@@ -34,7 +35,6 @@ export class ProductProductItemComponent implements OnInit {
   itemSize: any[] = [];
   products: Loader = { values: [] }; 
   filteredProducts: any[] = [];
-  productItemIngredient = [];
 
   loading: boolean = false;
 
@@ -50,6 +50,7 @@ export class ProductProductItemComponent implements OnInit {
     private readonly builder: FormBuilder,
     private readonly productIngredientService: ProductIngredientService,
     private readonly productService: ProductService,
+    private readonly productItemService: ProductItemService,
     private cdr: ChangeDetectorRef
   ) { }
   
@@ -79,24 +80,41 @@ export class ProductProductItemComponent implements OnInit {
     return form;
   }
 
-  public getIngredients(): any {
+  // public getIngredients(): any {
 
-    if (!this.productId) {
-      return [];
-    }    
+  //   if (!this.productId) {
+  //     return [];
+  //   }    
 
-    return this.productIngredientService
-      .getProductIngredient(this.productId)
-      .subscribe((values: any) => {
-        this.productItemIngredient = values;
-        this.cdr.markForCheck();
-      }) 
-  }
+  //   return this.productIngredientService
+  //     .getProductIngredient(this.productId)
+  //     .subscribe((values: any) => {
+  //       this.productItemIngredient = values;
+  //       this.initProductItemIngredientFormArray(values);
+  //       this.cdr.markForCheck();
+  //     }) 
+  // }
  
-  private initProductItemIngredientFormArray(ingredients: any[]): void {
-    const productItemIngredientsFormArray = this.form.get('ingredients') as FormArray;
-    productItemIngredientsFormArray.clear();
+  public getIngredients(): void {
+  if (!this.productId) {
+    return;
+  }
 
+  this.productIngredientService
+    .getProductIngredient(this.productId)
+    .subscribe((ingredients: any) => {
+      const formArray = this.getProductItemIngredientsFormArray();
+      formArray.clear();
+      (ingredients as any[]).forEach(ingredient => {
+        formArray.push(this.createIngredientFormGroup(ingredient));
+      });
+      this.cdr.markForCheck();
+    });
+}
+
+  public initProductItemIngredientFormArray(ingredients: any[]): void {
+    const productItemIngredientsFormArray = this.form.get('ingredients') as FormArray;
+    
     ingredients.forEach(ingredient => {
       productItemIngredientsFormArray.push(this.createIngredientFormGroup(ingredient));
     })
@@ -108,7 +126,7 @@ export class ProductProductItemComponent implements OnInit {
       productItem: [this.form.get('id')?.value],
       ingredient: [ingredient],
       quantity: [ingredient.quantity || 0, Validators.compose([Validators.required, Validators.min(0)])]
-    })
+    });
   }
 
   getProductItemIngredientsFormArray(): FormArray {
@@ -119,11 +137,12 @@ export class ProductProductItemComponent implements OnInit {
     return this.getProductItemIngredientsFormArray().at(index) as FormGroup;
   }
 
+
   onSaveProductItem(): void {
     if (this.form.valid) {
       const productItemData = this.form.getRawValue();
-      console.log('Dados do Product Item a serem salvos:', productItemData);
-      
+      console.log(productItemData);
+      this.productItemService.createProductItem(productItemData);
     } else {
       console.error('Formulário inválido. Verifique os campos.');
     }
