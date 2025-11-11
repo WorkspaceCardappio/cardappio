@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS ticket (
     status NUMERIC(10),
     person_id UUID,
     table_id UUID,
+    external_reference_id VARCHAR(255) UNIQUE,
 
     CONSTRAINT fk_ticket_person_id FOREIGN KEY (person_id) REFERENCES person(id),
     CONSTRAINT fk_ticket_table_id FOREIGN KEY (table_id) REFERENCES table_restaurant(id),

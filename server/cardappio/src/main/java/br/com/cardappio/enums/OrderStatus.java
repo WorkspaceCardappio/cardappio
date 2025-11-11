@@ -18,7 +18,10 @@ public enum OrderStatus implements EnumSerialize {
     PENDING(1L, "Pendente"),
     IN_PROGRESS(2L, "Em Andamento"),
     FINISHED(3L, "Finalizado"),
-    DELIVERED(4L, "Entregue");
+    DELIVERED(4L, "Entregue"),
+
+    PAID(5L, "Pagamento Aprovado"),
+    FAILED(6L, "Pagamento Falhou");
 
     private static final Map<Long, OrderStatus> CODE_MAP =
             Arrays.stream(values())
