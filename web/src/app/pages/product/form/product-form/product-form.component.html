@@ -1,8 +1,12 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
 <p-fieldset legend="Novo Produto">
-   <div class="card flex justify-center w-full">
-    <p-stepper [value]="stepIndex" class="w-full flex flex-column" [linear]="true">
+  <div class="card flex justify-center w-full">
+    <p-stepper
+      [value]="stepIndex"
+      class="w-full flex flex-column"
+      [linear]="true"
+    >
       <p-step-list>
         <p-step [value]="1">Informações Gerais</p-step>
         <p-step [value]="2">Ingredientes</p-step>
@@ -23,7 +27,7 @@
                     pInputText
                     formControlName="name"
                     placeholder="Nome"
-                    />
+                  />
                 </div>
 
                 <div class="col-3 flex flex-column mb-4 gap-1">
@@ -47,16 +51,22 @@
                 </div>
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
-                  <label for="description">Descrição</label>
-                  <textarea
-                    rows="3"
-                    pTextarea
-                    formControlName="description">
-                  </textarea>
+                  <p-floatlabel variant="in">
+                    <textarea
+                      pTextarea
+                      id="description"
+                      formControlName="description"
+                      rows="5"
+                      style="resize: none; width: 100%"
+                    ></textarea>
+                    <label for="description">Descrição</label>
+                  </p-floatlabel>
                 </div>
 
                 <div class="col-4 flex flex-column mb-4 gap-1">
-                  <label for="category" class="required-label">Vincular uma categoria</label>
+                  <label for="category" class="required-label"
+                    >Vincular uma categoria</label
+                  >
                   <p-autocomplete
                     formControlName="category"
                     optionLabel="name"
@@ -84,14 +94,22 @@
                     <img
                       [src]="imagePreview"
                       alt="Pré-visualização da imagem"
-                      style="max-width: 150px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2)"
+                      style="
+                        max-width: 150px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                      "
                     />
                   </div>
                 </div>
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="note">Informações adicionais</label>
-                  <textarea rows="3" pTextarea formControlName="note"></textarea>
+                  <textarea
+                    rows="3"
+                    pTextarea
+                    formControlName="note"
+                  ></textarea>
                 </div>
               </div>
             </form>
@@ -109,11 +127,10 @@
                 label="Próximo"
                 icon="pi pi-arrow-right"
                 iconPos="right"
-                  class="p-button-sm"
-
+                class="p-button-sm"
                 (click)="onSave(activateCallback)"
                 [disabled]="!productForm.valid"
-                />
+              />
             </div>
           </ng-template>
         </p-step-panel>
@@ -332,7 +349,6 @@
             </div>
           </ng-template>
          </p-step-panel> -->
-
       </p-step-panels>
     </p-stepper>
   </div>

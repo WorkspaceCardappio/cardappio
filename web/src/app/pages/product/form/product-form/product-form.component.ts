@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -44,7 +45,8 @@ import { ProductProductItemComponent } from '../product-product-item/product-pro
     TableModule,
     SelectModule,
     ProductIngredientComponent,
-    ProductProductItemComponent
+    ProductProductItemComponent,
+    FloatLabelModule
   ],
   providers: [
     CategoryService,
@@ -54,14 +56,14 @@ import { ProductProductItemComponent } from '../product-product-item/product-pro
   styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent implements OnInit {
-  
+
   stepIndex = 1;
 
   id: string = '';
   isEdit = false;
 
   productForm: FormGroup<any> = new FormGroup({});
-  
+
   items: MenuItem[] = [];
   home: MenuItem = {};
 
@@ -71,13 +73,13 @@ export class ProductFormComponent implements OnInit {
     item: null
   });
 
-  filteredCategories: any[] = []; 
-  categories: Loader = { values: [] }; 
+  filteredCategories: any[] = [];
+  categories: Loader = { values: [] };
   loading: boolean = false;
   currentIndex: number | null = null;
 
   imagePreview: string | ArrayBuffer | null = null;
-  
+
   constructor(
     private readonly builder: FormBuilder,
     private readonly router: Router,
@@ -142,9 +144,9 @@ export class ProductFormComponent implements OnInit {
     const payload = this.productForm.getRawValue();
     this.saveDraftProduct();
     if (this.isEdit) {
-      this.updateProduct(payload, activateCallback); 
+      this.updateProduct(payload, activateCallback);
       return;
-    } 
+    }
     this.createProduct(payload, activateCallback);
   }
 
@@ -152,7 +154,7 @@ export class ProductFormComponent implements OnInit {
   const draft = this.productForm.getRawValue();
   localStorage.setItem('product_draft', JSON.stringify(draft));
 }
-  
+
   private createProduct(payload: any, activateCallback: () => void): void {
     this.productService.create(payload).subscribe({
       next: (response: HttpResponse<any>) => {
@@ -225,7 +227,7 @@ export class ProductFormComponent implements OnInit {
 
 
   // protected addProductItem() {
-   
+
   //   const productItemValue = this.productItemForm.getRawValue();
   //   const productItemIngredientValue = this.productItemIngredientForm.getRawValue();
 
@@ -298,7 +300,7 @@ export class ProductFormComponent implements OnInit {
   //     .value
   //     .map((value: any) => value.product.id)
   //     .filter((value: any) => value !== '');
-    
+
   //   if (idsProduct.length) {
   //     const ids = idsProduct.join(',');
   //     searchs.push(`id=out=${ids}`);

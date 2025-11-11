@@ -184,7 +184,6 @@ export class ProductProductItemComponent implements OnInit {
           const ingredientForm = this.createIngredientFormGroup();
           ingredientForm.patchValue(ingredient);
           array.push(ingredientForm);
-          console.log(this.form);
         });
 
       this.form.patchValue(product);
@@ -207,5 +206,10 @@ export class ProductProductItemComponent implements OnInit {
       error: () => (this.products.values = []),
       complete: () => this.cdr.markForCheck(),
     });
+  }
+
+  onSave() {
+    this.productItemService.createProductItem(this.productsToSave)
+      .subscribe(() => this.nextEmitter.emit());
   }
 }

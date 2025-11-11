@@ -7,15 +7,14 @@ import { EntityService } from '../../../../../entity-service/entity.service';
   providedIn: 'root'
 })
 export class ProductItemService extends EntityService<any, any> {
-  
+
   override resource: string = `${environment.apiUrl}/product-item`;
 
   constructor(public http: HttpClient) {
     super(http);
   }
 
-  createProductItem(body: []) {
-    console.log(body)
-    return this.http.post(this.resource, body);
+  createProductItem(body: any[]) {
+    return this.http.post(`${this.resource}/persist`, body);
   }
 }
