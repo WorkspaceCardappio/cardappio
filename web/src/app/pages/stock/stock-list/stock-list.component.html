@@ -94,13 +94,14 @@
           <i class="pi pi-times-circle" style="color: #d33b19"></i>
         }
       </td>
-      <td>
+      <td style="white-space: nowrap;">
         <button
           pButton
           type="button"
           icon="pi pi-pencil"
           class="p-button-text p-button-sm"
           (click)="onEdit(stock.id)"
+          style="margin-right: 0.5rem"
           aria-label="Editar">
         </button>
         <button
@@ -112,7 +113,6 @@
           aria-label="Excluir">
         </button>
       </td>
-    </tr>
   </ng-template>
 
   <ng-template #emptymessage>
