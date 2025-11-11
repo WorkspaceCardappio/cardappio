@@ -35,17 +35,7 @@ keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
   resource: ${KEYCLOAK_REALM:backend-app}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET}
+    secret: ${KEYCLOAK_CLIENT_SECRET:zwOF9YcWLubVeuAhL4tVvXiM552cIEBh}
     public-client: false
   bearer-only: true
   ssl-required: external
-
-abacatepay:
-  api:
-    key: ${ABACATE_PAY:DEFAULT_ABACATE_PAY_KEY}
-    base-url: https://api.abacatepay.com/v1
-    webhook:
-      url: ${ABACATE_PAY_WEBHOOK_URL:http://localhost:8080/api/webhooks/abacatepay}
-      secret: ${ABACATE_PAY_WEBHOOK_SECRET:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET}
-    return-url: ${ABACATE_PAY_RETURN_URL:http://localhost:4200/checkout/cancel} #redireciona a tela do cliente se cancelar ou pagamento rejeitado (ver rota)
-    completion-url: ${ABACATE_PAY_COMPLETION_URL:http://localhost:4200/checkout/success} #redirecionar tela do cliente apos sucesso de pagamento (ver rota)
