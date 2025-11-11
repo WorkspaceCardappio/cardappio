@@ -22,4 +22,11 @@ public interface CategoryRepository extends CrudRepository<Category, UUID> {
             AND m.id = :idMenu
             """)
     List<FlutterCategoryDTO> findFlutterCategories(@Param("idMenu") UUID idMenu);
+
+    @Query("""
+            SELECT c.image
+            FROM Category c
+            WHERE c.id = :id
+            """)
+    String findImageById(UUID id);
 }
