@@ -40,40 +40,43 @@
 
   <ng-template #header>
     <tr>
-      <th pSortableColumn="name" style="width: 45%">
+      <th pSortableColumn="name" style="width: 40%">
         <div class="flex items-center gap-2">
           Ingrediente
           <p-sortIcon field="name" />
         </div>
       </th>
 
-      <th pSortableColumn="quantity" style="width: 15%">
+      <th pSortableColumn="quantity" style="width: 12%">
         <div class="flex items-center gap-2">
           Quantidade
           <p-sortIcon field="quantity" />
         </div>
       </th>
 
-      <th pSortableColumn="lote" style="width: 15%">
+      <th pSortableColumn="lote" style="width: 12%">
         <div class="flex items-center gap-2">
           Lote
           <p-sortIcon field="lote" />
         </div>
       </th>
 
-      <th pSortableColumn="expirationDate" style="width: 15%">
+      <th pSortableColumn="expirationDate" style="width: 12%">
         <div class="flex items-center gap-2">
           Data de Validade
           <p-sortIcon field="expirationDate" />
         </div>
       </th>
 
-      <th pSortableColumn="deliveryDate" style="width: 15%">
+      <th pSortableColumn="deliveryDate" style="width: 12%">
         <div class="flex items-center gap-2">
           Data de Entrega
           <p-sortIcon field="deliveryDate" />
         </div>
       </th>
+
+      <th style="width: 6%">Status</th>
+      <th style="width: 6%">Ações</th>
     </tr>
   </ng-template>
 
@@ -98,10 +101,8 @@
           icon="pi pi-pencil"
           class="p-button-text p-button-sm"
           (click)="onEdit(stock.id)"
-          style="margin-right: 0.5rem"
           aria-label="Editar">
         </button>
-
         <button
           pButton
           type="button"

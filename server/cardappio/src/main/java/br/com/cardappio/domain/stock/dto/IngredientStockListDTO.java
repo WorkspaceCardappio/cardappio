@@ -11,7 +11,8 @@ public record IngredientStockListDTO(
         String ingredientName,
         BigDecimal quantity,
         LocalDate expirationDate,
-        Long number
+    LocalDate deliveryDate,
+    Long number
 ) {
 
     public IngredientStockListDTO(final IngredientStock ingredientStock) {
@@ -20,6 +21,7 @@ public record IngredientStockListDTO(
                 ingredientStock.getIngredient().getName(),
                 ingredientStock.getQuantity(),
                 ingredientStock.getExpirationDate(),
+                ingredientStock.getDeliveryDate(),
                 ingredientStock.getNumber()
         );
     }

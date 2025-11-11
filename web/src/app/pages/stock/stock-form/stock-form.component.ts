@@ -35,7 +35,7 @@ import { Ingredient } from '../../../model/ingredient';
   styleUrl: './stock-form.component.scss'
 })
 export class StockFormComponent implements OnInit {
-  
+
   home = { icon: 'pi pi-home', routerLink: '/home' };
   items = [
     { label: 'Estoques', routerLink: '/stock' },
@@ -53,8 +53,8 @@ export class StockFormComponent implements OnInit {
     private ingredientService: IngredientService,
     private router: Router,
     private route: ActivatedRoute,
-  ){}
-  
+  ) { }
+
   ngOnInit(): void {
     this.initForm();
     this.loadIngredients();
@@ -64,9 +64,9 @@ export class StockFormComponent implements OnInit {
   private initForm() {
     this.form = this.builder.group({
       id: [''],
-      name: ['', Validators.required],
+      ingredient: [null, Validators.required], // ← substitui o "name"
       quantity: [0, [Validators.required, Validators.min(0)]],
-      lote: ['', Validators.required],
+      number: ['', Validators.required],
       expirationDate: [null, Validators.required],
       deliveryDate: [null, Validators.required]
     });
@@ -109,11 +109,27 @@ export class StockFormComponent implements OnInit {
     if (this.form.invalid)
       return;
 
+    const formValue = this.form.value;
+
+    const payload = {
+      ...formValue,
+      ingredient: { id: formValue.ingredient }
+    };
+
     const { id } = this.route.snapshot.params;
+
     if (id != 'new') {
-      this.service.update(id, this.form.value).subscribe(() => this.router.navigate(['stock']))
+      this.service.update(id, payload)
+        .subscribe({
+          next: () => this.router.navigate(['stock']),
+          error: (err) => console.error('Erro ao atualizar estoque', err)
+        });
     } else {
-      this.service.create(this.form.value).subscribe(() => this.router.navigate(['stock']))
+      this.service.create(payload)
+        .subscribe({
+          next: () => this.router.navigate(['stock']),
+          error: (err) => console.error('Erro ao criar estoque', err)
+        });
     }
   }
 

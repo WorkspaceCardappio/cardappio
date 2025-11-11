@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EntityService } from '../../../entity-service/entity.service';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Stock } from '../../../model/stock';
 

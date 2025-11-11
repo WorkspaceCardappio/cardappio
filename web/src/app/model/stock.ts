@@ -1,9 +1,11 @@
 export interface Stock {
-    id?: string,
-    name: string
-    quantity: number,
-    lote: string,
-    expirationDate: Date,
-    deliveryDate: Date,
-    active?: boolean
-}   
+    id?: string;
+    name?: string;
+    ingredientName?: string;
+    quantity: number;
+    lote?: string | number;
+    number?: number;
+    expirationDate: Date;
+    deliveryDate?: Date;
+    active?: boolean;
+}

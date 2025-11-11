@@ -84,7 +84,11 @@ export class StockListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.stocks = response.content;
+          this.stocks = response.content.map((s: any) => ({
+            ...s,
+            name: s.ingredientName ?? s.name,
+            lote: (s.number !== undefined && s.number !== null) ? s.number : s.lote,
+          }));
           this.totalRecords = response.totalElements;
         },
         error: () => {},

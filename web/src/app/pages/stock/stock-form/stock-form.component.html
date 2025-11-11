@@ -6,11 +6,11 @@
       <div class="col-12 flex flex-column mb-4 gap-1">
         <label for="name" class="required-label">Ingrediente</label>
         <p-select
-          id="name"
+          id="ingredient"
           [options]="ingredients"
-          formControlName="name"
+          formControlName="ingredient"
           optionLabel="name"
-          optionValue="name"
+          optionValue="id"
           placeholder="Selecione o ingrediente"
           [filter]="true"
           filterPlaceholder="Buscar ingrediente"
@@ -32,10 +32,10 @@
       <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
         <label for="lote" class="required-label">Lote</label>
         <input
-          id="lote"
+          id="number"
           pInputText
-          formControlName="lote"
-          placeholder="Lote"
+          formControlName="number"
+          placeholder="Número do Lote"
         />
       </div>
 

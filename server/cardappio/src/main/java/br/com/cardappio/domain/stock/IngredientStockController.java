@@ -14,8 +14,4 @@ import java.util.UUID;
 @RequestMapping("/api/stocks")
 public class IngredientStockController extends CrudController<IngredientStock, UUID, IngredientStockListDTO, IngredientStockDTO> {
 
-    public IngredientStockController(final CrudService<IngredientStock, UUID, IngredientStockListDTO, IngredientStockDTO> service) {
-        this.setService(service);
-    }
-
 }

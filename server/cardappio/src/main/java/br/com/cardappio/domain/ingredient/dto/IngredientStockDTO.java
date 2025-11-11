@@ -26,5 +26,7 @@ public record IngredientStockDTO(
         @Future(message = Messages.EXPIRATION_DATE_NOT_PAST)
         LocalDate expirationDate
 
+        , LocalDate deliveryDate
+
 ) {
 }
