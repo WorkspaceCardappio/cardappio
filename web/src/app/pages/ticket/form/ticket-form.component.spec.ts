@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TicketFormComponent } from './ticket-form.component';
-import { ActivatedRoute, provideRouter } from "@angular/router";
 import { provideHttpClient } from "@angular/common/http";
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { ActivatedRoute, provideRouter } from "@angular/router";
+import { TicketFormComponent } from './ticket-form.component';
 
 describe('TicketFormComponent', () => {
   let component: TicketFormComponent;
@@ -13,6 +14,7 @@ describe('TicketFormComponent', () => {
       imports: [TicketFormComponent],
       providers: [
         provideHttpClient(),
+        provideNoopAnimations(),
         provideRouter([]),
         {
           provide: ActivatedRoute,

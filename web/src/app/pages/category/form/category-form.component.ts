@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -52,6 +47,8 @@ export class CategoryFormComponent implements OnInit {
 
   form: FormGroup<any> = new FormGroup({});
 
+  file: any;
+
   constructor(
     private readonly builder: FormBuilder,
     private service: CategoryService,
@@ -70,7 +67,7 @@ export class CategoryFormComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       active: [true],
-      image: [''],
+      image: [],
       parent: [null],
     });
   }
@@ -83,8 +80,10 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private loadCategory(id: string) {
-    this.service.findById(id)
-      .subscribe((category) => this.form.patchValue(category));
+
+    this.service.findById(id).subscribe((category) =>
+
+      this.form.patchValue(category));
   }
 
   create() {
@@ -94,11 +93,11 @@ export class CategoryFormComponent implements OnInit {
 
     if (id != 'new') {
       this.service
-        .update(id, this.prepareForm())
+        .updateWithImage(id, this.prepareForm(), this.file)
         .subscribe(() => this.router.navigate(['category']));
     } else {
       this.service
-        .create(this.prepareForm())
+        .saveWithImage(this.prepareForm(), this.file)
         .subscribe(() => this.router.navigate(['category']));
     }
   }
@@ -145,4 +144,10 @@ export class CategoryFormComponent implements OnInit {
       parent: raw.parent === '' ? null : raw.parent,
     };
   }
+
+  onUpload(file: any) {
+
+    this.file = file.files[0];
+  }
+
 }

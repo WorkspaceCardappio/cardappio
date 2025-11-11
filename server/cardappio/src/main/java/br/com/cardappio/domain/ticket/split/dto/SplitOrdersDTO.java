@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotEmpty;
 public record SplitOrdersDTO(
 
         @NotEmpty(message = Messages.EMPTY_ORDERS)
-        Set<UUID> orders
+        Set<UUID> orders,
+
+        UUID ticket
 ) {
 }

@@ -1,11 +1,15 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'left-menu',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    TooltipModule
+  ],
   templateUrl: './left-menu.component.html',
   styleUrl: './left-menu.component.scss',
   standalone: true
@@ -84,7 +88,7 @@ export class LeftMenuComponent implements OnInit, OnDestroy {
         this.authService.logout();
       }, 0);
     } catch (error) {
-      console.error('❌ Erro ao fazer logout:', error);
+      console.error('Erro ao fazer logout:', error);
     }
   }
 

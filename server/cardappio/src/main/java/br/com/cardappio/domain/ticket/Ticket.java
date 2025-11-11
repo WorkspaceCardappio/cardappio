@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.ticket;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +13,6 @@ import br.com.cardappio.domain.person.Person;
 import br.com.cardappio.domain.table.TableRestaurant;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.enums.TicketStatus;
-import br.com.cardappio.utils.Messages;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -26,8 +24,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,7 +38,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"id", "number", "total", "status"})
+@ToString(of = {"id", "number", "status"})
 public class Ticket implements EntityModel<UUID> {
 
     @Id
@@ -51,11 +47,6 @@ public class Ticket implements EntityModel<UUID> {
 
     @Column(updatable = false, insertable = false)
     private Long number;
-
-    @Column(nullable = false)
-    @NotNull(message = Messages.MIN_VALUE_ZERO)
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal total = BigDecimal.ZERO;
 
     @Column
     @Convert(converter = TicketStatusConverter.class)
@@ -73,6 +64,9 @@ public class Ticket implements EntityModel<UUID> {
     @JsonIgnoreProperties("ticket")
     @OneToMany(mappedBy = "ticket", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
+
+    @Column(name = "external_reference_id", unique = true)
+    private String externalReferenceId;
 
     public static Ticket of(final TicketDTO dto) {
 

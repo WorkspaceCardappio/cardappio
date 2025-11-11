@@ -7,4 +7,6 @@ INSERT INTO order_status (code, description) VALUES
 (1, 'Pendente'),
 (2, 'Em Andamento'),
 (3, 'Finalizado'),
-(4, 'Entregue');
+(4, 'Entregue'),
+(5, 'Pagamento Aprovado'),
+(6, 'Pagamento Falhou')

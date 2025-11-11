@@ -36,7 +36,6 @@
     <rule ref="category/java/design.xml/AvoidRethrowingException"/>
     <rule ref="category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
     <rule ref="category/java/design.xml/GodClass"/>
-    <rule ref="category/java/design.xml/ImmutableField"/>
     <rule ref="category/java/design.xml/LogicInversion"/>
     <rule ref="category/java/design.xml/SimplifyBooleanReturns"/>
 
