@@ -18,10 +18,10 @@
               <div class="grid w-full mt-3">
                 <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="name" class="required-label">Nome</label>
-                  <input 
-                    id="name" 
-                    pInputText 
-                    formControlName="name" 
+                  <input
+                    id="name"
+                    pInputText
+                    formControlName="name"
                     placeholder="Nome"
                     />
                 </div>
@@ -48,9 +48,9 @@
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
                   <label for="description">Descrição</label>
-                  <textarea 
+                  <textarea
                     rows="3"
-                    pTextarea 
+                    pTextarea
                     formControlName="description">
                   </textarea>
                 </div>
@@ -117,7 +117,7 @@
             </div>
           </ng-template>
         </p-step-panel>
-        
+
         <p-step-panel [value]="2" class="w-full">
           <ng-template #content let-activateCallback="activateCallback">
             <app-product-ingredient
@@ -167,7 +167,7 @@
               </div>
             </form>
 
-            <p-button 
+            <p-button
               type="button"
               label="Adicionar"
               icon="pi pi-plus"
@@ -332,7 +332,7 @@
             </div>
           </ng-template>
          </p-step-panel> -->
-        
+
       </p-step-panels>
     </p-stepper>
   </div>

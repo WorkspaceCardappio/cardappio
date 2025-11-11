@@ -57,6 +57,11 @@ public class Additional implements EntityModel<UUID> {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "product_additional_id")
+    private Product productAdditional;
+
     @Column(nullable = false)
     private Boolean active = true;
 
