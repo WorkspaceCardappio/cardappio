@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public record AbacatePayRequestDTO(
 
-        @NotNull(message = Messages.ORDER_NOT_NULL)
-        UUID orderId,
+        @NotNull(message = Messages.TICKET_NOT_NULL)
+        UUID ticketId,
 
         @NotBlank(message = Messages.EMPTY_NOTE)
         @Size(max = 255, message = Messages.SIZE_255)

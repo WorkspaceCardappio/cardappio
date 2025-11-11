@@ -65,6 +65,9 @@ public class Ticket implements EntityModel<UUID> {
     @OneToMany(mappedBy = "ticket", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
+    @Column(name = "external_reference_id", unique = true)
+    private String externalReferenceId;
+
     public static Ticket of(final TicketDTO dto) {
 
         final Ticket ticket = new Ticket();
