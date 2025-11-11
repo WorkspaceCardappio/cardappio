@@ -1,13 +1,12 @@
 package br.com.cardappio.domain.ticket;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import com.cardappio.core.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.cardappio.core.repository.CrudRepository;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, UUID> {
@@ -25,4 +24,11 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
             WHERE t.id = :id
             """)
     Optional<Ticket> findByIdWithOrders(@Param("id") UUID id);
+
+    @Query(value = """
+            SELECT t FROM Ticket t
+            LEFT JOIN FETCH t.orders o
+            WHERE t.id = :id
+            """)
+    Optional<Ticket> findByIdWithOrdersFlutter(@Param("id") UUID id);
 }
