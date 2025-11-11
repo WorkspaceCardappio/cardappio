@@ -36,16 +36,16 @@ export class EntityService<V, K> {
     return this.httpClient.get<V>(`${this.resource}/${id}`);
   }
 
-  public create(newDTO: V): Observable<HttpResponse<void>> {
+  public create(newDTO: V): Observable<HttpResponse<K>> {
 
-    return this.httpClient.post<void>(this.resource, newDTO, {
+    return this.httpClient.post<K>(this.resource, newDTO, {
       observe: 'response'
     });
   }
 
-  public update(id: K, updateDTO: V): Observable<void> {
+  public update(id: K, updateDTO: V): Observable<K> {
 
-    return this.httpClient.put<void>(`${this.resource}/${id}`, updateDTO);
+    return this.httpClient.put<K>(`${this.resource}/${id}`, updateDTO);
   }
 
   public delete(id: K): Observable<void> {

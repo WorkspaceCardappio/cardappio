@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.ticket.dto;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,8 +14,6 @@ public record TicketListDTO(
 
         Long number,
 
-        BigDecimal total,
-
         EnumDTO status,
 
         String person,
@@ -27,9 +24,8 @@ public record TicketListDTO(
         this(
                 ticket.getId(),
                 ticket.getNumber(),
-                ticket.getTotal(),
                 ticket.getStatus().toDTO(),
-                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Jean Soares"),
+                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Darth Vader"),
                 new TableRestaurantToTicketDTO(ticket.getTable())
         );
     }

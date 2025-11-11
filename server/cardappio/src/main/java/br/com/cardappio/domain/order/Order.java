@@ -1,39 +1,23 @@
 package br.com.cardappio.domain.order;
 
+import br.com.cardappio.converter.OrderStatusConverter;
+import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
+import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.save.SaveStatus;
+import br.com.cardappio.domain.ticket.Ticket;
+import br.com.cardappio.enums.OrderStatus;
+import br.com.cardappio.utils.Messages;
+import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import br.com.cardappio.converter.OrderStatusConverter;
-import br.com.cardappio.domain.order.dto.OrderDTO;
-import br.com.cardappio.domain.ticket.Ticket;
-import br.com.cardappio.enums.OrderStatus;
-import br.com.cardappio.utils.Messages;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -42,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "client_order")
 @EqualsAndHashCode(of = {"id"})
-@ToString(of = {"id", "total", "status"})
+@ToString(of = {"id", "number", "status"})
 public class Order implements EntityModel<UUID> {
 
     @Id
@@ -52,10 +36,7 @@ public class Order implements EntityModel<UUID> {
     @Column(insertable = false, updatable = false)
     private Long number;
 
-    @Column(nullable = false)
-    @NotNull(message = Messages.MIN_VALUE_ZERO)
-    @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
-    private BigDecimal total = BigDecimal.ZERO;
+    private BigDecimal total;
 
     @Column(nullable = false)
     @NotNull(message = Messages.STATUS_NOT_NULL)
@@ -71,6 +52,13 @@ public class Order implements EntityModel<UUID> {
     @JsonIgnoreProperties("order")
     private List<ProductOrder> productOrders = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "save_status", nullable = false, length = 10)
+    private SaveStatus saveStatus = SaveStatus.DRAFT;
+
+    @Column
+    private String note;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -78,15 +66,10 @@ public class Order implements EntityModel<UUID> {
 
         final Order order = new Order();
         order.setId(dto.id());
-        order.setTotal(dto.total());
-        order.setStatus(dto.orderStatus());
-        order.setTicket(Ticket.of(dto.ticketId()));
+        order.setStatus(OrderStatus.fromCode(dto.status().code()));
+        order.setTicket(Ticket.of(dto.ticket().id()));
+        order.setTotal(BigDecimal.ONE);
 
-        List<ProductOrder> productOrders = dto.products().stream()
-                .map(ProductOrder::of)
-                .toList();
-
-        order.productOrders.addAll(productOrders);
         return order;
     }
 
@@ -94,6 +77,20 @@ public class Order implements EntityModel<UUID> {
         final Order order = new Order();
         order.setId(id);
         return order;
+    }
+
+    public static Order of(final FlutterCreateOrderDTO dto) {
+
+        Order order = new Order();
+        order.setStatus(OrderStatus.fromCode(dto.status().code()));
+        order.setTicket(Ticket.of(dto.ticket().id()));
+        order.setTotal(BigDecimal.ONE);
+
+        return order;
+    }
+
+    public void markAsFinalized() {
+        saveStatus = SaveStatus.FINALIZED;
     }
 
 }

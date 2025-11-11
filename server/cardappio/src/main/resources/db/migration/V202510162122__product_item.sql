@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS product_item (
    product_id UUID NOT NULL,
    price DECIMAL(10,2) NOT NULL,
    quantity DECIMAL(10,2) NOT NULL,
+   description VARCHAR(255),
    size_item NUMERIC(10),
    active BOOLEAN NOT NULL DEFAULT TRUE,
 

@@ -1,31 +1,32 @@
-<main [ngClass]="{ expanded: expanded }">
-  <span class="on-expand" (click)="toggleExpand()">
-
-    <span>
+<aside [ngClass]="{ expanded: expanded }">
+  <div class="header">
+    <button (click)="toggleExpand()">
       @if (expanded) {
-        <i class="fa-solid fa-arrow-left"></i>
+      <span>&times;</span>
       } @else {
-        <i class="fa-solid fa-arrow-right"></i>
+      <span>&equiv;</span>
       }
-    </span>
-  </span>
-
-  <div class="items">
-    <ul>
-
-      @for (route of routes; track $index) {
-        <li [ngClass]="{ left: expanded }" (click)="redirectTo(route.path)">
-          <i [ngClass]="route.icon"></i>
-          @if (expanded) {
-            <p>{{ route.name }}</p>
-          }
-        </li>
-      }
-
-    </ul>
+    </button>
   </div>
 
-  <span class="user">
-    <i class="fa-regular fa-circle-user"></i>
-  </span>
-</main>
+  <nav>
+    <ul>
+      @for (route of routes; track $index) {
+      <li
+        (click)="redirectTo(route.path)"
+        [ngClass]="{ active: router.url === route.path }"
+        pTooltip="{{ route.name }}"
+        tooltipPosition="right"
+        [tooltipOptions]="{ disabled: expanded }"
+      >
+        <i [ngClass]="route.icon"></i>
+        @if (expanded) {
+        <span>{{ route.name }}</span>
+        }
+      </li>
+      }
+    </ul>
+  </nav>
+
+  <div></div>
+</aside>

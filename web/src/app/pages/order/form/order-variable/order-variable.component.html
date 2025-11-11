@@ -1,0 +1,90 @@
+<div class="flex mt-3">
+  <p-table
+    [value]="initialVariables"
+    [(selection)]="selectedVariables"
+    (selectionChange)="onSelectionChange($event)"
+    dataKey="id"
+    showGridlines
+    stripedRows
+    style="width: 100%"
+    [scrollable]="true"
+    scrollHeight="70vh"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th>Nome</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Total</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-variable>
+      <tr>
+        <td><p-tableCheckbox [value]="variable" /></td>
+        <td>{{ variable.name }}</td>
+
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
+          <p-inputNumber
+            inputId="price"
+            formControlName="price"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            [disabled]="true"
+          ></p-inputNumber>
+        </td>
+
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
+          <p-inputNumber
+            formControlName="quantity"
+            [showButtons]="true"
+            [disabled]="!isVariableSelected(variable.id)"
+            [min]="1"
+            [max]="20"
+            placeholder="Escolha a quantidade"
+            [useGrouping]="false"
+          ></p-inputNumber>
+        </td>
+
+        <td [formGroup]="getFormGroupByVariableId(variable.id)">
+          <p-inputNumber
+            inputId="total"
+            formControlName="total"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            [disabled]="true"
+          ></p-inputNumber>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="4" class="text-right font-bold">Total Geral:</td>
+        <td class="font-bold">
+          {{ getTotal() | currency : "BRL" : "symbol" : "1.2-2" }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div class="mt-4 flex justify-content-end gap-2">
+  <button
+    pButton
+    type="button"
+    label="Cancelar"
+    severity="danger"
+    (click)="prevEmitter.emit()"
+  ></button>
+  <button
+    pButton
+    type="button"
+    label="Próximo"
+    class="p-button-primary"
+    (click)="onSave()"
+  ></button>
+</div>

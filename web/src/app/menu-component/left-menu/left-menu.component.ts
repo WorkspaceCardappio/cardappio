@@ -1,29 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'left-menu',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    TooltipModule
+  ],
   templateUrl: './left-menu.component.html',
-  standalone: true,
-  styleUrl: './left-menu.component.scss'
+  styleUrl: './left-menu.component.scss',
+  standalone: true
 })
 export class LeftMenuComponent {
 
-  @Input({ required: true }) routes: any;
+  @Input({ required: true }) routes: any[] = [];
 
   expanded = false;
 
-  constructor(
-    private readonly router: Router
-  ) {}
+  constructor(public readonly router: Router) {}
 
-  toggleExpand() {
+  toggleExpand(): void {
     this.expanded = !this.expanded;
   }
 
-  redirectTo(path: string) {
+  redirectTo(path: string): void {
     this.router.navigate([path]);
   }
 }

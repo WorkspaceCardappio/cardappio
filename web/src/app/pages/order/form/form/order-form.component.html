@@ -1,0 +1,138 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Novo Pedido">
+  <p-stepper [value]="stepIndex" class="basis-[50rem]" [linear]="true">
+    <p-step-list>
+      <p-step [value]="1">Informações Gerais</p-step>
+      <p-step [value]="2">Opções</p-step>
+      <p-step [value]="3">Adicionais</p-step>
+      <p-step [value]="4">Variáveis</p-step>
+      <p-step [value]="5">Resumo</p-step>
+    </p-step-list>
+    <p-step-panels>
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <form [formGroup]="form" class="p-fluid">
+            <div class="grid mt-3">
+              <div class="col-2 flex flex-column mb-4 gap-1">
+                <label for="number">Número</label>
+                <input
+                  id="number"
+                  pInputText
+                  formControlName="number"
+                  placeholder="Número"
+                  readonly
+                  class="input-readonly"
+                />
+              </div>
+
+              <div class="col-8 flex flex-column gap-1">
+                <label for="ticket" class="required-label">Comanda</label>
+                <p-autoComplete
+                  id="ticket"
+                  formControlName="ticket"
+                  [suggestions]="tickets.values"
+                  (completeMethod)="searchTickets($event)"
+                  [dropdown]="true"
+                  placeholder="Selecione a comanda"
+                  optionLabel="number"
+                  fluid
+                  [emptyMessage]="'Nenhuma comanda encontrada'"
+                >
+                </p-autoComplete>
+              </div>
+
+              <div class="col-2 flex flex-column mb-4 gap-1">
+                <label for="createdAt">Criado em</label>
+                <p-datepicker
+                  formControlName="createdAt"
+                  [showIcon]="true"
+                  inputId="createdAt"
+                  dateFormat="dd/mm/yy"
+                  locale="pt-BR"
+                  [readonlyInput]="true"
+                  [disabled]="true"
+                  style="width: 100%"
+                ></p-datepicker>
+              </div>
+
+              <div class="flex flex-column mb-4 gap-1 col-12">
+                <label for="parent" class="required-label"
+                  >Vincular um Status</label
+                >
+                <p-autocomplete
+                  formControlName="status"
+                  optionLabel="description"
+                  [suggestions]="status.values"
+                  [dropdown]="true"
+                  fluid
+                  (completeMethod)="searchStatus()"
+                  [emptyMessage]="'Nenhum status encontrado'"
+                />
+              </div>
+            </div>
+          </form>
+          <div class="mt-4 flex justify-content-end gap-2">
+            <button
+              pButton
+              type="button"
+              label="Cancelar"
+              severity="danger"
+              (click)="onCancel()"
+            ></button>
+            <button
+              pButton
+              type="button"
+              label="Próximo"
+              class="p-button-primary"
+              (click)="onSave(activateCallback)"
+              [disabled]="this.form.invalid"
+            ></button>
+          </div>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-options
+            [orderId]="orderGroupId().order!"
+            (prevEmitter)="prev(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+            (onItemSelect)="setItemInGroup($event)"
+            (onProductSelect)="setProductInGroup($event)"
+          ></app-order-options>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-additional
+            [productId]="orderGroupId().product!"
+            [itemId]="orderGroupId().item!"
+            (prevEmitter)="prev(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+          ></app-order-additional>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="4">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-variable
+            [productId]="orderGroupId().product!"
+            [itemId]="orderGroupId().item!"
+            (prevEmitter)="prev(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+          ></app-order-variable>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="5">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-order-summary
+            [orderId]="orderGroupId().order!"
+            [itemId]="orderGroupId().item!"
+            (prevEmitter)="prev(activateCallback)"
+            (newItemEmitter)="addNewItem(activateCallback)"
+            (nextEmitter)="next(activateCallback)"
+          ></app-order-summary>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+</p-fieldset>

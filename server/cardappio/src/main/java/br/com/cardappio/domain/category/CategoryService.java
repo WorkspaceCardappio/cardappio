@@ -4,6 +4,7 @@ import br.com.cardappio.components.s3.S3StorageComponent;
 import br.com.cardappio.domain.category.adapter.CategoryAdapter;
 import br.com.cardappio.domain.category.dto.CategoryDTO;
 import br.com.cardappio.domain.category.dto.CategoryListDTO;
+import br.com.cardappio.domain.category.dto.FlutterCategoryDTO;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,11 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
     @Override
     protected Adapter<Category, CategoryListDTO, CategoryDTO> getAdapter() {
         return new CategoryAdapter();
+    }
+
+    public List<FlutterCategoryDTO> findFlutterCategories(UUID idMenu) {
+
+        return repository.findFlutterCategories(idMenu);
     }
 
     public void saveCategory(MultipartFile file, CategoryDTO dto) {

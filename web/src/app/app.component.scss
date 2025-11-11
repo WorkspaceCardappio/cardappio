@@ -5,20 +5,39 @@
 }
 
 main {
-  display: grid;
-  gap: 40px;
-  grid-template-columns: auto 1fr;
+  height: calc(100vh - 16px);
+  display: flex;
+  flex-direction: column;
+}
 
-  .area {
-    grid-template-rows: auto 1fr;
-    gap: 10px;
+left-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+}
 
-    .content {
-      padding: 10px;
-      margin-right: 50px;
+header-menu {
+  margin-left: 60px;
+  transition: margin-left 0.3s ease-in-out;
+  z-index: 500;
+}
 
-    }
-  }
+main.expanded header-menu {
+  margin-left: 200px;
 }
 
 
+.content {
+  margin-left: 60px;
+  padding: 20px;
+  flex-grow: 1;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+main.expanded .content {
+  margin-left: 200px;
+}
