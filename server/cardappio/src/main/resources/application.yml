@@ -35,7 +35,7 @@ keycloak:
   auth-server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8090}
   resource: ${KEYCLOAK_CLIENT_ID:frontend-app}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET:55C9UfvLcuia9vfU0KveXz53oksH5Rff}
+    secret: ${KEYCLOAK_CLIENT_SECRET:}
     public-client: false
   bearer-only: true
   ssl-required: external
