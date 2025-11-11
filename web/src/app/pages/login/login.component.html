@@ -1,0 +1,71 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="login-card">
+
+      <div class="login-header">
+        <i class="pi pi-shopping-bag"></i>
+        <h1>Cardappio</h1>
+        <p class="subtitle">Gestão de Cardápios Inteligente</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-field">
+          <label for="username">Usuário ou Email</label>
+          <input
+            pInputText
+            id="username"
+            formControlName="username"
+            placeholder="Digite seu usuário"
+            class="w-full"
+            [class.p-invalid]="isFieldInvalid('username')"
+            autocomplete="username" />
+          <small class="p-error" *ngIf="isFieldInvalid('username')">
+            {{ getErrorMessage('username') }}
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="password">Senha</label>
+          <p-password
+            id="password"
+            formControlName="password"
+            placeholder="Digite sua senha"
+            [toggleMask]="true"
+            styleClass="w-full"
+            [feedback]="false"
+            [class.p-invalid]="isFieldInvalid('password')"
+            autocomplete="current-password" />
+          <small class="p-error" *ngIf="isFieldInvalid('password')">
+            {{ getErrorMessage('password') }}
+          </small>
+        </div>
+
+        <p-message
+          *ngIf="errorMessage"
+          severity="error"
+          [text]="errorMessage"
+          styleClass="w-full mb-3" />
+
+        <p-button
+          type="submit"
+          label="Entrar"
+          icon="pi pi-sign-in"
+          [loading]="loading"
+          [disabled]="!loginForm.valid"
+          styleClass="w-full login-button" />
+
+        <div class="login-footer">
+          <a class="forgot-password" (click)="forgotPassword()">
+            Esqueceu a senha?
+          </a>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="login-page-footer">
+      <p>&copy; 2025 Cardappio. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</div>
