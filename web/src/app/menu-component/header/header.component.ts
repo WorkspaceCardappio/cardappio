@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   standalone: true,
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
-
-}
+export class HeaderComponent {}

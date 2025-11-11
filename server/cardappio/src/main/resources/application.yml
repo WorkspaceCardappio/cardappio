@@ -32,10 +32,10 @@ cors:
 
 keycloak:
   realm: ${KEYCLOAK_REALM:cardappio-app}
-  auth-server-url: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
-  resource: ${KEYCLOAK_REALM:backend-app}
+  auth-server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8090}
+  resource: ${KEYCLOAK_CLIENT_ID:frontend-app}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET:zwOF9YcWLubVeuAhL4tVvXiM552cIEBh}
+    secret: ${KEYCLOAK_CLIENT_SECRET:}
     public-client: false
   bearer-only: true
   ssl-required: external

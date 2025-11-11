@@ -1,0 +1,10 @@
+<main [ngClass]="{ expanded: leftMenu.expanded }">
+  <left-menu
+    [routes]="routesMenu"
+    #leftMenu
+  ></left-menu>
+  <header-menu></header-menu>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</main>
