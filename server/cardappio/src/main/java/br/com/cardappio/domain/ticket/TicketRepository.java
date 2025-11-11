@@ -25,4 +25,5 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
             WHERE t.id = :id
             """)
     Optional<Ticket> findByIdWithOrders(@Param("id") UUID id);
+    Optional<Ticket> findByExternalReferenceId(@Param("externalReferenceId") String externalReferenceId);
 }

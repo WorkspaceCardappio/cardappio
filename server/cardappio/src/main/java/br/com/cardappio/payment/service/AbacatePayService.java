@@ -2,7 +2,10 @@ package br.com.cardappio.payment.service;
 
 import br.com.cardappio.domain.order.Order;
 import br.com.cardappio.domain.order.OrderRepository;
+import br.com.cardappio.domain.ticket.Ticket;
+import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.enums.OrderStatus;
+import br.com.cardappio.enums.TicketStatus;
 import br.com.cardappio.payment.dto.AbacatePayRequestDTO;
 import br.com.cardappio.payment.dto.AbacatePixResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AbacatePayService {
@@ -35,10 +40,28 @@ public class AbacatePayService {
     private String webhookSecret;
 
     @Autowired private OrderRepository orderRepository;
+    @Autowired private TicketRepository  ticketRepository;
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String PIX_QRCODE_ENDPOINT = "/pixQrCode/create";
 
     public AbacatePixResponseDTO createPixBilling(AbacatePayRequestDTO request) {
+
+        Ticket ticket = ticketRepository.findById(request.ticketId())
+                .orElseThrow(() -> new RuntimeException("Comanda não encontrada."));
+
+        // Filtra Orders PENDENTES e calcula o total
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        List<Order> pendingOrders = ticket.getOrders().stream()
+                .filter(order -> order.getStatus() == OrderStatus.PENDING)
+                .collect(Collectors.toList());
+
+        if (pendingOrders.isEmpty()) {
+            throw new RuntimeException("Não há pedidos pendentes para esta Comanda. Status: " + ticket.getStatus());
+        }
+
+        for (Order order : pendingOrders) {
+            totalAmount = totalAmount.add(order.getTotal());
+        }
 
         Map<String, Object> customerData = Map.of(
                 "name", request.customerName(),
@@ -48,12 +71,12 @@ public class AbacatePayService {
         );
 
         Map<String, Object> body = Map.of(
-                "amount", request.amount().multiply(new BigDecimal(100)).intValue(),
+                "amount", totalAmount.multiply(new BigDecimal(100)).intValue(),
                 "description", request.description(),
                 "expiresIn", 3600,
                 "customer", customerData,
                 "metadata", Map.of(
-                        "externalId", request.orderId().toString()
+                        "externalId", ticket.getId().toString()
                 ),
                 "webhookUrl", webhookUrl
         );
@@ -73,10 +96,8 @@ public class AbacatePayService {
 
                 String pixId = (String) data.get("id");
 
-                Order order = orderRepository.findById(request.orderId())
-                        .orElseThrow(() -> new RuntimeException("Pedido interno não encontrado."));
-                order.setExternalReferenceId(pixId);
-                orderRepository.save(order);
+                ticket.setExternalReferenceId(pixId);
+                ticketRepository.save(ticket);
 
                 return new AbacatePixResponseDTO(
                         pixId,
@@ -118,26 +139,42 @@ public class AbacatePayService {
             return;
         }
 
-        Optional<Order> orderOpt = orderRepository.findByExternalReferenceId(pixIdToSearch);
+        Optional<Ticket> ticketOpt = ticketRepository.findByExternalReferenceId(pixIdToSearch);
 
-        if (orderOpt.isPresent()) {
-            Order order = orderOpt.get();
+        if (ticketOpt.isPresent()) {
+            Ticket ticket = ticketOpt.get();
 
-            if (order.getStatus() == OrderStatus.PENDING) {
+            List<Order> pendingOrders = ticket.getOrders().stream()
+                    .filter(order -> order.getStatus() == OrderStatus.PENDING)
+                    .collect(Collectors.toList());
+
+            if (!pendingOrders.isEmpty()) {
 
                 if ("PAID".equalsIgnoreCase(status)) {
-                    order.setStatus(OrderStatus.PAID);
-                    orderRepository.save(order);
-                    System.out.println("SUCESSO: Cobrança " + pixIdToSearch + " APROVADA. Pedido atualizado para PAGO.");
+                    // 3. SUCESSO: Atualiza todas as Orders Pendentes para PAGO
+                    for (Order order : pendingOrders) {
+                        order.setStatus(OrderStatus.PAID);
+                        orderRepository.save(order);
+                    }
+                    // 4. Finaliza a Comanda (Ticket)
+                    ticket.setStatus(TicketStatus.FINISHED);
+                    ticketRepository.save(ticket);
+
+                    System.out.println("SUCESSO: Cobrança " + pixIdToSearch + " APROVADA. Comanda #" + ticket.getNumber() + " e Orders atualizados para PAGO/FINALIZADA.");
+
                 } else if ("REJECTED".equalsIgnoreCase(status) || "CANCELED".equalsIgnoreCase(status)) {
-                    order.setStatus(OrderStatus.FAILED);
-                    orderRepository.save(order);
-                    System.out.println("AÇÃO: Cobrança " + pixIdToSearch + " Falhou/Cancelada. Pedido atualizado para FAILED.");
+                    // 5. REJEIÇÃO: Atualiza Orders Pendentes para FAILED
+                    for (Order order : pendingOrders) {
+                        order.setStatus(OrderStatus.FAILED);
+                        orderRepository.save(order);
+                    }
+                    System.out.println("AÇÃO: Cobrança " + pixIdToSearch + " Falhou/Cancelada. Orders atualizadas para FAILED.");
+
                 } else {
                     System.out.println("AVISO: Status intermediário '" + status + "'.");
                 }
             } else {
-                System.out.println("AVISO: Pedido #" + order.getId() + " já estava processado. Ignorando notificação duplicada.");
+                System.out.println("AVISO: Comanda #" + ticket.getNumber() + " já estava com pedidos processados/pagos. Ignorando notificação duplicada.");
             }
         } else {
             System.err.println("ALERTA CRÍTICO: PIX ID '" + pixIdToSearch + "' não encontrado no BD. Necessita auditoria.");

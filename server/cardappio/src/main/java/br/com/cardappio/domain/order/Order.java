@@ -80,9 +80,6 @@ public class Order implements EntityModel<UUID> {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-   @Column(name = "external_reference_id", unique = true)
-   private String externalReferenceId;
-
     public static Order of(final OrderDTO dto) {
 
         final Order order = new Order();
