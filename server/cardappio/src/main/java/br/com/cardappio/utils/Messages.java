@@ -29,18 +29,21 @@ public class Messages {
     public static final String EMPTY_DISTRICT = "Campo bairro não pode ficar vazio";
     public static final String INVALID_EMAIL = "Campo email deve ser válido";
     public static final String STATUS_NOT_NULL = "O status deve ser informado";
-    public static final String ORDER_NOT_NULL = "O pedido deve ser informado";
+    public static final String TICKET_NOT_NULL = "A comanda deve ser informado";
     public static final String PRODUCT_ORDER_NOT_NULL = "O pedido deve ser informado";
     public static final String PRODUCT_NOT_NULL = "O produto deve ser informado";
     public static final String PRODUCT_VARIABLE_NOT_NULL = "O variável deve ser informada";
     public static final String ORDER_VARIABLE_NOT_NULL = "O variável deve ser informada";
+    public static final String ORDER_NOT_NULL = "O produto deve ser informado";
     public static final String SIZE_30 = "Tamanho não pode ultrapassar 30 caracteres";
     public static final String INGREDIENT_NOT_NULL = "O ingrediente deve ser informado";
     public static final String QUANTITY_NOT_NULL = "A quantidade deve ser informada";
     public static final String EMPTY_ORDERS = "Os pedidos devem ser informados";
-    public static final String TICKET_NOT_NULL = "O ticket não pode ficar vazio";
     public static final String EXPIRATION_DATE_NOT_NULL = "A data de validade não pode ficar vazio";
     public static final String EXPIRATION_DATE_NOT_PAST = "A data de validade deve estar no futuro";
     public static final String EMPTY_INGREDIENT = "Ingrediente não pode ficar vazio";
     public static final String SIZE_INGREDIENT = "Size não pode ficar vazio";
+    public static final String AMOUNT_MORE_ZERO = "O valor tem que ser maior que zero";
+    public static final String CURRENCY_DEFINITION = "A moeda é obrigatória";
+    public static final String ONLY_PIX = "Apenas a moeda BRL (Real Brasileiro) é permitida para Pix.";
 }

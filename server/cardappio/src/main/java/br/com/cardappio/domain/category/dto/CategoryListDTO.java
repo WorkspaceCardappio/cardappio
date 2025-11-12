@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public record CategoryListDTO(
 
-    UUID id,
-    String name,
-    boolean active,
-    String image,
-    CategoryParentDTO parent
-)
-    {   public CategoryListDTO(final Category category){
+        UUID id,
+        String name,
+        boolean active,
+        String image,
+        CategoryParentDTO parent
+) {
+    public CategoryListDTO(final Category category) {
         this(
                 category.getId(),
                 category.getName(),
