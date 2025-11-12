@@ -1,7 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -15,13 +27,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { StepperModule } from 'primeng/stepper';
-import { TableModule } from "primeng/table";
+import { TableModule } from 'primeng/table';
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Loader } from '../../../../model/loader';
 import { CategoryService } from '../../../category/service/category.service';
 import { OrderGroupId } from '../../../order/model/order-group-id.model';
 import { ProductService } from '../../service/product.service';
+import { ProductAdditionalComponent } from '../product-additional/product-additional.component';
 import { ProductIngredientComponent } from '../product-ingredient/product-ingredient.component';
 import { ProductProductItemComponent } from '../product-product-item/product-product-item.component';
 
@@ -46,17 +59,14 @@ import { ProductProductItemComponent } from '../product-product-item/product-pro
     SelectModule,
     ProductIngredientComponent,
     ProductProductItemComponent,
-    FloatLabelModule
+    FloatLabelModule,
+    ProductAdditionalComponent,
   ],
-  providers: [
-    CategoryService,
-    ProductService
-  ],
+  providers: [CategoryService, ProductService],
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss'
+  styleUrl: './product-form.component.scss',
 })
 export class ProductFormComponent implements OnInit {
-
   stepIndex = 1;
 
   id: string = '';
@@ -70,7 +80,7 @@ export class ProductFormComponent implements OnInit {
   productGroupId: WritableSignal<OrderGroupId> = signal({
     order: null,
     product: null,
-    item: null
+    item: null,
   });
 
   filteredCategories: any[] = [];
@@ -94,13 +104,13 @@ export class ProductFormComponent implements OnInit {
     this.initBreadcrumb();
 
     this.id = this.route.snapshot.paramMap.get('id') || '';
-    this.isEdit = this.id != 'new'
+    this.isEdit = this.id != 'new';
   }
 
   private initBreadcrumb(): void {
     this.items = [
       { label: 'Produtos', routerLink: '/product' },
-      { label: 'Novo Produto' }
+      { label: 'Novo Produto' },
     ];
     this.home = { icon: 'pi pi-home', routerLink: '/' };
   }
@@ -151,9 +161,9 @@ export class ProductFormComponent implements OnInit {
   }
 
   saveDraftProduct() {
-  const draft = this.productForm.getRawValue();
-  localStorage.setItem('product_draft', JSON.stringify(draft));
-}
+    const draft = this.productForm.getRawValue();
+    localStorage.setItem('product_draft', JSON.stringify(draft));
+  }
 
   private createProduct(payload: any, activateCallback: () => void): void {
     this.productService.create(payload).subscribe({
@@ -161,14 +171,15 @@ export class ProductFormComponent implements OnInit {
         this.next(activateCallback);
         this.setProductId(response.body);
       },
-      error: (error: any) => console.error('Erro ao criar produto: ', error)
+      error: (error: any) => console.error('Erro ao criar produto: ', error),
     });
   }
 
   private updateProduct(payload: any, activateCallback: () => void): void {
     this.productService.update(this.id, payload).subscribe({
       next: () => this.next(activateCallback),
-      error: (error: any) => console.error('Erro ao atualizar produto: ', error),
+      error: (error: any) =>
+        console.error('Erro ao atualizar produto: ', error),
     });
   }
 
@@ -190,15 +201,17 @@ export class ProductFormComponent implements OnInit {
     const file = event.files?.[0];
     if (file) this.productForm.get('image')?.setValue(file);
     const reader = new FileReader();
-    reader.onload = () => { this.imagePreview = reader.result; };
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    };
     reader.readAsDataURL(file);
   }
 
   private setProductId(id: string) {
     this.productGroupId.set({
       ...this.productGroupId(),
-      product: id
-    })
+      product: id,
+    });
   }
   // private loadProduct(id: string): void {
   //   this.productService.findById(id).subscribe({
@@ -222,9 +235,6 @@ export class ProductFormComponent implements OnInit {
   //     price: [0]
   //   });
   // }
-
-
-
 
   // protected addProductItem() {
 
