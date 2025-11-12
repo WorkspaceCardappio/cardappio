@@ -37,6 +37,7 @@ import { ProductService } from '../../service/product.service';
 import { ProductAdditionalComponent } from '../product-additional/product-additional.component';
 import { ProductIngredientComponent } from '../product-ingredient/product-ingredient.component';
 import { ProductProductItemComponent } from '../product-product-item/product-product-item.component';
+import { ProductVariableComponent } from '../product-variable/product-variable.component';
 
 @Component({
   selector: 'app-product-form',
@@ -61,6 +62,7 @@ import { ProductProductItemComponent } from '../product-product-item/product-pro
     ProductProductItemComponent,
     FloatLabelModule,
     ProductAdditionalComponent,
+    ProductVariableComponent,
   ],
   providers: [CategoryService, ProductService],
   templateUrl: './product-form.component.html',
@@ -213,119 +215,10 @@ export class ProductFormComponent implements OnInit {
       product: id,
     });
   }
-  // private loadProduct(id: string): void {
-  //   this.productService.findById(id).subscribe({
-  //     next: (product) => this.productForm.patchValue(product),
-  //     error: () => this.navigateToList()
-  //   });
-  // }
 
-  // private buildAdditionalForm() {
-  //   return this.builder.group({
-  //     id: [''],
-  //     name: ['', Validators.required],
-  //     price: [0, Validators.required]
-  //   });
-  // }
-
-  // private buildProductVariableForm() {
-  //   return this.builder.group({
-  //     id: [''],
-  //     name: [''],
-  //     price: [0]
-  //   });
-  // }
-
-  // protected addProductItem() {
-
-  //   const productItemValue = this.productItemForm.getRawValue();
-  //   const productItemIngredientValue = this.productItemIngredientForm.getRawValue();
-
-  //   const productItemFA = this.productForm.get('productItem') as FormArray;
-  //   const productItemIngredientFA = this.productForm.get('productItemIngredient') as FormArray;
-  //   if (this.currentIndex !== null) {
-  //     productItemFA.at(this.currentIndex).patchValue(productItemValue);
-  //     this.currentIndex = null;
-  //   } else {
-  //     const newProductItem = this.builder.group(productItemValue)
-  //     const newProductItemIngredient = this.builder.group(productItemIngredientValue)
-  //     productItemFA.push(newProductItem);
-  //     productItemIngredientFA.push(newProductItemIngredient);
-  //   }
-  //   this.productItemForm.reset();
-  // }
-
-  // protected deleteProductItem(index: number) {
-  //   (this.productForm.get('productItem') as FormArray).removeAt(index);
-  // }
-
-  // protected addAdditional() {
-  //   const additionalValue = this.additionalForm.getRawValue();
-  //   const additionalFA = this.productForm.get('additional') as FormArray;
-  //   if (this.currentIndex !== null) {
-  //     additionalFA.at(this.currentIndex).patchValue(additionalValue);
-  //     this.additional[this.currentIndex] = additionalValue;
-  //     this.currentIndex = null;
-  //   } else {
-  //     const newAdditional = this.builder.group(additionalValue);
-  //     additionalFA.push(newAdditional);
-  //     this.additional.push(additionalValue);
-  //   }
-  //   this.additionalForm.reset();
-  // }
-
-  // protected deleteAdditional(index: number) {
-  //   (this.productForm.get('additional') as FormArray).removeAt(index);
-  //   this.additional.splice(index, 1);
-  // }
-
-  // protected addProductVariable() {
-  //   const productVariable = this.productVariableForm.getRawValue();
-  //   const pvFA = this.productForm.get('productVariables') as FormArray;
-  //   if (this.currentIndex !== null) {
-  //     pvFA.at(this.currentIndex).patchValue(productVariable);
-  //     this.productVariables[this.currentIndex] = productVariable;
-  //     this.currentIndex = null;
-  //   } else {
-  //     const newProductVariable = this.builder.group(productVariable);
-  //     pvFA.push(newProductVariable);
-  //     this.productVariables.push(productVariable);
-  //   }
-  //   this.productVariableForm.reset();
-  // }
-
-  // protected deleteProductVariable(index: number) {
-  //   (this.productForm.get('productVariables') as FormArray).removeAt(index);
-  //   this.productVariables.splice(index, 1);
-  // }
-  //   searchProducts(event: any) {
-  //   const query = event.query;
-  //   const searchs = [];
-
-  //   if (query) {
-  //     searchs.push(`name=ilike=${query}%`);
-  //   }
-
-  //   const idsProduct = (this.productForm.get('products') as FormArray)
-  //     .value
-  //     .map((value: any) => value.product.id)
-  //     .filter((value: any) => value !== '');
-
-  //   if (idsProduct.length) {
-  //     const ids = idsProduct.join(',');
-  //     searchs.push(`id=out=${ids}`);
-  //   }
-
-  //   this.productService.findAll(20, searchs.join(';')).subscribe({
-  //     next: (data) => {
-  //       this.filteredProducts = data;
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao buscar produtos', err);
-  //     },
-  //     complete: () => {
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
+  finalizeProduct() {
+    this.productService
+      .finalize(this.productGroupId().product!)
+      .subscribe(() => this.router.navigate(['product']));
+  }
 }

@@ -1,18 +1,8 @@
 <div class="grid w-full mt-4" [formGroup]="form">
-  <div class="col-4 flex flex-column mb-4 gap-1">
+
+  <div class="col-6 flex flex-column mb-4 gap-1">
     <label for="name" class="required-label">Nome</label>
     <input id="name" pInputText formControlName="name" placeholder="Nome" />
-  </div>
-  <div class="col-4 flex flex-column mb-4 gap-1">
-    <label for="additional">Escolha um adicional</label>
-    <p-autocomplete
-      formControlName="productAdditional"
-      optionLabel="name"
-      [suggestions]="filteredProducts"
-      (completeMethod)="searchProducts($event)"
-      [dropdown]="true"
-      fluid
-    ></p-autocomplete>
   </div>
 
   <div class="col-2 flex flex-column mb-4 gap-1">
@@ -39,12 +29,12 @@
   type="button"
   label="Adicionar"
   icon="pi pi-plus"
-  (click)="addAdditional()"
+  (click)="addVariable()"
   [disabled]="this.form.invalid"
 ></p-button>
 
 <p-table
-  [value]="additionalsToSave"
+  [value]="variablesToSave"
   [paginator]="true"
   [rows]="5"
   [responsiveLayout]="'scroll'"
@@ -60,13 +50,12 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-additional let-i="rowIndex">
+  <ng-template pTemplate="body" let-variable let-i="rowIndex">
     <tr>
-      <td>{{ additional.productAdditional.name }}</td>
-      <td>{{ additional.name }}</td>
-      <td>{{ additional.price | currency : "BRL" : "symbol" : "1.2-2" }}</td>
+      <td>{{ variable.name }}</td>
+      <td>{{ variable.price | currency : "BRL" : "symbol" : "1.2-2" }}</td>
       <td>
-        @if (additional.active) {
+        @if (variable.active) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>
         } @else {
         <i class="pi pi-times-circle" style="color: #d33b19"></i>
@@ -79,7 +68,7 @@
           icon="pi pi-trash"
           class="p-button-text p-button-sm p-button-danger"
           aria-label="Excluir"
-          (click)="deleteAdditional(i)"
+          (click)="deleteVariable(i)"
         ></button>
       </td>
     </tr>
@@ -87,7 +76,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="3" class="text-center">Nenhum adicional cadastrado.</td>
+      <td colspan="3" class="text-center">Nenhuma Variável cadastrada.</td>
     </tr>
   </ng-template>
 </p-table>

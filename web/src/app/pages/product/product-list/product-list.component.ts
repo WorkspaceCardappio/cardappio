@@ -6,14 +6,15 @@ import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { InputNumber } from "primeng/inputnumber";
+import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { finalize } from 'rxjs';
 import { Product } from '../../../model/product';
+import LoadUtils from '../../../utils/load-utils';
+import { RequestUtils } from '../../../utils/request-utils';
 import { ProductService } from '../service/product.service';
 
 @Component({
@@ -32,31 +33,27 @@ import { ProductService } from '../service/product.service';
     FormsModule,
     ButtonModule,
     RouterLink,
-
-],
-  providers: [ ProductService ],
+  ],
+  providers: [ProductService],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.scss'
+  styleUrl: './product-list.component.scss',
 })
 export class ProductComponent implements OnInit {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Produtos', routerLink: '/product' }]
+  items = [{ label: 'Produtos', routerLink: '/product' }];
   products: Product[] = [];
   totalRecords: number = 0;
   loading: boolean = true;
 
-  constructor(public service: ProductService,  private cdr: ChangeDetectorRef, private router: Router) { }
+  constructor(
+    public service: ProductService,
+    private cdr: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.loadProducts({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {}
-    });
-    this.loading = false;
+    this.loadProducts(LoadUtils.getDefault());
   }
 
   clear(table: any) {
@@ -67,43 +64,33 @@ export class ProductComponent implements OnInit {
     this.router.navigate([`product`, id]);
   }
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.loadProducts({
-      first: 0,
-      rows: 20,
-      sortField: '',
-      sortOrder: 1,
-      filters: {},
-    }));
+    this.service.delete(id).subscribe(() =>
+      this.loadProducts({
+        first: 0,
+        rows: 20,
+        sortField: '',
+        sortOrder: 1,
+        filters: {},
+      })
+    );
   }
 
   loadProducts(event: TableLazyLoadEvent) {
     this.loading = true;
 
-    const page = (event.first ?? 0) / (event?.rows ?? 20);
-    const size = event.rows ?? 20;
-    const sortField = event.sortField ?? '';
-    const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
+    let request = RequestUtils.build(event);
+    request += `&search=saveStatus==FINALIZED`;
 
-    let request = `page=${page}&size=${size}`;
-
-    if (sortField) {
-      request += `&sort=${sortField},${sortOrder}`;
-    }
-
-    this.service
-      .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          this.products = response.content;
-          this.totalRecords = response.totalElements;
-        },
-        error: () => {},
-      });
+    this.service.findAllDTO(request).subscribe({
+      next: (response) => {
+        this.products = response.content;
+        this.totalRecords = response.totalElements;
+      },
+      error: () => {},
+      complete: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
   }
 }

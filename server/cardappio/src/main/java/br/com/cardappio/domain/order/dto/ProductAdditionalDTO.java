@@ -20,6 +20,7 @@ public record ProductAdditionalDTO(
 
         @JsonIgnore
         BigDecimal price,
+
         UUID itemId,
 
         BigDecimal quantity,

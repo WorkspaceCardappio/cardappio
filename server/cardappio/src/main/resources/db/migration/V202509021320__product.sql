@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS product (
     expiration_date DATE,
     image VARCHAR(255),
     note VARCHAR(255),
+    save_status VARCHAR(10) NOT NULL,
     category_id UUID NOT NULL,
+
     CONSTRAINT fk_product_category_id FOREIGN KEY (category_id) REFERENCES category(id)
 );

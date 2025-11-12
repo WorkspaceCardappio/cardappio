@@ -24,4 +24,8 @@ export class ProductService extends EntityService<any, any> {
     return this.http.get<any[]>(`${this.resource}/${id}/options`);
   }
 
+  finalize(id: string) {
+    return this.http.post<any>(`${this.resource}/${id}/finalize`, {});
+  }
+
 }
