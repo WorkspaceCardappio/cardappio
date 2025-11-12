@@ -78,7 +78,7 @@ public class Product implements EntityModel<UUID> {
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Additional> additional = new ArrayList<>();
+    private List<Additional> additionals = new ArrayList<>();
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)

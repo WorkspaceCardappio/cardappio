@@ -1,22 +1,36 @@
 package br.com.cardappio.domain.product.item.dto;
 
-import br.com.cardappio.domain.product.Product;
-import br.com.cardappio.domain.product.item.ProductItemIngredient;
-import br.com.cardappio.enums.ItemSize;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.cardappio.utils.Messages;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public record ProductItemDTO(
+
         UUID id,
-        Product product,
+
+        @NotNull(message = Messages.PRODUCT_NOT_NULL)
+        UUID product,
+
+        @NotNull(message = Messages.QUANTITY_NOT_NULL)
+        @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal quantity,
-        ItemSize size,
+
+        @NotNull(message = Messages.SIZE_INGREDIENT)
+        Long size,
+
         String description,
+
+        @NotNull
+        @Min(value = 0, message = Messages.MIN_VALUE_ZERO)
         BigDecimal price,
+
         Boolean active,
-        List<ProductItemIngredient> ingredients
+
+        List<ProductItemIngredientDTO> ingredients
 ) {
 
 }

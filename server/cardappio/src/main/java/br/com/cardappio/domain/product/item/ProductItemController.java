@@ -16,9 +16,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/product-additionals")
+@RequestMapping("api/product-item")
 @RequiredArgsConstructor
-public class ProductAdditionalontroller extends CrudController<ProductItem, UUID, ProductItemListDTO, ProductItemDTO> {
+public class ProductItemController extends CrudController<ProductItem, UUID, ProductItemListDTO, ProductItemDTO> {
 
     private final ProductItemService service;
 

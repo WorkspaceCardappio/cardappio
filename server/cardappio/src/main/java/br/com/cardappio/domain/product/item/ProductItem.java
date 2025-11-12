@@ -1,22 +1,39 @@
 package br.com.cardappio.domain.product.item;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import com.cardappio.core.entity.EntityModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import br.com.cardappio.converter.ItemTypeConverter;
 import br.com.cardappio.domain.product.Product;
 import br.com.cardappio.domain.product.item.dto.ProductItemDTO;
 import br.com.cardappio.enums.ItemSize;
 import br.com.cardappio.utils.Messages;
-import com.cardappio.core.entity.EntityModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table
@@ -63,7 +80,8 @@ public class ProductItem implements EntityModel<UUID> {
     private List<ProductItemIngredient> ingredients = new ArrayList<>();
 
     public static ProductItem of(final UUID id) {
-        if (id == null) return null;
+        if (id == null)
+            return null;
 
         final ProductItem item = new ProductItem();
         item.setId(id);
@@ -74,27 +92,24 @@ public class ProductItem implements EntityModel<UUID> {
 
         final ProductItem item = new ProductItem();
         item.setId(dto.id());
-        item.setProduct(dto.product());
+        item.setProduct(Product.of(dto.product()));
         item.setQuantity(dto.quantity());
-        item.setSize(dto.size());
+        item.setSize(ItemSize.fromCode(dto.size()));
         item.setDescription(dto.description());
         item.setPrice(dto.price());
         item.setActive(dto.active());
 
-        if (dto.ingredients() != null && !dto.ingredients().isEmpty()) {
-            item.setIngredients(
-                    dto.ingredients().stream()
-                            .map(ingredientDTO -> {
-                                ProductItemIngredient ingredient = new ProductItemIngredient();
-                                ingredient.setId(ingredientDTO.getId());
-                                ingredient.setItem(item);
-                                ingredient.setIngredient(ingredientDTO.getIngredient());
-                                ingredient.setQuantity(ingredientDTO.getQuantity());
-                                return ingredient;
-                            })
-                            .toList()
-            );
+        if (Objects.isNull(dto.ingredients())) {
+            return item;
         }
+
+        final List<ProductItemIngredient> itemIngredients = dto.ingredients()
+                .stream()
+                .map(ingredient -> ProductItemIngredient.of(ingredient, item))
+                .toList();
+
+        item.setIngredients(itemIngredients);
+
         return item;
     }
 }
