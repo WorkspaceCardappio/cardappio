@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from '../../../product/product.service';
+import { ProductService } from '../../../product/service/product.service';
 import { TicketService } from '../../../ticket/service/ticket.service';
 import { OrderService } from '../../service/order.service';
 

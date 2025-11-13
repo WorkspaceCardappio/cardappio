@@ -1,21 +1,18 @@
 package br.com.cardappio.domain.order.additional;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-
 import br.com.cardappio.domain.order.ProductOrder;
 import br.com.cardappio.domain.order.ProductOrderAdditional;
 import br.com.cardappio.domain.order.ProductOrderRepository;
 import br.com.cardappio.domain.order.additional.adapter.OrderAdditionalAdapter;
 import br.com.cardappio.domain.order.additional.dto.OrderAdditionalDTO;
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +25,7 @@ public class OrderAdditionalService extends CrudService<ProductOrderAdditional, 
         return new OrderAdditionalAdapter();
     }
 
-    public void createItems(@Valid List<OrderAdditionalDTO> additionals) {
+    public void createItems(List<OrderAdditionalDTO> additionals) {
 
         if (additionals.isEmpty()) {
             return;

@@ -1,14 +1,17 @@
-package br.com.cardappio.domain.product;
+package br.com.cardappio.domain.product.item;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.cardappio.converter.ItemTypeConverter;
+import br.com.cardappio.domain.product.Product;
+import br.com.cardappio.domain.product.item.dto.ProductItemDTO;
 import br.com.cardappio.enums.ItemSize;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.CascadeType;
@@ -77,11 +80,36 @@ public class ProductItem implements EntityModel<UUID> {
     private List<ProductItemIngredient> ingredients = new ArrayList<>();
 
     public static ProductItem of(final UUID id) {
+        if (id == null)
+            return null;
 
         final ProductItem item = new ProductItem();
         item.setId(id);
-
         return item;
     }
 
+    public static ProductItem of(final ProductItemDTO dto) {
+
+        final ProductItem item = new ProductItem();
+        item.setId(dto.id());
+        item.setProduct(Product.of(dto.product()));
+        item.setQuantity(dto.quantity());
+        item.setSize(ItemSize.fromCode(dto.size()));
+        item.setDescription(dto.description());
+        item.setPrice(dto.price());
+        item.setActive(dto.active());
+
+        if (Objects.isNull(dto.ingredients())) {
+            return item;
+        }
+
+        final List<ProductItemIngredient> itemIngredients = dto.ingredients()
+                .stream()
+                .map(ingredient -> ProductItemIngredient.of(ingredient, item))
+                .toList();
+
+        item.setIngredients(itemIngredients);
+
+        return item;
+    }
 }

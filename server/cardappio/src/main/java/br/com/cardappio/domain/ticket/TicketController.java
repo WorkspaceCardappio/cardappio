@@ -1,13 +1,7 @@
 package br.com.cardappio.domain.ticket;
 
-import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
-import br.com.cardappio.domain.ticket.dto.TicketDTO;
-import br.com.cardappio.domain.ticket.dto.TicketListDTO;
-import br.com.cardappio.domain.ticket.split.SplitService;
-import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
-import com.cardappio.core.controller.CrudController;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
+import com.cardappio.core.controller.CrudController;
+
+import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
+import br.com.cardappio.domain.ticket.dto.TicketDTO;
+import br.com.cardappio.domain.ticket.dto.TicketListDTO;
+import br.com.cardappio.domain.ticket.split.SplitService;
+import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor

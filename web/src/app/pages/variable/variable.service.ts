@@ -20,4 +20,8 @@ export class VariableService extends EntityService<any, any> {
     return this.http.get<Page<any>>(`${this.resource}/product/${id}`);
   }
 
+  persistItems(body: any[]){
+     return this.http.post(`${this.resource}/persist`, body);
+  }
+
 }

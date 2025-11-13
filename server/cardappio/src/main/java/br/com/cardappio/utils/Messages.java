@@ -42,6 +42,7 @@ public class Messages {
     public static final String EXPIRATION_DATE_NOT_NULL = "A data de validade não pode ficar vazio";
     public static final String EXPIRATION_DATE_NOT_PAST = "A data de validade deve estar no futuro";
     public static final String EMPTY_INGREDIENT = "Ingrediente não pode ficar vazio";
+    public static final String SIZE_INGREDIENT = "Size não pode ficar vazio";
     public static final String AMOUNT_MORE_ZERO = "O valor tem que ser maior que zero";
     public static final String CURRENCY_DEFINITION = "A moeda é obrigatória";
     public static final String ONLY_PIX = "Apenas a moeda BRL (Real Brasileiro) é permitida para Pix.";

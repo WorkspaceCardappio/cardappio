@@ -15,11 +15,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import br.com.cardappio.domain.additional.Additional;
 import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.domain.product.dto.ProductDTO;
+import br.com.cardappio.domain.product.ingredient.ProductIngredient;
+import br.com.cardappio.domain.product.item.ProductItem;
+import br.com.cardappio.domain.save.SaveStatus;
 import br.com.cardappio.domain.variable.ProductVariable;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -84,6 +89,10 @@ public class Product implements EntityModel<UUID> {
     @Column
     private String note;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "save_status", nullable = false, length = 10)
+    private SaveStatus saveStatus = SaveStatus.DRAFT;
+
     @ManyToOne
     @NotNull
     @JsonIgnore
@@ -92,7 +101,7 @@ public class Product implements EntityModel<UUID> {
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Additional> additional = new ArrayList<>();
+    private List<Additional> additionals = new ArrayList<>();
 
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -118,27 +127,6 @@ public class Product implements EntityModel<UUID> {
         product.setImage(dto.image());
         product.setCategory(dto.category());
 
-        final List<Additional> additional = dto.additional()
-                .stream()
-                .map(additionalDTO -> Additional.of(additionalDTO, product))
-                .toList();
-
-        product.setAdditional(additional);
-
-        final List<ProductVariable> variables = dto.variables()
-                .stream()
-                .map(productVariable -> ProductVariable.of(productVariable, product))
-                .toList();
-
-        product.setProductVariables(variables);
-
-        final List<ProductIngredient> ingredients = dto.ingredients()
-                .stream()
-                .map(ingredient -> ProductIngredient.of(ingredient, product))
-                .toList();
-
-        product.setProductIngredients(ingredients);
-
         return product;
     }
 
@@ -146,5 +134,9 @@ public class Product implements EntityModel<UUID> {
         final Product product = new Product();
         product.setId(id);
         return product;
+    }
+
+    public void markAsFinalized() {
+        saveStatus = SaveStatus.FINALIZED;
     }
 }
