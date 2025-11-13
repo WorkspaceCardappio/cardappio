@@ -80,8 +80,9 @@ public class ProductItem implements EntityModel<UUID> {
     private List<ProductItemIngredient> ingredients = new ArrayList<>();
 
     public static ProductItem of(final UUID id) {
-        if (id == null)
+        if (id == null) {
             return null;
+        }
 
         final ProductItem item = new ProductItem();
         item.setId(id);
