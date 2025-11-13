@@ -30,14 +30,11 @@ public class AbacatePayService {
     private String apiKey;
     @Value("${abacatepay.api.base-url}")
     private String baseUrl;
-    @Value("${abacatepay.api.return-url}")
-    private String returnUrl;
-    @Value("${abacatepay.api.completion-url}")
-    private String completionUrl;
     @Value("${abacatepay.api.webhook.url}")
     private String webhookUrl;
     @Value("${abacatepay.api.webhook.secret}")
     private String webhookSecret;
+    private static final String PIX_SIMULATE_ENDPOINT = "/pixQrCode/simulate-payment";
 
     @Autowired private OrderRepository orderRepository;
     @Autowired private TicketRepository  ticketRepository;
@@ -49,7 +46,6 @@ public class AbacatePayService {
         Ticket ticket = ticketRepository.findById(request.ticketId())
                 .orElseThrow(() -> new RuntimeException("Comanda não encontrada."));
 
-        // Filtra Orders PENDENTES e calcula o total
         BigDecimal totalAmount = BigDecimal.ZERO;
         List<Order> pendingOrders = ticket.getOrders().stream()
                 .filter(order -> order.getStatus() == OrderStatus.PENDING)
@@ -151,19 +147,16 @@ public class AbacatePayService {
             if (!pendingOrders.isEmpty()) {
 
                 if ("PAID".equalsIgnoreCase(status)) {
-                    // 3. SUCESSO: Atualiza todas as Orders Pendentes para PAGO
                     for (Order order : pendingOrders) {
                         order.setStatus(OrderStatus.PAID);
                         orderRepository.save(order);
                     }
-                    // 4. Finaliza a Comanda (Ticket)
                     ticket.setStatus(TicketStatus.FINISHED);
                     ticketRepository.save(ticket);
 
                     System.out.println("SUCESSO: Cobrança " + pixIdToSearch + " APROVADA. Comanda #" + ticket.getNumber() + " e Orders atualizados para PAGO/FINALIZADA.");
 
                 } else if ("REJECTED".equalsIgnoreCase(status) || "CANCELED".equalsIgnoreCase(status)) {
-                    // 5. REJEIÇÃO: Atualiza Orders Pendentes para FAILED
                     for (Order order : pendingOrders) {
                         order.setStatus(OrderStatus.FAILED);
                         orderRepository.save(order);
@@ -178,6 +171,29 @@ public class AbacatePayService {
             }
         } else {
             System.err.println("ALERTA CRÍTICO: PIX ID '" + pixIdToSearch + "' não encontrado no BD. Necessita auditoria.");
+        }
+    }
+
+    public void simulatePixPayment(String pixId) {
+
+        Map<String, Object> body = Map.of("metadata", Map.of());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(apiKey);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        String url = baseUrl + PIX_SIMULATE_ENDPOINT + "?id=" + pixId;
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("SUCESSO: Pagamento Pix simulado com sucesso. Aguardando notificação de webhook.");
+            } else {
+                throw new RuntimeException("Falha na API da Abacate Pay ao simular: Status " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao simular Pix na Abacate Pay: " + e.getMessage());
         }
     }
 }

@@ -39,3 +39,11 @@ keycloak:
     public-client: false
   bearer-only: true
   ssl-required: external
+
+abacatepay:
+  api:
+    key: ${ABACATE_PAY:DEFAULT_ABACATE_PAY_KEY}
+    base-url: https://api.abacatepay.com/v1
+    webhook:
+      url: ${ABACATE_PAY_WEBHOOK_URL:http://localhost:8080/api/webhooks/abacatepay}
+      secret: ${ABACATE_PAY_WEBHOOK_SECRET:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET}
