@@ -51,4 +51,13 @@ public interface ProductOrderRepository extends JpaRepository<ProductOrder, UUID
             """)
     List<ProductOrderToSummaryDTO> findSummaryByOrderId(@Param("id") UUID id);
 
+    @Query("""
+            SELECT DISTINCT po FROM ProductOrder po
+                JOIN FETCH po.productItem pi
+                JOIN FETCH pi.ingredients pii
+                JOIN FETCH pii.ingredient ing
+            WHERE po.order.id = :orderId
+            """)
+    List<ProductOrder> findAllWithIngredientsByOrderId(@Param("orderId") UUID orderId);
+
 }
