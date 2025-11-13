@@ -33,7 +33,13 @@ cors:
     - OPTIONS
     - PATCH
   allowed-headers:
-    - "*"
+    - Content-Type
+    - Authorization
+    - X-Requested-With
+    - Accept
+    - Origin
+    - Access-Control-Request-Method
+    - Access-Control-Request-Headers
 
 keycloak:
   realm: ${KEYCLOAK_REALM:cardappio-app}
