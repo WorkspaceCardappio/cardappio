@@ -1,16 +1,22 @@
 package br.com.cardappio.auth.service;
 
-import br.com.cardappio.auth.dto.LoginRequest;
-import br.com.cardappio.auth.dto.TokenResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import br.com.cardappio.auth.dto.LoginRequest;
+import br.com.cardappio.auth.dto.ServiceAccountLoginRequest;
+import br.com.cardappio.auth.dto.TokenResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -103,6 +109,49 @@ public class KeycloakAuthService {
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar token: " + e.getMessage());
+        }
+    }
+
+    public TokenResponse serviceAccountLogin(ServiceAccountLoginRequest request) {
+        try {
+            String tokenEndpoint = String.format("%s/realms/%s/protocol/openid-connect/token",
+                    keycloakUrl, realm);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.add("grant_type", "client_credentials");
+            body.add("client_id", request.getClientId());
+            body.add("client_secret", request.getClientSecret());
+
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
+
+            log.info("Service Account login attempt - Client ID: {}", request.getClientId());
+
+            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
+                    tokenEndpoint,
+                    requestEntity,
+                    TokenResponse.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                log.info("Service Account authenticated successfully - Client ID: {}", request.getClientId());
+                return response.getBody();
+            } else {
+                log.error("Service Account authentication failed: Status {}", response.getStatusCode());
+                throw new RuntimeException("Falha na autenticação do service account");
+            }
+
+        } catch (HttpClientErrorException.Unauthorized e) {
+            log.error("Service Account unauthorized - Client ID: {}", request.getClientId());
+            throw new RuntimeException("Credenciais inválidas do service account");
+        } catch (HttpClientErrorException e) {
+            log.error("HTTP error during service account login: {}", e.getResponseBodyAsString());
+            throw new RuntimeException("Erro HTTP: " + e.getStatusCode());
+        } catch (Exception e) {
+            log.error("General error during service account login", e);
+            throw new RuntimeException("Erro ao processar login do service account: " + e.getMessage());
         }
     }
 }
