@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ProductFormComponent } from './product-form.component';
 
 describe('ProductFormComponent', () => {
@@ -11,13 +11,25 @@ describe('ProductFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductFormComponent],
-      providers: [HttpClient, HttpHandler, provideNoopAnimations(), {
-        provide: ActivatedRoute,
-        useValue: {snapshot: {params: {id: 'new'}}}
-      }]
-    })
-    .compileComponents();
+      imports: [
+        ProductFormComponent,
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        provideNoopAnimations(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({ id: 'new' }),
+              queryParamMap: convertToParamMap({}),
+              data: {}
+            }
+          }
+        }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ProductFormComponent);
     component = fixture.componentInstance;
