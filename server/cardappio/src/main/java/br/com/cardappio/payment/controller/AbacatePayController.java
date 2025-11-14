@@ -3,10 +3,7 @@ package br.com.cardappio.payment.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.cardappio.payment.dto.AbacatePayRequestDTO;
 import br.com.cardappio.payment.dto.AbacatePixResponseDTO;
@@ -31,6 +28,19 @@ public class AbacatePayController {
         } catch (RuntimeException e) {
             log.error("Erro ao iniciar Pix Abacate Pay: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping("/pix/simulate/{pixId}")
+    public ResponseEntity<Void> simulatePix(@PathVariable String pixId) {
+        System.out.println("SIMULAÇÃO: Recebendo solicitação para simular PIX ID: " + pixId);
+
+        try {
+            abacatePayService.simulatePixPayment(pixId);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            System.err.println("Erro ao simular Pix Abacate Pay: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
