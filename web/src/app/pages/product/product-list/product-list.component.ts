@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -27,7 +26,6 @@ import { ProductService } from '../service/product.service';
     InputIconModule,
     MultiSelectModule,
     SelectModule,
-    HttpClientModule,
     CommonModule,
     InputNumber,
     FormsModule,
