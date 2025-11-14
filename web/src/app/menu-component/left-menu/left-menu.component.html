@@ -28,5 +28,37 @@
     </ul>
   </nav>
 
-  <div></div>
+  @if (isLoggedIn) {
+    <div class="user-section">
+      <div class="user-info" (click)="toggleUserMenu()">
+        <div class="user-avatar">
+          {{ getUserInitials() }}
+        </div>
+        @if (expanded) {
+          <div class="user-details">
+            <span class="username">{{ username }}</span>
+            <span class="role-badge"
+                  [class.admin]="authService.isAdmin()"
+                  [class.user]="authService.isUser()">
+              {{ getPrimaryRole() }}
+            </span>
+          </div>
+        }
+      </div>
+
+      @if (showUserMenu) {
+        <div class="user-menu" (click)="$event.stopPropagation()">
+          <button class="menu-item" (click)="closeUserMenu()">
+            <i class="pi pi-user"></i>
+            <span>Perfil</span>
+          </button>
+          <div class="menu-divider"></div>
+          <button class="menu-item logout" (click)="logout(); $event.stopPropagation()">
+            <i class="pi pi-sign-out"></i>
+            <span>Sair</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
 </aside>

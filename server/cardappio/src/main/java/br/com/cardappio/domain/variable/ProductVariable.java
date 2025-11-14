@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import com.cardappio.core.entity.EntityModel;
 
 import br.com.cardappio.domain.product.Product;
-import br.com.cardappio.domain.product.dto.ProductVariableDTO;
+import br.com.cardappio.domain.variable.dto.ProductVariableDTO;
 import br.com.cardappio.utils.Messages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,6 +64,9 @@ public class ProductVariable implements EntityModel<UUID> {
         final ProductVariable productVariable = new ProductVariable();
         productVariable.setId(dto.id());
         productVariable.setName(dto.name());
+        productVariable.setProduct(product);
+        productVariable.setPrice(dto.price());
+        productVariable.setActive(dto.active());
 
         return productVariable;
     }

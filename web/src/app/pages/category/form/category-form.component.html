@@ -31,13 +31,19 @@
 
     <div class="flex flex-column mb-4 gap-1">
       <label for="image">Imagem</label>
-      <p-fileUpload
-        name="image"
-        mode="basic"
+      <p-fileupload
+        mode="advanced"
+        name="archive"
+        [multiple]="false"
         [auto]="true"
-        customUpload="true"
         chooseLabel="Escolher Imagem"
-      ></p-fileUpload>
+        [showUploadButton]="false"
+        [showCancelButton]="false"
+        (onUpload)="onUpload($event)"
+        accept="image/*"
+        maxFileSize="1000000"
+        url="https://www.primefaces.org/cdn/api/upload.php"
+      ></p-fileupload>
     </div>
 
     <div class="mt-4 flex justify-content-end gap-2">

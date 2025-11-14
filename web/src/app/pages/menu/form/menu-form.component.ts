@@ -22,7 +22,7 @@ import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { ProductService } from '../../product/product.service';
+import { ProductService } from '../../product/service/product.service';
 import { MenuService } from '../service/menu.service';
 
 @Component({

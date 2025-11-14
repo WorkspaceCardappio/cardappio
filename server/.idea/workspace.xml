@@ -5,32 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d4ff2f3-0708-4492-ba05-b24d8069ea16" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/cardappio.93F_8Q/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/432ccc6f-2918-4ccf-a84b-68796c3c8981/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cardappio/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/cardappio/src/main/java/br/com/cardappio/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +22,12 @@
     &quot;assignee&quot;: &quot;joaoagr1&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/WorkspaceCardappio/cardappio&quot;,
-    &quot;accountId&quot;: &quot;95efd957-b5e9-4a66-8872-fecc252e4d67&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/WorkspaceCardappio/cardappio.git",
+    "accountId": "9443467f-f067-4ea2-b9f9-1d7a5faf9771"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
@@ -74,8 +50,10 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CardappioApplication.executor": "Debug",
-    "git-widget-placeholder": "#23 on CP-230-tela-de-cardapio-2",
-    "last_opened_file_path": "/home/joaorolo/escola-ti/cardappio/web",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "#55 on CP-263-tela-de-produtos",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/cassi/OneDrive/Área de Trabalho/cardappio/server/cardappio",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -105,14 +83,7 @@
       </method>
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
-      </set>
-    </attachedChunks>
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="2d4ff2f3-0708-4492-ba05-b24d8069ea16" name="Changes" comment="" />

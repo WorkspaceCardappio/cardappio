@@ -1,0 +1,180 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Novo Produto">
+  <div class="card flex justify-center w-full">
+    <p-stepper
+      [value]="stepIndex"
+      class="w-full flex flex-column"
+      [linear]="true"
+    >
+      <p-step-list>
+        <p-step [value]="1">Informações Gerais</p-step>
+        <p-step [value]="2">Ingredientes</p-step>
+        <p-step [value]="3">Tamanhos disponíveis e preço</p-step>
+        <p-step [value]="4">Adicionais</p-step>
+        <p-step [value]="5">Variáveis</p-step>
+      </p-step-list>
+
+      <p-step-panels class="w-full flex-2">
+        <p-step-panel [value]="1" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form [formGroup]="productForm" class="p-fluid w-full">
+              <div class="grid w-full mt-3">
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="name" class="required-label">Nome</label>
+                  <input
+                    id="name"
+                    pInputText
+                    formControlName="name"
+                    placeholder="Nome"
+                  />
+                </div>
+
+                <div class="col-3 flex flex-column mb-4 gap-1">
+                  <label for="expirationDate">Data de validade</label>
+                  <p-datepicker
+                    formControlName="expirationDate"
+                    [showIcon]="true"
+                    inputId="expirationDate"
+                    [showOnFocus]="true"
+                    dateFormat="dd/mm/yy"
+                    locale="pt-BR"
+                  ></p-datepicker>
+                </div>
+
+                <div class="col-2 flex flex-column mb-4 gap-2">
+                  <label for="active">Ativo</label>
+                  <p-toggle-switch
+                    inputId="active"
+                    formControlName="active"
+                  ></p-toggle-switch>
+                </div>
+
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <p-floatlabel variant="in">
+                    <textarea
+                      pTextarea
+                      id="description"
+                      formControlName="description"
+                      rows="5"
+                      style="resize: none; width: 100%"
+                    ></textarea>
+                    <label for="description">Descrição</label>
+                  </p-floatlabel>
+                </div>
+
+                <div class="col-4 flex flex-column mb-4 gap-1">
+                  <label for="category" class="required-label"
+                    >Vincular uma categoria</label
+                  >
+                  <p-autocomplete
+                    formControlName="category"
+                    optionLabel="name"
+                    [suggestions]="filteredCategories"
+                    (completeMethod)="searchCategories($event)"
+                    [dropdown]="true"
+                    [emptyMessage]="'Categoria não encontrada'"
+                    fluid
+                  />
+                </div>
+
+                <div class="col-2 flex flex-column mb-4 gap-1">
+                  <label for="image">Imagem</label>
+                  <p-fileUpload
+                    name="image"
+                    mode="basic"
+                    [auto]="true"
+                    customUpload="true"
+                    chooseLabel="Escolher Imagem"
+                    previewWidth="50"
+                    (onSelect)="onFileSelected($event)"
+                  ></p-fileUpload>
+
+                  <div *ngIf="imagePreview" class="mt-3">
+                    <img
+                      [src]="imagePreview"
+                      alt="Pré-visualização da imagem"
+                      style="
+                        max-width: 150px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                      "
+                    />
+                  </div>
+                </div>
+
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <label for="note">Informações adicionais</label>
+                  <textarea
+                    rows="3"
+                    pTextarea
+                    formControlName="note"
+                  ></textarea>
+                </div>
+              </div>
+            </form>
+            <div class="flex justify-content-end gap-3 mt-3">
+              <p-button
+                pButton
+                type="button"
+                label="Cancelar"
+                severity="danger"
+                class="p-button-sm min-w-[5rem]"
+                (click)="onCancel()"
+              />
+              <p-button
+                type="button"
+                label="Próximo"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                class="p-button-sm"
+                (click)="onSave(activateCallback)"
+                [disabled]="!productForm.valid"
+              />
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="2" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <app-product-ingredient
+              [productId]="productGroupId().product"
+              (prevEmitter)="prev(activateCallback)"
+              (nextEmitter)="next(activateCallback)"
+            ></app-product-ingredient>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="3" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <app-product-product-item
+              [productId]="productGroupId().product"
+              (prevEmitter)="prev(activateCallback)"
+              (nextEmitter)="next(activateCallback)"
+            ></app-product-product-item>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="4" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <app-product-additional
+              [productId]="productGroupId().product!"
+              (prevEmitter)="prev(activateCallback)"
+              (nextEmitter)="next(activateCallback)"
+            ></app-product-additional>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="5" class="w-full">
+          <ng-template #content let-activateCallback="activateCallback">
+            <app-product-variable
+              [productId]="productGroupId().product!"
+              (prevEmitter)="prev(activateCallback)"
+              (finalizeEmitter)="finalizeProduct()"
+            ></app-product-variable>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
+</p-fieldset>

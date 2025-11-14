@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ProductService } from '../../../product/product.service';
+import { ProductService } from '../../../product/service/product.service';
 
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';

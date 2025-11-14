@@ -2,6 +2,10 @@ spring:
   profiles:
     active: test
 
+  data:
+    rest:
+      enabled: false
+
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -20,22 +24,29 @@ spring:
           issuer-uri: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
 
 cors:
-  allowed-origins:
-    - "${CORS_ALLOWED_ORIGINS:http://localhost:4200}"
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
   allowed-methods:
     - GET
     - POST
     - PUT
     - DELETE
+    - OPTIONS
+    - PATCH
   allowed-headers:
-    - "*"
+    - Content-Type
+    - Authorization
+    - X-Requested-With
+    - Accept
+    - Origin
+    - Access-Control-Request-Method
+    - Access-Control-Request-Headers
 
 keycloak:
   realm: ${KEYCLOAK_REALM:cardappio-app}
-  auth-server-url: ${KEYCLOAK_AUTH_URL:http://localhost:8090/realms/cardappio-app}
-  resource: ${KEYCLOAK_REALM:backend-app}
+  auth-server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8090}
+  resource: ${KEYCLOAK_CLIENT_ID:frontend-app}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET:zwOF9YcWLubVeuAhL4tVvXiM552cIEBh}
+    secret: ${KEYCLOAK_CLIENT_SECRET:}
     public-client: false
   bearer-only: true
   ssl-required: external
