@@ -53,14 +53,19 @@
   <ng-template pTemplate="body" let-variable let-i="rowIndex">
     <tr>
       <td>{{ variable.name }}</td>
+
+      <td>{{ variable.productName || variable.name }}</td>
+
       <td>{{ variable.price | currency : "BRL" : "symbol" : "1.2-2" }}</td>
+
       <td>
         @if (variable.active) {
-        <i class="pi pi-check-circle" style="color: #51cf66"></i>
+          <i class="pi pi-check-circle" style="color: #51cf66"></i>
         } @else {
-        <i class="pi pi-times-circle" style="color: #d33b19"></i>
+          <i class="pi pi-times-circle" style="color: #d33b19"></i>
         }
       </td>
+
       <td>
         <button
           pButton

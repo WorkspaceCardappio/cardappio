@@ -48,7 +48,8 @@ export class ProductComponent implements OnInit {
     public service: ProductService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.loadProducts(LoadUtils.getDefault());
@@ -81,10 +82,12 @@ export class ProductComponent implements OnInit {
 
     this.service.findAllDTO(request).subscribe({
       next: (response) => {
-        this.products = response.content;
+        this.products = response.content.map(p => ({
+          ...p,
+          price: p.price ? parseFloat(p.price as string) : undefined
+        }));
         this.totalRecords = response.totalElements;
       },
-      error: () => {},
       complete: () => {
         this.loading = false;
         this.cdr.detectChanges();
