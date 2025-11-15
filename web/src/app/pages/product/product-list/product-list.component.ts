@@ -1,4 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common'; // 1. registerLocaleData adicionado
+import pt from '@angular/common/locales/pt'; // 2. Importação do locale data 'pt'
+
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -48,7 +50,9 @@ export class ProductComponent implements OnInit {
     public service: ProductService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) {
+    registerLocaleData(pt, 'pt-BR');
+  }
 
   ngOnInit() {
     this.loadProducts(LoadUtils.getDefault());
@@ -81,10 +85,13 @@ export class ProductComponent implements OnInit {
 
     this.service.findAllDTO(request).subscribe({
       next: (response) => {
-        this.products = response.content;
+
+        this.products = response.content.map(p => ({
+          ...p,
+          price: p.price ? parseFloat(p.price as string) : undefined
+        }));
         this.totalRecords = response.totalElements;
       },
-      error: () => {},
       complete: () => {
         this.loading = false;
         this.cdr.detectChanges();
