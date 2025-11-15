@@ -35,12 +35,6 @@ public class AbacatePayService {
     @Value("${abacatepay.api.base-url}")
     private String baseUrl;
 
-    @Value("${abacatepay.api.return-url}")
-    private String returnUrl;
-
-    @Value("${abacatepay.api.completion-url}")
-    private String completionUrl;
-
     @Value("${abacatepay.api.webhook.url}")
     private String webhookUrl;
 

@@ -56,5 +56,5 @@ abacatepay:
     key: ${ABACATE_PAY:DEFAULT_ABACATE_PAY_KEY}
     base-url: https://api.abacatepay.com/v1
     webhook:
-      url: ${ABACATE_PAY_WEBHOOK_URL:http://localhost:8080/api/webhooks/abacatepay}
-      secret: ${ABACATE_PAY_WEBHOOK_SECRET:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET}
+      url: ${ABACATE_PAY_WEBHOOK_URL:https://cardappio.up.railway.app/home/api/webhooks/abacatepay}
+      secret: ${ABACATE_PAY_WEBHOOK_SECRET_PROD:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET_PROD}
