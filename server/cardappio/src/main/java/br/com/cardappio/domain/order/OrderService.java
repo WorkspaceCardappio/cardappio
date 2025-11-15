@@ -1,20 +1,29 @@
 package br.com.cardappio.domain.order;
 
-import br.com.cardappio.domain.order.adapter.OrderAdapter;
-import br.com.cardappio.domain.order.dto.*;
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+
+import br.com.cardappio.domain.order.adapter.OrderAdapter;
+import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
+import br.com.cardappio.domain.order.dto.IdsDTO;
+import br.com.cardappio.domain.order.dto.NoteDTO;
+import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.order.dto.OrderListDTO;
+import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
+import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
+import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +84,11 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     }
 
     public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
+
+        if (body.ids().isEmpty()) {
+            return List.of();
+        }
+
         return repository.findTotalByIds(body.ids());
     }
 

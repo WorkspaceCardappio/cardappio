@@ -133,6 +133,7 @@ export class OrderOptionsComponent implements OnInit {
   searchProducts(event: any): void {
     const query = event.query || '';
     const searches = query ? [`name=ilike=${query}%`] : [];
+    searches.push('saveStatus==FINALIZED');
     const completeParams = `pageSize=20&search=${searches.join(';')}`;
 
     this.productService.findAllDTO(completeParams).subscribe({

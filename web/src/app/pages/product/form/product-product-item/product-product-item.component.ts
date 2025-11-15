@@ -16,9 +16,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
+import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Loader } from '../../../../model/loader';
 import { ProductService } from '../../service/product.service';
@@ -36,6 +38,8 @@ import { ProductItemService } from './service/product-item.service';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    FloatLabelModule,
+    TextareaModule
   ],
   templateUrl: './product-product-item.component.html',
   styleUrl: './product-product-item.component.scss',
@@ -143,8 +147,6 @@ export class ProductProductItemComponent implements OnInit {
       ],
     });
   }
-
-
 
   getProductItemIngredientsFormArray(): FormArray {
     return this.form.get('ingredients') as FormArray;

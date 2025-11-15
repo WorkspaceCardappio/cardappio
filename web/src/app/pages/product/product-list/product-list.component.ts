@@ -48,8 +48,7 @@ export class ProductComponent implements OnInit {
     public service: ProductService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.loadProducts(LoadUtils.getDefault());
@@ -64,15 +63,9 @@ export class ProductComponent implements OnInit {
   }
 
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() =>
-      this.loadProducts({
-        first: 0,
-        rows: 20,
-        sortField: '',
-        sortOrder: 1,
-        filters: {},
-      })
-    );
+    this.service
+      .delete(id)
+      .subscribe(() => this.loadProducts(LoadUtils.getDefault()));
   }
 
   loadProducts(event: TableLazyLoadEvent) {
@@ -83,15 +76,12 @@ export class ProductComponent implements OnInit {
 
     this.service.findAllDTO(request).subscribe({
       next: (response) => {
-        this.products = response.content.map(p => ({
-          ...p,
-          price: p.price ? parseFloat(p.price as string) : undefined
-        }));
+        this.products = response.content;
         this.totalRecords = response.totalElements;
       },
       complete: () => {
         this.loading = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
     });
   }
