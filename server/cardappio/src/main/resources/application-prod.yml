@@ -23,8 +23,8 @@ keycloak:
 
 abacatepay:
   api:
-    key: ${ABACATE_PAY:DEFAULT_ABACATE_PAY_KEY}
-    base-url: https://api.abacatepay.com/v1
+    key: ${ABACATEPAY_API_KEY:DEFAULT_ABACATE_PAY_KEY}
+    base-url: ${ABACATEPAY_API_BASE_URL:https://api.abacatepay.com/v1}
     webhook:
-    url: ${ABACATE_PAY_WEBHOOK_URL:https://cardappio.up.railway.app/home/api/webhooks/abacatepay}
-    secret: ${ABACATE_PAY_WEBHOOK_SECRET_PROD:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET_PROD}
+      url: ${ABACATEPAY_API_WEBHOOK_URL:https://cardappio-prod.up.railway.app/api/webhooks/abacatepay}
+      secret: ${ABACATEPAY_API_WEBHOOK_SECRET:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET}
