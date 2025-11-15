@@ -1,4 +1,9 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak-cardappio.up.railway.app/realms/cardappio-app
   application:
     name: cardappio-dev
   flyway:
@@ -16,6 +21,15 @@ spring:
       hibernate:
         format_sql: true
 
+keycloak:
+  realm: cardappio-app
+  auth-server-url: https://keycloak-cardappio.up.railway.app
+  resource: frontend-app
+  credentials:
+    secret: XA3HrCWwLYOtdZ50buEVE9ZwxECw8zCY
+    public-client: false
+  bearer-only: true
+  ssl-required: external
 
 AWS_ACCESS: any
 AWS_SECRET: any
