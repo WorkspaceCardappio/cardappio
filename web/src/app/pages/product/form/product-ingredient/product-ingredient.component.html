@@ -1,5 +1,5 @@
 <div class="grid w-full mt-4">
-  <div class="col-8 flex flex-column mb-4 gap-1">
+  <div class="col-11 flex flex-column mb-4 gap-1">
     <label for="ingredient">Buscar ingrediente</label>
     <p-autoComplete
       [suggestions]="filteredIngredients"
@@ -13,7 +13,7 @@
     ></p-autoComplete>
   </div>
 
-  <div class="col-4 flex align-items-end mb-4">
+  <div class="col-1 flex align-items-end mb-4">
     <p-button
       label="Adicionar"
       icon="pi pi-plus"
@@ -32,11 +32,9 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="name">
-        Nome <p-sortIcon field="name" />
-      </th>
+      <th pSortableColumn="name">Nome <p-sortIcon field="name" /></th>
       <th>Unidade</th>
-        <th style="width: 8rem">Ações</th>
+      <th style="width: 8rem">Ações</th>
     </tr>
   </ng-template>
 
@@ -59,14 +57,24 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="4" class="text-center">
-        Nenhum ingrediente adicionado.
-      </td>
+      <td colspan="4" class="text-center">Nenhum ingrediente adicionado.</td>
     </tr>
   </ng-template>
 </p-table>
 
-<div class="flex justify-content-between mt-4">
-  <p-button label="Voltar" icon="pi pi-arrow-left" (click)="prev()"></p-button>
-  <p-button label="Avançar" icon="pi pi-arrow-right" (click)="onSave()" [disabled]="form.length === 0"></p-button>
+<div class="mt-4 flex justify-content-end gap-2">
+  <button
+    pButton
+    type="button"
+    label="Anterior"
+    severity="danger"
+    (click)="prev()"
+  ></button>
+  <button
+    pButton
+    type="button"
+    label="Próximo"
+    class="p-button-primary"
+    (click)="onSave()"
+  ></button>
 </div>

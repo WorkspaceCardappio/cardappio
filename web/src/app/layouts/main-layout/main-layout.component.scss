@@ -1,5 +1,5 @@
 main {
-  height: 100vh;
+  height: calc(100vh - 10px);
   display: flex;
   flex-direction: column;
 }
@@ -8,7 +8,7 @@ left-menu {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: calc(100vh - 10px);
   z-index: 1000;
 }
 

@@ -50,23 +50,8 @@
                   ></p-toggle-switch>
                 </div>
 
-                <div class="col-6 flex flex-column mb-4 gap-1">
-                  <p-floatlabel variant="in">
-                    <textarea
-                      pTextarea
-                      id="description"
-                      formControlName="description"
-                      rows="5"
-                      style="resize: none; width: 100%"
-                    ></textarea>
-                    <label for="description">Descrição</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="col-4 flex flex-column mb-4 gap-1">
-                  <label for="category" class="required-label"
-                    >Vincular uma categoria</label
-                  >
+                <div class="col-8 flex flex-column mb-4 gap-1">
+                  <label for="category" class="required-label">Vincular uma categoria</label>
                   <p-autocomplete
                     formControlName="category"
                     optionLabel="name"
@@ -104,33 +89,48 @@
                 </div>
 
                 <div class="col-6 flex flex-column mb-4 gap-1">
-                  <label for="note">Informações adicionais</label>
-                  <textarea
-                    rows="3"
-                    pTextarea
-                    formControlName="note"
-                  ></textarea>
+                  <p-floatlabel variant="in">
+                    <textarea
+                      pTextarea
+                      id="description"
+                      formControlName="description"
+                      rows="5"
+                      style="resize: none; width: 100%"
+                    ></textarea>
+                    <label for="description">Descrição</label>
+                  </p-floatlabel>
+                </div>
+
+                <div class="col-6 flex flex-column mb-4 gap-1">
+                  <p-floatlabel variant="in">
+                    <textarea
+                      pTextarea
+                      id="description"
+                      formControlName="note"
+                      rows="5"
+                      style="resize: none; width: 100%"
+                    ></textarea>
+                    <label for="note">Informações adicionais</label>
+                  </p-floatlabel>
                 </div>
               </div>
             </form>
-            <div class="flex justify-content-end gap-3 mt-3">
-              <p-button
+            <div class="mt-4 flex justify-content-end gap-2">
+              <button
                 pButton
                 type="button"
                 label="Cancelar"
                 severity="danger"
-                class="p-button-sm min-w-[5rem]"
                 (click)="onCancel()"
-              />
-              <p-button
+              ></button>
+              <button
+                pButton
                 type="button"
                 label="Próximo"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-                class="p-button-sm"
+                class="p-button-primary"
                 (click)="onSave(activateCallback)"
-                [disabled]="!productForm.valid"
-              />
+                [disabled]="productForm.invalid"
+              ></button>
             </div>
           </ng-template>
         </p-step-panel>
