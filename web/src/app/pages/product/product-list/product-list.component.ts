@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Breadcrumb } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
@@ -27,10 +27,10 @@ import { ProductService } from '../service/product.service';
     MultiSelectModule,
     SelectModule,
     CommonModule,
-    InputNumber,
     FormsModule,
     ButtonModule,
     RouterLink,
+    Breadcrumb,
   ],
   providers: [ProductService],
   templateUrl: './product-list.component.html',
@@ -62,6 +62,7 @@ export class ProductComponent implements OnInit {
   onEdit(id: any) {
     this.router.navigate([`product`, id]);
   }
+
   onDelete(id: any) {
     this.service.delete(id).subscribe(() =>
       this.loadProducts({

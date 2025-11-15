@@ -1,4 +1,4 @@
-<h2>Produto</h2>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <p-table
   #dt2
   [value]="products"
@@ -8,11 +8,11 @@
   [paginator]="true"
   [totalRecords]="totalRecords"
   [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
-  [loading]="loading"
+  [loading]="false"
   [globalFilterFields]="['name', 'category', 'price', 'active']"
   [tableStyle]="{ 'min-width': '75rem' }"
   dataKey="id"
-  showGridLines
+  showGridlines
   stripedRows
 >
 <ng-template #caption>
@@ -20,7 +20,6 @@
     <p-button
       label="Novo"
       icon="pi pi-plus"
-      styleClass="p-button-success"
       routerLink="/product/new"
     ></p-button>
 
@@ -60,54 +59,6 @@
       </th>
       <th style="width: 15%">Status</th>
       <th style="width: 15%">Ações</th>
-    </tr>
-
-    <tr>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="name"
-          placeholder="Filtrar por nome"
-          ariaLabel="Filter Name"
-          filterOn="input"
-        ></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="category"
-          placeholder="Filtrar por categoria"
-          ariaLabel="Filter Category"
-          filterOn="input"
-        ></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter field="price" matchMode="between" [showMenu]="false">
-          <ng-template #filter let-value let-filter="filterCallback">
-            <div class="flex gap-2">
-              <p-inputNumber
-                mode="currency"
-                currency="BRL"
-                locale="pt-BR"
-                [ngModel]="value?.[0]"
-                (ngModelChange)="filter([$event, value?.[1]])"
-                placeholder="De R$"
-              ></p-inputNumber>
-              <p-inputNumber
-                mode="currency"
-                currency="BRL"
-                locale="pt-BR"
-                [ngModel]="value?.[1]"
-                (ngModelChange)="filter([value?.[0], $event])"
-                placeholder="Até R$"
-              ></p-inputNumber>
-            </div>
-          </ng-template>
-        </p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter field="active" type="boolean"></p-columnFilter>
-      </th>
     </tr>
   </ng-template>
 
