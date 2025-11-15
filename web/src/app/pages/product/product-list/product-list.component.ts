@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Breadcrumb } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -29,6 +30,7 @@ import { ProductService } from '../service/product.service';
     FormsModule,
     ButtonModule,
     RouterLink,
+    Breadcrumb,
   ],
   providers: [ProductService],
   templateUrl: './product-list.component.html',

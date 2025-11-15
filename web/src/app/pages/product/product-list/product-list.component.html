@@ -1,4 +1,4 @@
-<h2>Produto</h2>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <p-table
   #dt1
   [value]="products"
@@ -20,7 +20,6 @@
     <p-button
       label="Novo"
       icon="pi pi-plus"
-      styleClass="p-button-success"
       routerLink="/product/new"
     ></p-button>
 

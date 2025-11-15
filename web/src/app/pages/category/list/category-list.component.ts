@@ -33,7 +33,7 @@ export class CategoryListComponent implements OnInit {
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Categoria', routerLink: '/category' }];
+  items = [{ label: 'Categorias', routerLink: '/category' }];
 
   categories: any[] = [];
   totalRecords: number = 0;
