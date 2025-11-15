@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,12 @@ public class AbacatePayWebhookController {
 
     @Autowired
     private AbacatePayService abacatePayService;
+
+    @GetMapping
+    public ResponseEntity<String> healthCheck() {
+        log.info("Health check do webhook Abacate Pay");
+        return ResponseEntity.ok("Webhook Abacate Pay está ativo");
+    }
 
     @PostMapping(consumes = {"application/json", "application/x-www-form-urlencoded", "*/*"})
     public ResponseEntity<Void> receiveAbacatePayNotification(
