@@ -1,0 +1,14 @@
+.required-label::after {
+  content: ' *';
+  color: red;
+}
+
+:host ::ng-deep {
+  .p-fieldset {
+    margin-top: 1rem;
+  }
+
+  .p-button {
+    min-width: 100px;
+  }
+}

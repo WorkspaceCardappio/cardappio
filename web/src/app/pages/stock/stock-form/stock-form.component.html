@@ -1,0 +1,83 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<p-fieldset legend="Novo Estoque">
+  <form [formGroup]="form" class="p-fluid">
+    <div class="grid mt-4">
+      <div class="col-12 flex flex-column mb-4 gap-1">
+        <label for="name" class="required-label">Ingrediente</label>
+        <p-select
+          id="ingredient"
+          [options]="ingredients"
+          formControlName="ingredient"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione o ingrediente"
+          [filter]="true"
+          filterPlaceholder="Buscar ingrediente"
+          class="w-full"
+        ></p-select>
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+        <label for="quantity" class="required-label">Quantidade</label>
+        <p-inputNumber
+          id="quantity"
+          formControlName="quantity"
+          placeholder="Quantidade"
+          [min]="0"
+          [showButtons]="true"
+        ></p-inputNumber>
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+        <label for="lote" class="required-label">Lote</label>
+        <input
+          id="number"
+          pInputText
+          formControlName="number"
+          placeholder="Número do Lote"
+        />
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+        <label for="expirationDate" class="required-label">Data de Validade</label>
+        <p-datepicker
+          id="expirationDate"
+          formControlName="expirationDate"
+          placeholder="Selecione a data"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+        ></p-datepicker>
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column mb-4 gap-1">
+        <label for="deliveryDate" class="required-label">Data de Entrega</label>
+        <p-datepicker
+          id="deliveryDate"
+          formControlName="deliveryDate"
+          placeholder="Selecione a data"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+        ></p-datepicker>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="cancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        class="p-button-primary"
+        (click)="create()"
+        [disabled]="form.invalid"
+      ></button>
+    </div>
+  </form>
+</p-fieldset>

@@ -88,6 +88,15 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'stock',
+        canActivate: [roleGuard],
+        data: {roles: ['USER', 'ADMIN']},
+        children: [
+          { path: '', loadComponent: () => import('./pages/stock/stock-list/stock-list.component').then(m => m.StockListComponent)},
+          { path: ':id', loadComponent: () => import('./pages/stock/stock-form/stock-form.component').then(m => m.StockFormComponent)},
+        ]
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'
