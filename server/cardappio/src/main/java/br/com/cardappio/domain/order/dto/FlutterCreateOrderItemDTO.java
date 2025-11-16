@@ -9,7 +9,7 @@ public record FlutterCreateOrderItemDTO(
         UUID productId,
         int quantity,
         Double lineTotal,
-        UUID variableId,
+        List<UUID> variablesId,
         String observations,
         List<FlutterCreateOrderItemAdditionalDTO> additionals
 ) {
