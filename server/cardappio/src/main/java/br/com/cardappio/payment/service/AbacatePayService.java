@@ -29,32 +29,20 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AbacatePayService {
 
+    private static final String PIX_SIMULATE_ENDPOINT = "/pixQrCode/simulate-payment";
+    private static final String PAID_STATUS = "PAID";
+    private static final String PIX_QRCODE_ENDPOINT = "/pixQrCode/create";
+    private final RestTemplate restTemplate = new RestTemplate();
     @Value("${abacatepay.api.key}")
     private String apiKey;
-
     @Value("${abacatepay.api.base-url}")
     private String baseUrl;
-
-    @Value("${abacatepay.api.return-url}")
-    private String returnUrl;
-
-    @Value("${abacatepay.api.completion-url}")
-    private String completionUrl;
-
     @Value("${abacatepay.api.webhook.url}")
     private String webhookUrl;
-
     @Value("${abacatepay.api.webhook.secret}")
     private String webhookSecret;
-    private static final String PIX_SIMULATE_ENDPOINT = "/pixQrCode/simulate-payment";
-
-    private static final String PAID_STATUS = "PAID";
     @Autowired
     private OrderRepository orderRepository;
-
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    private static final String PIX_QRCODE_ENDPOINT = "/pixQrCode/create";
     @Autowired
     private TicketRepository ticketRepository;
 
@@ -207,7 +195,7 @@ public class AbacatePayService {
             ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                System.out.println("SUCESSO: Pagamento Pix simulado com sucesso. Aguardando notificação de webhook.");
+                log.info("SUCESSO: Pagamento Pix simulado com sucesso. Aguardando notificação de webhook.");
             } else {
                 throw new RuntimeException("Falha na API da Abacate Pay ao simular: Status " + response.getStatusCode());
             }

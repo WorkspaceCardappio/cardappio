@@ -34,7 +34,7 @@ import { TableRestaurantService } from '../service/table-restaurant.service';
 export class TableRestaurantListComponent {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Mesa', routerLink: '/table' }];
+  items = [{ label: 'Mesas', routerLink: '/table' }];
 
   tables: any[] = [];
   totalRecords: number = 0;

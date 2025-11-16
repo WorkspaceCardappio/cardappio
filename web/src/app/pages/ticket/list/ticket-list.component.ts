@@ -45,7 +45,7 @@ export class TicketListComponent implements OnInit {
 
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Comanda', routerLink: '/ticket' }];
+  items = [{ label: 'Comandas', routerLink: '/ticket' }];
 
   tickets: any[] = [];
   totalRecords: number = 0;

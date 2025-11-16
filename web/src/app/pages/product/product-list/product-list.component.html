@@ -1,18 +1,18 @@
-<h2>Produto</h2>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <p-table
-  #dt2
+  #dt1
   [value]="products"
   [lazy]="true"
   (onLazyLoad)="loadProducts($event)"
-  [rows]="20"
   [paginator]="true"
+  [rows]="20"
   [totalRecords]="totalRecords"
-  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
   [loading]="loading"
-  [globalFilterFields]="['name', 'category', 'price', 'active']"
+  [globalFilterFields]="['number', 'total', 'orderStatus']"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
   [tableStyle]="{ 'min-width': '75rem' }"
   dataKey="id"
-  showGridLines
+  showGridlines
   stripedRows
 >
 <ng-template #caption>
@@ -20,7 +20,6 @@
     <p-button
       label="Novo"
       icon="pi pi-plus"
-      styleClass="p-button-success"
       routerLink="/product/new"
     ></p-button>
 
@@ -31,7 +30,7 @@
       <input
         pInputText
         type="text"
-        (input)="dt2.filterGlobal($event.target.value, 'contains')"
+        (input)="dt1.filterGlobal($event.target.value, 'contains')"
         placeholder="Buscar"
       />
     </p-iconfield>
@@ -46,68 +45,11 @@
           <p-sortIcon field="name"/>
         </div>
       </th>
-      <th pSortableColumn="category" style="width: 15%">
-        <div class="flex items-center gap-2">
-          Categoria
-          <p-sortIcon field="category"/>
-        </div>
-      </th>
-      <th pSortableColumn="price" style="width: 15%">
-        <div class="flex items-center gap-2">
-          Preço
-          <p-sortIcon field="price"/>
-        </div>
+      <th style="width: 15%">
+        <div class="flex items-center gap-2">Categoria</div>
       </th>
       <th style="width: 15%">Status</th>
       <th style="width: 15%">Ações</th>
-    </tr>
-
-    <tr>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="name"
-          placeholder="Filtrar por nome"
-          ariaLabel="Filter Name"
-          filterOn="input"
-        ></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="category"
-          placeholder="Filtrar por categoria"
-          ariaLabel="Filter Category"
-          filterOn="input"
-        ></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter field="price" matchMode="between" [showMenu]="false">
-          <ng-template #filter let-value let-filter="filterCallback">
-            <div class="flex gap-2">
-              <p-inputNumber
-                mode="currency"
-                currency="BRL"
-                locale="pt-BR"
-                [ngModel]="value?.[0]"
-                (ngModelChange)="filter([$event, value?.[1]])"
-                placeholder="De R$"
-              ></p-inputNumber>
-              <p-inputNumber
-                mode="currency"
-                currency="BRL"
-                locale="pt-BR"
-                [ngModel]="value?.[1]"
-                (ngModelChange)="filter([value?.[0], $event])"
-                placeholder="Até R$"
-              ></p-inputNumber>
-            </div>
-          </ng-template>
-        </p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter field="active" type="boolean"></p-columnFilter>
-      </th>
     </tr>
   </ng-template>
 
@@ -115,7 +57,6 @@
     <tr>
       <td>{{ product.name }}</td>
       <td>{{ product.category }}</td>
-      <td>{{ product.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
       <td>
         @if (product.active){
           <i class="pi pi-check-circle" style="color: #51cf66"></i>
@@ -124,15 +65,6 @@
         }
       </td>
       <td>
-        <button
-          pButton
-          type="button"
-          icon="pi pi-pencil"
-          class="p-button-text p-button-sm"
-          (click)="onEdit(product.id)"
-          style="margin-right: 0.5rem"
-          aria-label="Editar"
-        ></button>
         <button
           pButton
           type="button"

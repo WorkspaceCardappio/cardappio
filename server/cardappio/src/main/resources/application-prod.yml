@@ -5,3 +5,28 @@ spring:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak-cardappio.up.railway.app/realms/cardappio-app
+
+keycloak:
+  realm: cardappio-app
+  auth-server-url: https://keycloak-cardappio.up.railway.app
+  resource: frontend-app
+  credentials:
+    secret: XA3HrCWwLYOtdZ50buEVE9ZwxECw8zCY
+    public-client: false
+  bearer-only: true
+  ssl-required: external
+
+abacatepay:
+  api:
+    key: ${ABACATE_PAY:DEFAULT_ABACATE_PAY_KEY}
+    base-url: https://api.abacatepay.com/v1
+    webhook:
+      url: ${ABACATE_PAY_WEBHOOK_URL:http://localhost:8080/api/webhooks/abacatepay}
+      secret: ${ABACATE_PAY_WEBHOOK_SECRET:DEFAULT_ABACATE_PAY_WEBHOOK_SECRET}
+    return-url: http://localhost:4200/checkout/cancel
+    completion-url: http://localhost:4200/checkout/success

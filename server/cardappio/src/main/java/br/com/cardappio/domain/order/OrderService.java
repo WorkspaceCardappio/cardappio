@@ -145,9 +145,11 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     }
 
     public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
+
         if (body.ids().isEmpty()) {
             return List.of();
         }
+
         return repository.findTotalByIds(body.ids());
     }
 
