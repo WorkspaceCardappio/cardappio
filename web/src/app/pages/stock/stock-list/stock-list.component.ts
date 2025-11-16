@@ -11,6 +11,8 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { StockService } from '../service/stock.service';
 import { Stock } from '../../../model/stock';
+import { Fieldset } from "primeng/fieldset";
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 @Component({
   selector: 'app-stock',
@@ -23,9 +25,10 @@ import { Stock } from '../../../model/stock';
     InputIconModule,
     InputTextModule,
     DatePipe,
-    RouterModule
-
-  ],
+    RouterModule,
+    Fieldset,
+    BreadcrumbModule
+],
   templateUrl: './stock-list.component.html',
   styleUrls: ['./stock-list.component.scss'],
   providers: [StockService],
@@ -95,3 +98,6 @@ export class StockListComponent implements OnInit {
       });
   }
 }
+
+
+
