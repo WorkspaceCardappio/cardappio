@@ -57,6 +57,9 @@
         <p-tag severity="info" value="Em Andamento"></p-tag> } @case (3) {
         <p-tag severity="success" value="Finalizado"></p-tag> } @case (4) {
         <p-tag [style]="{ background: '#22c55e' }" value="Entregue"></p-tag> }
+        @case (5) {
+        <p-tag severity="success" value="Pagamento aprovado"></p-tag> } @case
+        (6) { <p-tag severity="danger" value="Pagamento falhou"></p-tag> }
         @default { <p-tag severity="danger" value="Desconhecido"></p-tag> } }
       </td>
       <td>{{ order.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
@@ -114,7 +117,7 @@
       />
     </div>
 
-    <div class="flex gap-2 mb-6" style="justify-content: flex-end;">
+    <div class="flex gap-2 mb-6" style="justify-content: flex-end">
       <p-button
         label="Cancelar"
         severity="secondary"
