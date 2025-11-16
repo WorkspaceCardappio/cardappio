@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { StockFormComponent } from './stock-form.component';
 
@@ -13,9 +14,11 @@ describe('StockFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideRouter([]),
+        provideNoopAnimations(),
       ],
       imports: [StockFormComponent]
     })
+
     .compileComponents();
 
     fixture = TestBed.createComponent(StockFormComponent);
