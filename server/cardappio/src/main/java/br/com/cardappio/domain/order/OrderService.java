@@ -1,19 +1,5 @@
 package br.com.cardappio.domain.order;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
-
 import br.com.cardappio.domain.ingredient.Ingredient;
 import br.com.cardappio.domain.ingredient.IngredientRepository;
 import br.com.cardappio.domain.ingredient.IngredientStock;
@@ -28,8 +14,19 @@ import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
 import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
 import br.com.cardappio.domain.product.item.ProductItemIngredient;
 import br.com.cardappio.domain.stock.IngredientStockRepository;
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -105,9 +102,9 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
                                final List<Ingredient> changedAggregates) {
 
         if (piIngredient == null ||
-            piIngredient.getIngredient() == null ||
-            piIngredient.getQuantity() == null ||
-            orderQuantity == null) {
+                piIngredient.getIngredient() == null ||
+                piIngredient.getQuantity() == null ||
+                orderQuantity == null) {
             return;
         }
 
@@ -162,10 +159,14 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
             productOrder.setOrder(Order.of(idSavedOrder));
             productOrder.setPrice(BigDecimal.valueOf(item.lineTotal()));
 
-            if (Objects.nonNull(item.variableId())) {
-                productOrder.getVariables()
-                        .add(ProductOrderVariable.ofFlutter(item.variableId(), productOrder));
+
+            if (item.variablesId() != null && !item.variablesId().isEmpty()) {
+                for (UUID varId : item.variablesId()) {
+                    ProductOrderVariable variableEntity = ProductOrderVariable.ofFlutter(varId, productOrder);
+                    productOrder.getVariables().add(variableEntity);
+                }
             }
+
             productOrders.add(productOrder);
         });
 
