@@ -21,7 +21,7 @@
       <p-button
         label="Novo"
         icon="pi pi-plus"
-        styleClass="p-button-success"
+        [style]="{'background-color': '#34D399', 'border-color': '#34D399'}"
         [routerLink]="['/stock/new']">
       </p-button>
 
@@ -89,7 +89,7 @@
       <td>{{ stock.deliveryDate | date: 'dd/MM/yyyy' }}</td>
       <td>
         @if (stock.active) {
-          <i class="pi pi-check-circle" style="color: #51cf66"></i>
+          <i class="pi pi-check-circle" style="color: #34D399"></i>
         } @else {
           <i class="pi pi-times-circle" style="color: #d33b19"></i>
         }
