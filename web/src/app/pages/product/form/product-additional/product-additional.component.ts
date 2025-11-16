@@ -62,7 +62,7 @@ export class ProductAdditionalComponent implements OnInit {
   searchProducts(event: any) {
     const query = event.query;
 
-    let search = '&search=active==TRUE';
+    let search = '&search=active==TRUE;saveStatus==FINALIZED';
     search += query ? `;name=ilike=${query}` : '';
 
     const completeParams = `pageSize=20;${search}`;
@@ -103,7 +103,7 @@ export class ProductAdditionalComponent implements OnInit {
     this.additionalsToSave.splice(index, 1);
   }
 
-  onSave(){
+  onSave() {
     this.additionalService.persistItems(this.additionalsToSave)
       .subscribe(() => this.nextEmitter.emit());
   }

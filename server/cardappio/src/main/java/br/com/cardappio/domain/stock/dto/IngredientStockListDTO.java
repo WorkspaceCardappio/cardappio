@@ -1,10 +1,10 @@
 package br.com.cardappio.domain.stock.dto;
 
-import br.com.cardappio.domain.ingredient.IngredientStock;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import br.com.cardappio.domain.ingredient.IngredientStock;
 
 public record IngredientStockListDTO(
         UUID id,

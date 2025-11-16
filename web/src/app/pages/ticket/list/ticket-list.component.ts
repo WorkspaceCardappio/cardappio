@@ -11,6 +11,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Loader } from '../../../model/loader';
@@ -35,7 +36,8 @@ import { TicketService } from '../service/ticket.service';
     DialogModule,
     SelectButtonModule,
     AutoCompleteModule,
-    MessageModule
+    MessageModule,
+    SkeletonModule
   ],
   providers: [TicketService],
   templateUrl: './ticket-list.component.html',
@@ -50,6 +52,9 @@ export class TicketListComponent implements OnInit {
   tickets: any[] = [];
   totalRecords: number = 0;
   loading = false;
+  loadingTotal = false;
+  loadingTotalOrders = false;
+  loadingTotalOrdersToSplit = false;
 
   expandedRows: { [key: string]: boolean } = {};
   products: any[] = [];
@@ -65,6 +70,9 @@ export class TicketListComponent implements OnInit {
 
   ticketsToOption: Loader = { values: [] };
 
+  totalById: Map<string, number> = new Map();
+  totalOrdersById: Map<string, number> = new Map();
+
   ticketOptions = [
     { label: 'Nova comanda', value: 'criar' },
     { label: 'Vincular comanda', value: 'vincular' }
@@ -77,7 +85,7 @@ export class TicketListComponent implements OnInit {
     private service: TicketService,
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -105,6 +113,7 @@ export class TicketListComponent implements OnInit {
       next: (response) => {
         this.tickets = response.content;
         this.totalRecords = response.totalElements;
+        this.findTotalByIds(this.tickets.map(ticket => ticket.id));
       },
       error: () => {},
       complete: () => {
@@ -145,6 +154,7 @@ export class TicketListComponent implements OnInit {
       next: (response) => {
         this.ordersToSplit = response.content;
         this.totalRecordsSplit = response.totalElements;
+        this.findTotalOrdersByIds(this.ordersToSplit.map(order => order.id), this.loadingTotalOrdersToSplit);
       },
       error: () => {
         this.ordersToSplit = [];
@@ -165,8 +175,10 @@ export class TicketListComponent implements OnInit {
 
     this.orderService.findToTicket(ticket.id, request).subscribe({
       next: (response) => {
-        ticket.orders = response.content;
+        const orders = response.content;
+        ticket.orders = orders;
         ticket.totalOrders = response.totalElements;
+        this.findTotalOrdersByIds(orders.map(order => order.id), this.loadingTotalOrders);
       },
       error: () => {
         ticket.orders = [];
@@ -184,7 +196,6 @@ export class TicketListComponent implements OnInit {
   }
 
   showSplit(ticket: any) {
-    console.log(ticket);
     this.visibleSplit = true;
     this.ticketToSplit = ticket;
     this.loadOrdersToSplit();
@@ -232,12 +243,58 @@ export class TicketListComponent implements OnInit {
     const completeParams = `pageSize=100${search}`;
 
     this.service.findAllDTO(completeParams).subscribe({
-      next: (page) => (this.ticketsToOption.values = page.content),
+      next: (response) => this.ticketsToOption.values = response.content,
       error: () => (this.ticketsToOption.values = []),
       complete: () => {
         this.ticketsToOption.isLoading = false;
         this.cdr.markForCheck();
       },
     });
+  }
+
+  findTotalByIds(ids: string[]) {
+
+    this.loadingTotal = true;
+
+    this.service
+      .findTotalByIds(ids)
+      .subscribe({
+        next: (values: any[]) => {
+
+          values.forEach(value => {
+            if (!this.totalById.has(value.id))
+              this.totalById.set(value.id, value.total);
+          });
+
+        },
+        complete: () => {
+          this.loadingTotal = false;
+          this.cdr.markForCheck();
+        }
+      });
+
+  }
+
+  findTotalOrdersByIds(ids: string[], loading: boolean) {
+
+    loading = true;
+
+    this.orderService
+      .findTotalByIds(ids)
+      .subscribe({
+        next: (values: any[]) => {
+
+          values.forEach(value => {
+            if (!this.totalOrdersById.has(value.id))
+              this.totalOrdersById.set(value.id, value.total);
+          });
+
+        },
+        complete: () => {
+          loading = false;
+          this.cdr.markForCheck();
+        }
+      });
+
   }
 }

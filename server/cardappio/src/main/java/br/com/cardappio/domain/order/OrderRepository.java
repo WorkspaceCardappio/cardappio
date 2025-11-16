@@ -13,11 +13,12 @@ import org.springframework.stereotype.Repository;
 import com.cardappio.core.repository.CrudRepository;
 
 import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
+import br.com.cardappio.domain.save.SaveStatus;
 
 @Repository
 public interface OrderRepository extends CrudRepository<Order, UUID> {
 
-    Page<Order> findByTicketId(UUID ticketId, Pageable pageable);
+    Page<Order> findByTicketIdAndSaveStatus(UUID ticketId, SaveStatus saveStatus, Pageable pageable);
 
     @Query("""
             SELECT new br.com.cardappio.domain.order.dto.TotalAndIdDTO(
