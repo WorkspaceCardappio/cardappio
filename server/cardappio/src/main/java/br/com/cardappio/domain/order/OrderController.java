@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardappio.core.controller.CrudController;
 
+import br.com.cardappio.domain.order.dto.ChangeStatusDTO;
 import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
 import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
@@ -73,6 +74,11 @@ public class OrderController extends CrudController<Order, UUID, OrderListDTO, O
     @PostMapping("/total-by-ids")
     public List<TotalAndIdDTO> totalByIds(@RequestBody @Valid IdsDTO ids) {
         return service.getTotalByids(ids);
+    }
+
+    @PostMapping("/{id}/change-status")
+    public void changeStatus(@PathVariable final UUID id, @RequestBody @Valid ChangeStatusDTO statusDTO) {
+        service.changeStatus(id, statusDTO);
     }
 
     @PostMapping("/flutter-orders")

@@ -74,8 +74,6 @@
           <p-sortIcon field="deliveryDate" />
         </div>
       </th>
-
-      <th style="width: 6%">Status</th>
       <th style="width: 6%">Ações</th>
     </tr>
   </ng-template>
@@ -87,13 +85,6 @@
       <td>{{ stock.lote }}</td>
       <td>{{ stock.expirationDate | date: 'dd/MM/yyyy' }}</td>
       <td>{{ stock.deliveryDate | date: 'dd/MM/yyyy' }}</td>
-      <td>
-        @if (stock.active) {
-          <i class="pi pi-check-circle" style="color: #34D399"></i>
-        } @else {
-          <i class="pi pi-times-circle" style="color: #d33b19"></i>
-        }
-      </td>
       <td style="white-space: nowrap;">
         <button
           pButton

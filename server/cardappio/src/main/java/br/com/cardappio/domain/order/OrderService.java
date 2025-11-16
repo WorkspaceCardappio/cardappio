@@ -1,9 +1,23 @@
 package br.com.cardappio.domain.order;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+
 import br.com.cardappio.domain.ingredient.Ingredient;
 import br.com.cardappio.domain.ingredient.IngredientRepository;
 import br.com.cardappio.domain.ingredient.IngredientStock;
 import br.com.cardappio.domain.order.adapter.OrderAdapter;
+import br.com.cardappio.domain.order.dto.ChangeStatusDTO;
 import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
 import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
@@ -13,20 +27,11 @@ import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
 import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
 import br.com.cardappio.domain.order.dto.TotalAndIdDTO;
 import br.com.cardappio.domain.product.item.ProductItemIngredient;
+import br.com.cardappio.domain.save.SaveStatus;
 import br.com.cardappio.domain.stock.IngredientStockRepository;
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
+import br.com.cardappio.enums.OrderStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +50,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     }
 
     public Page<OrderToTicketDTO> findToTicket(final UUID id, final Pageable pageable) {
-        return repository.findByTicketId(id, pageable)
+        return repository.findByTicketIdAndSaveStatus(id, SaveStatus.FINALIZED, pageable)
                 .map(OrderToTicketDTO::new);
     }
 
@@ -82,8 +87,13 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         List<ProductOrder> productOrders = productOrderRepository.findAllWithIngredientsByOrderId(id);
 
         for (ProductOrder productOrder : productOrders) {
-            if (productOrder.getProductItem() == null) continue;
-            if (productOrder.getProductItem().getIngredients().isEmpty()) continue;
+            if (productOrder.getProductItem() == null) {
+                continue;
+            }
+
+            if (productOrder.getProductItem().getIngredients().isEmpty()) {
+                continue;
+            }
 
             productOrder.getProductItem().getIngredients()
                     .forEach(pi -> debitFromLots(pi, productOrder.getQuantity(), changedAggregates));
@@ -98,8 +108,8 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     }
 
     private void debitFromLots(final ProductItemIngredient piIngredient,
-                               final BigDecimal orderQuantity,
-                               final List<Ingredient> changedAggregates) {
+            final BigDecimal orderQuantity,
+            final List<Ingredient> changedAggregates) {
 
         if (piIngredient == null ||
                 piIngredient.getIngredient() == null ||
@@ -111,16 +121,22 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         final Ingredient ingredient = piIngredient.getIngredient();
         BigDecimal totalToConsume = piIngredient.getQuantity().multiply(orderQuantity);
 
-        if (totalToConsume.compareTo(BigDecimal.ZERO) <= 0) return;
+        if (totalToConsume.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
 
         List<IngredientStock> lots =
                 ingredientStockRepository.findAvailableByIngredient(ingredient.getId());
 
         for (IngredientStock lot : lots) {
-            if (totalToConsume.compareTo(BigDecimal.ZERO) <= 0) break;
+            if (totalToConsume.compareTo(BigDecimal.ZERO) <= 0) {
+                break;
+            }
 
             BigDecimal lotQty = lot.getQuantity();
-            if (lotQty == null || lotQty.compareTo(BigDecimal.ZERO) <= 0) continue;
+            if (lotQty == null || lotQty.compareTo(BigDecimal.ZERO) <= 0) {
+                continue;
+            }
 
             if (lotQty.compareTo(totalToConsume) > 0) {
                 lot.setQuantity(lotQty.subtract(totalToConsume));
@@ -159,7 +175,6 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
             productOrder.setOrder(Order.of(idSavedOrder));
             productOrder.setPrice(BigDecimal.valueOf(item.lineTotal()));
 
-
             if (item.variablesId() != null && !item.variablesId().isEmpty()) {
                 for (UUID varId : item.variablesId()) {
                     ProductOrderVariable variableEntity = ProductOrderVariable.ofFlutter(varId, productOrder);
@@ -171,6 +186,15 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         });
 
         productOrderRepository.saveAll(productOrders);
+    }
+
+    public void changeStatus(final UUID id, final ChangeStatusDTO statusDTO) {
+
+        final OrderStatus status = OrderStatus.fromCode(statusDTO.code());
+        final Order order = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
+        order.setStatus(status);
+        repository.save(order);
     }
 }
 

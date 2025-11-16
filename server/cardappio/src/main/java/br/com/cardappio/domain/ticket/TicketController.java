@@ -1,5 +1,6 @@
 package br.com.cardappio.domain.ticket;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardappio.core.controller.CrudController;
 
+import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
+import br.com.cardappio.domain.ticket.dto.TotalAndIdDTO;
 import br.com.cardappio.domain.ticket.split.SplitService;
 import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
 import jakarta.validation.Valid;
@@ -42,6 +45,11 @@ public class TicketController extends CrudController<Ticket, UUID, TicketListDTO
     @GetMapping("/flutter-tickets/by-ticket/{idTicket}")
     public ResponseEntity<FlutterTicketDTO> findFlutterTicket(@PathVariable UUID idTicket) {
         return ResponseEntity.ok(service.findFlutterTicket(idTicket));
+    }
+
+    @PostMapping("/total-by-ids")
+    public List<TotalAndIdDTO> totalByIds(@RequestBody @Valid IdsDTO ids) {
+        return service.getTotalByids(ids);
     }
 
 }

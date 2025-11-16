@@ -1,18 +1,16 @@
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DatePipe, CommonModule } from '@angular/common';
-import { finalize } from 'rxjs';
 
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 
-import { StockService } from '../service/stock.service';
-import { Stock } from '../../../model/stock';
-import { Fieldset } from "primeng/fieldset";
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { Stock } from '../../../model/stock';
+import { StockService } from '../service/stock.service';
 
 @Component({
   selector: 'app-stock',
@@ -26,7 +24,6 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
     InputTextModule,
     DatePipe,
     RouterModule,
-    Fieldset,
     BreadcrumbModule
 ],
   templateUrl: './stock-list.component.html',
@@ -67,6 +64,7 @@ export class StockListComponent implements OnInit {
   }
 
   loadStocks(event: TableLazyLoadEvent) {
+
     this.loading = true;
 
     const page = (event.first ?? 0) / (event?.rows ?? 20);
@@ -79,12 +77,6 @@ export class StockListComponent implements OnInit {
 
     this.service
       .findAllDTO(request)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
       .subscribe({
         next: (response) => {
           this.stocks = response.content.map((s: any) => ({
@@ -94,7 +86,10 @@ export class StockListComponent implements OnInit {
           }));
           this.totalRecords = response.totalElements;
         },
-        error: () => {},
+        complete: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
       });
   }
 }
