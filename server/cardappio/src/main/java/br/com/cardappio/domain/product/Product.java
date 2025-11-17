@@ -118,14 +118,14 @@ public class Product implements EntityModel<UUID> {
     public static Product of(final ProductDTO dto) {
 
         final Product product = new Product();
-        product.setId(dto.id());
-        product.setName(dto.name());
-        product.setPrice(dto.price());
-        product.setQuantity(dto.quantity());
-        product.setActive(dto.active());
-        product.setExpirationDate(dto.expirationDate());
-        product.setImage(dto.image());
-        product.setCategory(dto.category());
+        product.setId(dto.getId());
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setQuantity(dto.getQuantity());
+        product.setActive(dto.getActive());
+        product.setExpirationDate(dto.getExpirationDate());
+        product.setImage(dto.getImage());
+        product.setCategory(Category.of(dto.getCategory()));
 
         return product;
     }

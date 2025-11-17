@@ -11,6 +11,7 @@ public record CategoryListDTO(
         String name,
         boolean active,
         String image,
+        String imageUrl,
         CategoryParentDTO parent
 ) {
     public CategoryListDTO(final Category category) {
@@ -19,6 +20,7 @@ public record CategoryListDTO(
                 category.getName(),
                 category.getActive(),
                 category.getImage(),
+                null,
                 Optional.ofNullable(category.getParent())
                         .map(CategoryParentDTO::new)
                         .orElse(null)

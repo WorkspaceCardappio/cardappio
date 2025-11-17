@@ -10,7 +10,9 @@ public record ProductListDTO(
         String name,
         String category,
         BigDecimal price,
-        Boolean active
+        Boolean active,
+        String image,
+        String imageUrl
 
 ) {
     public ProductListDTO(final Product product) {
@@ -19,7 +21,9 @@ public record ProductListDTO(
                 product.getName(),
                 product.getCategory().getName(),
                 product.getPrice(),
-                product.getActive()
+                product.getActive(),
+                product.getImage(),
+                null 
         );
     }
 }

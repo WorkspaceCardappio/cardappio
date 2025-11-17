@@ -1,14 +1,17 @@
 package br.com.cardappio.domain.product;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 
+import br.com.cardappio.components.s3.S3StorageComponent;
 import br.com.cardappio.domain.product.adapter.ProductAdapter;
 import br.com.cardappio.domain.product.dto.FlutterProductDTO;
 import br.com.cardappio.domain.product.dto.ProductDTO;
@@ -22,11 +25,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService extends CrudService<Product, UUID, ProductListDTO, ProductDTO> {
 
+    private final S3StorageComponent s3StorageComponent;
     private final ProductRepository repository;
+    private final ProductAdapter productAdapter;
 
     @Override
     protected Adapter<Product, ProductListDTO, ProductDTO> getAdapter() {
-        return new ProductAdapter();
+        return productAdapter;
     }
 
     public List<ProductToMenuDTO> findToMenu(final String search) {
@@ -54,5 +59,45 @@ public class ProductService extends CrudService<Product, UUID, ProductListDTO, P
         product.markAsFinalized();
         repository.save(product);
 
+    }
+
+    public UUID saveProduct(MultipartFile file, ProductDTO dto) {
+
+        if (Objects.nonNull(file)) {
+
+            String key = s3StorageComponent.getKey(file);
+            dto.setImage(key);
+
+            s3StorageComponent.saveFile(file, key, null);
+        }
+
+        return create(dto);
+    }
+
+    public void updateProduct(UUID id, MultipartFile file, ProductDTO dto) {
+
+        if (Objects.nonNull(file)) {
+
+            String oldImage = repository.findImageById(id);
+            String newKey = s3StorageComponent.getKey(file);
+
+            s3StorageComponent.saveFile(file, newKey, oldImage);
+
+            dto.setImage(newKey);
+        }
+
+        update(id, dto);
+
+    }
+
+    @Override
+    protected void beforeDelete(Product product) {
+
+        String image = product.getImage();
+
+        if (Objects.nonNull(image)) {
+
+            s3StorageComponent.deleteMatchingObject(image);
+        }
     }
 }

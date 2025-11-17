@@ -48,6 +48,7 @@ export class CategoryFormComponent implements OnInit {
   form: FormGroup<any> = new FormGroup({});
 
   file: any;
+  imagePreview: string | null = null;
 
   constructor(
     private readonly builder: FormBuilder,
@@ -81,9 +82,14 @@ export class CategoryFormComponent implements OnInit {
 
   private loadCategory(id: string) {
 
-    this.service.findById(id).subscribe((category) =>
+    this.service.findById(id).subscribe((category) => {
 
-      this.form.patchValue(category));
+      this.form.patchValue(category);
+
+      if (category.imageUrl) {
+        this.imagePreview = category.imageUrl;
+      }
+    });
   }
 
   create() {
@@ -148,6 +154,14 @@ export class CategoryFormComponent implements OnInit {
   onUpload(file: any) {
 
     this.file = file.files[0];
+
+    // Criar preview da imagem
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreview = e.target.result;
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(this.file);
   }
 
 }

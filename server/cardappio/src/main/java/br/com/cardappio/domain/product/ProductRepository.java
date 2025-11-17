@@ -32,4 +32,11 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
             """)
     List<FlutterProductDTO> findFlutterProducts(@Param("idCategory") UUID idCategory);
 
+    @Query("""
+            SELECT p.image
+            FROM Product p
+            WHERE p.id = :id
+            """)
+    String findImageById(UUID id);
+
 }

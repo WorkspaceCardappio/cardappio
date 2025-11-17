@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpResponse } from '@angular/common/http';
 import {
   ChangeDetectorRef,
   Component,
@@ -107,6 +106,19 @@ export class ProductFormComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id') || '';
     this.isEdit = this.id != 'new';
+
+    if (this.isEdit) {
+      this.loadProduct(this.id);
+    }
+  }
+
+  private loadProduct(id: string) {
+    this.productService.findById(id).subscribe((product) => {
+      this.productForm.patchValue(product);
+      if (product.imageUrl) {
+        this.imagePreview = product.imageUrl;
+      }
+    });
   }
 
   private initBreadcrumb(): void {
@@ -168,17 +180,31 @@ export class ProductFormComponent implements OnInit {
   }
 
   private createProduct(payload: any, activateCallback: () => void): void {
-    this.productService.create(payload).subscribe({
-      next: (response: HttpResponse<any>) => {
+    const file = payload.image;
+    const dto = {
+      ...payload,
+      category: payload.category?.id || payload.category,
+      image: null
+    };
+
+    this.productService.saveWithImage(dto, file).subscribe({
+      next: (response: any) => {
         this.next(activateCallback);
-        this.setProductId(response.body);
+        this.setProductId(response.id);
       },
       error: (error: any) => console.error('Erro ao criar produto: ', error),
     });
   }
 
   private updateProduct(payload: any, activateCallback: () => void): void {
-    this.productService.update(this.id, payload).subscribe({
+    const file = payload.image;
+    const dto = {
+      ...payload,
+      category: payload.category?.id || payload.category,
+      image: null
+    };
+
+    this.productService.updateWithImage(this.id, dto, file).subscribe({
       next: () => this.next(activateCallback),
       error: (error: any) =>
         console.error('Erro ao atualizar produto: ', error),
