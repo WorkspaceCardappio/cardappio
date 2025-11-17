@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Objects;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,19 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
     }
 
     public List<FlutterCategoryDTO> findFlutterCategories(UUID idMenu) {
+        List<Category> categories = repository.findFlutterCategoriesEntities(idMenu);
 
-        return repository.findFlutterCategories(idMenu);
+        return categories.stream()
+                .map(category -> {
+                    String imageUrl = s3StorageComponent.generatePresignedUrl(category.getImage());
+                    return new FlutterCategoryDTO(
+                            category.getId(),
+                            category.getName(),
+                            category.getImage(),
+                            imageUrl
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
     public void saveCategory(MultipartFile file, CategoryDTO dto) {

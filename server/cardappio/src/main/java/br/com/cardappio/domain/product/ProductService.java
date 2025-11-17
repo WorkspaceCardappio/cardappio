@@ -3,6 +3,7 @@ package br.com.cardappio.domain.product;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import br.com.cardappio.domain.product.dto.ProductDTO;
 import br.com.cardappio.domain.product.dto.ProductItemDTO;
 import br.com.cardappio.domain.product.dto.ProductListDTO;
 import br.com.cardappio.domain.product.dto.ProductToMenuDTO;
+import br.com.cardappio.domain.product.item.ProductItem;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -47,8 +49,25 @@ public class ProductService extends CrudService<Product, UUID, ProductListDTO, P
     }
 
     public List<FlutterProductDTO> findFlutterProducts(UUID idCategory) {
+        List<ProductItem> productItems = repository.findFlutterProductsEntities(idCategory);
 
-        return repository.findFlutterProducts(idCategory);
+        return productItems.stream()
+                .map(productItem -> {
+                    Product product = productItem.getProduct();
+                    String imageUrl = s3StorageComponent.generatePresignedUrl(product.getImage());
+
+                    return new FlutterProductDTO(
+                            productItem.getId(),
+                            product.getId(),
+                            product.getName(),
+                            productItem.getPrice(),
+                            productItem.getDescription(),
+                            product.getNote(),
+                            product.getImage(),
+                            imageUrl
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
     public void finalize(final UUID id) {

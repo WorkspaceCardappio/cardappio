@@ -75,7 +75,7 @@ public class S3StorageComponent {
 
             GetObjectPresignRequest presignRequest =
                     software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest.builder()
-                            .signatureDuration(Duration.ofHours(1))
+                            .signatureDuration(Duration.ofHours(24))
                             .getObjectRequest(req -> req.bucket(bucketName).key(key))
                             .build();
 
