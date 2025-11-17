@@ -32,7 +32,7 @@ import { MenuService } from '../service/menu.service';
 export class MenuListComponent {
   home = { icon: 'pi pi-home', routerLink: '/home' };
 
-  items = [{ label: 'Cardápio', routerLink: '/menu' }];
+  items = [{ label: 'Cardápios', routerLink: '/menu' }];
 
   menus: any[] = [];
   totalRecords: number = 0;

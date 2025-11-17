@@ -9,9 +9,27 @@ import br.com.cardappio.enums.OrderStatus;
 import br.com.cardappio.utils.Messages;
 import com.cardappio.core.entity.EntityModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -85,6 +103,7 @@ public class Order implements EntityModel<UUID> {
         order.setStatus(OrderStatus.fromCode(dto.status().code()));
         order.setTicket(Ticket.of(dto.ticket().id()));
         order.setTotal(BigDecimal.ONE);
+        order.saveStatus = SaveStatus.FINALIZED;
 
         return order;
     }

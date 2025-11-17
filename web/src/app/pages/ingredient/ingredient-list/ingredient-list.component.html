@@ -38,15 +38,16 @@
   <ng-template #header>
     <tr>
       <th style="width: 1rem"></th>
-      <th pSortableColumn="name" style="width: 67%">
+      <th pSortableColumn="name" style="width: 45%">
         <div class="flex items-center gap-2">
           Nome
           <p-sortIcon field="name" />
         </div>
       </th>
-      <th style="width: 11%">Alergênico</th>
-      <th style="width: 11%">Status</th>
-      <th style="width: 11%">Ações</th>
+      <th style="width: 25%">Unidade de Medida</th>
+      <th style="width: 10%">Alergênico</th>
+      <th style="width: 10%">Status</th>
+      <th style="width: 10%">Ações</th>
     </tr>
   </ng-template>
 
@@ -65,6 +66,7 @@
         />
       </td>
       <td>{{ ingredient.name }}</td>
+      <td>{{ ingredient.unityOfMeasurement.description }}</td>
       <td>
         @if (ingredient.allergenic) {
         <i class="pi pi-check-circle" style="color: #51cf66"></i>
@@ -113,7 +115,7 @@
       <div class="p-4">
         <p-table
             [lazy]="true"
-            [paginator]="true"
+            [paginator]="false"
             [rows]="20"
             [value]="ingredient.stocks"
             [totalRecords]="ingredient.totalStocks"
@@ -128,16 +130,14 @@
               <tr>
                 <th>Lote</th>
                 <th>Quantidade</th>
-                <th>Unidade</th>
                 <th>Data de Validade</th>
               </tr>
         </ng-template>
 
         <ng-template #body let-stock>
               <tr>
-                <td>{{ stock.batch }}</td>
+                <td>{{ stock.number }}</td>
                 <td>{{ stock.quantity }}</td>
-                <td>{{ ingredient.unityOfMeasurement?.description }}</td>
                 <td>{{ stock.expirationDate | date: 'dd/MM/yyyy' }}</td>
               </tr>
         </ng-template>

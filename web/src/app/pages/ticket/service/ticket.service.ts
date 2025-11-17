@@ -19,4 +19,8 @@ export class TicketService extends EntityService<any, any>{
     return this.http.post(`${this.resource}/split/${id}`, { orders: orders, ticket: ticketToSplit });
   }
 
+  findTotalByIds(ids: string[]) {
+    return this.http.post<any>(`${this.resource}/total-by-ids`, { ids: ids });
+  }
+
 }

@@ -37,12 +37,15 @@ export class OrderService extends EntityService<any, any> {
   }
 
   finalize(id: string) {
-    return this.http.post<any>(`${this.resource}/${id}/finalize`, {});
+    return this.http.post<void>(`${this.resource}/${id}/finalize`, {});
   }
 
   findTotalByIds(ids: string[]) {
     return this.http.post<any>(`${this.resource}/total-by-ids`, { ids: ids });
   }
 
-}
+  changeStatus(id: string, statusCode: string) {
+    return this.http.post<any>(`${this.resource}/${id}/change-status`, { code: statusCode });
+  }
 
+}

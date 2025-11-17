@@ -1,27 +1,28 @@
 package br.com.cardappio.domain.ticket;
 
-import br.com.cardappio.domain.order.OrderRepository;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.cardappio.core.adapter.Adapter;
+import com.cardappio.core.service.CrudService;
+
 import br.com.cardappio.domain.order.dto.FlutterOrderDTO;
+import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
 import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
-import com.cardappio.core.adapter.Adapter;
-import com.cardappio.core.service.CrudService;
+import br.com.cardappio.domain.ticket.dto.TotalAndIdDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, TicketDTO> {
 
     private final TicketRepository repository;
-
-    private final OrderRepository orderRepository;
 
     @Override
     protected Adapter<Ticket, TicketListDTO, TicketDTO> getAdapter() {
@@ -49,6 +50,15 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
         ticketDTO.getOrders().addAll(aggregatedOrderItems);
 
         return ticketDTO;
+    }
+
+    public List<TotalAndIdDTO> getTotalByids(final IdsDTO body) {
+
+        if (body.ids().isEmpty()) {
+            return List.of();
+        }
+
+        return repository.findTotalByIds(body.ids());
     }
 
 }
