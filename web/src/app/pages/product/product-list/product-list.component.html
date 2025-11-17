@@ -40,7 +40,8 @@
 
   <ng-template #header>
     <tr>
-      <th pSortableColumn="name" style="width: 40%">
+      <th style="width: 5%">Imagem</th>
+      <th pSortableColumn="name" style="width: 35%">
         <div class="flex items-center gap-2">
           Produto
           <p-sortIcon field="name"/>
@@ -63,6 +64,7 @@
     </tr>
 
     <tr>
+      <th></th>
       <th>
         <p-columnFilter
           type="text"
@@ -113,6 +115,14 @@
 
   <ng-template #body let-product>
     <tr>
+      <td>
+        @if (product.imageUrl) {
+          <img [src]="product.imageUrl" alt="{{ product.name }}"
+               style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+        } @else {
+          <i class="pi pi-image" style="font-size: 2rem; color: #ccc;"></i>
+        }
+      </td>
       <td>{{ product.name }}</td>
       <td>{{ product.category }}</td>
       <td>{{ product.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
@@ -147,7 +157,7 @@
 
   <ng-template #emptymessage>
     <tr>
-      <td colspan="4">Nenhum produto encontrado.</td>
+      <td colspan="6">Nenhum produto encontrado.</td>
     </tr>
   </ng-template>
 </p-table>

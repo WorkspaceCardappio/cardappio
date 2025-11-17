@@ -31,6 +31,14 @@
 
     <div class="flex flex-column mb-4 gap-1">
       <label for="image">Imagem</label>
+
+      @if (imagePreview) {
+        <div class="mb-2">
+          <img [src]="imagePreview" alt="Preview"
+               style="max-width: 200px; max-height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd;" />
+        </div>
+      }
+
       <p-fileupload
         mode="basic"
         name="archive"

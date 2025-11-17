@@ -21,10 +21,11 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
 
     private final S3StorageComponent s3StorageComponent;
     private final CategoryRepository repository;
+    private final CategoryAdapter categoryAdapter;
 
     @Override
     protected Adapter<Category, CategoryListDTO, CategoryDTO> getAdapter() {
-        return new CategoryAdapter();
+        return categoryAdapter;
     }
 
     public List<FlutterCategoryDTO> findFlutterCategories(UUID idMenu) {
@@ -36,9 +37,10 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
 
         if (Objects.nonNull(file)) {
 
-            dto.setImage(s3StorageComponent.getKey(file));
+            String key = s3StorageComponent.getKey(file);
+            dto.setImage(key);
 
-            s3StorageComponent.saveFile(file, dto.getImage());
+            s3StorageComponent.saveFile(file, key, null);
         }
 
         create(dto);
@@ -49,10 +51,11 @@ public class CategoryService extends CrudService<Category, UUID, CategoryListDTO
         if (Objects.nonNull(file)) {
 
             String oldImage = repository.findImageById(id);
+            String newKey = s3StorageComponent.getKey(file);
 
-            s3StorageComponent.saveFile(file, oldImage);
+            s3StorageComponent.saveFile(file, newKey, oldImage);
 
-            dto.setImage(s3StorageComponent.getKey(file));
+            dto.setImage(newKey);
         }
 
         update(id, dto);

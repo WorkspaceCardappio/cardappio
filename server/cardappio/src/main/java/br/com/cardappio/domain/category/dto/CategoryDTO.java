@@ -26,6 +26,9 @@ public class CategoryDTO {
     @Setter
     private String image;
 
+    @Setter
+    private String imageUrl;
+
     private IdDTO parent;
 }
 

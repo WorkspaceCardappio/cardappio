@@ -28,4 +28,22 @@ export class ProductService extends EntityService<any, any> {
     return this.http.post<any>(`${this.resource}/${id}/finalize`, {});
   }
 
+  saveWithImage(dto: any, file: any) {
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+
+    return this.http.post(`${ this.resource }/with-image`, formData);
+  }
+
+  updateWithImage(id: any, dto: any, file: any) {
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+
+    return this.http.put(`${ this.resource }/${ id }/with-image`, formData);
+  }
+
 }

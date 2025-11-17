@@ -1,37 +1,44 @@
 package br.com.cardappio.domain.product.dto;
 
-import br.com.cardappio.domain.category.Category;
 import br.com.cardappio.utils.Messages;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record ProductDTO(
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
+public class ProductDTO {
 
-        UUID id,
+    private UUID id;
 
-        @NotBlank(message = Messages.EMPTY_NAME)
-        @Length(max = 255, message = Messages.SIZE_255)
-        String name,
+    @NotBlank(message = Messages.EMPTY_NAME)
+    @Length(max = 255, message = Messages.SIZE_255)
+    private String name;
 
-        BigDecimal price,
+    private BigDecimal price;
 
-        BigDecimal quantity,
+    private BigDecimal quantity;
 
-        Boolean active,
+    private Boolean active;
 
-        @Future
-        LocalDate expirationDate,
+    @Future
+    private LocalDate expirationDate;
 
-        @Length(max = 255, message = Messages.SIZE_255)
-        String image,
+    @Length(max = 255, message = Messages.SIZE_255)
+    private String image;
 
-        @NotNull
-        Category category
-) {
+    private String imageUrl;
+
+    @NotNull
+    private UUID category;
 }
