@@ -1,7 +1,8 @@
 package br.com.cardappio.domain.product;
 
-import br.com.cardappio.domain.product.dto.FlutterProductDTO;
 import br.com.cardappio.domain.product.dto.ProductItemDTO;
+import br.com.cardappio.domain.product.item.ProductItem;
+
 import com.cardappio.core.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,14 +24,14 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
     List<ProductItemDTO> findOptionsById(@Param("id") UUID id);
 
     @Query("""
-            SELECT new br.com.cardappio.domain.product.dto.FlutterProductDTO(pi.id, p.id, p.name, pi.price, pi.description, p.note, p.image)
+            SELECT pi
             FROM ProductItem pi
-            JOIN pi.product p
-            JOIN p.category c
+            JOIN FETCH pi.product p
+            JOIN FETCH p.category c
             WHERE p.active = true
             AND c.id = :idCategory
             """)
-    List<FlutterProductDTO> findFlutterProducts(@Param("idCategory") UUID idCategory);
+    List<ProductItem> findFlutterProductsEntities(@Param("idCategory") UUID idCategory);
 
     @Query("""
             SELECT p.image

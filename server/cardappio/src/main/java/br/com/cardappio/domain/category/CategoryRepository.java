@@ -1,6 +1,5 @@
 package br.com.cardappio.domain.category;
 
-import br.com.cardappio.domain.category.dto.FlutterCategoryDTO;
 import com.cardappio.core.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +12,7 @@ import java.util.UUID;
 public interface CategoryRepository extends CrudRepository<Category, UUID> {
 
     @Query("""
-            SELECT DISTINCT new br.com.cardappio.domain.category.dto.FlutterCategoryDTO(c.id, c.name, c.image)
+            SELECT DISTINCT c
             FROM Category c
             JOIN Product p ON p.category = c
             JOIN MenuProduct mp ON mp.product = p
@@ -21,7 +20,7 @@ public interface CategoryRepository extends CrudRepository<Category, UUID> {
             WHERE c.active = true
             AND m.id = :idMenu
             """)
-    List<FlutterCategoryDTO> findFlutterCategories(@Param("idMenu") UUID idMenu);
+    List<Category> findFlutterCategoriesEntities(@Param("idMenu") UUID idMenu);
 
     @Query("""
             SELECT c.image
