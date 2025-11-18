@@ -182,29 +182,21 @@
                 </td>
 
                 <td>
-                  @switch (item.status.code) { @case (1) {
+                  @switch (item.status?.code) { @case (1) {
+                  <p-tag severity="warn" value="Pendente"></p-tag> } @case (2) {
+                  <p-tag severity="info" value="Em Andamento"></p-tag> } @case
+                  (3) { <p-tag severity="success" value="Finalizado"></p-tag> }
+                  @case (4) {
                   <p-tag
-                    severity="warn"
-                    [value]="item.status.description"
+                    [style]="{ background: '#22c55e' }"
+                    value="Entregue"
                   ></p-tag>
-                  } @case (2) {
-                  <p-tag
-                    severity="info"
-                    [value]="item.status.description"
-                  ></p-tag>
-                  } @case (3) {
-                  <p-tag
-                    severity="success"
-                    [value]="item.status.description"
-                  ></p-tag>
-                  } @case (4) {
-                  <p-tag
-                    severity="contrast"
-                    [value]="item.status.description"
-                  ></p-tag>
-                  } @default {
-                  <p-tag severity="danger" value="Não encontrado"></p-tag>
-                  } }
+                  } @case (5) {
+                  <p-tag severity="success" value="Pagamento aprovado"></p-tag>
+                  } @case (6) {
+                  <p-tag severity="danger" value="Pagamento falhou"></p-tag> }
+                  @default {
+                  <p-tag severity="danger" value="Desconhecido"></p-tag> } }
                 </td>
                 <td>{{ item.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
                 <!-- <td>
@@ -321,17 +313,15 @@
           }
         </td>
         <td>
-          @switch (order.status.code) { @case (1) {
-          <p-tag severity="warn" [value]="order.status.description"></p-tag>
-          } @case (2) {
-          <p-tag severity="info" [value]="order.status.description"></p-tag>
-          } @case (3) {
-          <p-tag severity="success" [value]="order.status.description"></p-tag>
-          } @case (4) {
-          <p-tag severity="contrast" [value]="order.status.description"></p-tag>
-          } @default {
-          <p-tag severity="danger" value="Não encontrado"></p-tag>
-          } }
+          @switch (order.status?.code) { @case (1) {
+          <p-tag severity="warn" value="Pendente"></p-tag> } @case (2) {
+          <p-tag severity="info" value="Em Andamento"></p-tag> } @case (3) {
+          <p-tag severity="success" value="Finalizado"></p-tag> } @case (4) {
+          <p-tag [style]="{ background: '#22c55e' }" value="Entregue"></p-tag> }
+          @case (5) {
+          <p-tag severity="success" value="Pagamento aprovado"></p-tag> } @case
+          (6) { <p-tag severity="danger" value="Pagamento falhou"></p-tag> }
+          @default { <p-tag severity="danger" value="Desconhecido"></p-tag> } }
         </td>
       </tr>
     </ng-template>
