@@ -204,6 +204,7 @@ export class TicketListComponent implements OnInit {
   closeSplit() {
     this.ticketToSplit = null;
     this.visibleSplit = false;
+    this.selectedOrders = [];
   }
 
   confirmSplit() {
