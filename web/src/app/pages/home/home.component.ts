@@ -2,6 +2,8 @@ import { Component, OnInit, PLATFORM_ID, Inject, ViewChildren, QueryList, Change
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CardModule } from 'primeng/card';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
@@ -110,13 +112,38 @@ export class HomeComponent implements OnInit {
     ]
   };
 
-  public statusDoughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+  public statusDoughnutChartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
         position: 'right'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const dataset = context.dataset.data as number[];
+            const total = dataset.reduce((acc: number, val: number) => acc + val, 0);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+            return `${label}: ${value} (${percentage}%)`;
+          }
+        }
+      },
+      datalabels: {
+        color: '#fff',
+        font: {
+          weight: 'bold',
+          size: 14
+        },
+        formatter: (value: any, context: any) => {
+          const dataset = context.dataset.data as number[];
+          const total = dataset.reduce((acc: number, val: number) => acc + val, 0);
+          const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+          return `${value}\n(${percentage}%)`;
+        }
       }
     }
   };
@@ -183,6 +210,10 @@ export class HomeComponent implements OnInit {
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
+
+    if (this.isBrowser) {
+      Chart.register(ChartDataLabels);
+    }
   }
 
   ngOnInit(): void {
