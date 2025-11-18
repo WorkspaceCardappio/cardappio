@@ -3,13 +3,15 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { CardModule } from 'primeng/card';
+import { Select } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { DashboardStats } from '../../core/models/dashboard.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, CardModule],
+  imports: [CommonModule, BaseChartDirective, CardModule, Select, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -149,6 +151,32 @@ export class HomeComponent implements OnInit {
     }
   };
 
+  chartViewOptions = [
+    { label: 'Pedidos ao longo do tempo', value: 'orders' },
+    { label: 'Status dos Pedidos', value: 'status' },
+    { label: 'Faturamento por período', value: 'revenue' },
+    { label: 'Top Produtos por Receita', value: 'topProducts' }
+  ];
+  selectedChartView = 'orders';
+
+  periodOptions = [
+    { label: '7 dias', value: 7 },
+    { label: '15 dias', value: 15 },
+    { label: '30 dias', value: 30 },
+    { label: '60 dias', value: 60 },
+    { label: '90 dias', value: 90 }
+  ];
+
+  topProductsLimitOptions = [
+    { label: 'Top 5', value: 5 },
+    { label: 'Top 10', value: 10 },
+    { label: 'Top 15', value: 15 },
+    { label: 'Top 20', value: 20 }
+  ];
+
+  selectedPeriod = 7;
+  selectedTopProductsLimit = 5;
+
   constructor(
     private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef,
@@ -230,6 +258,98 @@ export class HomeComponent implements OnInit {
     });
 
     this.dashboardService.getTopProducts(5).subscribe(data => {
+      this.topProductsBarChartData = {
+        labels: data.map(item => item.productName),
+        datasets: [
+          {
+            data: data.map(item => item.revenue),
+            label: 'Receita (R$)',
+            backgroundColor: '#F59E0B',
+            borderColor: '#D97706',
+            borderWidth: 1
+          }
+        ]
+      };
+      this.updateCharts();
+    });
+  }
+
+  onPeriodChange(): void {
+    this.loadOrdersChart();
+    this.loadRevenueChart();
+  }
+
+  onTopProductsLimitChange(): void {
+    this.loadTopProductsChart();
+  }
+
+  loadOrdersChart(): void {
+    this.dashboardService.getOrdersByPeriod(this.selectedPeriod).subscribe(data => {
+      this.ordersLineChartData = {
+        labels: data.labels,
+        datasets: [
+          {
+            data: data.data,
+            label: 'Pedidos',
+            fill: true,
+            tension: 0.4,
+            borderColor: '#4F46E5',
+            backgroundColor: 'rgba(79, 70, 229, 0.1)'
+          }
+        ]
+      };
+      this.updateCharts();
+    });
+  }
+
+  loadRevenueChart(): void {
+    this.dashboardService.getRevenueByPeriod(this.selectedPeriod).subscribe(data => {
+      this.revenueBarChartData = {
+        labels: data.labels,
+        datasets: [
+          {
+            data: data.data,
+            label: 'Faturamento (R$)',
+            backgroundColor: '#10B981',
+            borderColor: '#059669',
+            borderWidth: 1
+          }
+        ]
+      };
+      this.updateCharts();
+    });
+  }
+
+  loadStatusChart(): void {
+    this.dashboardService.getOrdersByStatus().subscribe(data => {
+      this.statusDoughnutChartData = {
+        labels: data.map(item => item.status),
+        datasets: [
+          {
+            data: data.map(item => item.count),
+            backgroundColor: [
+              '#FCD34D',
+              '#60A5FA',
+              '#34D399',
+              '#A78BFA',
+              '#F87171'
+            ],
+            hoverBackgroundColor: [
+              '#FBBF24',
+              '#3B82F6',
+              '#10B981',
+              '#8B5CF6',
+              '#EF4444'
+            ]
+          }
+        ]
+      };
+      this.updateCharts();
+    });
+  }
+
+  loadTopProductsChart(): void {
+    this.dashboardService.getTopProducts(this.selectedTopProductsLimit).subscribe(data => {
       this.topProductsBarChartData = {
         labels: data.map(item => item.productName),
         datasets: [

@@ -1,5 +1,4 @@
 <div class="dashboard-container">
-  <h2 class="dashboard-title">Dashboard - Cardappio</h2>
   <div class="kpi-grid">
     <p-card class="kpi-card kpi-orders">
       <div class="kpi-content">
@@ -55,64 +54,84 @@
   </div>
 
   @if (isBrowser) {
-  <div class="charts-grid">
-    <p-card class="chart-card">
-      <ng-template pTemplate="header">
-        <div class="chart-header">
-          <h3>Pedidos - Últimos 7 dias</h3>
-        </div>
-      </ng-template>
-      <div class="chart-container">
-        <canvas baseChart
-          [data]="ordersLineChartData"
-          [options]="ordersLineChartOptions"
-          type="line">
-        </canvas>
+  <div class="charts-section">
+    <div class="chart-selector-container">
+      <div class="filter-group">
+        <label for="chart-view">Visualização:</label>
+        <p-select
+          id="chart-view"
+          [options]="chartViewOptions"
+          [(ngModel)]="selectedChartView"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione a visualização">
+        </p-select>
       </div>
-    </p-card>
+
+      @if (selectedChartView === 'orders' || selectedChartView === 'revenue') {
+        <div class="filter-group">
+          <label for="period">Período:</label>
+          <p-select
+            id="period"
+            [options]="periodOptions"
+            [(ngModel)]="selectedPeriod"
+            (onChange)="onPeriodChange()"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecione o período">
+          </p-select>
+        </div>
+      }
+
+      @if (selectedChartView === 'topProducts') {
+        <div class="filter-group">
+          <label for="top-limit">Quantidade:</label>
+          <p-select
+            id="top-limit"
+            [options]="topProductsLimitOptions"
+            [(ngModel)]="selectedTopProductsLimit"
+            (onChange)="onTopProductsLimitChange()"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecione a quantidade">
+          </p-select>
+        </div>
+      }
+    </div>
 
     <p-card class="chart-card">
-      <ng-template pTemplate="header">
-        <div class="chart-header">
-          <h3>Status dos Pedidos</h3>
-        </div>
-      </ng-template>
       <div class="chart-container">
-        <canvas baseChart
-          [data]="statusDoughnutChartData"
-          [options]="statusDoughnutChartOptions"
-          type="doughnut">
-        </canvas>
-      </div>
-    </p-card>
+        @if (selectedChartView === 'orders') {
+          <canvas baseChart
+            [data]="ordersLineChartData"
+            [options]="ordersLineChartOptions"
+            type="line">
+          </canvas>
+        }
 
-    <p-card class="chart-card">
-      <ng-template pTemplate="header">
-        <div class="chart-header">
-          <h3>Faturamento - Últimos 7 dias</h3>
-        </div>
-      </ng-template>
-      <div class="chart-container">
-        <canvas baseChart
-          [data]="revenueBarChartData"
-          [options]="revenueBarChartOptions"
-          type="bar">
-        </canvas>
-      </div>
-    </p-card>
+        @if (selectedChartView === 'status') {
+          <canvas baseChart
+            [data]="statusDoughnutChartData"
+            [options]="statusDoughnutChartOptions"
+            type="doughnut">
+          </canvas>
+        }
 
-    <p-card class="chart-card">
-      <ng-template pTemplate="header">
-        <div class="chart-header">
-          <h3>Top 5 Produtos por Receita</h3>
-        </div>
-      </ng-template>
-      <div class="chart-container">
-        <canvas baseChart
-          [data]="topProductsBarChartData"
-          [options]="topProductsBarChartOptions"
-          type="bar">
-        </canvas>
+        @if (selectedChartView === 'revenue') {
+          <canvas baseChart
+            [data]="revenueBarChartData"
+            [options]="revenueBarChartOptions"
+            type="bar">
+          </canvas>
+        }
+
+        @if (selectedChartView === 'topProducts') {
+          <canvas baseChart
+            [data]="topProductsBarChartData"
+            [options]="topProductsBarChartOptions"
+            type="bar">
+          </canvas>
+        }
       </div>
     </p-card>
   </div>
