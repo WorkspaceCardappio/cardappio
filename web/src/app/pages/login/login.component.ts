@@ -87,7 +87,6 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {
     // TODO: Implementar recuperação de senha
-    console.log('Recuperar senha');
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
