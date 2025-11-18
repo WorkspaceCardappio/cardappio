@@ -8,6 +8,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import br.com.cardappio.auth.service.KeycloakAuthService;
 import br.com.cardappio.components.s3.S3StorageComponent;
+import br.com.cardappio.config.KeycloakAdminConfig;
 import br.com.cardappio.config.PostgresTestContainerConfig;
 import br.com.cardappio.config.S3Config;
 import br.com.cardappio.config.SecurityConfig;
@@ -22,6 +23,9 @@ public abstract class IntegrationTestBase {
 
     @MockitoBean
     private KeycloakAuthService keycloakAuthService;
+
+    @MockitoBean
+    private KeycloakAdminConfig keycloakAdminConfig;
 
     @MockitoBean
     private S3Config s3Config;
