@@ -1,0 +1,92 @@
+<div class="container">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Gerenciamento de Funcionários</h2>
+        <p-button
+          label="Novo Funcionário"
+          icon="pi pi-plus"
+          (onClick)="navigateToCreate()"
+        ></p-button>
+      </div>
+    </ng-template>
+
+    <p-table
+      [value]="employees"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} funcionários"
+      [globalFilterFields]="['username', 'email', 'firstName', 'lastName']"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Usuário</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Roles</th>
+          <th>Status</th>
+          <th style="width: 150px">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-employee>
+        <tr>
+          <td>{{ employee.username }}</td>
+          <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+          <td>
+            <p-tag
+              *ngFor="let role of employee.roles"
+              [value]="role"
+              [severity]="$any(getRolesSeverity(role))"
+              styleClass="mr-1"
+            ></p-tag>
+          </td>
+          <td>
+            <p-tag
+              [value]="getStatusLabel(employee.enabled)"
+              [severity]="$any(getStatusSeverity(employee.enabled))"
+            ></p-tag>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <p-button
+                icon="pi pi-pencil"
+                [rounded]="true"
+                [text]="true"
+                severity="info"
+                (onClick)="navigateToEdit(employee.id)"
+                pTooltip="Editar"
+                tooltipPosition="top"
+              ></p-button>
+              <p-button
+                icon="pi pi-trash"
+                [rounded]="true"
+                [text]="true"
+                severity="danger"
+                (onClick)="confirmDelete(employee)"
+                pTooltip="Excluir"
+                tooltipPosition="top"
+              ></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center">
+            Nenhum funcionário encontrado
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

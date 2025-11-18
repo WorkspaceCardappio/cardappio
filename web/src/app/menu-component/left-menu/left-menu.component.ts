@@ -23,6 +23,7 @@ export class LeftMenuComponent implements OnInit, OnDestroy {
   username: string = '';
   showUserMenu: boolean = false;
   private checkInterval: any;
+  filteredRoutes: any[] = [];
 
   constructor(
     public readonly router: Router,
@@ -60,7 +61,16 @@ export class LeftMenuComponent implements OnInit, OnDestroy {
         this.showUserMenu = false;
       }
 
+      this.filterRoutes();
       this.cdr.markForCheck();
+    }
+  }
+
+  private filterRoutes() {
+    if (this.authService.isAdmin()) {
+      this.filteredRoutes = this.routes;
+    } else {
+      this.filteredRoutes = this.routes.filter(route => !route.adminOnly);
     }
   }
 

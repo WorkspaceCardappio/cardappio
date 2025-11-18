@@ -1,0 +1,166 @@
+<div class="container">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>{{ isEditMode ? 'Editar Funcionário' : 'Novo Funcionário' }}</h2>
+        <p-button
+          label="Voltar"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="navigateToList()"
+        ></p-button>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="username">
+            Usuário <span class="required">*</span>
+          </label>
+          <input
+            id="username"
+            type="text"
+            pInputText
+            formControlName="username"
+            [class.ng-invalid]="isFieldInvalid('username')"
+            [class.ng-dirty]="isFieldInvalid('username')"
+            placeholder="Digite o nome de usuário"
+          />
+          <small class="error-message" *ngIf="isFieldInvalid('username')">
+            {{ getFieldError('username') }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            Email <span class="required">*</span>
+          </label>
+          <input
+            id="email"
+            type="email"
+            pInputText
+            formControlName="email"
+            [class.ng-invalid]="isFieldInvalid('email')"
+            [class.ng-dirty]="isFieldInvalid('email')"
+            placeholder="Digite o email"
+          />
+          <small class="error-message" *ngIf="isFieldInvalid('email')">
+            {{ getFieldError('email') }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="firstName">
+            Nome <span class="required">*</span>
+          </label>
+          <input
+            id="firstName"
+            type="text"
+            pInputText
+            formControlName="firstName"
+            [class.ng-invalid]="isFieldInvalid('firstName')"
+            [class.ng-dirty]="isFieldInvalid('firstName')"
+            placeholder="Digite o nome"
+          />
+          <small class="error-message" *ngIf="isFieldInvalid('firstName')">
+            {{ getFieldError('firstName') }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">
+            Sobrenome <span class="required">*</span>
+          </label>
+          <input
+            id="lastName"
+            type="text"
+            pInputText
+            formControlName="lastName"
+            [class.ng-invalid]="isFieldInvalid('lastName')"
+            [class.ng-dirty]="isFieldInvalid('lastName')"
+            placeholder="Digite o sobrenome"
+          />
+          <small class="error-message" *ngIf="isFieldInvalid('lastName')">
+            {{ getFieldError('lastName') }}
+          </small>
+        </div>
+
+        <div class="form-group" *ngIf="!isEditMode">
+          <label for="password">
+            Senha <span class="required">*</span>
+          </label>
+          <p-password
+            id="password"
+            formControlName="password"
+            [class.ng-invalid]="isFieldInvalid('password')"
+            [class.ng-dirty]="isFieldInvalid('password')"
+            placeholder="Digite a senha"
+            [toggleMask]="true"
+            [feedback]="false"
+            styleClass="w-full"
+          ></p-password>
+          <small class="error-message" *ngIf="isFieldInvalid('password')">
+            {{ getFieldError('password') }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="roles">Roles</label>
+          <p-multiSelect
+            id="roles"
+            formControlName="roles"
+            [options]="availableRoles"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecione as roles"
+            styleClass="w-full"
+            [showClear]="true"
+          ></p-multiSelect>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <p-checkbox
+            formControlName="enabled"
+            [binary]="true"
+            inputId="enabled"
+          ></p-checkbox>
+          <label for="enabled" class="checkbox-label">Ativo</label>
+        </div>
+
+        <div class="form-group checkbox-group" *ngIf="!isEditMode">
+          <p-checkbox
+            formControlName="emailVerified"
+            [binary]="true"
+            inputId="emailVerified"
+          ></p-checkbox>
+          <label for="emailVerified" class="checkbox-label">Email Verificado</label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <p-button
+          label="Cancelar"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="navigateToList()"
+          type="button"
+        ></p-button>
+        <p-button
+          [label]="isEditMode ? 'Atualizar' : 'Criar'"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="submitting"
+          [disabled]="employeeForm.invalid || submitting"
+        ></p-button>
+      </div>
+    </form>
+
+    <div class="loading-container" *ngIf="loading">
+      <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+    </div>
+  </p-card>
+</div>
+
+<p-toast></p-toast>

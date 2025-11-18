@@ -1,4 +1,139 @@
-<div>
-  <h2>Cardappio | Escola de T.I</h2>
+<div class="dashboard-container">
+  <div class="kpi-grid">
+    <p-card class="kpi-card kpi-orders">
+      <div class="kpi-content">
+        <div class="kpi-icon">
+          <i class="pi pi-shopping-cart"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-label">Pedidos Hoje</span>
+          <span class="kpi-value">{{ stats.ordersToday }}</span>
+          <span class="kpi-sublabel">Total: {{ stats.totalOrders }}</span>
+        </div>
+      </div>
+    </p-card>
 
+    <p-card class="kpi-card kpi-revenue">
+      <div class="kpi-content">
+        <div class="kpi-icon">
+          <i class="pi pi-dollar"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-label">Faturamento Hoje</span>
+          <span class="kpi-value">R$ {{ stats.revenueToday | number:'1.2-2' }}</span>
+          <span class="kpi-sublabel">Total: R$ {{ stats.totalRevenue | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="kpi-card kpi-ticket">
+      <div class="kpi-content">
+        <div class="kpi-icon">
+          <i class="pi pi-chart-line"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-label">Ticket Médio</span>
+          <span class="kpi-value">R$ {{ stats.averageTicket | number:'1.2-2' }}</span>
+          <span class="kpi-sublabel">Por pedido</span>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="kpi-card kpi-tables">
+      <div class="kpi-content">
+        <div class="kpi-icon">
+          <i class="pi pi-list"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-label">Comandas Abertas</span>
+          <span class="kpi-value">{{ stats.openTables }}</span>
+          <span class="kpi-sublabel">Ativas agora</span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  @if (isBrowser) {
+  <div class="charts-section">
+    <div class="chart-selector-container">
+      <div class="filter-group">
+        <label for="chart-view">Visualização:</label>
+        <p-select
+          id="chart-view"
+          [options]="chartViewOptions"
+          [(ngModel)]="selectedChartView"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione a visualização">
+        </p-select>
+      </div>
+
+      @if (selectedChartView === 'orders' || selectedChartView === 'revenue') {
+        <div class="filter-group">
+          <label for="period">Período:</label>
+          <p-select
+            id="period"
+            [options]="periodOptions"
+            [(ngModel)]="selectedPeriod"
+            (onChange)="onPeriodChange()"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecione o período">
+          </p-select>
+        </div>
+      }
+
+      @if (selectedChartView === 'topProducts') {
+        <div class="filter-group">
+          <label for="top-limit">Quantidade:</label>
+          <p-select
+            id="top-limit"
+            [options]="topProductsLimitOptions"
+            [(ngModel)]="selectedTopProductsLimit"
+            (onChange)="onTopProductsLimitChange()"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecione a quantidade">
+          </p-select>
+        </div>
+      }
+    </div>
+
+    <p-card class="chart-card">
+      <div class="chart-container">
+        @if (selectedChartView === 'orders') {
+          <canvas baseChart
+            [data]="ordersLineChartData"
+            [options]="ordersLineChartOptions"
+            type="line">
+          </canvas>
+        }
+
+        @if (selectedChartView === 'status') {
+          <canvas baseChart
+            [data]="statusDoughnutChartData"
+            [options]="statusDoughnutChartOptions"
+            type="doughnut">
+          </canvas>
+        }
+
+        @if (selectedChartView === 'revenue') {
+          <canvas baseChart
+            [data]="revenueBarChartData"
+            [options]="revenueBarChartOptions"
+            type="bar">
+          </canvas>
+        }
+
+        @if (selectedChartView === 'topProducts') {
+          <canvas baseChart
+            [data]="topProductsBarChartData"
+            [options]="topProductsBarChartOptions"
+            type="bar">
+          </canvas>
+        }
+      </div>
+    </p-card>
+  </div>
+  }
 </div>

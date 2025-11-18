@@ -43,5 +43,11 @@ export const routesMenu = [
     path: 'stock',
     name: 'Estoque',
     icon: 'fa-solid fa-boxes-packing',
+  },
+  {
+    path: 'employee',
+    name: 'Funcionários',
+    icon: 'fa-solid fa-users',
+    adminOnly: true
   }
 ];

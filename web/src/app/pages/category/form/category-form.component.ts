@@ -155,7 +155,6 @@ export class CategoryFormComponent implements OnInit {
 
     this.file = file.files[0];
 
-    // Criar preview da imagem
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagePreview = e.target.result;

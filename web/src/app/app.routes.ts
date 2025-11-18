@@ -97,6 +97,16 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'employee',
+        canActivate: [roleGuard],
+        data: {roles: ['ADMIN']},
+        children: [
+          { path: '', loadComponent: () => import('./pages/employee/employee-list/employee-list.component').then(m => m.EmployeeListComponent)},
+          { path: 'new', loadComponent: () => import('./pages/employee/employee-form/employee-form.component').then(m => m.EmployeeFormComponent)},
+          { path: 'edit/:id', loadComponent: () => import('./pages/employee/employee-form/employee-form.component').then(m => m.EmployeeFormComponent)},
+        ]
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'

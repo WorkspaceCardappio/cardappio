@@ -11,7 +11,7 @@
 
   <nav>
     <ul>
-      @for (route of routes; track $index) {
+      @for (route of filteredRoutes; track $index) {
       <li
         (click)="redirectTo(route.path)"
         [ngClass]="{ active: router.url === route.path }"

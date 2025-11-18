@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
-import { from, switchMap, of } from 'rxjs';
+import { from, switchMap, catchError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (typeof window === 'undefined') {
@@ -21,7 +21,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  return from(keycloak.getToken()).pipe(
+  if (!keycloak.isLoggedIn()) {
+    return next(req);
+  }
+
+  return from(keycloak.updateToken(30)).pipe(
+    switchMap(() => keycloak.getToken()),
     switchMap((token) => {
       if (token) {
         const clonedReq = req.clone({
@@ -31,6 +36,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         });
         return next(clonedReq);
       }
+      return next(req);
+    }),
+    catchError((error) => {
+      console.error('Erro ao atualizar token:', error);
       return next(req);
     })
   );

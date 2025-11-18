@@ -12,9 +12,12 @@ import org.springframework.stereotype.Repository;
 import com.cardappio.core.repository.CrudRepository;
 
 import br.com.cardappio.domain.ticket.dto.TotalAndIdDTO;
+import br.com.cardappio.enums.TicketStatus;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, UUID> {
+
+    Long countByStatus(TicketStatus status);
 
     @Query(value = """
             SELECT t FROM Ticket t
