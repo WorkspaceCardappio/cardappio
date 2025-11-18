@@ -20,6 +20,11 @@ public interface OrderRepository extends CrudRepository<Order, UUID> {
 
     Page<Order> findByTicketIdAndSaveStatus(UUID ticketId, SaveStatus saveStatus, Pageable pageable);
 
+    List<Order> findAllBySaveStatus(SaveStatus saveStatus);
+
+    @Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.productOrders po LEFT JOIN FETCH po.productItem pi LEFT JOIN FETCH pi.product WHERE o.saveStatus = :saveStatus")
+    List<Order> findAllBySaveStatusWithProductOrders(@Param("saveStatus") SaveStatus saveStatus);
+
     @Query("""
             SELECT new br.com.cardappio.domain.order.dto.TotalAndIdDTO(
                 order.id,

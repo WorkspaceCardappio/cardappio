@@ -25,7 +25,7 @@ public record TicketListDTO(
                 ticket.getId(),
                 ticket.getNumber(),
                 ticket.getStatus().toDTO(),
-                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Darth Vader"),
+                Optional.ofNullable(ticket.getOwner()).map(Person::getName).orElse("Sistema"),
                 new TableRestaurantToTicketDTO(ticket.getTable())
         );
     }
