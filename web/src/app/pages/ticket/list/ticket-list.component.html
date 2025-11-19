@@ -134,6 +134,30 @@
     <tr>
       <td colspan="12">
         <div class="p-4">
+          @if (ticket.loadingOrders) {
+          <div class="orders-skeleton">
+            <table class="skeleton-table">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Número</th>
+                  <th style="width: 20%">Total</th>
+                  <th style="width: 30%">Status</th>
+                  <th style="width: 20%">Mesa</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (i of [1, 2]; track i) {
+                <tr class="skeleton-row">
+                  <td><p-skeleton width="50%" height="1.5rem"></p-skeleton></td>
+                  <td><p-skeleton width="60%" height="1.5rem"></p-skeleton></td>
+                  <td><p-skeleton width="70%" height="1.5rem"></p-skeleton></td>
+                  <td><p-skeleton width="40%" height="1.5rem"></p-skeleton></td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          } @else {
           <p-table
             [lazy]="true"
             [paginator]="true"
@@ -141,13 +165,14 @@
             [value]="ticket.orders"
             [totalRecords]="ticket.totalOrders"
             (onLazyLoad)="loadOrders($event, ticket)"
-            [loading]="ticket.loadingOrders"
+            [loading]="false"
             dataKey="id"
             [tableStyle]="{ 'min-width': '50rem' }"
             showGridlines
             stripedRows
             [sortField]="'number'"
             [sortOrder]="-1"
+            styleClass="orders-table-fade-in"
           >
             <ng-template #header>
               <tr>
@@ -165,7 +190,6 @@
                 <th style="width: 20%">
                   Mesa
                 </th>
-                <!-- <th style="width: 10%">Ações</th> -->
               </tr>
             </ng-template>
 
@@ -177,8 +201,7 @@
                   @if (this.loadingTotalOrders) {
                   <p-skeleton
                     width="60%"
-                    height="2rem"
-                    class="mb-2"
+                    height="1.5rem"
                   ></p-skeleton>
                   } @else {
                   {{
@@ -206,17 +229,6 @@
                   <p-tag severity="danger" value="Desconhecido"></p-tag> } }
                 </td>
                 <td>{{ item.table?.number || '-' }}</td>
-                <!-- <td>
-                  <button
-                    pButton
-                    type="button"
-                    icon="pi pi-pencil"
-                    class="p-button-text p-button-sm"
-                    (click)="redirectToOrder(item.id)"
-                    style="margin-right: 0.5rem"
-                    aria-label="Editar"
-                  ></button>
-                </td> -->
               </tr>
             </ng-template>
 
@@ -226,6 +238,7 @@
               </tr>
             </ng-template>
           </p-table>
+          }
         </div>
       </td>
     </tr>
