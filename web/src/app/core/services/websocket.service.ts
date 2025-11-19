@@ -56,12 +56,12 @@ export class WebSocketService {
           }
         },
         onConnect: () => {
-          console.log('✅ WebSocket conectado');
+          console.log('WebSocket conectado');
           this.connectionStatus.next(true);
           this.subscribeToTopics();
         },
         onDisconnect: () => {
-          console.warn('⚠️ WebSocket desconectado - tentando reconectar...');
+          console.warn('WebSocket desconectado - tentando reconectar...');
           this.connectionStatus.next(false);
         },
         onStompError: (frame) => {
