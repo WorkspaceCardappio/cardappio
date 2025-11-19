@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 
+import br.com.cardappio.config.security.SecurityUtils;
 import br.com.cardappio.domain.order.dto.FlutterOrderDTO;
 import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.ticket.adapter.TicketAdapter;
@@ -27,6 +28,13 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
     @Override
     protected Adapter<Ticket, TicketListDTO, TicketDTO> getAdapter() {
         return new TicketAdapter();
+    }
+
+    @Override
+    public UUID create(final TicketDTO dto) {
+        final Ticket ticket = getAdapter().toEntity(dto);
+        ticket.setCreatedBy(SecurityUtils.getFullName());
+        return repository.save(ticket).getId();
     }
 
     public FlutterTicketDTO findFlutterTicket(UUID idTicket) {

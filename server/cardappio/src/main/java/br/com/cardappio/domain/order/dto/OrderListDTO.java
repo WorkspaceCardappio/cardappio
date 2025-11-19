@@ -13,7 +13,8 @@ public record OrderListDTO(
         Long number,
         EnumDTO status,
         TicketListDTO ticket,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        String createdBy
 ) {
 
     public OrderListDTO(final Order order) {
@@ -22,7 +23,8 @@ public record OrderListDTO(
                 order.getNumber(),
                 order.getStatus().toDTO(),
                 new TicketListDTO(order.getTicket()),
-                order.getCreatedAt()
+                order.getCreatedAt(),
+                order.getCreatedBy() != null ? order.getCreatedBy() : "Sistema"
         );
     }
 
