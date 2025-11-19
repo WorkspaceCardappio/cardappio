@@ -360,7 +360,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
     return `${hours}h${mins > 0 ? mins + 'min' : ''}`;
   }
 
-  // Método auxiliar para calcular total de itens
   getTotalItems(order: KitchenOrder): number {
     if (!order.items) return 0;
     return order.items.reduce((sum, item) => sum + item.quantity, 0);
