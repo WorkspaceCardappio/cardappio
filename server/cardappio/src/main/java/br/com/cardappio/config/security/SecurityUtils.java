@@ -58,32 +58,25 @@ public final class SecurityUtils {
         return null;
     }
 
-    /**
-     * Retorna o melhor identificador disponível para o usuário/service account autenticado.
-     * Tenta na ordem: name (nome completo), preferred_username, azp (client_id), subject.
-     */
+
     public static String getUserIdentifier() {
         Jwt jwt = getJwt();
         if (jwt != null) {
-            // Tenta nome completo primeiro (usuários normais)
             String name = jwt.getClaimAsString("name");
             if (name != null && !name.trim().isEmpty()) {
                 return name;
             }
 
-            // Tenta preferred_username
             String username = jwt.getClaimAsString("preferred_username");
             if (username != null && !username.trim().isEmpty()) {
                 return username;
             }
 
-            // Tenta azp (authorized party / client_id) para service accounts
             String clientId = jwt.getClaimAsString("azp");
             if (clientId != null && !clientId.trim().isEmpty()) {
                 return clientId;
             }
 
-            // Fallback final: subject
             String subject = jwt.getSubject();
             if (subject != null && !subject.trim().isEmpty()) {
                 return subject;

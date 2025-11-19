@@ -1,0 +1,23 @@
+::ng-deep {
+  .p-datatable {
+    .p-datatable-tbody > tr > td {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: 95vw !important;
+    }
+
+    .p-datatable {
+      font-size: 0.875rem;
+
+      th, td {
+        padding: 0.5rem !important;
+      }
+    }
+  }
+}

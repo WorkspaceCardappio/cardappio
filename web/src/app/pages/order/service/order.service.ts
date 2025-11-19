@@ -48,4 +48,8 @@ export class OrderService extends EntityService<any, any> {
     return this.http.post<any>(`${this.resource}/${id}/change-status`, { code: statusCode });
   }
 
+  findOrderDetails(id: string): Observable<any> {
+    return this.http.get<any>(`${this.resource}/items/to-summary/${id}`);
+  }
+
 }
