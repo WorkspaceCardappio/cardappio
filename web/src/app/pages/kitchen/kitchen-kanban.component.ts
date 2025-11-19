@@ -227,15 +227,15 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
 
     // CORREÇÃO LÓGICA: Usa os IDs reais definidos no HTML
     switch (newColumnId) {
-      case 'cdk-drop-list-6':
+      case 'cdk-drop-list-0':
         newStatusCode = STATUS_CODES.PENDING;
         newStatusDescription = 'Pendente';
         break;
-      case 'cdk-drop-list-7':
+      case 'cdk-drop-list-1':
         newStatusCode = STATUS_CODES.IN_PROGRESS;
         newStatusDescription = 'Em Andamento';
         break;
-      case 'cdk-drop-list-9':
+      case 'cdk-drop-list-2':
         newStatusCode = STATUS_CODES.DELIVERED;
         newStatusDescription = 'Pronto';
         break;
