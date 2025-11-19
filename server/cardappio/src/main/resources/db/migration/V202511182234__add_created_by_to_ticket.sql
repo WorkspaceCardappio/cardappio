@@ -1,0 +1,1 @@
+ALTER TABLE ticket ADD COLUMN created_by VARCHAR(255);

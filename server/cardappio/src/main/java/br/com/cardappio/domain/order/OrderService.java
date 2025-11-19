@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cardappio.core.adapter.Adapter;
 import com.cardappio.core.service.CrudService;
 
+import br.com.cardappio.config.security.SecurityUtils;
 import br.com.cardappio.domain.ingredient.Ingredient;
 import br.com.cardappio.domain.ingredient.IngredientRepository;
 import br.com.cardappio.domain.ingredient.IngredientStock;
@@ -47,6 +48,13 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     @Override
     protected Adapter<Order, OrderListDTO, OrderDTO> getAdapter() {
         return new OrderAdapter();
+    }
+
+    @Override
+    public UUID create(final OrderDTO dto) {
+        final Order order = getAdapter().toEntity(dto);
+        order.setCreatedBy(SecurityUtils.getFullName());
+        return repository.save(order).getId();
     }
 
     public Page<OrderToTicketDTO> findToTicket(final UUID id, final Pageable pageable) {
@@ -167,7 +175,9 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     }
 
     public void createFlutterOrder(FlutterCreateOrderDTO dto) {
-        UUID idSavedOrder = repository.save(Order.of(dto)).getId();
+        Order order = Order.of(dto);
+        order.setCreatedBy(SecurityUtils.getFullName());
+        UUID idSavedOrder = repository.save(order).getId();
         List<ProductOrder> productOrders = new ArrayList<>();
 
         dto.items().forEach(item -> {

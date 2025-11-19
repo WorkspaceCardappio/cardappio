@@ -68,6 +68,9 @@ public class Ticket implements EntityModel<UUID> {
     @Column(name = "external_reference_id", unique = true)
     private String externalReferenceId;
 
+    @Column(name = "created_by", updatable = false)
+    private String createdBy;
+
     public static Ticket of(final TicketDTO dto) {
 
         final Ticket ticket = new Ticket();
