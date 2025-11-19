@@ -204,6 +204,7 @@ export class TicketListComponent implements OnInit {
   closeSplit() {
     this.ticketToSplit = null;
     this.visibleSplit = false;
+    this.selectedOrders = [];
   }
 
   confirmSplit() {
@@ -224,9 +225,13 @@ export class TicketListComponent implements OnInit {
   getSelectedTotal(): number {
     if (!this.selectedOrders || this.selectedOrders.length === 0) return 0;
 
-    return this.selectedOrders.reduce((total, order) => {
-      return total + (order.total || 0);
-    }, 0);
+    let total = 0;
+
+    this.selectedOrders.forEach((order: any) => {
+      total += this.totalOrdersById.get(order.id) || 0;
+    });
+
+    return total;
   }
 
   disabledConfirmSplit() {
