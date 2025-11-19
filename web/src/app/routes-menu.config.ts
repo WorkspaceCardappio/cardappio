@@ -51,8 +51,13 @@ export const routesMenu = [
   },
   {
     path: 'employee',
-    name: 'Funcionários',
+    name: 'Funcionárioos',
     icon: 'fa-solid fa-users',
     adminOnly: true
-  }
+  },
+  {
+    path: 'kitchen', // Adicionado
+    name: 'Cozinha',
+    icon: 'fa-solid fa-clipboard-list',
+  },
 ];

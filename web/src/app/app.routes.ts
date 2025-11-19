@@ -114,6 +114,12 @@ export const routes: Routes = [
         canActivate: [defaultRedirectGuard],
         children: []
       },
+      {
+        path: 'kitchen', // Nova rota para a cozinha
+        canActivate: [roleGuard],
+        data: { roles: ['USER', 'ADMIN'] },
+        loadComponent: () => import('./pages/kitchen/kitchen-kanban.component').then(m => m.KitchenKanbanComponent)
+      }
     ]
   },
   {
