@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Loader } from '../../../model/loader';
@@ -34,7 +35,8 @@ import { OrderService } from '../service/order.service';
     FormsModule,
     DialogModule,
     AutoCompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SkeletonModule
 ],
   providers: [
     OrderStatusService
@@ -57,6 +59,7 @@ export class OrderListComponent implements OnInit {
   visibleOrderDetails = false;
   orderDetails: any[] = [];
   selectedOrder: any = null;
+  loadingOrderDetails = false;
 
   status: Loader = { values: [] };
 
@@ -164,14 +167,19 @@ export class OrderListComponent implements OnInit {
   openOrderDetails(orderId: string) {
     this.selectedOrder = this.orders.find(o => o.id === orderId);
     this.visibleOrderDetails = true;
+    this.loadingOrderDetails = true;
+    this.orderDetails = [];
 
     this.service.findOrderDetails(orderId).subscribe({
       next: (details) => {
         this.orderDetails = details;
+        this.loadingOrderDetails = false;
         this.cdr.markForCheck();
       },
       error: () => {
         this.orderDetails = [];
+        this.loadingOrderDetails = false;
+        this.cdr.markForCheck();
       }
     });
   }
