@@ -42,6 +42,19 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
         return ticketId;
     }
 
+    @Override
+    public void update(final UUID id, final TicketDTO dto) {
+        final Ticket existingTicket = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+
+        final Ticket ticket = getAdapter().toEntity(dto);
+        ticket.setId(existingTicket.getId());
+        ticket.setCreatedBy(existingTicket.getCreatedBy());
+
+        repository.save(ticket);
+        webSocketNotificationService.notifyTicketChange(id.toString(), EventType.UPDATED, null);
+    }
+
     public FlutterTicketDTO findFlutterTicket(UUID idTicket) {
 
         Ticket ticketEntity = repository.findByIdWithOrdersFlutter(idTicket)
