@@ -1,22 +1,17 @@
-import {
-  CommonModule,
-  DatePipe,
-
-} from '@angular/common';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, NgZone} from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { interval, Subscription, Observable, of } from 'rxjs';
+import { interval, Subscription, of } from 'rxjs';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OrderService } from "../order/service/order.service";
-import { finalize, timeout, catchError, tap } from 'rxjs/operators';
+import { finalize, timeout, catchError } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { CurrencyPipe } from '@angular/common';
+import { WebSocketService } from '../../core/services/websocket.service';
 
 const STATUS_NAMES = {
   PENDING: "PENDING",
@@ -97,44 +92,69 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
   ready: KitchenOrder[] = [];
 
   loading = true;
+  wsConnected = false;
   private refreshSubscription: Subscription | null = null;
+  private wsSubscription: Subscription | null = null;
+  private wsStatusSubscription: Subscription | null = null;
   private isUpdating = false;
-  private loadingTimeout: any;
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   constructor(
     private service: OrderService,
     private cdr: ChangeDetectorRef,
     private messageService: MessageService,
-    private ngZone: NgZone
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit(): void {
-    this.loadingTimeout = setTimeout(() => {
-      if (this.loading) {
-        this.loading = false;
-        this.cdr.markForCheck();
-      }
-    }, 5000);
+    // Só executa no browser, não no servidor (SSR)
+    if (!this.isBrowser) {
+      this.loading = false;
+      return;
+    }
 
     this.loadOrders();
+    this.subscribeToWebSocket();
 
-    // Isola o interval do Zone.js para estabilidade (NG0506)
-    this.ngZone.runOutsideAngular(() => {
-      this.refreshSubscription = interval(30000).subscribe(() => {
-        if (!this.isUpdating) {
-          this.ngZone.run(() => {
-            this.loadOrders();
-          });
-        }
-      });
+    this.refreshSubscription = interval(30000).subscribe(() => {
+      if (!this.isUpdating) {
+        this.loadOrders();
+      }
     });
   }
 
   ngOnDestroy(): void {
     this.refreshSubscription?.unsubscribe();
-    if (this.loadingTimeout) {
-      clearTimeout(this.loadingTimeout);
-    }
+    this.wsSubscription?.unsubscribe();
+    this.wsStatusSubscription?.unsubscribe();
+  }
+
+  private subscribeToWebSocket(): void {
+    this.wsSubscription = this.webSocketService.getOrderEvents()
+      .pipe(
+        catchError(() => {
+          console.error('Erro ao processar evento de pedido');
+          return of(null);
+        })
+      )
+      .subscribe(event => {
+        if (!event) return;
+        console.log('Order event received in kitchen:', event);
+        this.loadOrders();
+      });
+
+    this.wsStatusSubscription = this.webSocketService.getConnectionStatus()
+      .pipe(
+        catchError(() => {
+          console.error('Erro ao monitorar status de conexão');
+          return of(false);
+        })
+      )
+      .subscribe(connected => {
+        this.wsConnected = connected;
+        this.cdr.markForCheck();
+      });
   }
 
   loadOrders() {
@@ -147,10 +167,30 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
       STATUS_NAMES.DELIVERED
     ].join(',');
 
-    const rsqlFilter = `status=in=(${relevantStatuses})`;
-    const request = `?pageSize=100&search=${rsqlFilter}`;
+    // Filtro para pedidos de hoje (00:00 até 23:59:59)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    this.service.findAllDTO(request)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const formatLocalDateTime = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
+
+    const startOfDay = formatLocalDateTime(today);
+    const endOfDay = formatLocalDateTime(tomorrow);
+
+    const rsqlFilter = `status=in=(${relevantStatuses});createdAt>=${startOfDay};createdAt<${endOfDay}`;
+    const request = `pageSize=100&search=${rsqlFilter}`;
+
+    this.service.findKitchenOrders(request)
       .pipe(
         timeout(10000),
         catchError((error) => {
@@ -323,6 +363,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
   // Método auxiliar para calcular total de itens
   getTotalItems(order: KitchenOrder): number {
     if (!order.items) return 0;
-    return order.items.reduce((sum, item) => item.quantity, 0);
+    return order.items.reduce((sum, item) => sum + item.quantity, 0);
   }
 }

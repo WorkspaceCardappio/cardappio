@@ -50,14 +50,14 @@ export const routesMenu = [
     adminOnly: true
   },
   {
+    path: 'kitchen',
+    name: 'Cozinha',
+    icon: 'fa-solid fa-clipboard-list',
+  },
+  {
     path: 'employee',
     name: 'Funcionárioos',
     icon: 'fa-solid fa-users',
     adminOnly: true
-  },
-  {
-    path: 'kitchen', // Adicionado
-    name: 'Cozinha',
-    icon: 'fa-solid fa-clipboard-list',
   },
 ];

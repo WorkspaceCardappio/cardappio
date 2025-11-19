@@ -24,6 +24,7 @@ import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
 import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
 import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.order.dto.OrderKitchenDTO;
 import br.com.cardappio.domain.order.dto.OrderListDTO;
 import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
 import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
@@ -37,6 +38,11 @@ import lombok.RequiredArgsConstructor;
 public class OrderController extends CrudController<Order, UUID, OrderListDTO, OrderDTO> {
 
     private final OrderService service;
+
+    @GetMapping("/kitchen")
+    public Page<OrderKitchenDTO> findKitchenOrders(@PageableDefault(size = 100) final Pageable pageable) {
+        return service.findKitchenOrders(pageable);
+    }
 
     @GetMapping("/to-ticket/{id}")
     public Page<OrderToTicketDTO> findToTicket(@PathVariable final UUID id,

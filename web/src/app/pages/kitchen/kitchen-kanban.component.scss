@@ -193,7 +193,56 @@
   }
 }
 
-/* Responsividade */
+.quantity-badge {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.items-section {
+  .text-base {
+    line-height: 1.4;
+  }
+}
+
+.pending-card {
+  .text-red-500 {
+    color: #ef4444;
+  }
+}
+
+.in-progress-card {
+  .text-blue-600 {
+    color: #2563eb;
+  }
+}
+
+.ready-card {
+  .text-green-600 {
+    color: #16a34a;
+  }
+}
+
 @media (max-width: 1200px) {
   .kanban-column {
     flex: 0 0 380px;
@@ -208,5 +257,15 @@
 
   .kanban-column {
     flex: 0 0 320px;
+  }
+
+  .quantity-badge {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+
+  .item-card {
+    padding: 0.75rem !important;
   }
 }

@@ -3,14 +3,10 @@
 <div class="flex justify-content-between align-items-center mb-3">
   <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 
-  <button
-    pButton
-    icon="pi pi-refresh"
-    label="Atualizar"
-    [loading]="loading"
-    (click)="loadOrders()"
-    class="p-button-sm p-button-outlined">
-  </button>
+  <div class="flex align-items-center gap-2">
+    <i class="pi" [ngClass]="wsConnected ? 'pi-circle-fill text-green-500' : 'pi-circle-fill text-red-500'" style="font-size: 0.75rem"></i>
+    <span class="text-sm text-600">{{ wsConnected ? 'Tempo real ativo' : 'Reconectando...' }}</span>
+  </div>
 </div>
 
 <div class="kanban-container" cdkDropListGroup>
@@ -37,74 +33,54 @@
       } @else {
         @for (order of pending; track order.id) {
           <div cdkDrag class="kanban-card pending-card">
-            <div class="flex justify-content-between align-items-center mb-2">
-              <span class="text-2xl font-bold text-700">#{{ order.number }}</span>
-              <p-tag severity="warn" value="Pendente"></p-tag>
-            </div>
-
-            <div class="mb-3 p-2 surface-100 border-round">
-              <div class="text-sm text-600 mb-1">
-                <i class="pi pi-ticket mr-2 text-primary"></i>
-                <strong>Comanda:</strong> {{ order.ticket?.number || 'N/A' }}
-              </div>
-
-              @if (order.ticket?.name) {
-                <div class="text-sm text-600 mb-1">
-                  <i class="pi pi-user mr-2 text-primary"></i>
-                  <strong>Cliente:</strong> {{ order.ticket.name }}
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-red-500 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
                 </div>
-              }
-
-              <div class="text-sm text-600">
-                <i class="pi pi-clock mr-2 text-primary"></i>
-                <strong class="text-red-500">Há:</strong> <span class="text-red-500 font-medium">{{ getTimeSince(order.createdAt) }}</span>
               </div>
             </div>
 
+            <!-- Observação do pedido (se houver) -->
             @if (order.observation) {
-              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 surface-50">
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
                 <div class="text-xs font-semibold text-700 mb-1">
-                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação:
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
                 </div>
                 <div class="text-xs text-600">{{ order.observation }}</div>
               </div>
             }
 
+            <!-- Lista de itens (Principal) -->
             @if (order.items && order.items.length > 0) {
-              <div class="mt-2 pt-2 border-top-1 border-200">
-                <div class="flex justify-content-between align-items-center mb-2">
-                  <span class="text-sm font-semibold text-700">
-                    <i class="pi pi-list mr-1"></i> Itens ({{ getTotalItems(order) }})
-                  </span>
-                  @if (order.totalValue) {
-                    <span class="text-sm font-bold text-900">
-                      {{ order.totalValue | currency:'BRL' }}
-                    </span>
-                  }
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
                 </div>
 
-                <div class="kanban-items-list">
-                  @for (item of order.items; track item.id) {
-                    <div class="mb-2 p-2 surface-50 border-round">
-                      <div class="flex justify-content-between align-items-start">
-                        <div class="text-sm font-medium text-900">
-                          <span class="font-bold text-primary mr-1">{{ item.quantity }}x</span>
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
                           {{ item.product.name }}
                         </div>
-                        @if (item.totalPrice) {
-                          <span class="text-xs text-600">{{ item.totalPrice | currency:'BRL' }}</span>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
                         }
                       </div>
-
-                      @if (item.observation) {
-                        <div class="text-xs text-600 mt-1 ml-3 border-left-2 border-100 pl-2">
-                          <i class="pi pi-comment mr-1" style="font-size: 0.7rem;"></i>
-                          {{ item.observation }}
-                        </div>
-                      }
                     </div>
-                  }
-                </div>
+                  </div>
+                }
               </div>
             }
           </div>
@@ -141,74 +117,54 @@
       } @else {
         @for (order of inProgress; track order.id) {
           <div cdkDrag class="kanban-card in-progress-card">
-            <div class="flex justify-content-between align-items-center mb-2">
-              <span class="text-2xl font-bold text-700">#{{ order.number }}</span>
-              <p-tag severity="info" value="Em Andamento"></p-tag>
-            </div>
-
-            <div class="mb-3 p-2 surface-100 border-round">
-              <div class="text-sm text-600 mb-1">
-                <i class="pi pi-ticket mr-2 text-primary"></i>
-                <strong>Comanda:</strong> {{ order.ticket?.number || 'N/A' }}
-              </div>
-
-              @if (order.ticket?.name) {
-                <div class="text-sm text-600 mb-1">
-                  <i class="pi pi-user mr-2 text-primary"></i>
-                  <strong>Cliente:</strong> {{ order.ticket.name }}
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-blue-600 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
                 </div>
-              }
-
-              <div class="text-sm text-600">
-                <i class="pi pi-clock mr-2 text-primary"></i>
-                <strong>Há:</strong> {{ getTimeSince(order.createdAt) }}
               </div>
             </div>
 
+            <!-- Observação do pedido (se houver) -->
             @if (order.observation) {
-              <div class="mb-3 p-2 border-round border-left-3 border-blue-500 surface-50">
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
                 <div class="text-xs font-semibold text-700 mb-1">
-                  <i class="pi pi-info-circle mr-1 text-blue-600"></i> Observação:
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
                 </div>
                 <div class="text-xs text-600">{{ order.observation }}</div>
               </div>
             }
 
+            <!-- Lista de itens (Principal) -->
             @if (order.items && order.items.length > 0) {
-              <div class="mt-2 pt-2 border-top-1 border-200">
-                <div class="flex justify-content-between align-items-center mb-2">
-                  <span class="text-sm font-semibold text-700">
-                    <i class="pi pi-list mr-1"></i> Itens ({{ getTotalItems(order) }})
-                  </span>
-                  @if (order.totalValue) {
-                    <span class="text-sm font-bold text-900">
-                      {{ order.totalValue | currency:'BRL' }}
-                    </span>
-                  }
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
                 </div>
 
-                <div class="kanban-items-list">
-                  @for (item of order.items; track item.id) {
-                    <div class="mb-2 p-2 surface-50 border-round">
-                      <div class="flex justify-content-between align-items-start">
-                        <div class="text-sm font-medium text-900">
-                          <span class="font-bold text-primary mr-1">{{ item.quantity }}x</span>
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
                           {{ item.product.name }}
                         </div>
-                        @if (item.totalPrice) {
-                          <span class="text-xs text-600">{{ item.totalPrice | currency:'BRL' }}</span>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
                         }
                       </div>
-
-                      @if (item.observation) {
-                        <div class="text-xs text-600 mt-1 ml-3 border-left-2 border-100 pl-2">
-                          <i class="pi pi-comment mr-1" style="font-size: 0.7rem;"></i>
-                          {{ item.observation }}
-                        </div>
-                      }
                     </div>
-                  }
-                </div>
+                  </div>
+                }
               </div>
             }
           </div>
@@ -245,74 +201,54 @@
       } @else {
         @for (order of ready; track order.id) {
           <div cdkDrag class="kanban-card ready-card">
-            <div class="flex justify-content-between align-items-center mb-2">
-              <span class="text-2xl font-bold text-700">#{{ order.number }}</span>
-              <p-tag severity="success" value="Pronto"></p-tag>
-            </div>
-
-            <div class="mb-3 p-2 surface-100 border-round">
-              <div class="text-sm text-600 mb-1">
-                <i class="pi pi-ticket mr-2 text-primary"></i>
-                <strong>Comanda:</strong> {{ order.ticket?.number || 'N/A' }}
-              </div>
-
-              @if (order.ticket?.name) {
-                <div class="text-sm text-600 mb-1">
-                  <i class="pi pi-user mr-2 text-primary"></i>
-                  <strong>Cliente:</strong> {{ order.ticket.name }}
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-green-600 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
                 </div>
-              }
-
-              <div class="text-sm text-600">
-                <i class="pi pi-clock mr-2 text-primary"></i>
-                <strong>Há:</strong> {{ getTimeSince(order.createdAt) }}
               </div>
             </div>
 
+            <!-- Observação do pedido (se houver) -->
             @if (order.observation) {
-              <div class="mb-3 p-2 border-round border-left-3 border-green-500 surface-50">
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
                 <div class="text-xs font-semibold text-700 mb-1">
-                  <i class="pi pi-info-circle mr-1 text-green-600"></i> Observação:
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
                 </div>
                 <div class="text-xs text-600">{{ order.observation }}</div>
               </div>
             }
 
+            <!-- Lista de itens (Principal) -->
             @if (order.items && order.items.length > 0) {
-              <div class="mt-2 pt-2 border-top-1 border-200">
-                <div class="flex justify-content-between align-items-center mb-2">
-                  <span class="text-sm font-semibold text-700">
-                    <i class="pi pi-list mr-1"></i> Itens ({{ getTotalItems(order) }})
-                  </span>
-                  @if (order.totalValue) {
-                    <span class="text-sm font-bold text-900">
-                      {{ order.totalValue | currency:'BRL' }}
-                    </span>
-                  }
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
                 </div>
 
-                <div class="kanban-items-list">
-                  @for (item of order.items; track item.id) {
-                    <div class="mb-2 p-2 surface-50 border-round">
-                      <div class="flex justify-content-between align-items-start">
-                        <div class="text-sm font-medium text-900">
-                          <span class="font-bold text-primary mr-1">{{ item.quantity }}x</span>
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
                           {{ item.product.name }}
                         </div>
-                        @if (item.totalPrice) {
-                          <span class="text-xs text-600">{{ item.totalPrice | currency:'BRL' }}</span>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
                         }
                       </div>
-
-                      @if (item.observation) {
-                        <div class="text-xs text-600 mt-1 ml-3 border-left-2 border-100 pl-2">
-                          <i class="pi pi-comment mr-1" style="font-size: 0.7rem;"></i>
-                          {{ item.observation }}
-                        </div>
-                      }
                     </div>
-                  }
-                </div>
+                  </div>
+                }
               </div>
             }
           </div>

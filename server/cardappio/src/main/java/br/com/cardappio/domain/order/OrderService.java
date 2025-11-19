@@ -23,6 +23,7 @@ import br.com.cardappio.domain.order.dto.FlutterCreateOrderDTO;
 import br.com.cardappio.domain.order.dto.IdsDTO;
 import br.com.cardappio.domain.order.dto.NoteDTO;
 import br.com.cardappio.domain.order.dto.OrderDTO;
+import br.com.cardappio.domain.order.dto.OrderKitchenDTO;
 import br.com.cardappio.domain.order.dto.OrderListDTO;
 import br.com.cardappio.domain.order.dto.OrderToTicketDTO;
 import br.com.cardappio.domain.order.dto.ProductOrderToSummaryDTO;
@@ -203,6 +204,20 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
         productOrderRepository.saveAll(productOrders);
         webSocketNotificationService.notifyOrderChange(idSavedOrder.toString(), EventType.CREATED, null);
+    }
+
+    public Page<OrderKitchenDTO> findKitchenOrders(final Pageable pageable) {
+        return repository.findAllBySaveStatusWithProductOrders(SaveStatus.FINALIZED)
+                .stream()
+                .map(OrderKitchenDTO::new)
+                .collect(java.util.stream.Collectors.collectingAndThen(
+                        java.util.stream.Collectors.toList(),
+                        list -> new org.springframework.data.domain.PageImpl<>(
+                                list,
+                                pageable,
+                                list.size()
+                        )
+                ));
     }
 
     public void changeStatus(final UUID id, final ChangeStatusDTO statusDTO) {
