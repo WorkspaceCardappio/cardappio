@@ -11,7 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { DashboardStats } from '../../core/models/dashboard.model';
 import { forkJoin } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, catchError } from 'rxjs/operators';
+import { WebSocketService } from '../../core/services/websocket.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -209,10 +211,12 @@ export class HomeComponent implements OnInit {
 
   selectedPeriod = 7;
   selectedTopProductsLimit = 5;
+  wsConnected = false;
 
   constructor(
     private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef,
+    private readonly webSocketService: WebSocketService,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -225,7 +229,48 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     if (this.isBrowser) {
       this.loadDashboardData();
+      this.subscribeToUpdates();
     }
+  }
+
+  private subscribeToUpdates(): void {
+    this.webSocketService.getOrderEvents()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao processar evento de pedido no dashboard:', error);
+          return of(null);
+        })
+      )
+      .subscribe(event => {
+        if (!event) return;
+        console.log('Dashboard: Atualizando gráficos após evento de pedido:', event.eventType);
+        this.loadDashboardData();
+      });
+
+    this.webSocketService.getTicketEvents()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao processar evento de comanda no dashboard:', error);
+          return of(null);
+        })
+      )
+      .subscribe(event => {
+        if (!event) return;
+        console.log('Dashboard: Atualizando gráficos após evento de comanda:', event.eventType);
+        this.loadDashboardData();
+      });
+
+    this.webSocketService.getConnectionStatus()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao monitorar status de conexão no dashboard:', error);
+          return of(false);
+        })
+      )
+      .subscribe(connected => {
+        this.wsConnected = connected;
+        this.cdr.markForCheck();
+      });
   }
 
   loadDashboardData(): void {

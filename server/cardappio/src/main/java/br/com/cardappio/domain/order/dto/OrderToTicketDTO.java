@@ -1,6 +1,7 @@
 package br.com.cardappio.domain.order.dto;
 
 import br.com.cardappio.domain.order.Order;
+import br.com.cardappio.domain.table.dto.TableRestaurantToTicketDTO;
 import br.com.cardappio.utils.EnumDTO;
 
 import java.math.BigDecimal;
@@ -13,7 +14,8 @@ public record OrderToTicketDTO(
         Long number,
         EnumDTO status,
         LocalDateTime createdAt,
-        BigDecimal total
+        BigDecimal total,
+        TableRestaurantToTicketDTO table
 ) {
 
     public OrderToTicketDTO(final Order order) {
@@ -22,7 +24,10 @@ public record OrderToTicketDTO(
                 order.getNumber(),
                 order.getStatus().toDTO(),
                 order.getCreatedAt(),
-                order.getTotal()
+                order.getTotal(),
+                order.getTicket() != null && order.getTicket().getTable() != null
+                        ? new TableRestaurantToTicketDTO(order.getTicket().getTable())
+                        : null
         );
     }
 

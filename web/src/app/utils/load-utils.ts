@@ -11,4 +11,14 @@ export default class LoadUtils {
     }
   }
 
+  static getDefaultForTicket() {
+    return {
+      first: 0,
+      rows: 20,
+      sortField: 'number',
+      sortOrder: -1,
+      filters: {},
+    }
+  }
+
 }
