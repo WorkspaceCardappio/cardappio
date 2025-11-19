@@ -54,6 +54,10 @@ export class OrderListComponent implements OnInit {
   visibleChangeStatus = false;
   idToChangeStatus: string | null = null;
 
+  visibleOrderDetails = false;
+  orderDetails: any[] = [];
+  selectedOrder: any = null;
+
   status: Loader = { values: [] };
 
   form: FormGroup<any> = new FormGroup({});
@@ -155,5 +159,28 @@ export class OrderListComponent implements OnInit {
           this.form.reset();
         }
       })
+  }
+
+  openOrderDetails(orderId: string) {
+    this.selectedOrder = this.orders.find(o => o.id === orderId);
+    this.visibleOrderDetails = true;
+
+    this.service.findOrderDetails(orderId).subscribe({
+      next: (details) => {
+        this.orderDetails = details;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.orderDetails = [];
+      }
+    });
+  }
+
+  getTotalItem(item: any): number {
+    return (item.totalPrice || 0) + (item.additionalsPrice || 0) + (item.variablesPrice || 0);
+  }
+
+  getTotalOrder(): number {
+    return this.orderDetails.reduce((acc, item) => acc + this.getTotalItem(item), 0);
   }
 }

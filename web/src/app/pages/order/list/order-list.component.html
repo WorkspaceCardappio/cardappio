@@ -14,6 +14,8 @@
   dataKey="id"
   showGridlines
   stripedRows
+  sortField="createdAt"
+  [sortOrder]="-1"
 >
   <ng-template pTemplate="caption">
     <div class="flex">
@@ -74,10 +76,10 @@
         <button
           pButton
           type="button"
-          icon="pi pi-trash"
-          class="p-button-text p-button-sm p-button-danger"
-          (click)="onDelete(order.id)"
-          aria-label="Excluir"
+          icon="pi pi-file-edit"
+          class="p-button-text p-button-sm p-button-success"
+          (click)="openOrderDetails(order.id)"
+          aria-label="Ver Extrato"
         ></button>
         <button
           pButton
@@ -133,3 +135,120 @@
     </div>
   </p-dialog>
 </form>
+
+<p-dialog
+  header="Extrato do Pedido"
+  [modal]="true"
+  [(visible)]="visibleOrderDetails"
+  [style]="{ width: '90vw', maxWidth: '1200px' }"
+  [maximizable]="true"
+>
+  @if (selectedOrder) {
+    <div class="mb-4">
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <p><strong>Pedido Nº:</strong> {{ selectedOrder.number }}</p>
+          <p><strong>Comanda:</strong> {{ selectedOrder.ticket?.number }}</p>
+          <p><strong>Data:</strong> {{ selectedOrder.createdAt | date : "dd/MM/yyyy HH:mm" }}</p>
+        </div>
+        <div class="col-12 md:col-6">
+          <p><strong>Criado por:</strong> {{ selectedOrder.createdBy }}</p>
+          <p><strong>Status:</strong> {{ selectedOrder.status?.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <p-table
+      [value]="orderDetails"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [scrollable]="true"
+      scrollHeight="60vh">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width: 200px">Produto</th>
+          <th style="min-width: 80px">Qtd</th>
+          <th style="min-width: 120px">Valor Unit.</th>
+          <th style="min-width: 180px">Adicionais</th>
+          <th style="min-width: 180px; max-width: 250px">Observação</th>
+          <th style="min-width: 120px" class="text-right">Total</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>
+            <div>
+              <strong class="block mb-1">{{ item.productName }}</strong>
+              @if (item.itemSize?.description) {
+                <div class="text-sm text-600 mb-1">
+                  <i class="pi pi-box mr-1"></i>
+                  Tamanho: {{ item.itemSize.description }}
+                </div>
+              }
+              @if (item.variables && item.variables.length > 0) {
+                <div class="text-sm mt-2">
+                  @for (variable of item.variables; track variable.id) {
+                    <div class="text-500 mb-1">
+                      <i class="pi pi-sliders-h mr-1"></i>
+                      {{ variable.variableName }}: <strong>{{ variable.optionName }}</strong>
+                      @if (variable.price > 0) {
+                        <span class="ml-1 text-primary">(+{{ variable.price | currency : "BRL" : "symbol" : "1.2-2" }})</span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </td>
+          <td class="text-center">
+            <strong>{{ item.quantity }}</strong>
+          </td>
+          <td>{{ item.price | currency : "BRL" : "symbol" : "1.2-2" }}</td>
+          <td>
+            @if (item.additionals && item.additionals.length > 0) {
+              <div class="text-sm">
+                @for (additional of item.additionals; track additional.id) {
+                  <div class="mb-2 flex align-items-start gap-1">
+                    <i class="pi pi-plus-circle text-primary mt-1" style="font-size: 0.75rem"></i>
+                    <div class="flex-1">
+                      <span class="font-semibold">{{ additional.additionalName }}</span>
+                      @if (additional.price > 0) {
+                        <div class="text-primary">+{{ additional.price | currency : "BRL" : "symbol" : "1.2-2" }}</div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <span class="text-500">-</span>
+            }
+          </td>
+          <td>
+            <div
+              class="text-sm"
+              style="word-break: break-word; overflow-wrap: break-word; max-width: 250px;">
+              {{ item.note || '-' }}
+            </div>
+          </td>
+          <td class="text-right">
+            <strong class="text-lg">{{ getTotalItem(item) | currency : "BRL" : "symbol" : "1.2-2" }}</strong>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-end">
+          <strong class="text-xl">Total do Pedido: {{ getTotalOrder() | currency : "BRL" : "symbol" : "1.2-2" }}</strong>
+        </div>
+      </ng-template>
+    </p-table>
+  }
+
+  <div class="flex gap-2 mt-4" style="justify-content: flex-end">
+    <p-button
+      label="Fechar"
+      severity="secondary"
+      (click)="visibleOrderDetails = false"
+    />
+  </div>
+</p-dialog>
