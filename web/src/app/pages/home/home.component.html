@@ -1,55 +1,107 @@
 <div class="dashboard-container">
   <div class="kpi-grid">
     <p-card class="kpi-card kpi-orders">
-      <div class="kpi-content">
-        <div class="kpi-icon">
-          <i class="pi pi-shopping-cart"></i>
+      @if (isLoadingStats) {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+          </div>
+          <div class="kpi-info">
+            <p-skeleton width="8rem" height="1rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="4rem" height="2rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="6rem" height="0.8rem"></p-skeleton>
+          </div>
         </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Pedidos Hoje</span>
-          <span class="kpi-value">{{ stats.ordersToday }}</span>
-          <span class="kpi-sublabel">Total: {{ stats.totalOrders }}</span>
+      } @else {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <i class="pi pi-shopping-cart"></i>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Pedidos Hoje</span>
+            <span class="kpi-value">{{ stats.ordersToday }}</span>
+            <span class="kpi-sublabel">Total: {{ stats.totalOrders }}</span>
+          </div>
         </div>
-      </div>
+      }
     </p-card>
 
     <p-card class="kpi-card kpi-revenue">
-      <div class="kpi-content">
-        <div class="kpi-icon">
-          <i class="pi pi-dollar"></i>
+      @if (isLoadingStats) {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+          </div>
+          <div class="kpi-info">
+            <p-skeleton width="8rem" height="1rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="6rem" height="2rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="8rem" height="0.8rem"></p-skeleton>
+          </div>
         </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Faturamento Hoje</span>
-          <span class="kpi-value">R$ {{ stats.revenueToday | number:'1.2-2' }}</span>
-          <span class="kpi-sublabel">Total: R$ {{ stats.totalRevenue | number:'1.2-2' }}</span>
+      } @else {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <i class="pi pi-dollar"></i>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Faturamento Hoje</span>
+            <span class="kpi-value">R$ {{ stats.revenueToday | number:'1.2-2' }}</span>
+            <span class="kpi-sublabel">Total: R$ {{ stats.totalRevenue | number:'1.2-2' }}</span>
+          </div>
         </div>
-      </div>
+      }
     </p-card>
 
     <p-card class="kpi-card kpi-ticket">
-      <div class="kpi-content">
-        <div class="kpi-icon">
-          <i class="pi pi-chart-line"></i>
+      @if (isLoadingStats) {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+          </div>
+          <div class="kpi-info">
+            <p-skeleton width="7rem" height="1rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="5rem" height="2rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="5rem" height="0.8rem"></p-skeleton>
+          </div>
         </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Ticket Médio</span>
-          <span class="kpi-value">R$ {{ stats.averageTicket | number:'1.2-2' }}</span>
-          <span class="kpi-sublabel">Por pedido</span>
+      } @else {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <i class="pi pi-chart-line"></i>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Ticket Médio</span>
+            <span class="kpi-value">R$ {{ stats.averageTicket | number:'1.2-2' }}</span>
+            <span class="kpi-sublabel">Por pedido</span>
+          </div>
         </div>
-      </div>
+      }
     </p-card>
 
     <p-card class="kpi-card kpi-tables">
-      <div class="kpi-content">
-        <div class="kpi-icon">
-          <i class="pi pi-list"></i>
+      @if (isLoadingStats) {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+          </div>
+          <div class="kpi-info">
+            <p-skeleton width="9rem" height="1rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="3rem" height="2rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="6rem" height="0.8rem"></p-skeleton>
+          </div>
         </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Comandas Abertas</span>
-          <span class="kpi-value">{{ stats.openTables }}</span>
-          <span class="kpi-sublabel">Ativas agora</span>
+      } @else {
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <i class="pi pi-list"></i>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Comandas Abertas</span>
+            <span class="kpi-value">{{ stats.openTables }}</span>
+            <span class="kpi-sublabel">Ativas agora</span>
+          </div>
         </div>
-      </div>
+      }
     </p-card>
   </div>
 
@@ -100,39 +152,45 @@
     </div>
 
     <p-card class="chart-card">
-      <div class="chart-container">
-        @if (selectedChartView === 'orders') {
-          <canvas baseChart
-            [data]="ordersLineChartData"
-            [options]="ordersLineChartOptions"
-            type="line">
-          </canvas>
-        }
+      @if (isLoadingChart) {
+        <div class="chart-container chart-skeleton">
+          <p-skeleton width="100%" height="400px"></p-skeleton>
+        </div>
+      } @else {
+        <div class="chart-container">
+          @if (selectedChartView === 'orders') {
+            <canvas baseChart
+              [data]="ordersLineChartData"
+              [options]="ordersLineChartOptions"
+              type="line">
+            </canvas>
+          }
 
-        @if (selectedChartView === 'status') {
-          <canvas baseChart
-            [data]="statusDoughnutChartData"
-            [options]="statusDoughnutChartOptions"
-            type="doughnut">
-          </canvas>
-        }
+          @if (selectedChartView === 'status') {
+            <canvas baseChart
+              [data]="statusDoughnutChartData"
+              [options]="statusDoughnutChartOptions"
+              type="doughnut">
+            </canvas>
+          }
 
-        @if (selectedChartView === 'revenue') {
-          <canvas baseChart
-            [data]="revenueBarChartData"
-            [options]="revenueBarChartOptions"
-            type="bar">
-          </canvas>
-        }
+          @if (selectedChartView === 'revenue') {
+            <canvas baseChart
+              [data]="revenueBarChartData"
+              [options]="revenueBarChartOptions"
+              type="bar">
+            </canvas>
+          }
 
-        @if (selectedChartView === 'topProducts') {
-          <canvas baseChart
-            [data]="topProductsBarChartData"
-            [options]="topProductsBarChartOptions"
-            type="bar">
-          </canvas>
-        }
-      </div>
+          @if (selectedChartView === 'topProducts') {
+            <canvas baseChart
+              [data]="topProductsBarChartData"
+              [options]="topProductsBarChartOptions"
+              type="bar">
+            </canvas>
+          }
+        </div>
+      }
     </p-card>
   </div>
   }
