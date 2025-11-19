@@ -19,6 +19,8 @@ import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
 import { OrderService } from '../../order/service/order.service';
 import { TicketService } from '../service/ticket.service';
+import { WebSocketService } from '../../../core/services/websocket.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-ticket',
@@ -80,16 +82,46 @@ export class TicketListComponent implements OnInit {
 
   optionsSelected: string = 'criar';
   selectedTicketToSend: any = null;
+  wsConnected = false;
 
   constructor(
     private service: TicketService,
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private readonly webSocketService: WebSocketService
   ) {}
 
   ngOnInit(): void {
-    this.load(LoadUtils.getDefault());
+    this.load(LoadUtils.getDefaultForTicket());
+    this.subscribeToTicketChanges();
+  }
+
+  private subscribeToTicketChanges(): void {
+    this.webSocketService.getTicketEvents()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao processar evento de comanda:', error);
+          return of(null);
+        })
+      )
+      .subscribe(event => {
+        if (!event) return;
+        console.log('Ticket event received in component:', event);
+        this.load(LoadUtils.getDefaultForTicket());
+      });
+
+    this.webSocketService.getConnectionStatus()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao monitorar status de conexão:', error);
+          return of(false);
+        })
+      )
+      .subscribe(connected => {
+        this.wsConnected = connected;
+        this.cdr.markForCheck();
+      });
   }
 
   clear(table: any) {
@@ -101,7 +133,7 @@ export class TicketListComponent implements OnInit {
   }
 
   onDelete(id: any) {
-    this.service.delete(id).subscribe(() => this.load(LoadUtils.getDefault()));
+    this.service.delete(id).subscribe(() => this.load(LoadUtils.getDefaultForTicket()));
   }
 
   load(event: TableLazyLoadEvent) {
@@ -144,7 +176,7 @@ export class TicketListComponent implements OnInit {
     const event: TableLazyLoadEvent = {
       first: 0,
       rows: 50,
-      sortField: 'createdAt',
+      sortField: 'number',
       sortOrder: -1,
     };
 
@@ -218,7 +250,7 @@ export class TicketListComponent implements OnInit {
     this.service.split(this.ticketToSplit?.id, ids, ticketToSend)
       .subscribe(() => {
         this.closeSplit();
-        this.load(LoadUtils.getDefault());
+        this.load(LoadUtils.getDefaultForTicket());
       });
   }
 

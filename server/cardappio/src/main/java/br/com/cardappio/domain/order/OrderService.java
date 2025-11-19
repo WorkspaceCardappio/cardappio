@@ -31,6 +31,8 @@ import br.com.cardappio.domain.product.item.ProductItemIngredient;
 import br.com.cardappio.domain.save.SaveStatus;
 import br.com.cardappio.domain.stock.IngredientStockRepository;
 import br.com.cardappio.enums.OrderStatus;
+import br.com.cardappio.websocket.EventType;
+import br.com.cardappio.websocket.WebSocketNotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +46,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     private final ProductOrderRepository productOrderRepository;
     private final IngredientRepository ingredientRepository;
     private final IngredientStockRepository ingredientStockRepository;
+    private final WebSocketNotificationService webSocketNotificationService;
 
     @Override
     protected Adapter<Order, OrderListDTO, OrderDTO> getAdapter() {
@@ -54,7 +57,9 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     public UUID create(final OrderDTO dto) {
         final Order order = getAdapter().toEntity(dto);
         order.setCreatedBy(SecurityUtils.getUserIdentifier());
-        return repository.save(order).getId();
+        UUID orderId = repository.save(order).getId();
+        webSocketNotificationService.notifyOrderChange(orderId.toString(), EventType.CREATED, null);
+        return orderId;
     }
 
     public Page<OrderToTicketDTO> findToTicket(final UUID id, final Pageable pageable) {
@@ -113,6 +118,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
         order.markAsFinalized();
         repository.save(order);
+        webSocketNotificationService.notifyOrderChange(id.toString(), EventType.UPDATED, null);
     }
 
     private void debitFromLots(final ProductItemIngredient piIngredient,
@@ -196,6 +202,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
         });
 
         productOrderRepository.saveAll(productOrders);
+        webSocketNotificationService.notifyOrderChange(idSavedOrder.toString(), EventType.CREATED, null);
     }
 
     public void changeStatus(final UUID id, final ChangeStatusDTO statusDTO) {
@@ -205,6 +212,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
                 .orElseThrow(() -> new EntityNotFoundException(ORDER_NOT_FOUND));
         order.setStatus(status);
         repository.save(order);
+        webSocketNotificationService.notifyOrderChange(id.toString(), EventType.STATUS_CHANGED, null);
     }
 }
 

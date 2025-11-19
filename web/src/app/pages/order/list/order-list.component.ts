@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -17,11 +17,14 @@ import LoadUtils from '../../../utils/load-utils';
 import { RequestUtils } from '../../../utils/request-utils';
 import { OrderStatusService } from '../service/order-status.service';
 import { OrderService } from '../service/order.service';
+import { WebSocketService } from '../../../core/services/websocket.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
   imports: [
+    CommonModule,
     TableModule,
     RouterLink,
     CurrencyPipe,
@@ -60,6 +63,7 @@ export class OrderListComponent implements OnInit {
   orderDetails: any[] = [];
   selectedOrder: any = null;
   loadingOrderDetails = false;
+  wsConnected = false;
 
   status: Loader = { values: [] };
 
@@ -72,6 +76,35 @@ export class OrderListComponent implements OnInit {
     this.form = this.builder.group({
       status: ['', Validators.required]
     })
+
+    this.subscribeToOrderChanges();
+  }
+
+  private subscribeToOrderChanges(): void {
+    this.webSocketService.getOrderEvents()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao processar evento de pedido:', error);
+          return of(null);
+        })
+      )
+      .subscribe(event => {
+        if (!event) return;
+        console.log('Order event received in component:', event);
+        this.loadOrders(LoadUtils.getDefault());
+      });
+
+    this.webSocketService.getConnectionStatus()
+      .pipe(
+        catchError(error => {
+          console.error('Erro ao monitorar status de conexão:', error);
+          return of(false);
+        })
+      )
+      .subscribe(connected => {
+        this.wsConnected = connected;
+        this.cdr.markForCheck();
+      });
   }
 
   constructor(
@@ -79,7 +112,8 @@ export class OrderListComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private readonly statusService: OrderStatusService,
-    private readonly builder: FormBuilder
+    private readonly builder: FormBuilder,
+    private readonly webSocketService: WebSocketService
   ) {}
 
   loadOrders(event: TableLazyLoadEvent) {
