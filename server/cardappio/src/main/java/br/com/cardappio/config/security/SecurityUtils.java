@@ -67,14 +67,14 @@ public final class SecurityUtils {
                 return name;
             }
 
-            String username = jwt.getClaimAsString("preferred_username");
-            if (username != null && !username.trim().isEmpty()) {
-                return username;
-            }
-
             String clientId = jwt.getClaimAsString("azp");
             if (clientId != null && !clientId.trim().isEmpty()) {
                 return clientId;
+            }
+
+            String username = jwt.getClaimAsString("preferred_username");
+            if (username != null && !username.trim().isEmpty()) {
+                return username;
             }
 
             String subject = jwt.getSubject();
