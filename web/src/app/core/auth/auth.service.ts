@@ -70,8 +70,11 @@ export class AuthService {
 
   login(): Promise<void> {
     if (!this.isBrowser()) return Promise.resolve();
+
+    const redirectPath = this.isUser() && !this.isAdmin() ? '/order' : '/home';
+
     return this.keycloakService.login({
-      redirectUri: window.location.origin + '/home'
+      redirectUri: window.location.origin + redirectPath
     });
   }
 
@@ -133,7 +136,8 @@ export class AuthService {
         keycloakInstance.tokenParsed = tokenParsed;
         keycloakInstance.authenticated = true;
 
-        window.location.href = '/home';
+        const redirectPath = this.isUser() && !this.isAdmin() ? '/order' : '/home';
+        window.location.href = redirectPath;
       }
     } catch (error) {
       console.error('Erro no login customizado:', error);
