@@ -16,6 +16,8 @@ import br.com.cardappio.domain.ticket.dto.FlutterTicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketDTO;
 import br.com.cardappio.domain.ticket.dto.TicketListDTO;
 import br.com.cardappio.domain.ticket.dto.TotalAndIdDTO;
+import br.com.cardappio.websocket.EventType;
+import br.com.cardappio.websocket.WebSocketNotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, TicketDTO> {
 
     private final TicketRepository repository;
+    private final WebSocketNotificationService webSocketNotificationService;
 
     @Override
     protected Adapter<Ticket, TicketListDTO, TicketDTO> getAdapter() {
@@ -34,7 +37,22 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
     public UUID create(final TicketDTO dto) {
         final Ticket ticket = getAdapter().toEntity(dto);
         ticket.setCreatedBy(SecurityUtils.getUserIdentifier());
-        return repository.save(ticket).getId();
+        UUID ticketId = repository.save(ticket).getId();
+        webSocketNotificationService.notifyTicketChange(ticketId.toString(), EventType.CREATED, null);
+        return ticketId;
+    }
+
+    @Override
+    public void update(final UUID id, final TicketDTO dto) {
+        final Ticket existingTicket = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+
+        final Ticket ticket = getAdapter().toEntity(dto);
+        ticket.setId(existingTicket.getId());
+        ticket.setCreatedBy(existingTicket.getCreatedBy());
+
+        repository.save(ticket);
+        webSocketNotificationService.notifyTicketChange(id.toString(), EventType.UPDATED, null);
     }
 
     public FlutterTicketDTO findFlutterTicket(UUID idTicket) {

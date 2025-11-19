@@ -1,4 +1,9 @@
 <div class="dashboard-container">
+  <div class="flex align-items-center gap-2 mb-3">
+    <i class="pi" [ngClass]="wsConnected ? 'pi-circle-fill text-green-500' : 'pi-circle-fill text-red-500'" style="font-size: 0.75rem"></i>
+    <span class="text-sm text-600">{{ wsConnected ? 'Atualização em tempo real ativa' : 'Reconectando...' }}</span>
+  </div>
+
   <div class="kpi-grid">
     <p-card class="kpi-card kpi-orders">
       @if (isLoadingStats) {

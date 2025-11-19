@@ -7,6 +7,8 @@ import br.com.cardappio.domain.person.PersonRepository;
 import br.com.cardappio.domain.ticket.Ticket;
 import br.com.cardappio.domain.ticket.TicketRepository;
 import br.com.cardappio.domain.ticket.split.dto.SplitOrdersDTO;
+import br.com.cardappio.websocket.EventType;
+import br.com.cardappio.websocket.WebSocketNotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class SplitService {
     private final TicketRepository ticketRepository;
     private final OrderRepository orderRepository;
     private final PersonRepository personRepository;
+    private final WebSocketNotificationService webSocketNotificationService;
 
     public void ticket(final UUID id, final UUID idPerson, final SplitOrdersDTO valueToSplit) {
 
@@ -42,6 +45,9 @@ public class SplitService {
         newTicket.getOrders().addAll(orders);
 
         ticketRepository.saveAll(List.of(ticket, newTicket));
+
+        webSocketNotificationService.notifyTicketChange(ticket.getId().toString(), EventType.UPDATED, null);
+        webSocketNotificationService.notifyTicketChange(newTicket.getId().toString(), EventType.CREATED, null);
     }
 
     private void validateSizeToSplit(final Ticket ticket, final List<Order> orders) {
