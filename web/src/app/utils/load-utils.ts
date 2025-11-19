@@ -5,8 +5,8 @@ export default class LoadUtils {
     return {
       first: 0,
       rows: 20,
-      sortField: '',
-      sortOrder: 1,
+      sortField: 'createdAt',
+      sortOrder: -1,
       filters: {},
     }
   }
