@@ -6,20 +6,26 @@ import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CardModule } from 'primeng/card';
 import { Select } from 'primeng/select';
+import { Skeleton } from 'primeng/skeleton';
 import { FormsModule } from '@angular/forms';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { DashboardStats } from '../../core/models/dashboard.model';
+import { forkJoin } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, CardModule, Select, FormsModule],
+  imports: [CommonModule, BaseChartDirective, CardModule, Select, Skeleton, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
   @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
   isBrowser: boolean;
+
+  isLoadingStats = true;
+  isLoadingChart = true;
 
   stats: DashboardStats = {
     totalOrders: 0,
@@ -218,183 +224,184 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isBrowser) {
-      setTimeout(() => {
-        this.loadDashboardData();
-      }, 100);
+      this.loadDashboardData();
     }
   }
 
   loadDashboardData(): void {
-    this.dashboardService.getDashboardStats().subscribe(stats => {
-      this.stats = stats;
-    });
+    this.isLoadingStats = true;
+    this.dashboardService.getDashboardStats()
+      .pipe(finalize(() => {
+        this.isLoadingStats = false;
+        this.cdr.markForCheck();
+      }))
+      .subscribe({
+        next: (stats) => {
+          this.stats = stats;
+        },
+        error: (error) => {
+          console.error('Erro ao carregar estatísticas:', error);
+        }
+      });
 
-    this.dashboardService.getOrdersByPeriod(7).subscribe(data => {
-      this.ordersLineChartData = {
-        labels: data.labels,
-        datasets: [
-          {
-            data: data.data,
-            label: 'Pedidos',
-            fill: true,
-            tension: 0.4,
-            borderColor: '#4F46E5',
-            backgroundColor: 'rgba(79, 70, 229, 0.1)'
-          }
-        ]
-      };
-      this.updateCharts();
-    });
+    this.isLoadingChart = true;
+    forkJoin({
+      orders: this.dashboardService.getOrdersByPeriod(this.selectedPeriod),
+      revenue: this.dashboardService.getRevenueByPeriod(this.selectedPeriod),
+      status: this.dashboardService.getOrdersByStatus(),
+      topProducts: this.dashboardService.getTopProducts(this.selectedTopProductsLimit)
+    })
+    .pipe(finalize(() => {
+      this.isLoadingChart = false;
+      this.cdr.markForCheck();
+    }))
+    .subscribe({
+      next: (data) => {
+        this.ordersLineChartData = {
+          labels: data.orders.labels,
+          datasets: [
+            {
+              data: data.orders.data,
+              label: 'Pedidos',
+              fill: true,
+              tension: 0.4,
+              borderColor: '#4F46E5',
+              backgroundColor: 'rgba(79, 70, 229, 0.1)'
+            }
+          ]
+        };
 
-    this.dashboardService.getRevenueByPeriod(7).subscribe(data => {
-      this.revenueBarChartData = {
-        labels: data.labels,
-        datasets: [
-          {
-            data: data.data,
-            label: 'Faturamento (R$)',
-            backgroundColor: '#10B981',
-            borderColor: '#059669',
-            borderWidth: 1
-          }
-        ]
-      };
-      this.updateCharts();
-    });
+        this.revenueBarChartData = {
+          labels: data.revenue.labels,
+          datasets: [
+            {
+              data: data.revenue.data,
+              label: 'Faturamento (R$)',
+              backgroundColor: '#10B981',
+              borderColor: '#059669',
+              borderWidth: 1
+            }
+          ]
+        };
 
-    this.dashboardService.getOrdersByStatus().subscribe(data => {
-      this.statusDoughnutChartData = {
-        labels: data.map(item => item.status),
-        datasets: [
-          {
-            data: data.map(item => item.count),
-            backgroundColor: [
-              '#FCD34D',
-              '#60A5FA',
-              '#34D399',
-              '#A78BFA',
-              '#F87171'
-            ],
-            hoverBackgroundColor: [
-              '#FBBF24',
-              '#3B82F6',
-              '#10B981',
-              '#8B5CF6',
-              '#EF4444'
-            ]
-          }
-        ]
-      };
-      this.updateCharts();
-    });
+        this.statusDoughnutChartData = {
+          labels: data.status.map(item => item.status),
+          datasets: [
+            {
+              data: data.status.map(item => item.count),
+              backgroundColor: [
+                '#FCD34D',
+                '#60A5FA',
+                '#34D399',
+                '#A78BFA',
+                '#F87171'
+              ],
+              hoverBackgroundColor: [
+                '#FBBF24',
+                '#3B82F6',
+                '#10B981',
+                '#8B5CF6',
+                '#EF4444'
+              ]
+            }
+          ]
+        };
 
-    this.dashboardService.getTopProducts(5).subscribe(data => {
-      this.topProductsBarChartData = {
-        labels: data.map(item => item.productName),
-        datasets: [
-          {
-            data: data.map(item => item.revenue),
-            label: 'Receita (R$)',
-            backgroundColor: '#F59E0B',
-            borderColor: '#D97706',
-            borderWidth: 1
-          }
-        ]
-      };
-      this.updateCharts();
+        this.topProductsBarChartData = {
+          labels: data.topProducts.map(item => item.productName),
+          datasets: [
+            {
+              data: data.topProducts.map(item => item.revenue),
+              label: 'Receita (R$)',
+              backgroundColor: '#F59E0B',
+              borderColor: '#D97706',
+              borderWidth: 1
+            }
+          ]
+        };
+
+        this.updateCharts();
+      },
+      error: (error) => {
+        console.error('Erro ao carregar gráficos:', error);
+      }
     });
   }
 
   onPeriodChange(): void {
-    this.loadOrdersChart();
-    this.loadRevenueChart();
+    this.isLoadingChart = true;
+    forkJoin({
+      orders: this.dashboardService.getOrdersByPeriod(this.selectedPeriod),
+      revenue: this.dashboardService.getRevenueByPeriod(this.selectedPeriod)
+    })
+    .pipe(finalize(() => {
+      this.isLoadingChart = false;
+      this.cdr.markForCheck();
+    }))
+    .subscribe({
+      next: (data) => {
+        this.ordersLineChartData = {
+          labels: data.orders.labels,
+          datasets: [
+            {
+              data: data.orders.data,
+              label: 'Pedidos',
+              fill: true,
+              tension: 0.4,
+              borderColor: '#4F46E5',
+              backgroundColor: 'rgba(79, 70, 229, 0.1)'
+            }
+          ]
+        };
+
+        this.revenueBarChartData = {
+          labels: data.revenue.labels,
+          datasets: [
+            {
+              data: data.revenue.data,
+              label: 'Faturamento (R$)',
+              backgroundColor: '#10B981',
+              borderColor: '#059669',
+              borderWidth: 1
+            }
+          ]
+        };
+
+        this.updateCharts();
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar gráficos por período:', error);
+      }
+    });
   }
 
   onTopProductsLimitChange(): void {
-    this.loadTopProductsChart();
-  }
-
-  loadOrdersChart(): void {
-    this.dashboardService.getOrdersByPeriod(this.selectedPeriod).subscribe(data => {
-      this.ordersLineChartData = {
-        labels: data.labels,
-        datasets: [
-          {
-            data: data.data,
-            label: 'Pedidos',
-            fill: true,
-            tension: 0.4,
-            borderColor: '#4F46E5',
-            backgroundColor: 'rgba(79, 70, 229, 0.1)'
-          }
-        ]
-      };
-      this.updateCharts();
-    });
-  }
-
-  loadRevenueChart(): void {
-    this.dashboardService.getRevenueByPeriod(this.selectedPeriod).subscribe(data => {
-      this.revenueBarChartData = {
-        labels: data.labels,
-        datasets: [
-          {
-            data: data.data,
-            label: 'Faturamento (R$)',
-            backgroundColor: '#10B981',
-            borderColor: '#059669',
-            borderWidth: 1
-          }
-        ]
-      };
-      this.updateCharts();
-    });
-  }
-
-  loadStatusChart(): void {
-    this.dashboardService.getOrdersByStatus().subscribe(data => {
-      this.statusDoughnutChartData = {
-        labels: data.map(item => item.status),
-        datasets: [
-          {
-            data: data.map(item => item.count),
-            backgroundColor: [
-              '#FCD34D',
-              '#60A5FA',
-              '#34D399',
-              '#A78BFA',
-              '#F87171'
-            ],
-            hoverBackgroundColor: [
-              '#FBBF24',
-              '#3B82F6',
-              '#10B981',
-              '#8B5CF6',
-              '#EF4444'
+    this.isLoadingChart = true;
+    this.dashboardService.getTopProducts(this.selectedTopProductsLimit)
+      .pipe(finalize(() => {
+        this.isLoadingChart = false;
+        this.cdr.markForCheck();
+      }))
+      .subscribe({
+        next: (data) => {
+          this.topProductsBarChartData = {
+            labels: data.map(item => item.productName),
+            datasets: [
+              {
+                data: data.map(item => item.revenue),
+                label: 'Receita (R$)',
+                backgroundColor: '#F59E0B',
+                borderColor: '#D97706',
+                borderWidth: 1
+              }
             ]
-          }
-        ]
-      };
-      this.updateCharts();
-    });
-  }
-
-  loadTopProductsChart(): void {
-    this.dashboardService.getTopProducts(this.selectedTopProductsLimit).subscribe(data => {
-      this.topProductsBarChartData = {
-        labels: data.map(item => item.productName),
-        datasets: [
-          {
-            data: data.map(item => item.revenue),
-            label: 'Receita (R$)',
-            backgroundColor: '#F59E0B',
-            borderColor: '#D97706',
-            borderWidth: 1
-          }
-        ]
-      };
-      this.updateCharts();
-    });
+          };
+          this.updateCharts();
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar top produtos:', error);
+        }
+      });
   }
 
   updateCharts(): void {

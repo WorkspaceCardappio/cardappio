@@ -132,6 +132,22 @@
   position: relative;
   height: 400px;
   width: 100%;
+
+  &.chart-skeleton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  ::ng-deep .p-skeleton {
+    border-radius: 4px;
+  }
 }
 
 @media (max-width: 768px) {
