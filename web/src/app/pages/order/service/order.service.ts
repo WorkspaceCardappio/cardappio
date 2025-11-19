@@ -45,6 +45,7 @@ export class OrderService extends EntityService<any, any> {
   }
 
   changeStatus(id: string, statusCode: string) {
+    console.log('aquiiiiiii?')
     return this.http.post<any>(`${this.resource}/${id}/change-status`, { code: statusCode });
   }
 
