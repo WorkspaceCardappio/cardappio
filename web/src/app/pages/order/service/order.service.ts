@@ -45,11 +45,16 @@ export class OrderService extends EntityService<any, any> {
   }
 
   changeStatus(id: string, statusCode: string) {
+    console.log('aquiiiiiii?')
     return this.http.post<any>(`${this.resource}/${id}/change-status`, { code: statusCode });
   }
 
   findOrderDetails(id: string): Observable<any> {
     return this.http.get<any>(`${this.resource}/items/to-summary/${id}`);
+  }
+
+  findKitchenOrders(params: string): Observable<Page<any>> {
+    return this.http.get<Page<any>>(`${this.resource}/kitchen?${params}`);
   }
 
 }

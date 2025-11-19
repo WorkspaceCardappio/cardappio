@@ -1,0 +1,266 @@
+<p-toast></p-toast>
+
+<div class="flex justify-content-between align-items-center mb-3">
+  <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+  <div class="flex align-items-center gap-2">
+    <i class="pi" [ngClass]="wsConnected ? 'pi-circle-fill text-green-500' : 'pi-circle-fill text-red-500'" style="font-size: 0.75rem"></i>
+    <span class="text-sm text-600">{{ wsConnected ? 'Tempo real ativo' : 'Reconectando...' }}</span>
+  </div>
+</div>
+
+<div class="kanban-container" cdkDropListGroup>
+
+  <p-card header="" class="kanban-column" id="pendingList">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center p-3">
+        <span class="font-bold text-lg">PENDENTE</span>
+        <p-tag [value]="pending.length.toString()" severity="warn"></p-tag>
+      </div>
+    </ng-template>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="pending"
+      class="kanban-list"
+      [cdkDropListConnectedTo]="[]"
+      (cdkDropListDropped)="drop($event)">
+
+      @if (loading) {
+        <p-skeleton height="120px" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="120px" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="120px"></p-skeleton>
+      } @else {
+        @for (order of pending; track order.id) {
+          <div cdkDrag class="kanban-card pending-card">
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-red-500 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Observação do pedido (se houver) -->
+            @if (order.observation) {
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
+                <div class="text-xs font-semibold text-700 mb-1">
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
+                </div>
+                <div class="text-xs text-600">{{ order.observation }}</div>
+              </div>
+            }
+
+            <!-- Lista de itens (Principal) -->
+            @if (order.items && order.items.length > 0) {
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
+                </div>
+
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
+                          {{ item.product.name }}
+                        </div>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        @if (!loading && pending.length === 0) {
+          <div class="text-center empty-state">
+            <i class="pi pi-check-circle"></i>
+            <div>Nenhum pedido pendente</div>
+          </div>
+        }
+      }
+    </div>
+  </p-card>
+
+  <p-card header="" class="kanban-column" id="inProgressList">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center p-3">
+        <span class="font-bold text-lg">EM ANDAMENTO</span>
+        <p-tag [value]="inProgress.length.toString()" severity="info"></p-tag>
+      </div>
+    </ng-template>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="inProgress"
+      class="kanban-list"
+      [cdkDropListConnectedTo]="[]"
+      (cdkDropListDropped)="drop($event)">
+
+      @if (loading) {
+        <p-skeleton height="120px" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="120px" styleClass="mb-2"></p-skeleton>
+      } @else {
+        @for (order of inProgress; track order.id) {
+          <div cdkDrag class="kanban-card in-progress-card">
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-blue-600 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Observação do pedido (se houver) -->
+            @if (order.observation) {
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
+                <div class="text-xs font-semibold text-700 mb-1">
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
+                </div>
+                <div class="text-xs text-600">{{ order.observation }}</div>
+              </div>
+            }
+
+            <!-- Lista de itens (Principal) -->
+            @if (order.items && order.items.length > 0) {
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
+                </div>
+
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
+                          {{ item.product.name }}
+                        </div>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        @if (!loading && inProgress.length === 0) {
+          <div class="text-center empty-state">
+            <i class="pi pi-inbox"></i>
+            <div>Nenhum pedido em produção</div>
+          </div>
+        }
+      }
+    </div>
+  </p-card>
+
+  <p-card header="" class="kanban-column" id="readyList">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center p-3">
+        <span class="font-bold text-lg">PRONTO</span>
+        <p-tag [value]="ready.length.toString()" severity="success"></p-tag>
+      </div>
+    </ng-template>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="ready"
+      class="kanban-list"
+      [cdkDropListConnectedTo]="[]"
+      (cdkDropListDropped)="drop($event)">
+
+      @if (loading) {
+        <p-skeleton height="120px" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="120px"></p-skeleton>
+      } @else {
+        @for (order of ready; track order.id) {
+          <div cdkDrag class="kanban-card ready-card">
+            <!-- Cabeçalho compacto -->
+            <div class="flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="text-2xl font-bold text-700 mb-1">#{{ order.number }}</div>
+                <div class="text-xs text-500">
+                  <i class="pi pi-ticket mr-1"></i>Comanda {{ order.ticket?.number || 'N/A' }}
+                  <span class="mx-2">•</span>
+                  <i class="pi pi-clock mr-1"></i><span class="text-green-600 font-semibold">{{ getTimeSince(order.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Observação do pedido (se houver) -->
+            @if (order.observation) {
+              <div class="mb-3 p-2 border-round border-left-3 border-yellow-500 bg-yellow-50">
+                <div class="text-xs font-semibold text-700 mb-1">
+                  <i class="pi pi-info-circle mr-1 text-yellow-600"></i> Observação do Pedido:
+                </div>
+                <div class="text-xs text-600">{{ order.observation }}</div>
+              </div>
+            }
+
+            <!-- Lista de itens (Principal) -->
+            @if (order.items && order.items.length > 0) {
+              <div class="items-section">
+                <div class="text-xs font-semibold text-500 uppercase mb-2">
+                  {{ getTotalItems(order) }} {{ getTotalItems(order) === 1 ? 'Item' : 'Itens' }}
+                </div>
+
+                @for (item of order.items; track item.id) {
+                  <div class="item-card mb-2 p-3 surface-50 border-round">
+                    <div class="flex align-items-start gap-2">
+                      <div class="quantity-badge">{{ item.quantity }}</div>
+                      <div class="flex-1">
+                        <div class="text-base font-bold text-900 mb-1">
+                          {{ item.product.name }}
+                        </div>
+
+                        @if (item.observation) {
+                          <div class="text-xs text-600 mt-1 p-2 border-round bg-orange-50 border-left-3 border-orange-400">
+                            <i class="pi pi-comment mr-1 text-orange-600" style="font-size: 0.7rem;"></i>
+                            <strong class="text-orange-600">OBS:</strong> {{ item.observation }}
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        @if (!loading && ready.length === 0) {
+          <div class="text-center empty-state">
+            <i class="pi pi-inbox"></i>
+            <div>Nenhum pedido pronto</div>
+          </div>
+        }
+      }
+    </div>
+  </p-card>
+</div>
