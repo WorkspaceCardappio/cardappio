@@ -1,7 +1,7 @@
 :host {
-  display: flex; // Transforma o host em um contêiner flexível
+  display: flex;
   flex-direction: column;
-  height: 100vh; // Ocupa toda a altura da viewport
+  height: 100vh;
   background: #f8f9fa;
 }
 
@@ -9,20 +9,11 @@
   display: flex;
   gap: 24px;
   padding: 32px;
-  // Altura: Ocupa o restante da tela menos o padding superior/inferior.
-  // O ajuste real deve ser feito no seu main-layout para garantir que o contêiner
-  // não conte header/footer no 100vh, mas aqui usamos 100% da altura do pai.
   flex-grow: 1;
   overflow-x: auto;
   overflow-y: hidden;
-  align-items: center; // Centraliza as colunas verticalmente
+  align-items: stretch; /* Alinha as colunas para preencher toda a altura */
 
-  // Se o conteúdo for menor que a tela, ele o centralizará horizontalmente
-  // justify-content: center;
-  // COMENTADO: Isso impediria a rolagem horizontal quando o conteúdo exceder a tela,
-  // mas é o que centralizaria. Mantemos a rolagem para funcionalidade.
-
-  // Scroll customizado
   &::-webkit-scrollbar {
     height: 8px;
   }
@@ -43,8 +34,8 @@
 }
 
 .kanban-column {
-  flex: 0 0 450px; // Colunas mais largas (mantido 450px)
-  height: 100%; // Ocupa 100% da altura do .kanban-container
+  flex: 0 0 450px;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -81,7 +72,6 @@
     overflow-y: auto;
     padding: 20px;
 
-    // Scroll customizado para o conteúdo
     &::-webkit-scrollbar {
       width: 6px;
     }
@@ -127,28 +117,9 @@
   &:active {
     cursor: grabbing;
   }
-
-  .order-items {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #e2e8f0;
-    font-size: 0.875rem;
-    color: #718096;
-  }
-
-  .order-id {
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 8px;
-  }
-
-  .order-date {
-    font-size: 0.75rem;
-    color: #a0aec0;
-  }
 }
 
-// Estilos aprimorados de Drag and Drop
+/* Estilos aprimorados de Drag and Drop */
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 10px;
@@ -173,7 +144,7 @@
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Estado vazio
+/* Estado vazio */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -196,7 +167,7 @@
   }
 }
 
-// Loading skeleton
+/* Loading skeleton */
 .kanban-card-skeleton {
   padding: 18px;
   border-radius: 10px;
@@ -222,19 +193,7 @@
   }
 }
 
-// Badge de contador (opcional)
-.column-count {
-  display: inline-block;
-  background: #edf2f7;
-  color: #4a5568;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-left: 8px;
-}
-
-// Responsividade
+/* Responsividade */
 @media (max-width: 1200px) {
   .kanban-column {
     flex: 0 0 380px;

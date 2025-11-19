@@ -16,6 +16,7 @@ import { OrderService } from "../order/service/order.service";
 import { finalize, timeout, catchError, tap } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CurrencyPipe } from '@angular/common';
 
 const STATUS_NAMES = {
   PENDING: "PENDING",
@@ -25,7 +26,6 @@ const STATUS_NAMES = {
 }
 
 interface KitchenOrder {
-// ... (definição da interface KitchenOrder) ...
   id: string;
   number: number;
   ticket: {
@@ -78,9 +78,9 @@ const STATUS_CODE_TO_NAME: { [key: number]: string } = {
     DragDropModule,
     BreadcrumbModule,
     TagModule,
-    DatePipe,
     SkeletonModule,
-    ToastModule
+    ToastModule,
+    CurrencyPipe // Adicionado CurrencyPipe para uso no TS (opcional, mas bom para tipagem)
   ],
   providers: [OrderService, MessageService],
   templateUrl: './kitchen-kanban.component.html',
@@ -105,13 +105,12 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
     private service: OrderService,
     private cdr: ChangeDetectorRef,
     private messageService: MessageService,
-    private ngZone: NgZone // Injeção necessária para isolar o intervalo
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
     this.loadingTimeout = setTimeout(() => {
       if (this.loading) {
-        console.warn('Loading timeout - forçando exibição');
         this.loading = false;
         this.cdr.markForCheck();
       }
@@ -119,11 +118,10 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
 
     this.loadOrders();
 
-    // CORREÇÃO NG0506: Executa o interval FORA da zona do Angular.
+    // Isola o interval do Zone.js para estabilidade (NG0506)
     this.ngZone.runOutsideAngular(() => {
       this.refreshSubscription = interval(30000).subscribe(() => {
         if (!this.isUpdating) {
-          // Volta para a zona APENAS para executar a lógica que altera o estado da UI/dados
           this.ngZone.run(() => {
             this.loadOrders();
           });
@@ -156,7 +154,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
       .pipe(
         timeout(10000),
         catchError((error) => {
-          console.error('Erro ao carregar pedidos:', error);
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
@@ -177,7 +174,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
 
           response.content.forEach((order: KitchenOrder) => {
             if (!order.status || !order.status.code) {
-              console.warn('Pedido sem status válido:', order);
               return;
             }
 
@@ -198,39 +194,25 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
           this.inProgress = newInProgress;
           this.ready = newReady;
 
-          console.log('✅ Pedidos carregados:', {
-            pending: this.pending.length,
-            inProgress: this.inProgress.length,
-            ready: this.ready.length,
-            total: response.content.length
-          });
-          this.cdr.markForCheck(); // Força a atualização da UI após carregar os dados
+          this.cdr.markForCheck();
         }
       });
   }
 
   /**
    * Manipula o evento de soltura (drop) do CdkDragDrop.
-   * Aciona a chamada à API para atualização do status do pedido.
-   * @param event Evento de drop.
    */
   drop(event: CdkDragDrop<KitchenOrder[]>) {
-
-    console.log("droppou?")
     if (event.previousContainer === event.container) {
-      console.log("bk1")
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       this.cdr.detectChanges();
       return;
     }
 
     if (this.isUpdating) {
-      console.log("bk2")
-      console.warn('[DROP] 🛑 Atualização em andamento. Ignorando novo drop.');
       return;
     }
 
-    console.log("bk3")
     this.isUpdating = true;
 
     const order = event.previousContainer.data[event.previousIndex];
@@ -239,40 +221,32 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
     const newColumnId = event.container.id;
 
     let newStatusCode: number;
-    let newStatusName: string;
     let newStatusDescription: string;
 
-    console.log("bk4")
+    console.log('Novo ID da coluna:', newColumnId);
 
-    console.log(`Tentando mover Pedido #${order.number} para coluna ${newColumnId}`);
-
+    // CORREÇÃO LÓGICA: Usa os IDs reais definidos no HTML
     switch (newColumnId) {
-      case 'cdk-drop-list-0':
+      case 'cdk-drop-list-6':
         newStatusCode = STATUS_CODES.PENDING;
-        newStatusName = STATUS_NAMES.PENDING;
         newStatusDescription = 'Pendente';
         break;
-      case 'cdk-drop-list-1':
+      case 'cdk-drop-list-7':
         newStatusCode = STATUS_CODES.IN_PROGRESS;
-        newStatusName = STATUS_NAMES.IN_PROGRESS;
         newStatusDescription = 'Em Andamento';
         break;
-      case 'cdk-drop-list-2':
+      case 'cdk-drop-list-9':
         newStatusCode = STATUS_CODES.DELIVERED;
-        newStatusName = STATUS_NAMES.DELIVERED;
         newStatusDescription = 'Pronto';
         break;
       default:
         this.isUpdating = false;
-        console.log('io?')
         return;
     }
 
-    console.log("bk4.5")
-
-
-    // Backup do status original
     const oldStatus = { ...order.status };
+    const newStatusName = STATUS_CODE_TO_NAME[newStatusCode] || 'DESCONHECIDO';
+
 
     // 1. Mover visualmente ANTES de chamar API (melhora UX)
     transferArrayItem(
@@ -281,9 +255,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
       event.previousIndex,
       event.currentIndex,
     );
-
-    console.log("bk5")
-
 
     // 2. Atualizar status local (para refletir na tag, etc.)
     order.status = {
@@ -294,21 +265,11 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
 
     this.cdr.detectChanges(); // Força a atualização visual imediata
 
-
-
-    console.log(`[DROP] ✅ Movimento visual e estado local atualizados. Pedido #${order.number}`);
-    console.log(`[API_CALL] ➡️ Chamando service.changeStatus para ID=${order.id}, STATUS=${newStatusCode}`); // CONSOLE CHAVE
-
     // 3. Chamar API para persistir a mudança
     this.service.changeStatus(order.id, String(newStatusCode))
       .pipe(
-        // TAP: Se este console não aparecer, a chamada HTTP NÃO foi para a fila.
-        tap(() => console.log(`[API_CALL] 🟢 Observable Ativo - Requisição HTTP deve estar no Network Tab!`)),
         timeout(5000),
         catchError((error) => {
-          console.error('[API_CALL] ❌ Erro de HTTP ou Timeout:', error);
-
-          // Mostrar mensagem de erro
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
@@ -318,27 +279,22 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
           // 4. REVERTER mudança (rollback)
           order.status = oldStatus;
           transferArrayItem(
-            event.container.data, // Container atual
-            previousContainerData, // Container anterior (o de origem)
-            event.currentIndex, // Posição atual
-            previousIndex // Posição anterior
+            event.container.data,
+            previousContainerData,
+            event.currentIndex,
+            previousIndex
           );
-          this.cdr.detectChanges(); // Força a reversão visual
-          console.log('[DROP] ↩️ Rollback concluído devido a falha da API.');
-
-          return of(null); // Retorna um Observable que completa para que a cadeia continue
+          this.cdr.detectChanges();
+          return of(null);
         }),
         finalize(() => {
           this.isUpdating = false;
           this.cdr.markForCheck();
-          console.log('[API_CALL] 🏁 Finalize do Observable (Fim do Pipeline).'); // CONSOLE CHAVE
         })
       )
       .subscribe({
         next: (response) => {
           if (response) {
-            console.log(`[API_CALL] ✅ Resposta OK do servidor. Requisição concluída.`); // CONSOLE CHAVE
-
             this.messageService.add({
               severity: 'success',
               summary: 'Sucesso',
@@ -346,9 +302,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
               life: 2000
             });
           }
-        },
-        complete: () => {
-          console.log('[API_CALL] 🛑 Subscrição COMPLETA.'); // CONSOLE CHAVE
         }
       });
   }
@@ -370,6 +323,6 @@ export class KitchenKanbanComponent implements OnInit, OnDestroy {
   // Método auxiliar para calcular total de itens
   getTotalItems(order: KitchenOrder): number {
     if (!order.items) return 0;
-    return order.items.reduce((sum, item) => sum + item.quantity, 0);
+    return order.items.reduce((sum, item) => item.quantity, 0);
   }
 }
