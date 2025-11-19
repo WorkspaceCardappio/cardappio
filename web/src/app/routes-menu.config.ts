@@ -3,11 +3,13 @@ export const routesMenu = [
     path: 'home',
     name: 'Home',
     icon: 'fa-solid fa-house',
+    adminOnly: true
   },
   {
     path: 'category',
     name: 'Categorias',
     icon: 'fa-solid fa-plate-wheat',
+    adminOnly: true
   },
   {
     path: 'product',
@@ -18,11 +20,13 @@ export const routesMenu = [
     path: 'ingredient',
     name: 'Ingredientes',
     icon: 'fa-solid fa-seedling',
+    adminOnly: true
   },
   {
     path: 'menu',
     name: 'Cardápios',
     icon: 'fa-solid fa-folder',
+    adminOnly: true
   },
   {
     path: 'order',
@@ -43,6 +47,7 @@ export const routesMenu = [
     path: 'stock',
     name: 'Estoque',
     icon: 'fa-solid fa-boxes-packing',
+    adminOnly: true
   },
   {
     path: 'employee',

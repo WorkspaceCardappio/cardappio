@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { homeGuard } from './core/guards/home.guard';
+import { defaultRedirectGuard } from './core/guards/default-redirect.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +24,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
+        canActivate: [homeGuard],
         loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
       },
       {
@@ -108,8 +111,8 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
+        canActivate: [defaultRedirectGuard],
+        children: []
       },
     ]
   },

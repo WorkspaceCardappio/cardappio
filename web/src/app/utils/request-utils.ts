@@ -34,25 +34,25 @@ export class RequestUtils {
       .join('&');
   }
 
-  static buildSearch(filters: Filter[]): string {
+  static buildSearch(filters: Filter[] = []): string {
 
     if (!filters.length)
       return '';
 
     const filter = filters
-      .map(filter => `${filter.field}${filter.condition}${filter.value}`)
+      .map((filter: Filter) => `${filter.field}${filter.condition}${filter.value}`)
       .join(';');
 
     return `search=${filter}`;
   }
 
-  static buildSort(sorts: SortItem[]): string {
+  static buildSort(sorts: SortItem[] = []): string {
 
     if (!sorts.length)
       return '';
 
     return sorts
-      .map(order => `sort=${order.field},${order.order}`)
+      .map((order: SortItem) => `sort=${order.field},${order.order}`)
       .join('&');
   }
 
