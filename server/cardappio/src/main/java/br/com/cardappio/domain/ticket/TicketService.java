@@ -33,7 +33,7 @@ public class TicketService extends CrudService<Ticket, UUID, TicketListDTO, Tick
     @Override
     public UUID create(final TicketDTO dto) {
         final Ticket ticket = getAdapter().toEntity(dto);
-        ticket.setCreatedBy(SecurityUtils.getFullName());
+        ticket.setCreatedBy(SecurityUtils.getUserIdentifier());
         return repository.save(ticket).getId();
     }
 

@@ -53,7 +53,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
     @Override
     public UUID create(final OrderDTO dto) {
         final Order order = getAdapter().toEntity(dto);
-        order.setCreatedBy(SecurityUtils.getFullName());
+        order.setCreatedBy(SecurityUtils.getUserIdentifier());
         return repository.save(order).getId();
     }
 
@@ -176,7 +176,7 @@ public class OrderService extends CrudService<Order, UUID, OrderListDTO, OrderDT
 
     public void createFlutterOrder(FlutterCreateOrderDTO dto) {
         Order order = Order.of(dto);
-        order.setCreatedBy(SecurityUtils.getFullName());
+        order.setCreatedBy(SecurityUtils.getUserIdentifier());
         UUID idSavedOrder = repository.save(order).getId();
         List<ProductOrder> productOrders = new ArrayList<>();
 
